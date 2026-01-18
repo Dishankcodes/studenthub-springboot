@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students | EduPlatform</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link th:href="@{/css/footer_style.css}" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: #eef3ff;
+            color: #222;
+            line-height: 1.8;
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #4481eb, #0099ff);
+            color: #fff;
+            padding: 120px 20px 100px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            opacity: 0.95;
+        }
+
+        /* SECTIONS */
+        .section {
+            max-width: 880px;
+            margin: 90px auto;
+            padding: 0 20px;
+        }
+
+        .section h2 {
+            font-size: 36px;
+            color: #0038a8;
+            margin-bottom: 18px;
+        }
+
+        .section p {
+            font-size: 17px;
+            color: #444;
+            margin-bottom: 18px;
+        }
+
+        .divider {
+            width: 70px;
+            height: 3px;
+            background: #0059ff;
+            margin: 35px 0;
+        }
+
+        /* LIST STYLE (NO BOXES) */
+        .text-list div {
+            padding: 22px 0;
+            border-bottom: 1px solid #dbe4ff;
+        }
+
+        .text-list h4 {
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #222;
+        }
+
+        /* STEPS */
+        .steps {
+            margin-top: 30px;
+        }
+
+        .step {
+            display: flex;
+            gap: 22px;
+            margin-bottom: 26px;
+        }
+
+        .step span {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0059ff;
+        }
+
+        /* QUOTES */
+        .quote {
+            font-size: 18px;
+            font-style: italic;
+            color: #333;
+            margin-bottom: 22px;
+        }
+
+        /* CTA */
+        .cta {
+            text-align: center;
+            margin: 110px 0;
+        }
+
+        .cta a {
+            background: #0059ff;
+            color: #fff;
+            padding: 16px 48px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 600;
+            transition: 0.3s;
+            box-shadow: 0 12px 30px rgba(0, 89, 255, 0.35);
+        }
+
+        .cta a:hover {
+            background: #0038b3;
+            transform: translateY(-3px);
+        }
+
+        /* FOOTER */
+        footer {
+            background: #002b80;
+            color: #fff;
+            padding: 55px 20px;
+            text-align: center;
+        }
+
+        footer h3 {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 38px;
+            }
+
+            .section h2 {
+                font-size: 28px;
+            }
+        }
+            /* NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 120px;
+      background: #4481eb;
+    }
+
+    .navbar nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    .navbar nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+    }
+
+    .navbar nav a {
+      position: relative;
+    }
+
+    .navbar nav a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: #ffcc66;
+      left: 0;
+      bottom: -6px;
+      transition: 0.3s;
+    }
+
+    .navbar nav a:hover::after {
+      width: 100%;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .auth-btns button {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: none;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    .role-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+
+    </style>
+</head>
+
+<body>
+ <header class="navbar">
+    <div class="logo">EduPlatform</div>
+    <nav>
+      <a th:href="@{/index}">Home</a>
+      <a th:href="@{/courses}">Courses</a>
+      <a th:href="@{/about}">About</a>
+      <a th:href="@{/career}">Careers</a>
+      <a th:href="@{/student-privacy}">Privacy Policy</a>
+    </nav>
+    <div class="auth-btns">
+      <button class="role-btn student"
+      th:onclick="|window.location.href = '@{/student-login}'|">Student</button>
+      
+      <button class="role-btn teacher"
+       th:onclick="|window.location.href = '@{/teacher-homepage}'|">Teacher</button>
+      
+      <button class="role-btn admin" 
+      th:onclick="|window.location.href = '@{/admin-homepage}'|">Admin</button>
+    </div>
+  </header>
+    <!-- HERO -->
+    <section class="hero">
+        <h1>Learning, Without the Pressure</h1>
+        <p>A calm space where students grow with clarity and confidence</p>
+    </section>
+
+    <!-- SECTION 1 -->
+    <section class="section">
+        <h2>What You Get as a Student</h2>
+        <div class="divider"></div>
+
+        <div class="text-list">
+            <div>
+                <h4>Courses that actually help</h4>
+                <p>Clear explanations, practical focus, and content aligned with exams and real careers.</p>
+            </div>
+            <div>
+                <h4>Certificates that add value</h4>
+                <p>Showcase your achievements on resumes and professional profiles.</p>
+            </div>
+            <div>
+                <h4>Structured learning materials</h4>
+                <p>Well-organized notes and videos you can revisit anytime.</p>
+            </div>
+            <div>
+                <h4>Visible progress</h4>
+                <p>Track how far you’ve come instead of feeling unsure.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section class="section">
+        <h2>A Better Learning Experience</h2>
+        <div class="divider"></div>
+
+        <p>
+            EduPlatform is designed for students who want clarity instead of chaos.
+            Learn at your own pace, revise without stress, and focus on steady improvement.
+        </p>
+
+        <p>
+            Whether you’re preparing for exams or building future-ready skills,
+            the platform supports you without pressure or comparison.
+        </p>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section class="section">
+        <h2>How It Works</h2>
+        <div class="divider"></div>
+
+        <div class="steps">
+            <div class="step">
+                <span>01</span>
+                <p>Create your student account</p>
+            </div>
+            <div class="step">
+                <span>02</span>
+                <p>Explore courses based on your goals</p>
+            </div>
+            <div class="step">
+                <span>03</span>
+                <p>Learn with videos, notes, and practice</p>
+            </div>
+            <div class="step">
+                <span>04</span>
+                <p>Earn certificates and career guidance</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4 -->
+    <section class="section">
+        <h2>Student Voices</h2>
+        <div class="divider"></div>
+
+        <p class="quote">“Studying finally felt calm and organized.”</p>
+        <p class="quote">“I stopped feeling lost while preparing for exams.”</p>
+        <p class="quote">“Learning felt manageable for the first time.”</p>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta">
+        <a th:href="@{student-login}">Start Learning Today</a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="edu-footer">
+  <div class="footer-container">
+
+    <!-- BRAND -->
+    <div class="footer-col">
+      <h2 class="footer-logo">EduPlatform</h2>
+      <p class="footer-desc">
+        Empowering students with practical learning, career guidance,
+        and future-ready skills.
+      </p>
+		<div class="footer-social">
+		  <a th:href="@{https://www.instagram.com/dishank_._prajapati}" target="_blank">
+		    <i class="bi bi-instagram"></i>
+		  </a>
+		
+		  <a th:href="@{https://linkedin.com}" target="_blank">
+		    <i class="bi bi-linkedin"></i>
+		  </a>
+		
+		  <a th:href="@{https://github.com}" target="_blank">
+		    <i class="bi bi-github"></i>
+		  </a>
+		
+		  <a th:href="@{https://youtube.com}" target="_blank">
+		    <i class="bi bi-youtube"></i>
+		  </a>
+		</div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a th:href="@{/}">Home</a>
+      <a th:href="@{/courses}">Courses</a>
+      <a th:href="@{/career}">Careers</a>
+      <a th:href="@{/blog}">Blog</a>
+      <a th:href="@{/contact}">Contact</a>
+    </div>
+
+    <!-- LEARNING -->
+    <div class="footer-col">
+      <h4>Learning</h4>
+      <a th:href="@{/courses/java}">Java Development</a>
+      <a th:href="@{/courses/web}">Web Development</a>
+      <a th:href="@{/courses/data-science}">Data Science</a>
+      <a th:href="@{/courses/ai}">AI & Machine Learning</a>
+      <a th:href="@{/courses/ui-ux}">UI / UX Design</a>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="footer-col">
+      <h4>Support</h4>
+      <p><i class="bi bi-envelope"></i> support@eduplatform.com</p>
+      <p><i class="bi bi-telephone"></i> +91 9XXXX XXXXX</p>
+      <p><i class="bi bi-clock"></i> Mon – Sat : 9 AM – 7 PM</p>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 EduPlatform. All Rights Reserved.
+    <span>|</span>
+    <a th:href="@{/student-privacy}">Privacy Policy</a>
+    <span>|</span>
+    <a th:href="@{/}">Terms & Conditions</a>
+  </div>
+</footer>
+
+</body>
+</html>

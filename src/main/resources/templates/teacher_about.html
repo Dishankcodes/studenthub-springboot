@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachers | EduPlatform</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: #eef3ff;
+            color: #222;
+            line-height: 1.8;
+        }
+
+       
+        /* NAVBAR */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 110px;
+            background: #f6a623;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 700;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            gap: 35px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            position: relative;
+        }
+
+        nav a::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #fff3c4;
+            left: 0;
+            bottom: -6px;
+            transition: 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .roles {
+            display: flex;
+            gap: 10px;
+        }
+
+        .role-btn {
+            padding: 8px 18px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .student {
+            background: white;
+            color: #f6a623;
+        }
+
+        .teacher {
+            background: #fff3c4;
+            color: #333;
+        }
+
+        .admin {
+            background: #2f2f55;
+            color: white;
+        }
+
+        .role-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* HERO */
+        .hero {
+            background: linear-gradient(135deg, #f6a623, #ff9500);
+            color: #fff;
+            padding: 120px 20px 100px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 14px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            opacity: 0.95;
+        }
+
+        /* SECTIONS */
+        .section {
+            max-width: 880px;
+            margin: 90px auto;
+            padding: 0 20px;
+        }
+
+        .section h2 {
+            font-size: 36px;
+            color: #cc5400;
+            margin-bottom: 18px;
+        }
+
+        .section p {
+            font-size: 17px;
+            color: #444;
+            margin-bottom: 18px;
+        }
+
+        .divider {
+            width: 70px;
+            height: 3px;
+            background: #ff7a00;
+            margin: 35px 0;
+        }
+
+        /* TEXT LIST */
+        .text-list div {
+            padding: 22px 0;
+            border-bottom: 1px solid #dbe4ff;
+        }
+
+        .text-list h4 {
+            font-size: 19px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #222;
+        }
+
+        /* STEPS */
+        .steps {
+            margin-top: 30px;
+        }
+
+        .step {
+            display: flex;
+            gap: 22px;
+            margin-bottom: 26px;
+        }
+
+        .step span {
+            font-size: 20px;
+            font-weight: 600;
+            color: #f6a623;
+        }
+
+        /* QUOTES */
+        .quote {
+            font-size: 18px;
+            font-style: italic;
+            color: #333;
+            margin-bottom: 22px;
+        }
+
+        /* CTA */
+        .cta {
+            text-align: center;
+            margin: 110px 0;
+        }
+
+        .cta a {
+            background: #ff6f00;
+            color: #fff;
+            padding: 16px 48px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 600;
+            transition: 0.3s;
+            box-shadow: 0 12px 30px rgba(255, 111, 0, 0.35);
+        }
+
+        .cta a:hover {
+            background: #cc5400;
+            transform: translateY(-3px);
+        }
+
+        /* FOOTER */
+        footer {
+            background: #1a1a1a;
+            color: #fff;
+            padding: 55px 20px;
+            text-align: center;
+        }
+
+        footer h3 {
+            font-size: 30px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        footer p {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 38px;
+            }
+
+            .section h2 {
+                font-size: 28px;
+            }
+
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 10px 30px;
+            }
+
+            .navbar nav {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- NAVBAR -->
+    <header>
+        <div class="logo">EduPlatform</div>
+
+        <nav>
+            <a th:href="@{/teacher-homepage}">Home</a>
+            <a th:href="@{/teacher_about}">About</a>
+            <a th:href="@{/teacher-privacy}">Privacy</a>
+        </nav>
+
+        <div class="roles">
+            <button class="role-btn student"
+             th:onclick="|location.href='@{index}'|">
+             Student</button>
+            <button class="role-btn teacher"
+             th:onclick="|location.href='@{teacher-auth}'|">
+            Teacher</button>
+            <button class="role-btn admin" 
+            th:onclick="|location.href='@{admin-homepage}'|">
+            Admin</button>
+        </div>
+    </header>
+    <!-- HERO -->
+    <section class="hero">
+        <h1>Teach, Inspire, Transform Lives</h1>
+        <p>Empower students with knowledge and guidance 📚✨</p>
+    </section>
+
+    <!-- SECTION 1 -->
+    <section class="section">
+        <h2>What You Can Do as a Teacher</h2>
+        <div class="divider"></div>
+        <div class="text-list">
+            <div>
+                <h4>Create Courses</h4>
+                <p>Design and customize courses to teach your way.</p>
+            </div>
+            <div>
+                <h4>Upload Videos & Notes</h4>
+                <p>Provide clear learning materials for every student.</p>
+            </div>
+            <div>
+                <h4>Conduct Exams & Quizzes</h4>
+                <p>Assess students with auto or manual grading.</p>
+            </div>
+            <div>
+                <h4>Make Announcements</h4>
+                <p>Keep students informed about updates and events.</p>
+            </div>
+            <div>
+                <h4>Track Student Progress</h4>
+                <p>Monitor enrollments and their learning journey.</p>
+            </div>
+            <div>
+                <h4>Answer Doubts</h4>
+                <p>Provide guidance and solve student queries effectively.</p>
+            </div>
+            <div>
+                <h4>Dashboard Analytics</h4>
+                <p>Review course popularity and performance metrics.</p>
+            </div>
+            <div>
+                <h4>Collaborate</h4>
+                <p>Connect with other teachers to grow and learn.</p>
+            </div>
+            <div>
+                <h4>Manage Profile</h4>
+                <p>Edit your personal info, experience, and certifications.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2 -->
+    <section class="section">
+        <h2>How It Works</h2>
+        <div class="divider"></div>
+        <div class="steps">
+            <div class="step"><span>01</span><p>Create your teacher account</p></div>
+            <div class="step"><span>02</span><p>Add courses and learning materials</p></div>
+            <div class="step"><span>03</span><p>Engage with students and answer doubts</p></div>
+            <div class="step"><span>04</span><p>Track performance and improve</p></div>
+        </div>
+    </section>
+
+    <!-- SECTION 3 -->
+    <section class="section">
+        <h2>Teacher Voices</h2>
+        <div class="divider"></div>
+        <p class="quote">“Sharing knowledge and seeing students grow is priceless.”</p>
+        <p class="quote">“I can organize my courses the way I want.”</p>
+        <p class="quote">“Connecting with learners and teachers is inspiring.”</p>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta">
+        <a th:href="@{teacher-auth}">Become an Instructor 👨‍🏫🔥</a>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <h3>EduPlatform</h3>
+        <p>Empowering Teachers. Creating Impact. 📚</p>
+        <p style="margin-top:10px; font-size:14px; color:#cfd8ff;">© 2026 EduPlatform. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

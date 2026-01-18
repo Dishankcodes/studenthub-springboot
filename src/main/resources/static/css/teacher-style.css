@@ -1,0 +1,159 @@
+
+/* ================= FONT ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body, html {
+  height: 100%;
+}
+
+/* ================= BACKGROUND ================= */
+.container-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ffa621, #f39c12);
+  padding: 15px;
+}
+
+/* ================= CARD ================= */
+.login-box {
+  background: #fff;
+  border-radius: 12px;
+  width: 900px;
+  display: flex;
+  padding: 120px 100px 40px;
+  justify-content: space-between;
+}
+
+/* ================= IMAGE ================= */
+.login-img {
+  width: 320px;
+}
+.login-img img {
+  width: 100%;
+}
+
+/* ================= FORM ================= */
+.login-form {
+  width: 300px;
+}
+
+.login-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 50px;
+  color: #333;
+}
+
+/* ================= INPUT ================= */
+.input-wrap {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.input-wrap input {
+  width: 100%;
+  height: 50px;
+  border-radius: 25px;
+  background: #f0f0f0;
+  padding-left: 60px;
+  font-size: 15px;
+  border: none;
+}
+
+.input-wrap i {
+  position: absolute;
+  top: 50%;
+  left: 25px;
+  transform: translateY(-50%);
+  color: #888;
+}
+
+/* ================= BUTTON ================= */
+.login-btn {
+  width: 100%;
+  height: 50px;
+  border-radius: 25px;
+  background: #ff9800;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  border: none;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background: #f57c00;
+}
+
+/* ================= LINKS ================= */
+.text-center {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.text-center a {
+  color: #ff9800;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.text-center a:hover {
+  text-decoration: underline;
+}
+
+/* ================= VALIDATION ================= */
+.alert-validate::after {
+  content: "\f06a";
+  font-family: FontAwesome;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: red;
+}
+
+
+.home-btn {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    background: #ffffff;
+    color: #ff9800;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    border: 2px solid #ff9800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s ease-in-out;
+}
+
+.home-btn:hover {
+    background: #ff9800;
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .login-box {
+    padding: 60px 30px;
+  }
+  .login-img {
+    display: none;
+  }
+  .login-form {
+    width: 100%;
+  }
+}

@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Guidance | EduPlatform</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link th:href="@{/css/footer_style.css}" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #f5f7ff;
+      color: #222;
+    }
+
+    /* NAVBAR (same as homepage) */
+    header {
+      background: #5995fd;
+      padding: 22px 0;
+    }
+
+    .header-content {
+      width: 90%;
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    header h1 {
+      color: #fff;
+      font-size: 26px;
+      font-weight: 700;
+    }
+/* NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 120px;
+      background: #4481eb;
+    }
+
+    .navbar nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    .navbar nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      position: relative;
+    }
+
+    .navbar nav a::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 2px;
+      background: #ffcc66;
+      left: 0;
+      bottom: -6px;
+      transition: 0.3s;
+    }
+
+    .navbar nav a:hover::after {
+      width: 100%;
+    }
+
+    .logo {
+      font-size: 26px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .auth-btns button {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: none;
+      margin-left: 10px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .role-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .student {
+      background: white;
+      color: #4481eb;
+    }
+
+    .teacher {
+      background: #ffcc66;
+      color: #333;
+    }
+
+    .admin {
+      background: #2c2c54;
+      color: white;
+    }
+
+
+    /* PAGE TITLE */
+    .page-title {
+      text-align: center;
+      margin: 60px 0 40px;
+    }
+
+    .page-title h2 {
+      font-size: 34px;
+      color: #2c2c2c;
+    }
+
+    .page-title p {
+      color: #666;
+      max-width: 650px;
+      margin: 12px auto 0;
+    }
+
+    /* CONTAINER */
+    .container {
+      width: 90%;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    /* INFO CARD */
+    .card {
+      background: #fff;
+      padding: 32px;
+      border-radius: 18px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+      margin-bottom: 45px;
+    }
+
+    /* ACCORDION */
+    .accordion {
+      background: #f9fbff;
+      padding: 18px 22px;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: 0.25s;
+      border: 1px solid #e6ecff;
+    }
+
+    .accordion:hover {
+      background: #eef3ff;
+    }
+
+    .accordion.active i {
+      transform: rotate(180deg);
+    }
+
+    .panel {
+      display: none;
+      padding: 18px 26px;
+      background: #fff;
+      border-radius: 0 0 14px 14px;
+      border-left: 3px solid #5995fd;
+      margin-bottom: 20px;
+      animation: fade 0.3s ease;
+    }
+
+    .panel li {
+      margin: 8px 0;
+      color: #444;
+      font-size: 15px;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CTA */
+    .cta {
+      background: #5995fd;
+      color: #fff;
+      padding: 40px;
+      border-radius: 20px;
+      text-align: center;
+      margin: 60px 0;
+    }
+
+    .cta button {
+      margin-top: 15px;
+      background: #fff;
+      color: #5995fd;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* FORM */
+    .mentor-form input,
+    .mentor-form textarea {
+      width: 100%;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #ccc;
+      margin-bottom: 14px;
+      font-size: 14px;
+    }
+
+    .mentor-form button {
+      width: 100%;
+      background: #5995fd;
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #5995fd;
+      color: #fff;
+      text-align: center;
+      padding: 35px 0;
+      margin-top: 70px;
+    }
+
+    .social-links a {
+      color: #fff;
+      font-size: 22px;
+      margin: 0 12px;
+    }
+
+    
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">EduPlatform</div>
+    <nav>
+      <a th:href="@{/index}">Home</a>
+      <a th:href="@{/courses}">Courses</a>
+      <a th:href="@{/about}">About</a>
+      <a th:href="@{/career}">Careers</a>
+      <a th:href="@{/student-privacy}">Privacy Policy</a>
+    </nav>
+   <div class="auth-btns">
+      <button class="role-btn student"
+      th:onclick="|window.location.href = '@{/student-login}'|">Student</button>
+      
+      <button class="role-btn teacher"
+       th:onclick="|window.location.href = '@{/teacher-homepage}'|">Teacher</button>
+      
+      <button class="role-btn admin" 
+      th:onclick="|window.location.href = '@{/admin-homepage}'|">Admin</button>
+    </div>
+
+  </header>
+
+  <!-- TITLE -->
+  <div class="page-title">
+    <h2>Career Guidance</h2>
+    <p>Explore career paths, understand job roles, and get expert guidance to shape your future.</p>
+  </div>
+
+  <div class="container">
+
+    <div class="card">
+      <div class="accordion">Software Development <i class="bi bi-chevron-down"></i></div>
+      <div class="panel">
+        <ul>
+          <li>Full Stack Developer</li>
+          <li>Backend Developer</li>
+          <li>Mobile App Developer</li>
+          <li><b>Salary:</b> ₹4L – ₹25L+</li>
+        </ul>
+      </div>
+
+      <div class="accordion">Data Science & AI <i class="bi bi-chevron-down"></i></div>
+      <div class="panel">
+        <ul>
+          <li>Data Scientist</li>
+          <li>ML Engineer</li>
+          <li>AI Engineer</li>
+          <li><b>Salary:</b> ₹5L – ₹30L+</li>
+        </ul>
+      </div>
+
+	<div class="accordion">UI / UX Design <i class="bi bi-chevron-down"></i></div>
+		<div class="panel">
+  		<ul>
+    		<li>UI Designer</li>
+		    <li>UX Designer</li>
+		    <li>Product Designer</li>
+		    <li>Design Systems Specialist</li>
+		    <li><b>Salary:</b> ₹4L – ₹10L+</li>
+		</ul>
+	</div>
+
+	<div class="accordion">Java Development <i class="bi bi-chevron-down"></i></div>
+	<div class="panel">
+	  <ul>
+	    <li>Java Developer</li>
+	    <li>Spring Boot Developer</li>
+	    <li>Microservices Engineer</li>
+	    <li>Enterprise Application Developer</li>
+	    <li><b>Salary:</b> ₹4L – ₹28L+</li>
+	  </ul>
+	</div>
+
+	<div class="accordion">Web Development <i class="bi bi-chevron-down"></i></div>
+	<div class="panel">
+	  <ul>
+	    <li>Frontend Developer</li>
+	    <li>Full Stack Web Developer</li>
+	    <li>Web Performance Engineer</li>
+	    <li>SEO-Friendly Web Specialist</li>
+	    <li><b>Salary:</b> ₹3.5L – ₹22L+</li>
+	  </ul>
+	</div>
+
+	<div class="accordion">Software Testing & QA <i class="bi bi-chevron-down"></i></div>
+	<div class="panel">
+	  <ul>
+	    <li>Manual Tester</li>
+	    <li>Automation Test Engineer</li>
+	    <li>Performance Tester</li>
+	    <li>QA Analyst</li>
+	    <li><b>Salary:</b> ₹3L – ₹15L+</li>
+	  </ul>
+	</div>
+
+      <div class="accordion">Cloud & DevOps <i class="bi bi-chevron-down"></i></div>
+      <div class="panel">
+        <ul>
+          <li>DevOps Engineer</li>
+          <li>Cloud Architect</li>
+          <li><b>Salary:</b> ₹5L – ₹30L+</li>
+        </ul>
+      </div>
+    </div>
+
+	
+
+    <div class="cta">
+      <h2>Need Personal Guidance?</h2>
+      <p>Book a free 1:1 mentorship session</p>
+      <button th:onclick="@{document.getElementById('mentorForm').scrollIntoView({behavior:'smooth'})}">
+        Meet a Mentor
+      </button>
+    </div>
+
+    <div id="mentorForm" class="card mentor-form">
+      <h3>Connect With a Mentor</h3>
+      <input type="text" placeholder="Full Name">
+      <input type="email" placeholder="Email">
+      <textarea rows="4" placeholder="Your career interests..."></textarea>
+      <button>Submit</button>
+    </div>
+
+  </div>
+  
+
+  <!-- FOOTER -->
+<footer class="edu-footer">
+  <div class="footer-container">
+
+    <!-- BRAND -->
+    <div class="footer-col">
+      <h2 class="footer-logo">EduPlatform</h2>
+      <p class="footer-desc">
+        Empowering students with practical learning, career guidance,
+        and future-ready skills.
+      </p>
+		<div class="footer-social">
+		  <a th:href="@{https://www.instagram.com/dishank_._prajapati}" target="_blank">
+		    <i class="bi bi-instagram"></i>
+		  </a>
+		
+		  <a th:href="@{https://linkedin.com}" target="_blank">
+		    <i class="bi bi-linkedin"></i>
+		  </a>
+		
+		  <a th:href="@{https://github.com}" target="_blank">
+		    <i class="bi bi-github"></i>
+		  </a>
+		
+		  <a th:href="@{https://youtube.com}" target="_blank">
+		    <i class="bi bi-youtube"></i>
+		  </a>
+		</div>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a th:href="@{/}">Home</a>
+      <a th:href="@{/courses}">Courses</a>
+      <a th:href="@{/career}">Careers</a>
+      <a th:href="@{/contact}">Contact</a>
+    </div>
+
+    <!-- LEARNING -->
+    <div class="footer-col">
+      <h4>Learning</h4>
+      <a th:href="@{/courses/java}">Java Development</a>
+      <a th:href="@{/courses/web}">Web Development</a>
+      <a th:href="@{/courses/data-science}">Data Science</a>
+      <a th:href="@{/courses/ai}">AI & Machine Learning</a>
+      <a th:href="@{/courses/ui-ux}">UI / UX Design</a>
+    </div>
+
+    <!-- CONTACT -->
+    <div class="footer-col">
+      <h4>Support</h4>
+      <p><i class="bi bi-envelope"></i> support@eduplatform.com</p>
+      <p><i class="bi bi-telephone"></i> +91 9XXXX XXXXX</p>
+      <p><i class="bi bi-clock"></i> Mon – Sat : 9 AM – 7 PM</p>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 EduPlatform. All Rights Reserved.
+    <span>|</span>
+    <a th:href="@{/student-privacy}">Privacy Policy</a>
+    <span>|</span>
+    <a th:href="@{/}">Terms & Conditions</a>
+  </div>
+</footer>
+
+
+  <script>
+    document.querySelectorAll(".accordion").forEach(acc => {
+      acc.addEventListener("click", () => {
+        acc.classList.toggle("active");
+        const panel = acc.nextElementSibling;
+        panel.style.display = panel.style.display === "block" ? "none" : "block";
+      });
+    });
+  </script>
+
+</body>
+</html>

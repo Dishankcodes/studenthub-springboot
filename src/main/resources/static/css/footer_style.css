@@ -1,0 +1,165 @@
+@charset "UTF-8";
+
+.edu-footer {
+  background: linear-gradient(135deg, #0b1020, #050814);
+  color: #cfd8ff;
+  padding: 60px 20px 30px;
+  font-family: "Poppins", sans-serif;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+}
+
+.footer-logo {
+  font-size: 26px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.footer-desc {
+  margin: 15px 0;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.footer-col h4 {
+  margin-bottom: 15px;
+  color: #ffffff;
+  font-size: 18px;
+}
+
+.footer-col a {
+  display: block;
+  color: #cfd8ff;
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 8px;
+  transition: 0.3s;
+}
+
+.footer-col a:hover {
+  color: #4da3ff;
+  padding-left: 4px;
+}
+
+.footer-social a {
+  display: inline-block;
+  margin-right: 12px;
+  font-size: 18px;
+  color: #cfd8ff;
+  transition: 0.3s;
+}
+
+.footer-social a:hover {
+  color: #4da3ff;
+}
+
+.footer-bottom {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 13px;
+  color: #9aa7ff;
+}
+
+.footer-bottom a {
+  color: #9aa7ff;
+  text-decoration: none;
+}
+
+.footer-bottom span {
+  margin: 0 8px;
+}
+/* ========================= */
+/* RESPONSIVE FOOTER */
+/* ========================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .footer-container {
+    gap: 30px;
+  }
+
+  .footer-logo {
+    font-size: 24px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .edu-footer {
+    padding: 50px 15px 25px;
+    text-align: center;
+  }
+
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .footer-col {
+    align-items: center;
+  }
+
+  .footer-desc {
+    max-width: 420px;
+    margin: 12px auto;
+  }
+
+  .footer-col a {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+
+  .footer-social {
+    margin-top: 12px;
+  }
+
+  .footer-social a {
+    margin: 0 10px;
+    font-size: 20px;
+  }
+
+  .footer-bottom {
+    margin-top: 30px;
+    font-size: 14px;
+  }
+}
+
+/* Very Small Screens */
+@media (max-width: 480px) {
+  .footer-logo {
+    font-size: 22px;
+  }
+
+  .footer-col h4 {
+    font-size: 17px;
+  }
+
+  .footer-bottom span {
+    display: block;
+    margin: 6px 0;
+  }
+}
+.footer-col a {
+  padding: 6px 0;
+}
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
+}
+
+.footer-social a:hover {
+  background: #4da3ff;
+  color: #fff;
+}
+
