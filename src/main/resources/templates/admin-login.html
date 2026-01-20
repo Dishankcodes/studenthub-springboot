@@ -117,7 +117,8 @@
     <div class="login-container">
         <h2>Admin Login</h2>
         <form th:action="@{/admin-dashboard}" method="post">
-            <input type="text" placeholder="Username" name="username" required>
+            <input type="text" placeholder="Enter Username" name="username" required>
+            <input type="email" placeholder="Enter Email" name="email" required>
             <input type="password" placeholder="Password" name="password" required>
             <button type="submit">Login</button>
         </form>
