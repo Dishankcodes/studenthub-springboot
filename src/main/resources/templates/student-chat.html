@@ -23,55 +23,16 @@
         body {
             background: #f4f7ff;
         }
-
-              
-        .main {
-            margin-left: 240px;
-            margin-top: 56px;
-            padding: 20px;
-            transition: 0.3s ease;
-        }
-
-        .sidebar.collapsed ~ .main {
-            margin-left: 70px;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 16px;
-        }
-
-        .card {
-            background: #fff;
-            padding: 18px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-        }
-
-        .card h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #0038a8;
-        }
-
-        .card p {
-            font-size: 13px;
-            color: #444;
-            line-height: 1.6;
-        }
-
-        .btn {
-            display: inline-block;
-            background: #0059ff;
-            padding: 6px 16px;
-            margin-top: 10px;
-            border-radius: 20px;
-            color: #fff;
-            font-size: 12px;
-            text-decoration: none;
-        }
-
+     
+	     .main {
+	            margin-left: 240px;
+	            margin-top: 56px;
+	            padding: 20px;
+	            transition: 0.3s ease;
+	        }
+     	
+     	
+       
 
     </style>
 </head>
@@ -93,13 +54,13 @@
         </h2>
     </div>
 
-<a th:href="@{/student-dashboard}" class="active"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
 <a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
 <a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
 <a th:href="@{/student-instructor-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
 <a th:href="@{/student-news}"><i class="bi bi-megaphone"></i><span>Announcements</span></a>
 <a th:href="@{/student-notes}"><i class="bi bi-graph-up"></i><span>Notes</span></a>
-<a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
+<a th:href="@{/student-chat}" class="active"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
 <a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
 <a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
 <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
@@ -108,12 +69,12 @@
 
 <!-- ===== TOPBAR ===== -->
 <div class="student-topbar">
-    <span class="page-title">Dashboard</span>
-
-    <div class="topbar-right">
+    <span class="page-title">Chat System</span>
+    	<div class="topbar-right">
         <div class="notif">
+        <a th:href="@{/student-notification}">
             <i class="bi bi-bell"></i>
-            <span class="dot"></span>
+            <span class="dot"></span> </a>
         </div>
 
         <div class="profile">
@@ -123,24 +84,14 @@
           </a>
         </div>
     </div>
+    	
+
 </div>
 
-<!-- ===== MAIN ===== -->
 <div class="main">
-    <div class="cards">
-        <div class="card">
-            <h3>My Courses</h3>
-            <p>Continue learning where you left off.</p>
-            <a class="btn" href="#">View</a>
-        </div>
-
-        <div class="card">
-            <h3>Progress</h3>
-            <p>Track your performance.</p>
-            <a class="btn" href="#">Check</a>
-        </div>
-    </div>
+  
 </div>
+
 
 <!-- ===== SCRIPT ===== -->
 <script>

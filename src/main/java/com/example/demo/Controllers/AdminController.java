@@ -17,40 +17,40 @@ public class AdminController {
 	public String admin_student()
 	{
 	
-		return "manage_students";
+		return "manage-students";
 	}
 	
 	@GetMapping("/manage-teachers")
 	public String admin_instructor()
 	{
 	
-		return "manage_instructor";
+		return "manage-instructor";
 	}
 	
 	@GetMapping("/manage-courses")
 	public String admin_courses()
 	{
 	
-		return "manage_courses";
+		return "manage-courses";
 	}
 	
 	@GetMapping("/manage-internships")
 	public String admin_internships()
 	{
 	
-		return "manage_internships";
+		return "manage-internships";
 	}
 	@GetMapping("/admin-feedback")
 	public String admin_feedback()
 	{
 	
-		return "admin_feedback";
+		return "admin-feedback";
 	}
 	
 	@GetMapping("/admin-settings")
 	public String admin_settings()
 	{
 	
-		return "admin_settings";
+		return "admin-settings";
 	}
 }

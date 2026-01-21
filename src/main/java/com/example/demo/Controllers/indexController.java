@@ -51,7 +51,7 @@ public class indexController {
 	@GetMapping("/teacher_about")
 	public String teacher_about()
 	{
-		return "teacher_about";
+		return "teacher-about";
 	}
 	
 	@GetMapping("/teacher-privacy")
@@ -68,6 +68,6 @@ public class indexController {
 	@GetMapping("/admin_about")
 	public String admin_about()
 	{
-		return "admin_about";
+		return "admin-about";
 	}
 }

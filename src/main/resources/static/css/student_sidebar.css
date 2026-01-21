@@ -183,7 +183,68 @@
 		}
         
         .sidebar.collapsed {
-    padding-top: 8px;
+		    padding-top: 8px;
+		}
+		
+		/* When sidebar is collapsed */
+		.sidebar.collapsed ~ .main {
+		    margin-left: 70px;
+		}
+		
+		/* Mobile */
+		@media (max-width: 768px) {
+		    .main {
+		        margin-left: 0;
+		    }
+		}
+				
+		.topbar-text {
+		    display: flex;
+		    flex-direction: column;
+		}
+		
+		.page-title {
+		    font-size: 18px;
+		    font-weight: 600;
+		    color: #0038a8;
+		}
+		
+		.page-subtitle {
+		    font-size: 12.5px;
+		    color: #666;
+		    margin-top: 2px;
+		}
+				
+		/* Profile link in topbar */
+		.profile-link {
+		    display: flex;
+		    align-items: center;
+		    gap: 8px;
+		    text-decoration: none;   /* removes underline */
+		    color: #0038a8;          /* same as theme */
+		    font-weight: 500;
+		}
+		
+		.profile-link:hover {
+		    color: #0059ff;
+		}
+		
+		/* Profile image */
+		.profile img {
+		    width: 32px;
+		    height: 32px;
+		    border-radius: 50%;
+		    object-fit: cover;
+		}
+		
+		/* Student name */
+		.student-name {
+		    font-size: 14px;
+		}
+		
+		.profile-link:hover img {
+		    outline: 2px solid #0059ff;
+		    outline-offset: 2px;
 		}
 		
 		 /* ===== MOBILE ===== */

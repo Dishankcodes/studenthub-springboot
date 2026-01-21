@@ -30,29 +30,35 @@ public class StudentController {
 	
 	@GetMapping("/student-news")
 	public String student_announcements() {
-		return "student_announcements";
+		return "student-announcements";
 	}
 	
-	@GetMapping("/notes")
+	@GetMapping("/student-notes")
 	public String student_stuff() {
-		return "student_stuff";
+		return "student-stuff";
 	}
 	
 	@GetMapping("/student-chat")
 	public String student_chat() {
-		return "student_chat";
+		return "student-chat";
 	}
 	
 	@GetMapping("/student-internships")
 	public String student_internships()
 	{
-		return "student_internships";
+		return "student-internships";
+	}
+	
+	@GetMapping("/student-notification")
+	public String student_notifi()
+	{
+		return "student-notification";
 	}
 	
 	@GetMapping("/student-profile")
 	public String student_profile()
 	{
-		return "student_profile";
+		return "student-profile";
 	}
 	
 	@GetMapping("/student-instructor-feedback")
