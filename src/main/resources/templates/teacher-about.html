@@ -1,36 +1,40 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="www.thymeleaf.org">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teachers | EduPlatform</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teachers | EduPlatform</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
+  <style>
+   :root {
+            --primary: #f6a623;       /* bright orange */
+            --primary-dark: #d48821;  /* darker orange for hover */
+            --bg: #fffdf8;            /* light cream background */
+            --card-bg: #ffffff;       /* white cards */
+            --text-dark: #333;        /* main text */
+            --text-muted: #666;       /* muted text */
         }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
 
-        body {
-            background: #eef3ff;
-            color: #222;
-            line-height: 1.8;
-        }
+    body {
+      background: #f6f8ff;
+      color: #222;
+    }
 
-       
-        /* NAVBAR */
+    /* ================= NAVBAR ================= */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 22px 110px;
-            background: #f6a623;
+            background: var(--primary);
         }
 
         .logo {
@@ -81,13 +85,13 @@
         }
 
         .student {
-            background: white;
-            color: #f6a623;
+            background: #fff3c4;
+            color: var(--primary);
         }
 
         .teacher {
-            background: #fff3c4;
-            color: #333;
+            background: white;
+            color: var(--primary);
         }
 
         .admin {
@@ -99,260 +103,247 @@
             transform: translateY(-2px);
         }
 
-        /* HERO */
-        .hero {
-            background: linear-gradient(135deg, #f6a623, #ff9500);
-            color: #fff;
-            padding: 120px 20px 100px;
-            text-align: center;
-        }
+    /* ================= HERO ================= */
+    .hero {
+      padding: 120px 20px 140px;
+      text-align: center;
+      background: linear-gradient(135deg, #f6a623, #ffb347);
+      color: #fff;
+      border-bottom-left-radius: 120px;
+      border-bottom-right-radius: 120px;
+    }
 
-        .hero h1 {
-            font-size: 56px;
-            font-weight: 700;
-            margin-bottom: 14px;
-        }
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
 
-        .hero p {
-            font-size: 20px;
-            opacity: 0.95;
-        }
+    .hero p {
+      font-size: 20px;
+      opacity: 0.95;
+    }
 
-        /* SECTIONS */
-        .section {
-            max-width: 880px;
-            margin: 90px auto;
-            padding: 0 20px;
-        }
+    /* ================= SECTION ================= */
+    .section {
+      max-width: 1100px;
+      margin: 100px auto;
+      padding: 0 20px;
+    }
 
-        .section h2 {
-            font-size: 36px;
-            color: #cc5400;
-            margin-bottom: 18px;
-        }
+    .section h2 {
+      font-size: 38px;
+      margin-bottom: 40px;
+      text-align: center;
+      color: #2f2f55;
+    }
 
-        .section p {
-            font-size: 17px;
-            color: #444;
-            margin-bottom: 18px;
-        }
+    /* ================= CARDS ================= */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 30px;
+    }
 
-        .divider {
-            width: 70px;
-            height: 3px;
-            background: #ff7a00;
-            margin: 35px 0;
-        }
+    .card {
+      background: #fff;
+      padding: 32px 26px;
+      border-radius: 22px;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+      transition: 0.35s;
+    }
 
-        /* TEXT LIST */
-        .text-list div {
-            padding: 22px 0;
-            border-bottom: 1px solid #dbe4ff;
-        }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+    }
 
-        .text-list h4 {
-            font-size: 19px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #222;
-        }
+    .card h4 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: #f6a623;
+    }
 
-        /* STEPS */
-        .steps {
-            margin-top: 30px;
-        }
+    .card p {
+      font-size: 15px;
+      color: #555;
+      line-height: 1.6;
+    }
 
-        .step {
-            display: flex;
-            gap: 22px;
-            margin-bottom: 26px;
-        }
+    /* ================= STEPS ================= */
+    .steps {
+      max-width: 800px;
+      margin: auto;
+    }
 
-        .step span {
-            font-size: 20px;
-            font-weight: 600;
-            color: #f6a623;
-        }
+    .step {
+      background: #fff;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      padding: 22px 28px;
+      border-radius: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
 
-        /* QUOTES */
-        .quote {
-            font-size: 18px;
-            font-style: italic;
-            color: #333;
-            margin-bottom: 22px;
-        }
+    .step span {
+      font-size: 22px;
+      font-weight: 700;
+      color: #f6a623;
+    }
 
-        /* CTA */
-        .cta {
-            text-align: center;
-            margin: 110px 0;
-        }
+    /* ================= QUOTES ================= */
+    .quotes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+    }
 
-        .cta a {
-            background: #ff6f00;
-            color: #fff;
-            padding: 16px 48px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 20px;
-            font-weight: 600;
-            transition: 0.3s;
-            box-shadow: 0 12px 30px rgba(255, 111, 0, 0.35);
-        }
+    .quote {
+      background: #fff;
+      padding: 28px;
+      border-radius: 22px;
+      font-style: italic;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+    }
 
-        .cta a:hover {
-            background: #cc5400;
-            transform: translateY(-3px);
-        }
+    /* ================= CTA ================= */
+    .cta {
+      text-align: center;
+      margin: 120px 0;
+    }
 
-        /* FOOTER */
-        footer {
-            background: #1a1a1a;
-            color: #fff;
-            padding: 55px 20px;
-            text-align: center;
-        }
+    .cta a {
+      background: linear-gradient(135deg, #ff7a00, #f6a623);
+      color: #fff;
+      padding: 18px 55px;
+      border-radius: 50px;
+      font-size: 22px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 18px 40px rgba(255, 122, 0, 0.45);
+      transition: 0.3s;
+    }
 
-        footer h3 {
-            font-size: 30px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
+    .cta a:hover {
+      transform: translateY(-4px);
+    }
 
-        footer p {
-            font-size: 15px;
-            opacity: 0.9;
-        }
+    /* ================= FOOTER ================= */
+    footer {
+      background: #2e3440;
+      padding: 50px 80px 25px;
+      color: #cfd8dc;
+    }
 
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 38px;
-            }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-bottom: 30px;
+    }
 
-            .section h2 {
-                font-size: 28px;
-            }
+    footer h4 {
+      color: #fff;
+      margin-bottom: 12px;
+    }
 
-            .navbar {
-                flex-direction: column;
-                gap: 15px;
-                padding: 10px 30px;
-            }
+    footer p {
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
 
-            .navbar nav {
-                flex-direction: column;
-                gap: 15px;
-            }
-        }
-    </style>
+    footer p:hover { color: #f6a623; }
+
+    .copy {
+      text-align: center;
+      font-size: 13px;
+      opacity: 0.7;
+      border-top: 1px solid #444;
+      padding-top: 15px;
+    }
+  </style>
 </head>
+
 <body>
 
+<header>
+  <div class="logo">EduPlatform</div>
+  <nav>
+    <a th:href="@{/teacher-homepage}">Home</a>
+    <a th:href="@{/teacher_about}">About</a>
+    <a th:href="@{/teacher-privacy}">Privacy</a>
+  </nav>
+  <div class="roles">
+    <button class="role-btn student" th:onclick="|location.href='@{index}'|">Student</button>
+    <button class="role-btn teacher">Teacher</button>
+    <button class="role-btn admin" th:onclick="|location.href='@{admin-homepage}'|">Admin</button>
+  </div>
+</header>
 
-    <!-- NAVBAR -->
-    <header>
-        <div class="logo">EduPlatform</div>
+<section class="hero">
+  <h1>Teach. Inspire. Transform.</h1>
+  <p>Build courses that shape futures</p>
+</section>
 
-        <nav>
-            <a th:href="@{/teacher-homepage}">Home</a>
-            <a th:href="@{/teacher_about}">About</a>
-            <a th:href="@{/teacher-privacy}">Privacy</a>
-        </nav>
+<section class="section">
+  <h2>What You Can Do</h2>
+  <div class="card-grid">
+    <div class="card"><h4>Create Courses</h4><p>Design engaging structured learning experiences.</p></div>
+    <div class="card"><h4>Upload Content</h4><p>Videos, notes, quizzes — all in one place.</p></div>
+    <div class="card"><h4>Track Progress</h4><p>Monitor student performance in real time.</p></div>
+    <div class="card"><h4>Analytics</h4><p>Understand what works with detailed insights.</p></div>
+    <div class="card"><h4>Announcements</h4><p>Keep students updated instantly.</p></div>
+    <div class="card"><h4>Collaboration</h4><p>Learn and grow with fellow educators.</p></div>
+  </div>
+</section>
 
-        <div class="roles">
-            <button class="role-btn student"
-             th:onclick="|location.href='@{index}'|">
-             Student</button>
-            <button class="role-btn teacher"
-             th:onclick="|location.href='@{teacher-auth}'|">
-            Teacher</button>
-            <button class="role-btn admin" 
-            th:onclick="|location.href='@{admin-homepage}'|">
-            Admin</button>
-        </div>
-    </header>
-    <!-- HERO -->
-    <section class="hero">
-        <h1>Teach, Inspire, Transform Lives</h1>
-        <p>Empower students with knowledge and guidance 📚✨</p>
-    </section>
+<section class="section">
+  <h2>How It Works</h2>
+  <div class="steps">
+    <div class="step"><span>01</span><p>Create your teacher account</p></div>
+    <div class="step"><span>02</span><p>Add courses and materials</p></div>
+    <div class="step"><span>03</span><p>Engage & guide students</p></div>
+    <div class="step"><span>04</span><p>Track growth and improve</p></div>
+  </div>
+</section>
 
-    <!-- SECTION 1 -->
-    <section class="section">
-        <h2>What You Can Do as a Teacher</h2>
-        <div class="divider"></div>
-        <div class="text-list">
-            <div>
-                <h4>Create Courses</h4>
-                <p>Design and customize courses to teach your way.</p>
-            </div>
-            <div>
-                <h4>Upload Videos & Notes</h4>
-                <p>Provide clear learning materials for every student.</p>
-            </div>
-            <div>
-                <h4>Conduct Exams & Quizzes</h4>
-                <p>Assess students with auto or manual grading.</p>
-            </div>
-            <div>
-                <h4>Make Announcements</h4>
-                <p>Keep students informed about updates and events.</p>
-            </div>
-            <div>
-                <h4>Track Student Progress</h4>
-                <p>Monitor enrollments and their learning journey.</p>
-            </div>
-            <div>
-                <h4>Answer Doubts</h4>
-                <p>Provide guidance and solve student queries effectively.</p>
-            </div>
-            <div>
-                <h4>Dashboard Analytics</h4>
-                <p>Review course popularity and performance metrics.</p>
-            </div>
-            <div>
-                <h4>Collaborate</h4>
-                <p>Connect with other teachers to grow and learn.</p>
-            </div>
-            <div>
-                <h4>Manage Profile</h4>
-                <p>Edit your personal info, experience, and certifications.</p>
-            </div>
-        </div>
-    </section>
+<section class="section">
+  <h2>Teacher Voices</h2>
+  <div class="quotes">
+    <div class="quote">“Teaching here feels powerful and simple.”</div>
+    <div class="quote">“My courses finally look professional.”</div>
+    <div class="quote">“Students engage more than ever.”</div>
+  </div>
+</section>
 
-    <!-- SECTION 2 -->
-    <section class="section">
-        <h2>How It Works</h2>
-        <div class="divider"></div>
-        <div class="steps">
-            <div class="step"><span>01</span><p>Create your teacher account</p></div>
-            <div class="step"><span>02</span><p>Add courses and learning materials</p></div>
-            <div class="step"><span>03</span><p>Engage with students and answer doubts</p></div>
-            <div class="step"><span>04</span><p>Track performance and improve</p></div>
-        </div>
-    </section>
+<div class="cta">
+  <a th:href="@{teacher-auth}">Become an Instructor</a>
+</div>
 
-    <!-- SECTION 3 -->
-    <section class="section">
-        <h2>Teacher Voices</h2>
-        <div class="divider"></div>
-        <p class="quote">“Sharing knowledge and seeing students grow is priceless.”</p>
-        <p class="quote">“I can organize my courses the way I want.”</p>
-        <p class="quote">“Connecting with learners and teachers is inspiring.”</p>
-    </section>
-
-    <!-- CTA -->
-    <div class="cta">
-        <a th:href="@{teacher-auth}">Become an Instructor 👨‍🏫🔥</a>
+<footer>
+  <div class="footer-grid">
+    <div>
+      <h4>EduPlatform</h4>
+      <p>Empowering educators worldwide.</p>
     </div>
-
-    <!-- FOOTER -->
-    <footer>
-        <h3>EduPlatform</h3>
-        <p>Empowering Teachers. Creating Impact. 📚</p>
-        <p style="margin-top:10px; font-size:14px; color:#cfd8ff;">© 2026 EduPlatform. All Rights Reserved.</p>
-    </footer>
+    <div>
+      <h4>Teacher Panel</h4>
+      <p>Dashboard</p>
+      <p>Create Course</p>
+      <p>Analytics</p>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <p>Help Center</p>
+      <p>Community</p>
+      <p>Policies</p>
+    </div>
+  </div>
+  <p class="copy">© 2025 EduPlatform — Teacher Interface</p>
+</footer>
 
 </body>
 </html>

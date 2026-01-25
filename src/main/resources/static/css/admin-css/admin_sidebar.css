@@ -1,0 +1,164 @@
+/* ===== SIDEBAR STYLES ===== */
+:root {
+  --expanded: 16.875rem;
+  --collapsed: 3.25rem;
+  --item: 2.25rem;
+  --svg: 1.125rem;
+  --brad-outer: 0.75rem;
+  --brad-inner: calc(var(--brad-outer) - 0.5rem);
+  --frame-space: 0.5rem;
+
+  --bg--primary: hsl(203, 7%, 92%);
+  --bg--hover: hsl(200, 7%, 84%);
+  --bg--active: hsla(203, 86%, 93%, 0.7);
+  --bg--focus: hsl(203, 100%, 100%);
+  --gray--primary: hsl(200, 10%, 50%);
+  --gray--secondary: hsl(200, 14%, 30%);
+  --dark--primary: hsl(203, 13%, 14%);
+  --accent--primary: hsl(206, 90%, 56%);
+  --accent--secondary: hsl(206, 79%, 58%);
+}
+
+/* Container */
+.vertical-sidebar {
+  display: flex;
+  inline-size: var(--expanded);
+  margin-block: 5vmin;
+}
+
+/* Sidebar nav */
+nav {
+  background: var(--bg--primary);
+  display: flex;
+  flex-direction: column;
+  min-width: var(--collapsed);
+  border-radius: var(--brad-outer);
+  flex: 0 0 auto;
+  transition: flex-basis 0.3s ease-out;
+  padding: var(--frame-space);
+  box-shadow: 0 3px 5px #1233, 0 5px 17px #0003;
+}
+
+.vertical-sidebar input:checked ~ nav {
+  flex-basis: var(--expanded);
+}
+
+.vertical-sidebar input:not(:checked) ~ nav {
+  flex-basis: var(--collapsed);
+}
+
+/* Header & Toggle */
+header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.sidebar__toggle-container {
+  height: var(--item);
+  display: flex;
+  justify-content: end;
+}
+
+.nav__toggle {
+  height: 100%;
+  background: none;
+  border-radius: var(--brad-inner);
+  overflow: hidden;
+}
+
+.toggle--icons {
+  display: grid;
+  place-content: center;
+  height: inherit;
+  aspect-ratio: 1;
+}
+
+.toggle-svg-icon {
+  width: var(--svg);
+  height: var(--svg);
+  fill: var(--gray--primary);
+}
+
+/* Sidebar wrapper */
+.sidebar__wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sidebar__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.sidebar__item {
+  height: var(--item);
+  border-radius: var(--brad-inner);
+}
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  height: 100%;
+  border-radius: inherit;
+  outline: 2px solid transparent;
+  padding: 0 0.75rem;
+}
+
+.sidebar__link .icon svg {
+  width: var(--svg);
+  height: var(--svg);
+  fill: var(--gray--primary);
+}
+
+.sidebar__link .text {
+  color: var(--gray--secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  pointer-events: none;
+  transition: color 0.3s ease-out;
+}
+
+.sidebar__link:hover {
+  background: var(--bg--hover);
+}
+
+.sidebar__link:hover .icon svg {
+  fill: var(--accent--primary);
+}
+
+.sidebar__link:hover .text {
+  color: var(--dark--primary);
+}
+
+/* Tooltip */
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: fixed;
+  left: calc(var(--collapsed) + 0.5rem);
+  background: hsl(198,16%,30%);
+  color: #ddd;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--brad-inner);
+  font-size: 0.875rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: scale(0);
+  pointer-events: none;
+  transition: all 0.35s ease-out;
+  z-index: 999;
+}
+
+.vertical-sidebar input:not(:checked)
+  .sidebar__link:hover::before {
+  opacity: 1;
+  transform: scale(1);
+}

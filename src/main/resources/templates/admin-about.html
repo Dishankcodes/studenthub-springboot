@@ -1,261 +1,285 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-
+<html lang="en" xmlns:th="www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin | EduPlatform</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | EduPlatform</title>
 
-    <!-- Fonts + Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            font-family: "Poppins", sans-serif;
-            box-sizing: border-box;
-        }
+  <style>
+    * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
 
-        body {
-            background: #f4f7ff;
-            color: #222;
-        }
+/* ================= BASE ================= */
+body {
+  background: #0d0d2b;
+  color: #ffffff;
+}
 
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #9b1fff, #ce3aff);
-            color: #fff;
-            text-align: center;
-            padding: 95px 20px;
-            animation: fadeIn 1s ease;
-        }
+/* ================= NAVBAR ================= */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 110px;
+  background: #1a1a3d;
+}
 
-        .hero h1 {
-            font-size: 50px;
-            font-weight: 700;
-        }
+.logo {
+  font-size: 26px;
+  font-weight: 700;
+  color: #6c63ff;
+}
 
-        .hero p {
-            font-size: 18px;
-            margin-top: 10px;
-        }
+nav {
+  display: flex;
+  gap: 35px;
+}
 
-        /* Container */
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: auto;
-            margin-top: 55px;
-        }
+nav a {
+  color: #f0f0f0;
+  text-decoration: none;
+  font-weight: 500;
+  position: relative;
+}
 
-        .section-title {
-            text-align: center;
-            font-size: 32px;
-            color: #7c09d5;
-            font-weight: 700;
-            margin-bottom: 30px;
-        }
+nav a::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background: #6c63ff;
+  left: 0;
+  bottom: -6px;
+  transition: 0.3s;
+}
 
-        /* Features Cards */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-        }
+nav a:hover::after {
+  width: 100%;
+}
 
-        .box {
-            background: #fff;
-            padding: 30px;
-            border-radius: 14px;
-            text-align: center;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-            animation: floatUp 0.7s ease;
-            transition: 0.3s;
-        }
+/* ================= ROLE BUTTONS ================= */
+.roles {
+  display: flex;
+  gap: 10px;
+}
 
-        .box:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-        }
+.role-btn {
+  padding: 8px 18px;
+  border-radius: 25px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-        .box i {
-            font-size: 45px;
-            color: #a600ff;
-            margin-bottom: 12px;
-        }
+.student,
+.teacher {
+  background: #2a2a55;
+  color: #fff;
+}
 
-        .box h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-            color: #7c09d5;
-        }
+.admin {
+  background: #6c63ff;
+  color: #fff;
+}
 
-        .box p {
-            font-size: 15px;
-            color: #555;
-        }
+.role-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(108, 99, 255, 0.4);
+}
 
-        /* CTA Button */
-        .cta {
-            text-align: center;
-            margin: 60px 0;
-        }
+/* ================= HERO ================= */
+.hero {
+  padding: 120px 20px 140px;
+  text-align: center;
+  background: #1a1a3d;
+  border-bottom-left-radius: 120px;
+  border-bottom-right-radius: 120px;
+}
 
-        .cta a {
-            background: #a600ff;
-            color: #fff;
-            padding: 15px 40px;
-            border-radius: 35px;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: 600;
-        }
+.hero h1 {
+  font-size: 56px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  color: #ffffff;
+}
 
-        .cta a:hover {
-            background: #8500d4;
-        }
+.hero p {
+  font-size: 20px;
+  color: #cfd2ff;
+}
 
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: scale(0.96);
-            }
+/* ================= SECTIONS ================= */
+.section {
+  max-width: 1100px;
+  margin: 100px auto;
+  padding: 0 20px;
+  background: #0d0d2b;
+}
 
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
+.section h2 {
+  font-size: 38px;
+  margin-bottom: 40px;
+  text-align: center;
+  color: #ffffff;
+}
 
-        @keyframes floatUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
+/* ================= CARDS ================= */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+}
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+.card {
+  background: #1a1a3d;
+  padding: 32px 26px;
+  border-radius: 22px;
+  transition: 0.35s;
+  box-shadow: 0 15px 40px rgba(108, 99, 255, 0.08);
+}
 
-        .social-links a {
-            color: #fff;
-            font-size: 26px;
-            margin: 0 14px;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-        }
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 60px rgba(108, 99, 255, 0.25);
+}
 
-        .social-links a:hover {
-            color: #00eaff;
-            transform: translateY(-4px);
-        }
-    </style>
+.card h4 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #6c63ff;
+}
 
+.card p {
+  font-size: 15px;
+  color: #cfd2ff;
+  line-height: 1.6;
+}
+
+/* ================= CTA ================= */
+.cta {
+  text-align: center;
+  margin: 120px 0;
+}
+
+.cta a {
+  background: linear-gradient(135deg, #6c63ff, #4e4ae8);
+  color: #fff;
+  padding: 18px 55px;
+  border-radius: 50px;
+  font-size: 22px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.cta a:hover {
+  transform: translateY(-4px);
+}
+
+/* ================= FOOTER ================= */
+footer {
+  background: #1a1a3d;
+  padding: 50px 80px 25px;
+  color: #cfd2ff;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+footer h4 {
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+
+footer p {
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+footer p:hover {
+  color: #6c63ff;
+}
+
+.copy {
+  text-align: center;
+  font-size: 13px;
+  opacity: 0.7;
+  border-top: 1px solid #2a2a55;
+  padding-top: 15px;
+}
+
+  </style>
 </head>
 
 <body>
 
-    <section class="hero">
-        <h1>For Admin</h1>
-        <p>Control. Monitor. Secure the entire learning ecosystem 🛡️</p>
-    </section>
+<header>
+  <div class="logo">EduPlatform</div>
+  <nav>
+    <a th:href="@{/admin-homepage}">Home</a>
+    <a th:href="@{/admin-about}">About</a>
+  </nav>
+  <div class="roles">
+    <button class="role-btn student" th:onclick="|location.href='@{index}'|">Student</button>
+    <button class="role-btn teacher" th:onclick="|location.href='@{teacher-homepage}'|">Teacher</button>
+    <button class="role-btn admin">Admin</button>
+  </div>
+</header>
 
-    <div class="container">
-        <h2 class="section-title">Admin Power Features</h2>
+<section class="hero">
+  <h1>Command. Control. Secure.</h1>
+  <p>Powering the entire EduPlatform ecosystem</p>
+</section>
 
-        <div class="features">
+<section class="section">
+  <h2>Admin Capabilities</h2>
+  <div class="card-grid">
+    <div class="card"><h4>User Management</h4><p>Approve, block, and manage all users.</p></div>
+    <div class="card"><h4>Course Control</h4><p>Monitor, approve, or remove courses.</p></div>
+    <div class="card"><h4>Teacher Verification</h4><p>Review and approve educator profiles.</p></div>
+    <div class="card"><h4>Platform Analytics</h4><p>Track growth, revenue, and engagement.</p></div>
+    <div class="card"><h4>Content Moderation</h4><p>Ensure quality and policy compliance.</p></div>
+    <div class="card"><h4>System Security</h4><p>Maintain uptime and data integrity.</p></div>
+  </div>
+</section>
 
-            <div class="box">
-                <i class="fas fa-chart-line"></i>
-                <h3>Dashboard & Analytics</h3>
-                <p>Monitor users, courses, revenue & activities live.</p>
-            </div>
+<div class="cta">
+  <a th:href="@{admin-login}">Enter Admin Panel</a>
+</div>
 
-            <div class="box">
-                <i class="fas fa-user-graduate"></i>
-                <h3>Manage All Students</h3>
-                <p>View, approve, block or update student accounts.</p>
-            </div>
-
-            <div class="box">
-                <i class="fas fa-user-check"></i>
-                <h3>Approve Teachers</h3>
-                <p>Review teacher requests & activate educators.</p>
-            </div>
-
-            <div class="box">
-                <i class="fas fa-briefcase"></i>
-                <h3>Add Internships</h3>
-                <p>Offer industry opportunities for learners.</p>
-            </div>
-
-            <div class="box">
-                <i class="fas fa-video"></i>
-                <h3>Content Moderation</h3>
-                <p>Review & delete inappropriate videos or notes.</p>
-            </div>
-
-            <div class="box">
-                <i class="fas fa-receipt"></i>
-                <h3>Payments Management</h3>
-                <p>Track and verify all transactions easily.</p>
-            </div>
-
-            <div class="box">
-                <i class="fas fa-comment-dots"></i>
-                <h3>View Feedback</h3>
-                <p>Listen to students & improve platform quality.</p>
-            </div>
-
-            <div class="box">
-                <i class="fas fa-server"></i>
-                <h3>Server Control</h3>
-                <p>Ensure platform security & uptime with control.</p>
-            </div>
-
-            <div class="box">
-                <i class="fas fa-bolt"></i>
-                <h3>Quick Actions</h3>
-                <p>Perform urgent admin operations instantly.</p>
-            </div>
-
-        </div>
-
-        <div class="cta">
-            <a th:href="@{admin-login}">Go to Admin Panel ⚙️</a>
-        </div>
+<footer>
+  <div class="footer-grid">
+    <div>
+      <h4>EduPlatform</h4>
+      <p>Administrative Control Center</p>
     </div>
-
-    <!-- Footer Section -->
-    <footer style="background:#002b80; color:#fff; padding:40px 0; margin-top:60px;">
-        <div style="width:90%; max-width:1200px; margin:auto; text-align:center;">
-
-            <h3 style="font-weight:700; font-size:26px;">EduPlatform</h3>
-            <p style="font-size:15px; margin:10px 0 20px;">
-                Empowering Education. Leading Innovation. 🌍
-            </p>
-
-            <div class="social-links" style="margin-bottom:22px;">
-              <a th:href="@{/}" class="social-icon"><i class="bi bi-instagram"></i></a>
-                        <a th:href="@{/}" class="social-icon"><i class="bi bi-twitter"></i></a>
-                        <a th:href="@{/}" class="social-icon"><i class="bi bi-google"></i></a>
-                        <a th:href="@{/}" class="social-icon"><i class="bi bi-linkedin"></i></a>
-            </div>
-
-            <p style="font-size:14px; color:#cfd8ff;">
-                © 2026 EduPlatform. All Rights Reserved.
-            </p>
-
-        </div>
-    </footer>
+    <div>
+      <h4>Admin Tools</h4>
+      <p>User Management</p>
+      <p>Course Review</p>
+      <p>Reports</p>
+    </div>
+    <div>
+      <h4>Security</h4>
+      <p>Privacy</p>
+      <p>Policies</p>
+      <p>Compliance</p>
+    </div>
+  </div>
+  <p class="copy">© 2026 EduPlatform — Admin Panel</p>
+</footer>
 
 </body>
-
 </html>

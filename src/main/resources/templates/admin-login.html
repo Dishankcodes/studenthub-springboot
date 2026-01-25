@@ -8,107 +8,114 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
-        }
+       * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
 
-        body {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #0b0b1f, #14142f);
-        }
+/* ================= BASE ================= */
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #0d0d2b;
+  color: #fff;
+}
 
-        .login-container {
-            width: 450px;
-            padding: 50px 35px;
-            border-radius: 20px;
-            background: rgba(20, 20, 47, 0.8);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-        }
+/* ================= LOGIN CONTAINER ================= */
+.login-container {
+  width: 450px;
+  padding: 50px 35px;
+  border-radius: 22px;
+  background: #1a1a3d;
+  animation: float 6s ease-in-out infinite;
+}
 
-        .login-container h2 {
-            text-align: center;
-            font-size: 28px;
-            color: #c2b280; /* subtle gold */
-            margin-bottom: 30px;
-            font-weight: 700;
-        }
+/* ================= TITLE ================= */
+.login-container h2 {
+  text-align: center;
+  font-size: 30px;
+  color: #f ff;
+  margin-bottom: 30px;
+  font-weight: 700;
+}
 
-        .login-container form {
-            display: flex;
-            flex-direction: column;
-            gap: 18px;
-        }
+/* ================= FORM ================= */
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
 
-        .login-container input {
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 1px solid rgba(194, 178, 128, 0.4);
-            background: rgba(0, 0, 0, 0.3);
-            color: #f0f0f0;
-            font-size: 15px;
-            outline: none;
-            transition: 0.3s;
-        }
+.login-container input {
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid #2a2a55;
+  background: #0d0d2b;
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  transition: 0.3s;
+}
 
-        .login-container input::placeholder {
-            color: #ccc;
-        }
+.login-container input::placeholder {
+  color: #cfd2ff;
+  opacity: 0.7;
+}
 
-        .login-container input:focus {
-            border-color: #c2b280;
-            box-shadow: 0 0 8px rgba(194, 178, 128, 0.4);
-        }
+.login-container input:focus {
+  border-color: #6c63ff;
+  box-shadow: 0 0 10px rgba(108, 99, 255, 0.45);
+}
 
-        .login-container button {
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: none;
-            background: linear-gradient(135deg, #2f2e4d, #3c3b65);
-            color: #f0f0f0;
-            font-weight: 600;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+/* ================= BUTTON ================= */
+.login-container button {
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #6c63ff, #4e4ae8);
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 10px;
+}
 
-        .login-container button:hover {
-            background: linear-gradient(135deg, #3c3b65, #4a497f);
-        }
+.login-container button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 35px rgba(108, 99, 255, 0.45);
+}
 
-        .login-footer {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 14px;
-            color: #aaa;
-        }
+/* ================= FOOTER ================= */
+.login-footer {
+  margin-top: 22px;
+  text-align: center;
+  font-size: 14px;
+  color: #cfd2ff;
+}
 
-        .login-footer a {
-            color: #c2b280;
-            text-decoration: none;
-            transition: 0.3s;
-        }
+.login-footer a {
+  color: #6c63ff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
 
-        .login-footer a:hover {
-            text-decoration: underline;
-        }
+.login-footer a:hover {
+  text-decoration: underline;
+}
 
-        /* Optional aesthetic: subtle floating animation */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-            100% { transform: translateY(0px); }
-        }
+/* ================= FLOAT ANIMATION ================= */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
 
-        .login-container {
-            animation: float 6s ease-in-out infinite;
-        }
     </style>
 </head>
 

@@ -44,6 +44,10 @@ public class LoginController {
 		return "teacher-auth";
 	}
 	
+	@GetMapping("/teacher-register")
+	public String teacher_register() {
+		return "teacher-register";
+	}
 	@GetMapping("/admin-login") 
 	public String admin_login(){
 		return "admin-login";

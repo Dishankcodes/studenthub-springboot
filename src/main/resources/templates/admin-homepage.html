@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>EduPlatform | Admin</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 
     <style>
@@ -16,7 +17,7 @@
 
         body {
             background: #0d0d2b;
-            color: #f0f0f0;
+            color: #fff;
         }
 
         /* NAVBAR */
@@ -31,7 +32,7 @@
         .logo {
             font-size: 26px;
             font-weight: 700;
-            color: #ffcc00;
+            color: #6c63ff;
         }
 
         .navbar nav {
@@ -52,7 +53,7 @@
             position: absolute;
             width: 0;
             height: 2px;
-            background: #ffcc00;
+            background: #6c63ff;
             left: 0;
             bottom: -6px;
             transition: 0.3s;
@@ -77,24 +78,20 @@
             transition: 0.3s;
         }
 
-        .student {
-            background: #333;
-            color: #ffcc00;
-        }
-
+        .student,
         .teacher {
-            background: #444;
-            color: #ffcc00;
+            background: #2a2a55;
+            color: #fff;
         }
 
         .admin {
-            background: #ffcc00;
-            color: #1a1a3d;
+            background: #6c63ff;
+            color: #fff;
         }
 
         .role-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 204, 0, 0.4);
+            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.4);
         }
 
         /* HERO */
@@ -109,7 +106,6 @@
         }
 
         .hero-content {
-            color: #f0f0f0;
             max-width: 520px;
         }
 
@@ -119,12 +115,12 @@
         }
 
         .hero-content span {
-            color: #ffcc00;
+            color: #6c63ff;
         }
 
         .hero-content p {
             margin: 20px 0;
-            opacity: 0.9;
+            color: #cfd2ff;
         }
 
         .hero-buttons {
@@ -133,8 +129,8 @@
         }
 
         .primary-btn {
-            background: #ffcc00;
-            color: #1a1a3d;
+            background: linear-gradient(135deg, #6c63ff, #4e4ae8);
+            color: #fff;
             padding: 14px 28px;
             border-radius: 30px;
             border: none;
@@ -144,26 +140,8 @@
         }
 
         .primary-btn:hover {
-            background: #e6b800;
-            color: #0d0d2b;
-        }
-
-        .secondary-btn {
-            background: transparent;
-            color: #f0f0f0;
-            border: none;
-            font-size: 15px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .secondary-btn:hover {
-            letter-spacing: 0.5px;
-        }
-
-        .hero-image {
-            display: flex;
-            justify-content: center;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(108, 99, 255, 0.45);
         }
 
         .hero-img {
@@ -178,7 +156,7 @@
 
         .info h2 {
             font-size: 32px;
-            color: #ffcc00;
+            color: #fff;
         }
 
         .info-cards {
@@ -193,21 +171,20 @@
             padding: 30px;
             width: 300px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(255, 204, 0, 0.1);
             transition: 0.3s;
         }
 
         .info-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(255, 204, 0, 0.2);
+            box-shadow: 0 18px 40px rgba(108, 99, 255, 0.3);
         }
 
         .info-card h3 {
-            color: #ffcc00;
+            color: #fff;
         }
 
         .info-card p {
-            color: #ccc;
+            color: #fff;
         }
 
         /* STATS */
@@ -220,19 +197,18 @@
         }
 
         .stat h2 {
-            color: #ffcc00;
+            color: #6c63ff;
             font-size: 30px;
         }
 
         .stat p {
-            color: #ccc;
+            color: #cfd2ff;
             font-size: 14px;
         }
 
         /* FOOTER */
         .footer {
             background: #1a1a3d;
-            color: #f0f0f0;
             padding: 60px 120px 30px;
         }
 
@@ -244,13 +220,12 @@
 
         .footer p {
             font-size: 14px;
-            opacity: 0.9;
             cursor: pointer;
             transition: 0.3s;
         }
 
         .footer p:hover {
-            color: #ffcc00;
+            color: #6c63ff;
             transform: translateX(4px);
         }
 
@@ -264,111 +239,94 @@
 
 <body>
 
-    <!-- NAVBAR -->
-    <header class="navbar">
-        <div class="logo">EduPlatform</div>
+<header class="navbar">
+    <div class="logo">EduPlatform</div>
 
-        <nav>
-            <a th:href="@{admin-homepage}">Home</a>
-            <a th:href="@{admin_about}">About</a>
-            <a th:href="@{/}">Reports</a>
-        </nav>
+    <nav>
+        <a th:href="@{admin-homepage}">Home</a>
+        <a th:href="@{admin_about}">About</a>
+    </nav>
 
-        <div class="auth-btns">
-            <button class="role-btn student" th:onclick="|window.location.href='@{index}'|">
-                Student
-            </button>
-            <button class="role-btn teacher" th:onclick="|window.location.href='@{teacher-homepage}'|">
-                Teacher
-            </button>
-            <button class="role-btn admin" th:onclick="|window.location.href='@{admin-login}'|">Admin</button>
+    <div class="auth-btns">
+        <button class="role-btn student" th:onclick="|window.location.href='@{index}'|">Student</button>
+        <button class="role-btn teacher" th:onclick="|window.location.href='@{teacher-homepage}'|">Teacher</button>
+        <button class="role-btn admin" th:onclick="|window.location.href='@{admin-login}'|">Admin</button>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>
+            Manage <span>Smarter</span>,<br>
+            Oversee Every Operation
+        </h1>
+        <p>Admin panel to monitor courses, users, analytics, and system performance effortlessly.</p>
+
+        <div class="hero-buttons">
+            <button class="primary-btn" th:onclick="|window.location.href='@{admin-dashboard}'|">Dashboard</button>
+            <button class="primary-btn" th:onclick="|window.location.href='@{admin-login}'|">Login</button>
         </div>
-    </header>
+    </div>
 
-    <!-- HERO -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>
-                Manage <span>Smarter</span>,<br>
-                Oversee Every Operation
-            </h1>
-            <p>
-                Admin panel to monitor courses, users, analytics, and system performance effortlessly.
-            </p>
+    <img th:src="@{/images/admin.png}" class="hero-img">
+</section>
 
-            <div class="hero-buttons">
-                <button class="primary-btn" th:onclick="|window.location.href='@{admin-dashboard}'|">Dashboard</button>
-                <button class="primary-btn" th:onclick="|window.location.href='@{admin-login}'|">Login (Restricated)</button>
-            </div>
+<section class="info">
+    <h2>Why Use EduPlatform Admin?</h2>
+
+    <div class="info-cards">
+        <div class="info-card">
+            <h3>User Management</h3>
+            <p>Manage students, teachers, and admins efficiently.</p>
         </div>
-
-        <div class="hero-image">
-            <img th:src="@{/images/admin.png}" class="hero-img">
+        <div class="info-card">
+            <h3>Course Oversight</h3>
+            <p>Monitor all courses, approvals, and content.</p>
         </div>
-    </section>
-
-    <!-- INFO -->
-    <section class="info">
-        <h2>Why Use EduPlatform Admin?</h2>
-
-        <div class="info-cards">
-            <div class="info-card">
-                <h3>User Management</h3>
-                <p>Manage students, teachers, and admins efficiently.</p>
-            </div>
-            <div class="info-card">
-                <h3>Course Oversight</h3>
-                <p>Monitor all courses, approvals, and content.</p>
-            </div>
-            <div class="info-card">
-                <h3>Analytics & Reports</h3>
-                <p>View detailed analytics on performance and engagement.</p>
-            </div>
+        <div class="info-card">
+            <h3>Analytics & Reports</h3>
+            <p>View detailed analytics on performance and engagement.</p>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- STATS -->
-    <section class="stats">
-        <div class="stat">
-            <h2>500+</h2>
-            <p>Active Users</p>
-        </div>
-        <div class="stat">
-            <h2>200+</h2>
-            <p>Courses Monitored</p>
-        </div>
-        <div class="stat">
-            <h2>99%</h2>
-            <p>System Uptime</p>
-        </div>
-    </section>
+<section class="stats">
+    <div class="stat">
+        <h2>500+</h2>
+        <p>Active Users</p>
+    </div>
+    <div class="stat">
+        <h2>200+</h2>
+        <p>Courses Monitored</p>
+    </div>
+    <div class="stat">
+        <h2>99%</h2>
+        <p>System Uptime</p>
+    </div>
+</section>
 
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div>
-                <h3>EduPlatform</h3>
-                <p>Admin Panel - Manage the platform seamlessly.</p>
-            </div>
-            <div>
-                <h4>Admin Tools</h4>
-                <p>Dashboard</p>
-                <p>Manage Users</p>
-                <p>Reports</p>
-            </div>
-            <div>
-                <h4>Support</h4>
-                <p>Help Center</p>
-                <p>Community</p>
-                <p>Policies</p>
-            </div>
+<footer class="footer">
+    <div class="footer-content">
+        <div>
+            <h3>EduPlatform</h3>
+            <p>Admin Panel — Full Control</p>
         </div>
+        <div>
+            <h4>Admin Tools</h4>
+            <p>Dashboard</p>
+            <p>Users</p>
+            <p>Reports</p>
+        </div>
+        <div>
+            <h4>Support</h4>
+            <p>Help Center</p>
+            <p>Community</p>
+            <p>Policies</p>
+        </div>
+    </div>
 
-        <p class="copyright">
-            © 2026 EduPlatform — Admin Panel
-        </p>
-    </footer>
+    <p class="copyright">© 2026 EduPlatform — Admin Panel</p>
+</footer>
 
 </body>
-
 </html>
