@@ -4,6 +4,7 @@
 *::after,
 *::before {
     box-sizing: inherit;
+    color:#fff;
 }
 
 label,
@@ -64,7 +65,6 @@ body {
 .vertical-sidebar {
     display: flex;
     inline-size: var(--expanded);
-    margin-block: 5vmin;
 }
 
 nav {
@@ -78,6 +78,7 @@ nav {
     will-change: flex-basis;
     padding: var(--frame-space);
     box-shadow: 0 3px 5px #1233, 0 5px 17px #0003;
+    padding-top:10px;
 }
 
 .vertical-sidebar :checked ~ nav {
@@ -241,15 +242,21 @@ figcaption {
     transition: color 266ms ease-out;
 }
 
+/* Sidebar link hover */
 .sidebar__link:hover {
     background: var(--bg--hover);
-    .icon svg {
-        fill: var(--accent--primary);
-    }
-    .text {
-        color: var(--dark--primary);
-    }
 }
+
+/* Change icon color on hover */
+.sidebar__link:hover .icon svg {
+    fill: var(--accent--primary);
+}
+
+/* Change text color on hover */
+.sidebar__link:hover .text {
+    color: var(--dark--primary);
+}
+
 
 .sidebar__link:focus {
     outline: 2px solid var(--accent--secondary);
@@ -308,7 +315,6 @@ aside:not(:has(:checked))
 .home-section {
 flex: 1;
 padding: 2rem;
-margin-left: var(--collapsed);
 transition: margin-left 300ms ease;
 background: linear-gradient(
 135deg,
@@ -335,68 +341,71 @@ margin-left: var(--expanded);
 
 /* ===== TOPBAR ===== */
 .topbar {
-  height: 64px;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  background: linear-gradient(135deg, #0b0b1f, #14142f);
-  color: #eaeaf0;
-
-  position: sticky;
-  top: 0;
-  z-index: 500;
+    height: 64px;
+    display: flex;            /* horizontal layout */
+    flex-direction: row;      /* make sure it's row */
+    align-items: center;      /* vertically center items */
+    justify-content: space-between; /* page title left, profile right */
+    padding: 0 2rem;
+    background: linear-gradient(135deg, #0b0b1f, #14142f);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3); /* subtle shadow */
+    position: sticky;
+    top: 0;
+    z-index: 500;
 }
 
 /* Page title */
 .page-title {
-  font-size: 1.1rem;
-  font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: inline-block;  /* ensure it stays left */
 }
 
-/* Right side */
+/* Right side (profile) */
 .topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+    display: flex;
+    align-items: center;
+    margin-left: auto;      /* push to right */
+    gap: 0.75rem;
 }
 
 /* Profile button */
 .profile-btn {
-  background: transparent;
-  border: none;
-  color: #eaeaf0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: none;
+    color: #eaeaf0;
 }
 
 .profile-btn img {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Profile hover effect */
+.profile-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    transition: 0.2s ease-in-out;
 }
 
 /* ===== MAIN CONTENT ===== */
 .home-section {
 flex: 1;
 padding: 2rem;
-margin-left: var(--collapsed);
 transition: margin-left 300ms ease;
 background: linear-gradient(135deg, #0b0b1f, #14142f);
 color: #eaeaf0;
 }
 
-/* Sidebar collapsed */
-.vertical-sidebar:not(:has(:checked)) + .content-area .home-section {
-  margin-left: var(--collapsed);
-}
 
-/* Sidebar expanded */
-.vertical-sidebar:has(:checked) + .content-area .home-section {
-  margin-left: var(--expanded);
-}
+
+
 /* ===== MAIN LAYOUT ===== */
 /* ===== MAIN LAYOUT ===== */
 .layout {
@@ -406,8 +415,15 @@ color: #eaeaf0;
 
 /* ===== SIDEBAR ===== */
 .vertical-sidebar {
-  flex: 0 0 auto;
+  width: var(--collapsed);
+  transition: width 300ms ease;
 }
+
+/* Expanded */
+.vertical-sidebar:has(:checked) {
+  width: var(--expanded);
+}
+
 
 /* ===== CONTENT AREA ===== */
 .content-area {
@@ -418,15 +434,7 @@ color: #eaeaf0;
   transition: margin-left 300ms ease;
 }
 
-/* Sidebar collapsed */
-.vertical-sidebar:not(:has(:checked)) + .content-area {
-  margin-left: var(--collapsed);
-}
 
-/* Sidebar expanded */
-.vertical-sidebar:has(:checked) + .content-area {
-  margin-left: var(--expanded);
-}
 
 /* ===== TOPBAR ===== */
 .topbar {
