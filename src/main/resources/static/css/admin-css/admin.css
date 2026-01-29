@@ -1,72 +1,143 @@
+/* ===== ROOT VARIABLES ===== */
+:root {
+    --expanded: 16.875rem;
+    --collapsed: 3.25rem;
+    --bg-primary: linear-gradient(135deg, #0b0b1f, #14142f);
+    --bg-content: #1a1a3d; /* slightly lighter than topbar */
+    --accent: #3b82f6;
+    --text-light: #eaeaf0;
+    --text-muted: #9ca3af;
+    --shadow-topbar: rgba(0,0,0,0.4);
+}
+
+/* ===== BODY ===== */
 body {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #0b0b1f, #14142f);
-  color: #eaeaf0;
-  margin: 0;
-  font-family: "Poppins", sans-serif;
+    font-family: "Poppins", sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg-primary);
+    color: var(--text-light);
 }
 
-/* TOP BAR */
+/* ===== LAYOUT ===== */
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ===== CONTENT AREA ===== */
+.content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: margin-left 300ms ease;
+}
+
+/* When sidebar is expanded */
+.vertical-sidebar:has(:checked) ~ .content-area {
+    margin-left: var(--expanded);
+}
+
+/* When sidebar is collapsed */
+.vertical-sidebar:not(:has(:checked)) ~ .content-area {
+    margin-left: var(--collapsed);
+}
+
+/* ===== TOPBAR ===== */
 .topbar {
-  position: fixed;
-  top: 0;
-  left: 78px;
-  right: 0;
-  height: 64px;
-  background: rgba(20, 20, 47, 0.85);
-  backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 30px;
-  z-index: 100;
-  transition: 0.3s;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* profile on right */
+    padding: 0 2rem;
+    background: var(--bg-primary);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 8px var(--shadow-topbar); /* shadow for separation */
+    position: sticky;
+    top: 0;
+    z-index: 500;
 }
 
-.sidebar.open ~ .topbar {
-  left: 260px;
-}
-
+/* Page title */
 .page-title {
-  font-size: 18px;
-  font-weight: 600;
+    font-size: 1.2rem;
+    font-weight: 600;
 }
 
-/* TOP RIGHT */
+/* Right side (profile) */
 .topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  font-size: 14px;
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* push to right */
+    gap: 1rem;
+	text-align:right;
 }
 
-.topbar-right i {
-  font-size: 18px;
+/* Profile button */
+.profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: transparent;
+    border: none;
+    color: var(--text-light);
 }
 
-.avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
+.profile-btn img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
-/* MAIN CONTENT */
+/* Hover effect on profile */
+.profile-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+    transition: 0.3s;
+}
+
+/* ===== MAIN CONTENT ===== */
 .home-section {
-  margin-left: 78px;
-  margin-top: 64px;
-  padding: 40px;
-  transition: 0.3s;
+    flex: 1;
+    padding: 2rem;
+    background: var(--bg-content);
+    border-radius: 0 20px 0 0; /* optional rounded top-right for style */
+    box-shadow: inset 0 0 30px rgba(0,0,0,0.2);
+    color: var(--text-light);
+    transition: margin-left 300ms ease, background 300ms ease;
 }
 
-.sidebar.open ~ .home-section {
-  margin-left: 260px;
-}
-
+/* Headings & paragraph */
 .home-section h1 {
-  font-size: 28px;
-  margin-bottom: 10px;
+    margin-bottom: 10px;
+    font-size: 28px;
 }
 
 .home-section p {
-  opacity: 0.8;
+    opacity: 0.85;
+}
+
+/* ===== Hover / Active links (if inside main content or future buttons) ===== */
+.button, .link {
+    text-decoration: none;
+    color: var(--text-light);
+    transition: all 0.2s ease;
+}
+
+.button:hover, .link:hover {
+    color: var(--accent);
+    transform: translateY(-1px);
+}
+
+/* ===== RESPONSIVE ===== */
+@media screen and (max-width: 768px) {
+    .topbar {
+        padding: 0 1rem;
+    }
+
+    .home-section {
+        padding: 1rem;
+    }
 }
