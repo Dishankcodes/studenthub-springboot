@@ -1,0 +1,179 @@
+:root {
+    --primary: #f6a623;
+}
+
+.sidebar {
+    width: 260px;
+    height: 100vh;
+    background: #1f1f2e;
+    position: fixed;
+    left: 0;
+    top: 0;
+    padding: 30px 0;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.35);
+}
+
+.sidebar-logo {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    padding: 0 24px;
+    margin-bottom: 40px;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-menu a {
+    text-decoration: none;
+    color: #cfd8dc;
+    padding: 14px 24px;
+    font-weight: 500;
+    transition: 0.3s ease;
+}
+
+.sidebar-menu a:hover,
+.sidebar-menu a.active {
+    background: var(--primary);
+    color: #1f1f2e;
+}
+
+.sidebar-menu .logout {
+    margin-top: 30px;
+    background: #2f2f55;
+}
+/* ===== SIDEBAR TOGGLE ===== */
+.sidebar.collapsed {
+    width: 80px;
+}
+
+.sidebar.collapsed .sidebar-logo {
+    font-size: 0;
+}
+
+.sidebar.collapsed .sidebar-logo::after {
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.sidebar.collapsed .sidebar-menu a {
+    text-align: center;
+    padding: 14px 0;
+    font-size: 0;
+}
+
+.sidebar.collapsed .sidebar-menu a::before {
+
+    font-size: 20px;
+    color: #fff;
+}
+
+/* Smooth transition */
+.sidebar,
+.main-content,
+.footer {
+    transition: all 0.3s ease;
+}
+
+/* ===== SIDEBAR MENU ===== */
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    text-decoration: none;
+    color: #cfd8dc;
+    padding: 14px 24px;
+    font-weight: 500;
+
+    transition: 0.3s ease;
+}
+
+.sidebar-menu a i {
+    font-size: 18px;
+    min-width: 20px;
+    text-align: center;
+}
+
+/* hover + active */
+.sidebar-menu a:hover,
+.sidebar-menu a.active {
+    background: var(--primary);
+    color: #1f1f2e;
+}
+
+/* ===== COLLAPSED SIDEBAR ===== */
+.sidebar.collapsed {
+    width: 80px;
+}
+
+/* hide text when collapsed */
+.sidebar.collapsed .sidebar-menu a span {
+    display: none;
+}
+
+/* center icons when collapsed */
+.sidebar.collapsed .sidebar-menu a {
+    justify-content: center;
+    padding: 14px 0;
+}
+
+.sidebar.collapsed .sidebar-menu a i {
+    font-size: 20px;
+}
+
+/* smooth animation */
+.sidebar,
+.sidebar-menu a,
+.sidebar-menu a span,
+.sidebar-menu a i {
+    transition: all 0.3s ease;
+}
+/* ===== SIDEBAR LOGO (FIXED & RESPONSIVE) ===== */
+/* ===== SIDEBAR LOGO ===== */
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px 0;
+    margin-bottom: 30px;
+
+    overflow: hidden;
+}
+
+/* logo image */
+/* ===== ROUND LOGO IMAGE ===== */
+.sidebar-logo img {
+    width: 40px;          /* control size */
+    height: 40px;         /* same as width for perfect circle */
+    object-fit: contain;  /* keeps logo inside circle */
+    border-radius: 50%;   /* 🔥 makes it round */
+    background: #ffffff;  /* optional: remove if logo already transparent */
+    padding: 4px;         /* optional: breathing space */
+}
+
+/* logo text (EduPlatform) */
+.logo-text {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+/* ===== COLLAPSED MODE ===== */
+.sidebar.collapsed .logo-text {
+    display: none;        /* ❌ REMOVE EP / TEXT COMPLETELY */
+}
+
+.sidebar.collapsed .sidebar-logo {
+    padding: 20px 0;
+}
+
+.sidebar.collapsed .sidebar-logo img {
+    width: 36px;
+}

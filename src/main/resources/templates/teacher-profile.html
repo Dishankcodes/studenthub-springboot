@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher Profile</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/teacher-css/teacher-style.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
+</head>
+
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+    <div class="sidebar-logo">
+        <img th:src="@{/images/logo.png}" alt="EduPlatform Logo">
+        <span class="logo-text">EduPlatform</span>
+    </div>
+
+    <nav class="sidebar-menu">
+        <a th:href="@{/teacher-dashboard}">
+            <i class="bi bi-speedometer2"></i><span>Dashboard</span>
+        </a>
+
+        <a th:href="@{/teacher-course}">
+            <i class="bi bi-journal-bookmark"></i><span>Course Management</span>
+        </a>
+
+        <a th:href="@{/teacher-exams}">
+            <i class="bi bi-pencil-square"></i><span>Exams & Quizzes</span>
+        </a>
+
+        <a th:href="@{/teacher-students}">
+            <i class="bi bi-people"></i><span>Students</span>
+        </a>
+
+        <a th:href="@{/teacher-communication}">
+            <i class="bi bi-chat-dots"></i><span>Communication</span>
+        </a>
+
+        <a th:href="@{/teacher-feedback}">
+            <i class="bi bi-star"></i><span>Feedback & Ratings</span>
+        </a>
+
+        <a th:href="@{/teacher-profile}" class="active">
+            <i class="bi bi-gear"></i><span>Profile & Settings</span>
+        </a>
+
+        <a th:href="@{/logout}" class="logout">
+            <i class="bi bi-box-arrow-right"></i><span>Logout</span>
+        </a>
+    </nav>
+</aside>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main-content">
+    <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+<header class="page-header">
+	<h1>Settings</h1>
+</header>
+<!-- ===== TEACHER PROFILE ===== -->
+<section class="teacher-profile-wrapper">
+
+    <!-- PROFILE CARD -->
+    <div class="teacher-profile-card">
+        <div class="teacher-photo">
+            <img src="/images/default-avatar.png" alt="Teacher Profile">
+            <label class="photo-upload">
+                Change Photo
+                <input type="file" hidden>
+            </label>
+        </div>
+
+        <h2 class="teacher-name">Teacher Name</h2>
+        <p class="teacher-role">Educator · EduPlatform</p>
+    </div>
+
+    <!-- PROFILE FORM -->
+    <form class="teacher-profile-form">
+
+        <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" placeholder="Enter full name">
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" placeholder="Enter email">
+        </div>
+
+        <div class="form-group">
+            <label>Phone</label>
+            <input type="text" placeholder="Enter phone number">
+        </div>
+
+        <div class="form-group">
+            <label>Qualification</label>
+            <input type="text" placeholder="e.g. M.Sc, B.Ed, PhD">
+        </div>
+
+        <div class="form-group">
+            <label>Specialist</label>
+            <input type="text" placeholder="e.g. Mathematics, Physics">
+        </div>
+
+        <div class="form-group">
+            <label>Experience (Years)</label>
+            <input type="number" placeholder="e.g. 5">
+        </div>
+
+        <div class="form-group">
+            <label>Bio</label>
+            <textarea rows="4" placeholder="Short bio about you"></textarea>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="profile-actions">
+            <button type="button" class="cancel-btn">Cancel Changes</button>
+            <button type="submit" class="save-btn">Save Changes</button>
+        </div>
+
+        <!-- PASSWORD LINK -->
+        <p class="password-link">
+            Want to update your password?
+            <a href="#" id="openPassword">Change Password</a>
+        </p>
+    </form>
+</section>
+<!-- ===== CHANGE PASSWORD MODAL ===== -->
+<div id="passwordModal" class="modal">
+
+    <div class="modal-content">
+        <span class="close-btn" id="closePasswordModal">&times;</span>
+
+        <h2>Change Password</h2>
+        
+
+        <form>
+            <div class="form-group">
+                <label>Current Password</label>
+                <input type="password" placeholder="Enter current password">
+            </div>
+
+            <div class="form-group">
+                <label>New Password</label>
+                <input type="password" placeholder="Enter new password">
+            </div>
+
+            <div class="form-group">
+                <label>Confirm New Password</label>
+                <input type="password" placeholder="Confirm new password">
+            </div>
+<p class="modal-subtext">
+            Forgot your password?
+            <a href="#">Reset it securely</a>
+        </p>
+            <div class="profile-actions">
+                <button type="button" class="cancel-btn" id="cancelPassword">
+                    Cancel
+                </button>
+                <button type="submit" class="save-btn">
+                    Update Password
+                </button>
+            </div>
+            
+        </form>
+    </div>
+</div>
+
+
+<script th:src="@{/javascript/teacher-js/teacher.js}"></script>
+</body>
+</html>
