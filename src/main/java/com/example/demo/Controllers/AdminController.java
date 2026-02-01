@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.example.demo.entity.Student;
 import com.example.demo.repository.StudentRepo;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class AdminController {
 	
@@ -17,9 +19,15 @@ public class AdminController {
 	private StudentRepo repo;
 
 	@GetMapping("/admin-dashboard")
-	public String admin_dashboard()
+	public String admin_dashboard(HttpSession session,Model model)
 	{
-	
+		if(session.getAttribute("adminEmail")==null)
+		{
+			return "redirect:/admin-login";
+		}
+		
+		String username = (String) session.getAttribute("adminUsername");
+		model.addAttribute("username", username);
 		return "admin-dashboard";
 	}
 	
@@ -65,4 +73,11 @@ public class AdminController {
 	
 		return "admin-settings";
 	}
+	
+	@GetMapping("/admin-logout")
+	public String adminLogout(HttpSession session) {
+	    session.invalidate(); 
+	    return "redirect:/admin-login";
+	}
+
 }

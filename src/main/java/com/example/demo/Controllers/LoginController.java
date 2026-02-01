@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.entity.Admin;
 import com.example.demo.repository.AdminRepository;
 
+import jakarta.servlet.http.HttpSession;
+
 
 @Controller
 public class LoginController {
@@ -42,26 +44,24 @@ public class LoginController {
 	public String loginAdmin(@RequestParam String email,
 			@RequestParam String username,
 			@RequestParam String password,
+			HttpSession session,
 			Model model)
 	{
 		Optional<Admin> opt = adminrepo.findByEmail(email);
 
-	    if (opt.isEmpty()) {
-	        model.addAttribute("error", "Admin not found");
+	    if (opt.isEmpty()
+	    		|| !username.equals(opt.get().getUsername())
+	    		|| !password.equals(opt.get().getPassword()))
+	    		 {
+	        model.addAttribute("error", "Admin not found or Invalid Password ");
 	        model.addAttribute("admin", new Admin());
 	        return "admin-login";
 	    }
 	    
-	    Admin dbAdmin = opt.get();
-
-	    if (!password.equals(dbAdmin.getPassword())) {
-	        model.addAttribute("error", "Invalid password");
-	        model.addAttribute("admin", new Admin());
-	        return "admin-login";
-	    }
-	    
-		    model.addAttribute("username", dbAdmin.getUsername());
-		    return "redirect:/admin-dashboard";
+	   	    session.setAttribute("adminEmail", opt.get().getEmail());
+	   	    session.setAttribute("adminUsername", opt.get().getUsername());
+		   
+	   	    return "redirect:/admin-dashboard";
 	}
 
 }
