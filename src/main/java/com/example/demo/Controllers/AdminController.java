@@ -1,10 +1,20 @@
 package com.example.demo.Controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.demo.entity.Student;
+import com.example.demo.repository.StudentRepo;
 
 @Controller
 public class AdminController {
+	
+	@Autowired
+	private StudentRepo repo;
 
 	@GetMapping("/admin-dashboard")
 	public String admin_dashboard()
@@ -14,9 +24,11 @@ public class AdminController {
 	}
 	
 	@GetMapping("/manage-students")
-	public String admin_student()
+	public String admin_student(Model model)
 	{
 	
+		List<Student> students=repo.findAll();
+		model.addAttribute("students", students);
 		return "manage-students";
 	}
 	
