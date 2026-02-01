@@ -129,6 +129,8 @@ body {
             <input type="password" placeholder="Password" name="password" required>
             <button type="submit">Login</button>
         </form>
+        
+        <p th:if="${error}" class="text-danger" th:text="${error}"></p>
         <div class="login-footer">
             <p> Not an admin? <a th:href="@{/admin-homepage}">Go back</a></p>
         </div>

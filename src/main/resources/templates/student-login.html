@@ -21,6 +21,10 @@
             <div class="signin-signup">
                 <form th:action="@{/student-dashboard}" method="post" class="sign-in-form">
                     <h2 class="title">Sign in</h2>
+                    <p th:if="${loginError}" style="color:red; margin-bottom:10px;"
+   th:text="${loginError}">
+					</p>
+                    
                     <div class="input-field">
                         <i class="bi bi-person"></i>
                         <input type="email" name="email" placeholder="Email" required>
@@ -42,12 +46,14 @@
                         <a th:href="@{/}" class="social-icon"><i class="bi bi-linkedin"></i></a>
                     </div>
                 </form>
+                
+                
                 <!-- Sign up Form -->
                 <form th:action="@{/student-login}" th:object="${student}" 
                 method="post" class="sign-up-form">
                     <h2 class="title">Sign up</h2>
-                     <p th:if="${error}" style="color:red" th:text="${error}"></p>
-
+                     <p th:if="${signupError}" style="color:red" th:text="${signupError}"></p>
+ 			
 				    <!-- success message -->
 				    <p th:if="${success}" style="color:green" th:text="${success}"></p>
                     <div class="input-field">

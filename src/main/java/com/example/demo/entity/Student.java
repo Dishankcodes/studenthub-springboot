@@ -9,7 +9,7 @@ public class Student {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer stud_id;
+	private Integer studid;
 	
 	private String fullname;
 	
@@ -22,11 +22,11 @@ public class Student {
 	private String password;
 
 	public Integer getStud_id() {
-		return stud_id;
+		return studid;
 	}
 
-	public void setStud_id(Integer stud_id) {
-		this.stud_id = stud_id;
+	public void setStud_id(Integer studid) {
+		this.studid = studid;
 	}
 
 	public String getFullname() {
