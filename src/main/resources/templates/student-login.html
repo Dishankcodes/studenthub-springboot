@@ -21,6 +21,10 @@
             <div class="signin-signup">
                 <form th:action="@{/student-dashboard}" method="post" class="sign-in-form">
                     <h2 class="title">Sign in</h2>
+                    <p th:if="${loginError}" style="color:red; margin-bottom:10px;"
+   th:text="${loginError}">
+					</p>
+                    
                     <div class="input-field">
                         <i class="bi bi-person"></i>
                         <input type="email" name="email" placeholder="Email" required>
@@ -42,38 +46,32 @@
                         <a th:href="@{/}" class="social-icon"><i class="bi bi-linkedin"></i></a>
                     </div>
                 </form>
+                
+                
                 <!-- Sign up Form -->
-                <form th:action="@{/student-login}" class="sign-up-form">
+                <form th:action="@{/student-login}" th:object="${student}" 
+                method="post" class="sign-up-form">
                     <h2 class="title">Sign up</h2>
+                     <p th:if="${signupError}" style="color:red" th:text="${signupError}"></p>
+ 			
+				    <!-- success message -->
+				    <p th:if="${success}" style="color:green" th:text="${success}"></p>
                     <div class="input-field">
                         <i class="bi bi-person"></i>
-                        <input type="text" name="fullname" placeholder="Full Name" required>
+                        <input type="text" th:field="*{fullname}" placeholder="Full Name" required>
                     </div>
                     <div class="input-field">
                         <i class="bi bi-building"></i>
-                        <input type="text" name="college" placeholder="College" required>
-                    </div>
-
-                    <div class="input-field">
-                        <i class="bi bi-calendar-event"></i>
-                        <select required>
-                            <option selected disabled>Select Graduation Year</option>
-                            <option>2026</option>
-                            <option>2027</option>
-                            <option>2028</option>
-                            <option>2029</option>
-                            <option>2030</option>
-                            <option>2031</option>
-                        </select>
+                        <input type="text" th:field="*{college}" placeholder="College" required>
                     </div>
 
                     <div class="input-field">
                         <i class="bi bi-envelope"></i>
-                        <input type="email" name="email" placeholder="Email" required>
+                        <input type="email" th:field="*{email}" placeholder="Email" required>
                     </div>
                     <div class="input-field">
                         <i class="bi bi-lock"></i>
-                        <input type="password" name="password" placeholder="Password" required>
+                        <input type="password" th:field="*{password}" placeholder="Password" required>
                     </div>
                     <input type="submit" class="btn" value="Sign up" />
                     <p class="social-text">Or Sign up with social platforms</p>
