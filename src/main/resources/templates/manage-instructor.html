@@ -74,7 +74,7 @@
   <div class="content-area">
     <!-- ===== TOPBAR ===== -->
     <header class="topbar">
-      <span class="page-title"></span>
+      <span class="page-title"> Instructor Maagement</span>
       <div class="topbar-right">
         <button class="profile-btn dropdown-toggle" data-bs-toggle="dropdown">
           <img th:src="@{/images/admin-avatar.png}" alt="Admin" class="avatar">
@@ -85,10 +85,36 @@
 
     <!-- ===== MAIN CONTENT ===== -->
     <main class="home-section">
-      <h1>Dashboard</h1>
-      <p>Welcome, <span th:text="${username}">Admin</span></p>
+           <table class="table table-bordered table-striped mt-3">
+        <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Phone No</th>
+            <th>Email</th>
+            <th>Options</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="teacher : ${teachers}">
+     <td th:text="${teacher.firstname + ' ' + teacher.lastname}"></td>
+       <td th:text="${teacher.phoneno}"></td>
+            <td th:text="${teacher.email}"></td>
+
+            <td>
+                <a th:href="@{/}"
+                   class="btn btn-danger btn-sm"
+                   onclick="return confirm('Are you sure?')">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
     </main>
   </div>
+
+
 
 </div>
 

@@ -23,17 +23,6 @@ public class LoginController {
         this.adminrepo = adminrepo;
     }
 	
-	
-	@GetMapping("/teacher-auth") 
-	public String teacher_login(){
-		return "teacher-auth";
-	}
-	
-	@GetMapping("/teacher-register")
-	public String teacher_register() {
-		return "teacher-register";
-	}
-	
 	@GetMapping("/admin-login") 
 	public String admin_login(Model model){
 		model.addAttribute("admin", new Admin());

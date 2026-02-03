@@ -296,23 +296,18 @@ footer .copy {
       <img th:src="@{/images/img-01.png}" alt="login">
     </div>
 
-    <form 
+    <form th:action="@{/teacher-dashboard}"
     class="login-form validate-form">
     
       <div class="login-title">Teacher Login</div>
 
       <div class="input-wrap validate-input">
-      
-        <input type="text" 
-        name="phone" placeholder="Entet Mobile-Number"
-        maxlength="10" required>
+        <input type="text" name="phone" placeholder="Entet Mobile-Number"maxlength="10" required>
         <i class="fa fa-phone"></i>
       </div>
 
       <div class="input-wrap validate-input">
-      
-        <input type="text" name="otp" placeholder="Enter OTP"
-        maxlength="6" required>
+        <input type="text" name="otp" placeholder="Enter OTP" maxlength="6" required>
         <i class="fa fa-lock"></i>
       </div>
 

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 
 <head>
   <meta charset="UTF-8">
@@ -13,10 +14,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
   <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <!-- Tilt -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js">  </script>
+  
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
 
 <style>
 :root {
@@ -182,20 +182,7 @@ body, html {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
-/* ================= RESPONSIVE ================= */
-@media (max-width: 768px) {
-  .login-box {
-    padding: 60px 30px;
-    flex-direction: column;
-    gap: 30px;
-  }
-  .login-img {
-    display: none;
-  }
-  .login-form {
-    width: 100%;
-  }
-}
+
 
 /* ================= FOOTER ================= */
 footer {
@@ -271,6 +258,182 @@ footer .copy {
     .admin { background:#2f2f55; color:white; }
     .role-btn:hover { transform:translateY(-2px); }
 
+/* ================= PHONE INPUT FINAL FIX ================= */
+.phone-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #fff3c4;
+  border: 1px solid #f6a623;
+  border-radius: 25px;
+  height: 50px;
+  padding-left: 45px; /* space for icon */
+  padding-right: 15px;
+}
+
+/* Phone Icon */
+.phone-group i {
+  position: absolute;
+  left: 18px;
+  color: #f6a623;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+/* Country Code */
+.phone-group .country-code {
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  outline: none;
+  margin-right: 12px;
+  cursor: pointer;
+}
+
+/* Mobile Number */
+.phone-group input {
+  border: none;
+  background: transparent;
+  height: 100%;
+  font-size: 15px;
+  flex: 1;
+  outline: none;
+  padding-left: 0;
+}
+
+/* Remove inner borders */
+.phone-group select,
+.phone-group input {
+  box-shadow: none;
+}
+/* ================= RESPONSIVE FIXES ================= */
+
+/* ---------- Tablets (<= 992px) ---------- */
+@media (max-width: 992px) {
+
+  .login-box {
+    width: 100%;
+    padding: 80px 60px 40px;
+  }
+
+  header {
+    padding: 15px 40px;
+  }
+
+  nav {
+    gap: 20px;
+  }
+}
+
+/* ---------- Mobile (<= 768px) ---------- */
+@media (max-width: 768px) {
+
+  /* Header */
+  header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+    text-align: center;
+  }
+
+  nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .roles {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  /* Card */
+  .container-login {
+    padding: 20px 10px;
+  }
+
+  .login-box {
+    width: 100%;
+    padding: 50px 25px 35px;
+    border-radius: 18px;
+  }
+
+  .login-title {
+    font-size: 22px;
+    margin-bottom: 35px;
+  }
+
+  /* Inputs */
+  .input-wrap input {
+    height: 48px;
+    font-size: 14px;
+  }
+
+  /* Phone group */
+  .phone-group {
+    height: 48px;
+    padding-left: 42px;
+  }
+
+  .phone-group .country-code {
+    font-size: 13px;
+    margin-right: 8px;
+  }
+
+  .phone-group input {
+    font-size: 14px;
+  }
+
+  .phone-group i {
+    left: 16px;
+    font-size: 15px;
+  }
+
+  /* Button */
+  .login-btn {
+    height: 48px;
+    font-size: 14px;
+  }
+
+  /* Footer */
+  footer {
+    padding: 30px 20px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    text-align: center;
+  }
+}
+
+/* ---------- Small Phones (<= 480px) ---------- */
+@media (max-width: 480px) {
+
+  .login-title {
+    font-size: 20px;
+  }
+
+  .input-wrap {
+    margin-bottom: 12px;
+  }
+
+  .phone-group .country-code {
+    max-width: 70px;
+  }
+
+  nav a {
+    font-size: 14px;
+  }
+
+  .role-btn {
+    font-size: 13px;
+    padding: 6px 14px;
+  }
+}
+
 </style>
 </head>
 
@@ -294,54 +457,62 @@ footer .copy {
     <div class="login-img js-tilt">
       <img th:src="@{/images/img-01.png}" alt="login">
     </div>
-
-<form class="login-form validate-form">
+<form th:action="@{/teacher-auth}" 
+      method="post" 
+      th:object="${teacher}"
+      class="login-form validate-form">
 
   <div class="login-title">Teacher Sign Up</div>
+  
+  <!-- ERROR MESSAGE -->
+<div th:if="${error}" 
+     style="background:#ffe6e6; 
+            color:#b30000; 
+            padding:10px 15px; 
+            border-radius:8px; 
+            margin-bottom:15px;
+            font-size:14px;">
+    <i class="fa fa-exclamation-circle"></i>
+    <span th:text="${error}"></span>
+</div>
+  
 
   <div class="input-wrap validate-input">
-    <input 
-      type="text" 
-      name="name" 
-      placeholder="Enter Full Name"
-      required>
+    <input type="text" th:field="*{firstname}" placeholder="Enter First Name" required>
     <i class="fa fa-user"></i>
   </div>
 
   <div class="input-wrap validate-input">
-    <input 
-      type="text" 
-      name="phone" 
-      placeholder="Enter Mobile Number"
-      maxlength="10"
-      required>
+    <input type="text" th:field="*{lastname}" placeholder="Enter Last Name" required>
+    <i class="fa fa-user-o"></i>
+  </div>
+
+  <div class="input-wrap validate-input phone-group">
+    <select th:field="*{countryCode}" class="country-code" required>
+      <option value="+91">🇮🇳 +91</option>
+      <option value="+1">🇺🇸 +1</option>
+      <option value="+44">🇬🇧 +44</option>
+      <option value="+61">🇦🇺 +61</option>
+      <option value="+81">🇯🇵 +81</option>
+      <option value="+971">🇦🇪 +971</option>
+    </select>
+
+    <input type="tel"
+           th:field="*{phoneno}"
+           placeholder="Enter Mobile Number"
+           maxlength="10"
+           pattern="[0-9]{6,15}"
+           required>
     <i class="fa fa-phone"></i>
   </div>
 
   <div class="input-wrap validate-input">
-    <input 
-      type="email" 
-      name="email" 
-      placeholder="Enter Email"
-      required>
+    <input type="email" th:field="*{email}" placeholder="Enter Email" required>
     <i class="fa fa-envelope"></i>
   </div>
 
   <div class="input-wrap validate-input">
-    <input 
-      type="password" 
-      name="password" 
-      placeholder="Create Password"
-      required>
-    <i class="fa fa-lock"></i>
-  </div>
-
-  <div class="input-wrap validate-input">
-    <input 
-      type="password" 
-      name="confirmPassword" 
-      placeholder="Confirm Password"
-      required>
+    <input type="password" th:field="*{password}" placeholder="Create Password" required>
     <i class="fa fa-lock"></i>
   </div>
 
