@@ -1,16 +1,38 @@
 package com.example.demo.Controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+
+
+import com.example.demo.entity.Teacher;
+import com.example.demo.entity.TeacherProfile;
+import com.example.demo.repository.TeacherProfileRepo;
+import com.example.demo.repository.TeacherRepo;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class TeacherController {
+	
+	@Autowired
+	private TeacherRepo teacherRepo;
+	
+	@Autowired
+	private TeacherProfileRepo teacherProfileRepo;
 
     // ===== DASHBOARD =====
-    @GetMapping("/teacher-dashboard")
-    public String teacherDashboard() {
-        return "teacher-dashboard";
-    }
+	@GetMapping("/teacher-dashboard")
+	public String dashboard(HttpSession session) {
+	    if (session.getAttribute("TEACHER_LOGGED_IN") == null) {
+	        return "redirect:/teacher-auth";
+	    }
+	    return "teacher-dashboard";
+	}
+
 
     // ===== COURSE MANAGEMENT =====
     @GetMapping("/teacher-course")
@@ -42,10 +64,82 @@ public class TeacherController {
         return "teacher-feedback";
     }
 
+    
+   
+    
     // ===== PROFILE =====
     @GetMapping("/teacher-profile")
-    public String profilePage() {
+    public String teacherProfile(Model model,
+    		HttpSession session) {
+    	
+    	if (session.getAttribute("TEACHER_LOGGED_IN") == null) {
+	        return "redirect:/teacher-auth";
+	    }
+    	
+        Integer teacherId = (Integer) session.getAttribute("teacherId");
+        
+        if(teacherId == null)
+        {
+        	return "redirect:/teacher-auth";
+        }
+        
+        Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+        
+        TeacherProfile profile = teacherProfileRepo.findByTeacherTeacherId(teacherId);
+
+        if (profile == null) {
+            profile = new TeacherProfile();
+            profile.setTeacher(teacher);
+        }
+
+        model.addAttribute("teacher", teacher);
+        model.addAttribute("profile", profile);
+
         return "teacher-profile";
     }
+
+    
+    @PostMapping("/teacher-profile")
+     public String editTeacherProfile(
+    		 @ModelAttribute("profile") TeacherProfile techerProfile
+    		 ,HttpSession session)
+     {
+    	 Integer teacherId = (Integer) session.getAttribute("teacherId");
+
+    	 if (teacherId == null) {
+    	        return "redirect:/teacher-auth";
+    	    }
+
+    	 Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+    	    if (teacher == null) {
+    	        return "redirect:/teacher-auth";
+    	    }
+
+    	    TeacherProfile profile =
+    	            teacherProfileRepo.findByTeacherTeacherId(teacherId);
+    	    
+    	    if (profile == null) {
+    	        profile = new TeacherProfile();
+    	        profile.setTeacher(teacher);
+    	    }
+    	    
+    	    profile.setQualification(techerProfile.getQualification());
+    	    profile.setSpecialist(techerProfile.getSpecialist());
+    	    profile.setExperience(techerProfile.getExperience());
+    	    profile.setBio(techerProfile.getBio());
+	        profile.setTeacher(teacher);
+	        teacherProfileRepo.save(profile);
+	
+	        return "redirect:/teacher/profile";
+     }
+    
+    
+    
+    @GetMapping("/teacher-logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/teacher-auth";
+    }
+
     
 }

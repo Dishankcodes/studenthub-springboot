@@ -27,6 +27,8 @@ public class TeachLoginController {
 	
 	@GetMapping("/teacher-auth") 
 	public String teacher_login(){
+		
+		
 		return "teacher-auth";
 	}
 	
@@ -35,8 +37,6 @@ public class TeachLoginController {
 	public String registerTeacher(
 			@ModelAttribute Teacher teacher,
 			Model model){
-		
-		
 		
 		if(teacherRepo.existsByEmail(teacher.getEmail()))
 		{
@@ -57,15 +57,15 @@ public class TeachLoginController {
 	}
 	
 	@PostMapping("/teacher-dashboard")
-	public String loginTeacher(@RequestParam String phoneno
+	public String loginTeacher(@RequestParam String email
 			,Model model){
 		
 		
-		Teacher teacher =teacherRepo.findByPhoneno(phoneno);
+		Teacher teacher =teacherRepo.findByemail(email);
 		
 		if(teacher == null)
 		{
-			model.addAttribute("error", "Mobile number not registered,create your account");
+			model.addAttribute("error", "Email not registered,create your account");
 	        return "teacher-auth";
 		}
 		
@@ -73,4 +73,5 @@ public class TeachLoginController {
 		return "redirect:/teacher-dashboard";
 		
 	}
+	
 }

@@ -11,4 +11,7 @@ public interface TeacherRepo extends JpaRepository<Teacher, Integer>{
 	boolean existsByPhoneno(String phoneno);
 	
 	Teacher findByPhoneno(String phoneno);
+	Teacher findByemail(String email);
+	
+	
 }

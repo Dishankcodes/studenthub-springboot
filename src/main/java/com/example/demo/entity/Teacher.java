@@ -1,16 +1,20 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "teacher")
 public class Teacher {
 	
+	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer teacherId;
@@ -29,6 +33,17 @@ public class Teacher {
 
 	public String countryCode;
 
+	@OneToOne(mappedBy = "teacher",cascade = CascadeType.ALL)
+	private TeacherProfile profile;
+	
+	public TeacherProfile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(TeacherProfile profile) {
+		this.profile = profile;
+	}
+	
 	public Integer getTeacherId() {
 		return teacherId;
 	}

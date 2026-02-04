@@ -76,41 +76,49 @@
             </label>
         </div>
 
-        <h2 class="teacher-name">Teacher Name</h2>
+        <h2 class="teacher-name"
+    th:text="${teacher.firstname + ' ' + teacher.lastname}">
+</h2>
+
         <p class="teacher-role">Educator · EduPlatform</p>
     </div>
 
     <!-- PROFILE FORM -->
-    <form class="teacher-profile-form">
+    <form class="teacher-profile-form" th:action="@{/teacher-profile}" method="post"
+    th:object="${profile}">
 
         <div class="form-group">
             <label>Full Name</label>
-            <input type="text" placeholder="Enter full name">
+           <input type="text"
+       th:value="${teacher.firstname + ' ' + teacher.lastname}"
+       placeholder="Enter full name"
+       >
         </div>
 
         <div class="form-group">
             <label>Email</label>
-            <input type="email" placeholder="Enter email">
+            <input type="email" placeholder="Enter email" th:value="${teacher.email}">
         </div>
 
         <div class="form-group">
             <label>Phone</label>
-            <input type="text" placeholder="Enter phone number">
+            <input type="text" placeholder="Enter phone number" th:value="${teacher.phoneno}">
         </div>
 
         <div class="form-group">
             <label>Qualification</label>
-            <input type="text" placeholder="e.g. M.Sc, B.Ed, PhD">
+            <input type="text" th:field="*{qualification}" placeholder="e.g. M.Sc, B.Ed, PhD">
+
         </div>
 
         <div class="form-group">
             <label>Specialist</label>
-            <input type="text" placeholder="e.g. Mathematics, Physics">
+            <input type="text" th:field="*{specialist}" placeholder="e.g. Mathematics, Physics">
         </div>
 
         <div class="form-group">
             <label>Experience (Years)</label>
-            <input type="number" placeholder="e.g. 5">
+            <input type="number" placeholder="e.g. 5" th:field="*{experience}">
         </div>
 
         <div class="form-group">
