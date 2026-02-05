@@ -145,6 +145,9 @@
     overflow: hidden;
 }
 
+.sidebar.collapsed ~ .main-content {
+    margin-left: 100px;
+}
 /* logo image */
 /* ===== ROUND LOGO IMAGE ===== */
 .sidebar-logo img {
@@ -202,5 +205,114 @@
 .sidebar.collapsed ~ .main-content .sidebar-toggle {
     left: 100px;          /* collapsed side bar width */
     margin-left: -6px;
+}
+/* ===== TOP HEADER ===== */
+.top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 10px 16px;   /* ⬅ reduced */
+    background: transparent;
+}
+
+/* LEFT */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.page-title {
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* RIGHT */
+.header-right {
+    position: relative;
+}
+/* ===== PROFILE ===== */
+.profile-menu {
+    position: relative;
+}
+
+.profile-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #f6a623;
+    color: #1f1f2e;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.profile-name {
+    font-weight: 500;
+}
+
+/* ===== DROPDOWN ===== */
+.profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 55px;
+    background: #2a2a4a;
+    border-radius: 10px;
+    overflow: hidden;
+    min-width: 180px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+
+    display: none;
+    flex-direction: column;
+}
+
+.profile-dropdown a {
+    padding: 12px 16px;
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.profile-dropdown a:hover {
+    background: #f6a623;
+    color: #1f1f2e;
+}
+
+/* SHOW DROPDOWN */
+.profile-dropdown.show {
+    display: flex;
+}
+
+.header-divider {
+    border: none;
+    height: 1px;
+    margin: 10px 0 20px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        rgba(0,0,0,0.25),
+        transparent
+    );
+}
+/* MOBILE */
+@media (max-width: 768px) {
+    .profile-name {
+        display: none;
+    }
 }
 
