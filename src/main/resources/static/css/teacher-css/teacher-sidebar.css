@@ -177,3 +177,30 @@
 .sidebar.collapsed .sidebar-logo img {
     width: 36px;
 }
+
+.sidebar-toggle {
+    position: fixed;
+    top: 26px;
+    left: 280px;          /* side bar width */
+    margin-left: -6px;   /* move slightly LEFT */
+    z-index: 1200;
+    background: transparent;   /* ❌ no background */
+    border: none;
+    padding: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1f1f2e;
+    cursor: pointer;
+    transition: left 0.3s ease, color 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+    color: #f6a623;      /* subtle hover feedback */
+}
+
+/* ===== WHEN SIDEBAR COLLAPSES ===== */
+.sidebar.collapsed ~ .main-content .sidebar-toggle {
+    left: 100px;          /* collapsed side bar width */
+    margin-left: -6px;
+}
+

@@ -69,23 +69,28 @@ public class TeacherController {
     
     // ===== PROFILE =====
     @GetMapping("/teacher-profile")
-    public String teacherProfile(Model model,
-    		HttpSession session) {
+    public String teacherProfile(
+    		// HttpSession session,
+    		Model model
+    		) {
+
+     //   Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+       // Integer teacherId = (Integer) session.getAttribute("teacherId");
+
+    	Integer teacherId =1; // remove this when testing done
     	
-    	if (session.getAttribute("TEACHER_LOGGED_IN") == null) {
-	        return "redirect:/teacher-auth";
-	    }
-    	
-        Integer teacherId = (Integer) session.getAttribute("teacherId");
-        
-        if(teacherId == null)
-        {
-        	return "redirect:/teacher-auth";
-        }
-        
+        //if (loggedIn == null || !loggedIn || teacherId == null) {
+          //  return "redirect:/teacher-auth";
+        //}
+
         Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
-        
-        TeacherProfile profile = teacherProfileRepo.findByTeacherTeacherId(teacherId);
+        if (teacher == null) {
+           // session.invalidate();
+            return "redirect:/teacher-auth";
+        }
+
+        TeacherProfile profile =
+                teacherProfileRepo.findByTeacherTeacherId(teacherId);
 
         if (profile == null) {
             profile = new TeacherProfile();
@@ -97,45 +102,48 @@ public class TeacherController {
 
         return "teacher-profile";
     }
-
+    
+    
     
     @PostMapping("/teacher-profile")
-     public String editTeacherProfile(
-    		 @ModelAttribute("profile") TeacherProfile techerProfile
-    		 ,HttpSession session)
-     {
-    	 Integer teacherId = (Integer) session.getAttribute("teacherId");
+    public String editTeacherProfile(
+            @ModelAttribute("profile") TeacherProfile teacherProfile
+           // HttpSession session
+            ) {
 
-    	 if (teacherId == null) {
-    	        return "redirect:/teacher-auth";
-    	    }
+    	Integer teacherId = 1 ;//demo
+     //   Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+     //   Integer teacherId = (Integer) session.getAttribute("teacherId");
 
-    	 Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
-    	    if (teacher == null) {
-    	        return "redirect:/teacher-auth";
-    	    }
+       // if (loggedIn == null || !loggedIn || teacherId == null) {
+       //     return "redirect:/teacher-auth";
+      //  }
 
-    	    TeacherProfile profile =
-    	            teacherProfileRepo.findByTeacherTeacherId(teacherId);
-    	    
-    	    if (profile == null) {
-    	        profile = new TeacherProfile();
-    	        profile.setTeacher(teacher);
-    	    }
-    	    
-    	    profile.setQualification(techerProfile.getQualification());
-    	    profile.setSpecialist(techerProfile.getSpecialist());
-    	    profile.setExperience(techerProfile.getExperience());
-    	    profile.setBio(techerProfile.getBio());
-	        profile.setTeacher(teacher);
-	        teacherProfileRepo.save(profile);
-	
-	        return "redirect:/teacher/profile";
-     }
-    
-    
-    
-    @GetMapping("/teacher-logout")
+        Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+        if (teacher == null) {
+         //   session.invalidate();
+            return "redirect:/teacher-auth";
+        }
+
+        TeacherProfile profile =
+                teacherProfileRepo.findByTeacherTeacherId(teacherId);
+
+        if (profile == null) {
+            profile = new TeacherProfile();
+            profile.setTeacher(teacher);
+        }
+
+        profile.setQualification(teacherProfile.getQualification());
+        profile.setSpecialist(teacherProfile.getSpecialist());
+        profile.setExperience(teacherProfile.getExperience());
+        profile.setBio(teacherProfile.getBio());
+
+        teacherProfileRepo.save(profile);
+
+        return "redirect:/teacher-profile";
+    }
+
+    @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/teacher-auth";

@@ -299,6 +299,7 @@ footer .copy {
 .timer{
   margin-left:5px;
   color:#999;
+  }
 .error-msg{
   color:red;
   text-align:center;
@@ -359,12 +360,14 @@ footer .copy {
 
 	<div class="form-links">
 
-        <form th:action="@{/teacher-resend-otp}" method="post">
-          <input type="hidden" name="email" th:value="${session.OTP_EMAIL}">
-          Didn’t get OTP?
-          <button type="submit" id="resendBtn">Resend OTP</button>
-          <span id="timer" class="timer"></span>
-        </form>
+        <p>
+      Didn’t get OTP?
+      <button type="submit"
+        id="resendBtn" formaction="/teacher-resend-otp" formmethod="post">
+        Resend OTP
+      </button>
+      <span id="timer"></span>
+    </p>
 
         <a th:href="@{/teacher-auth}">Change Email?</a>
         <a th:href="@{/teacher-homepage}">Back to Home →</a>
@@ -432,6 +435,7 @@ const interval = setInterval(() => {
     timer.textContent = "";
   }
 },1000);
+
 </script>
 
 </body>

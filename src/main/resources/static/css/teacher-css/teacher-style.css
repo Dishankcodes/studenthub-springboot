@@ -99,31 +99,6 @@ body {
     box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
-/* ===== FOOTER ===== */
-.footer {
-    margin-left: 260px;
-    background: #1f1f2e;
-    color: #cfd8dc;
-    padding: 40px;
-}
-
-.footer-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-}
-
-.footer h4 {
-    color: #fff;
-    margin-bottom: 10px;
-}
-
-.copy {
-    text-align: center;
-    margin-top: 30px;
-    font-size: 13px;
-    opacity: 0.7;
-}
 /* ===== PAGE HEADER ===== */
 .page-header {
     display: flex;
@@ -151,72 +126,7 @@ body {
 .primary-btn:hover {
     background: #d48821;
 }
-
-/* ===== COURSE MANAGEMENT ===== */
-/* teacher-style.css */
-
-/* Table container */
-.course-management-table {
-    margin: 2rem 0;
-    overflow-x: auto;
-}
-
-/* Table styling */
-.course-management-table table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: 'Poppins', sans-serif;
-    background-color: #fff;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-/* Table headers */
-.course-management-table th {
-    background-color: #1f1f2e;
-    text-align: left;
-    padding: 12px 16px;
-    font-weight: 600;
-    color: #fff;
-}
-
-/* Table rows */
-.course-management-table td {
-    padding: 12px 16px;
-    border-top: 1px solid #e0e0e0;
-    color: #555;
-}
-
-/* Actions buttons */
-.course-management-table button {
-    margin-right: 6px;
-    padding: 6px 12px;
-    font-size: 0.9rem;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.course-management-table button:hover {
-    opacity: 0.85;
-}
-
-.course-management-table button.publish {
-    background-color: #28a745;
-    color: white;
-}
-
-.course-management-table button.unpublish {
-    background-color: #dc3545;
-    color: white;
-}
-
-.course-management-table button:not(.publish):not(.unpublish) {
-    background-color: #007bff;
-    color: white;
-}/* ===== MODAL BACKDROP (SLOW FADE) ===== */
+/* ===== SIDEBAR COLLAPSE EFFECT ===== */
 .modal {
     position: fixed;
     inset: 0;
@@ -269,75 +179,10 @@ body {
     cursor: pointer;
 }
 
-/* Form buttons */
-.form-actions {
-    margin-top: 1.5rem;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
 
-.submit-btn {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.cancel-btn {
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.submit-btn:hover, .cancel-btn:hover {
-    opacity: 0.85;
-}
-/* ===== SIDEBAR COLLAPSE EFFECT ===== */
-.sidebar.collapsed ~ .main-content {
-    margin-left: 80px;
-}
-
-.sidebar.collapsed ~ .footer {
-    margin-left: 80px;
-}
 
 /* Toggle button */
 /* ===== SIDEBAR TOGGLE BUTTON (ICON ONLY) ===== */
-.sidebar-toggle {
-    position: fixed;
-    top: 26px;
-    left: 260px;          /* sidebar width */
-    margin-left: -6px;   /* move slightly LEFT */
-
-    z-index: 1200;
-
-    background: transparent;   /* ❌ no background */
-    border: none;
-    padding: 0;
-
-    font-size: 22px;
-    font-weight: 700;
-    color: #1f1f2e;
-
-    cursor: pointer;
-    transition: left 0.3s ease, color 0.2s ease;
-}
-
-.sidebar-toggle:hover {
-    color: #f6a623;      /* subtle hover feedback */
-}
-
-/* ===== WHEN SIDEBAR COLLAPSES ===== */
-.sidebar.collapsed ~ .main-content .sidebar-toggle {
-    left: 80px;          /* collapsed sidebar width */
-    margin-left: -6px;
-}
 /*----------------------------------------------------------------------------------------*/
 /* ===== PROFILE WRAPPER ===== */
 .teacher-profile-wrapper {
@@ -385,7 +230,7 @@ body {
 .teacher-name {
     font-size: 24px;
     font-weight: 600;
-    margin-top: 10px;
+    margin-top: 40px;
 }
 
 .teacher-role {
