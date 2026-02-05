@@ -223,12 +223,6 @@
     gap: 14px;
 }
 
-.page-title {
-    font-size: 24px;
-    font-weight: 600;
-    margin: 0;
-}
-
 /* RIGHT */
 .header-right {
     position: relative;
@@ -309,10 +303,28 @@
         transparent
     );
 }
+
+
+.page-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-left:20px;
+}
 /* MOBILE */
 @media (max-width: 768px) {
     .profile-name {
         display: none;
     }
 }
+.main-content {
+    margin-left: 260px;
+    padding: 20 30px;
+    transition: margin-left 0.3s ease;
+}
+/* When sidebar is collapsed */
+body.sidebar-collapsed .main-content {
+    margin-left: 80px;
+}
+
 

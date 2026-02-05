@@ -36,7 +36,7 @@ body.sidebar-collapsed .main-content {
     font-size: 28px;
     font-weight: 600;
     margin-top: 30px;
-    margin-left:20;
+    margin-left:20px;
 }
 
 /* ===== PAGE HEADER ===== */
@@ -235,20 +235,24 @@ tr:nth-child(even) {
             <i class="bi bi-list"></i>
         </button>
 
-        <span class="page-title">Dashboard</h1>
+        <span class="page-title">Dashboard</span>
     </div>
 
     <div class="header-right">
         <div class="profile-trigger" id="profileToggle">
+        <span th:text="${teacher.firstname + ' ' + teacher.lastname}">
+    Dishank 
+</span>
             <div class="avatar">
                 <i class="bi bi-person-fill"></i>
             </div>
             <i class="bi bi-caret-down-fill"></i>
         </div>
 
+
         <div class="profile-dropdown" id="profileDropdown">
-            <a href="#">Profile</a>
-            <a href="#">Logout</a>
+            <a th:href="@{/teacher-profile}">Profile</a>
+            <a href="@{/logout}">Logout</a>
         </div>
     </div>
 </header>

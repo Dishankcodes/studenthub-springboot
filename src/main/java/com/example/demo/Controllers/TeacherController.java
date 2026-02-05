@@ -26,12 +26,22 @@ public class TeacherController {
 
     // ===== DASHBOARD =====
 	@GetMapping("/teacher-dashboard")
-	public String dashboard()
+	public String dashboard(Model model)
 			//HttpSession session)
 	{
 //	    if (session.getAttribute("TEACHER_LOGGED_IN") == null) {
 //	        return "redirect:/teacher-auth";
 //	    }//	  
+		
+		Integer teacherId =1;
+		
+		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+		
+		if(teacher==null)
+		{
+			return "redirect:/teacher-auth";
+		}
+		 model.addAttribute("teacher", teacher);
 		return "teacher-dashboard";
 	}
 
