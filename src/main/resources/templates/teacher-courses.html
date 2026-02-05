@@ -10,12 +10,231 @@
 
    
     <link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #1f1f2e;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        /* ===== HEADER ===== */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .page-title {
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        /* ===== TOP BAR ===== */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 14px 10px 36px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .filter select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #1f1f2e;
+            color: #fff;
+        }
+
+        /* ===== GRID ===== */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 22px;
+        }
+
+        /* ===== COURSE CARD ===== */
+        .course-card {
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            transition: 0.3s ease;
+        }
+
+        .course-card:hover {
+            transform: translateY(-6px);
+        }
+
+        /* ===== THUMBNAIL ===== */
+        .course-thumb {
+            height: 160px;
+            background: #dfe3eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #999;
+        }
+
+        /* ===== CONTENT ===== */
+        .course-body {
+            padding: 18px;
+        }
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .course-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* ===== BADGE ===== */
+        .badge {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .badge.published {
+            background: #d1f7e5;
+            color: #0f5132;
+        }
+
+        .badge.draft {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        /* ===== META ===== */
+        .course-meta {
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        /* ===== ACTIONS ===== */
+        .course-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .course-actions a {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .edit {
+            background: #1f1f2e;
+            color: #fff;
+        }
+
+        .continue {
+            background: #f6a623;
+            color: #1f1f2e;
+        }
+
+        .analytics {
+            background: #e9ecf3;
+            color: #1f1f2e;
+        }
+
+        .delete {
+            background: #ffe5e5;
+            color: #b02a37;
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 60px 30px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .empty-icon {
+            font-size: 60px;
+            color: #c7cbd6;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #666;
+            font-size: 15px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+    </style>
 </head>
 
-<body>
+<body class="sidebar-collapsed">
 
-<!-- ===== SIDEBAR ===== -->
-<aside class="sidebar"><div class="sidebar-logo">
+<aside class="sidebar collapsed">
+<div class="sidebar-logo">
     <img th:src="@{/images/logo.png}" alt="EduPlatform Logo">
     <span class="logo-text">EduPlatform</span>
 </div>
@@ -29,6 +248,11 @@
     <a th:href="@{/teacher-course}"  class="active">
         <i class="bi bi-journal-bookmark"></i>
         <span>Course Management</span>
+    </a>
+
+	<a th:href="@{/teacher-creates-course}">
+        <i class="bi bi-journal-bookmark"></i>
+        <span>Create Course</span>
     </a>
 
     <a th:href="@{/teacher-exams}">
@@ -67,6 +291,106 @@
 <main class="main-content">
 <button class="sidebar-toggle" id="sidebarToggle">☰</button>
 
+     <div class="container">
+
+        <!-- HEADER -->
+        <div class="page-header">
+            <div class="page-title">My Courses</div>
+            <a href="/teacher-course/create" class="btn btn-primary">
+                <i class="bi bi-plus-lg"></i> Create Course
+            </a>
+        </div>
+
+        <!-- SEARCH + FILTER -->
+        <div class="top-bar">
+            <div class="search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Search courses...">
+            </div>
+
+            <div class="filter">
+                <select>
+                    <option>All</option>
+                    <option>Published</option>
+                    <option>Draft</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- COURSE GRID -->
+        <div class="course-grid">
+
+            <!-- COURSE CARD -->
+            <div class="course-card">
+                <div class="course-thumb">
+                    📘
+                </div>
+
+                <div class="course-body">
+                    <div class="course-header">
+                        <div class="course-title">Spring Boot Masterclass</div>
+                        <span class="badge published">Published</span>
+                    </div>
+
+                    <div class="course-meta">
+                        <span><i class="bi bi-people"></i> 620</span>
+                        <span><i class="bi bi-currency-rupee"></i> 1.8L</span>
+                    </div>
+
+                    <div class="course-actions">
+                        <a class="edit">Edit</a>
+                        <a class="analytics">Analytics</a>
+                        <a class="delete">Delete</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DRAFT COURSE -->
+            <div class="course-card">
+                <div class="course-thumb">
+                    📗
+                </div>
+
+                <div class="course-body">
+                    <div class="course-header">
+                        <div class="course-title">Java Fundamentals</div>
+                        <span class="badge draft">Draft</span>
+                    </div>
+
+                    <div class="course-meta">
+                        <span>0 Students</span>
+                        <span>Not Published</span>
+                    </div>
+
+                    <div class="course-actions">
+                        <a class="continue">Continue</a>
+                        <a class="delete">Delete</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- EMPTY STATE -->
+    <div class="empty-state">
+
+        <div class="empty-icon">
+            <i class="bi bi-journal-plus"></i>
+        </div>
+
+        <h2>No courses yet</h2>
+
+        <p>
+            You haven’t created any courses yet.<br>
+            Start by creating your first course and share your knowledge.
+        </p>
+
+        <a href="/teacher-course/create" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Create Your First Course
+        </a>
+
+    </div>
    
 </main>
 

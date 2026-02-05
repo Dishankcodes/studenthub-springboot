@@ -173,8 +173,8 @@ tr:nth-child(even) {
 </style>
 </head>
 
-<body>
-<aside class="sidebar">
+<body class="sidebar-collapsed">
+<aside class="sidebar collapsed">
 <div class="sidebar-logo">
     <img th:src="@{/images/logo.png}" alt="EduPlatform Logo">
     <span class="logo-text">EduPlatform</span>
@@ -191,6 +191,12 @@ tr:nth-child(even) {
         <span>Course Management</span>
     </a>
 
+
+	<a th:href="@{/teacher-creates-course}">
+        <i class="bi bi-journal-bookmark"></i>
+        <span>Create Course</span>
+    </a>
+    
     <a th:href="@{/teacher-exams}">
         <i class="bi bi-pencil-square"></i>
         <span>Exams & Quizzes</span>

@@ -52,6 +52,11 @@ public class TeacherController {
         return "teacher-courses";
     }
 
+    @GetMapping("/teacher-creates-course")
+    public String createCourse()
+    {
+    	return "teacher-creates-course";
+    }
     // ===== EXAMS & QUIZZES =====
     @GetMapping("/teacher-exams")
     public String examsAndQuizzes() {
