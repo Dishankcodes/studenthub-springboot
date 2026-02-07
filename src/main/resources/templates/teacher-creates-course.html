@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Teacher Courses</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+   
+    <link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
+    <style>
+        /* ================= BASE ================= */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #1f1f2e;
+        }
+
+		.main-content {
+		    margin-left: 260px;
+		    padding: 20 30px;
+		    transition: margin-left 0.3s ease;
+		}
+		/* When sidebar is collapsed */
+		body.sidebar-collapsed .main-content {
+		    margin-left: 80px;
+		}
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        /* ================= HEADER ================= */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .page-title {
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        .draft-badge {
+            background: #fff3cd;
+            color: #664d03;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+
+        /* ================= STEPPER ================= */
+        .stepper {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        .step {
+            flex: 1;
+            padding: 10px;
+            background: #e9ecf3;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .step.active {
+            background: #1f1f2e;
+            color: #fff;
+        }
+
+        /* ================= CARD ================= */
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 28px;
+        }
+
+        /* ================= FORM ================= */
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .form-group small {
+            font-size: 12px;
+            color: #777;
+        }
+
+        /* ================= BUTTONS ================= */
+        .btn {
+            padding: 10px 18px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #1f1f2e;
+            color: #fff;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #1f1f2e;
+            color: #1f1f2e;
+        }
+
+        .btn-warning {
+            background: #f6a623;
+            color: #1f1f2e;
+        }
+
+        /* ================= THUMBNAIL ================= */
+        .thumbnail-upload {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .thumbnail-preview {
+            width: 280px;
+            height: 160px;
+            border-radius: 12px;
+            border: 2px dashed #ccc;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #777;
+            cursor: pointer;
+        }
+
+        .thumbnail-preview i {
+            font-size: 32px;
+        }
+
+        /* ================= CURRICULUM ================= */
+        .module {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+
+        .module-header {
+            background: #f4f6f9;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .lessons {
+            padding: 8px 0;
+        }
+
+        /* ================= LESSON ================= */
+        .lesson {
+            padding: 10px 16px;
+            border-top: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .lesson-header {
+            display: grid;
+            grid-template-columns: 1fr 120px 32px;
+            gap: 8px;
+        }
+
+        .lesson-header input,
+        .lesson-header select {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .lesson-content {
+            background: #f8f9fb;
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        /* ================= QUIZ ================= */
+        .quiz-question {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
+        }
+
+        .quiz-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .quiz-question input,
+        .quiz-question select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 8px;
+        }
+
+        /* ================= ACTION BAR ================= */
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body class="sidebar-collapsed">
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar collapsed"><div class="sidebar-logo">
+    <img th:src="@{/images/logo.png}" alt="EduPlatform Logo">
+    <span class="logo-text">EduPlatform</span>
+</div>
+
+    <nav class="sidebar-menu">
+    <a th:href="@{/teacher-dashboard}">
+        <i class="bi bi-speedometer2"></i>
+        <span> Dashboard</span>
+    </a>
+
+    <a th:href="@{/teacher-course}" >
+        <i class="bi bi-journal-bookmark"></i>
+        <span>Course Management</span>
+    </a>
+    
+    
+    <a th:href="@{/teacher-course}"  class="active">
+        <i class="bi bi-journal-bookmark"></i>
+        <span>Create Course</span>
+    </a>
+    
+
+    <a th:href="@{/teacher-exams}">
+        <i class="bi bi-pencil-square"></i>
+        <span>Exams & Quizzes</span>
+    </a>
+
+    <a th:href="@{/teacher-students}">
+        <i class="bi bi-people"></i>
+        <span>Students</span>
+    </a>
+
+    <a th:href="@{/teacher-communication}">
+        <i class="bi bi-chat-dots"></i>
+        <span>Communication</span>
+    </a>
+
+    <a th:href="@{/teacher-feedback}">
+        <i class="bi bi-star"></i>
+        <span>Feedback & Ratings</span>
+    </a>
+
+    <a th:href="@{/teacher-profile}">
+        <i class="bi bi-gear"></i>
+        <span>Profile</span>
+    </a>
+
+    <a th:href="@{/logout}" class="logout">
+        <i class="bi bi-box-arrow-right"></i>
+        <span>Logout</span>
+    </a>
+</nav>
+</aside>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main-content">
+<button class="sidebar-toggle" id="sidebarToggle">☰</button>
+
+       <div class="container">
+
+        <!-- HEADER -->
+        <div class="page-header">
+            <div class="page-title">Create Course</div>
+            <span class="draft-badge">Draft</span>
+        </div>
+
+        <!-- STEPPER -->
+        <div class="stepper">
+            <div class="step active">Basic Info</div>
+            <div class="step">Pricing</div>
+            <div class="step">Curriculum & Content</div>
+            <div class="step">Publish</div>
+        </div>
+
+        <!-- BASIC INFO -->
+        <div class="card">
+            <h3>Course Details</h3>
+
+            <div class="form-group">
+                <label>Course Thumbnail</label>
+                <div class="thumbnail-upload">
+                    <div class="thumbnail-preview">
+                        <i class="bi bi-image"></i>
+                        <span>Upload thumbnail</span>
+                    </div>
+                    <input type="file" hidden>
+                    </div>
+                    <small> Recommended size: 1280 × 720 (16:9). JPG or PNG. </small>
+                </div>
+                <div class="form-group">
+                    <label>Course Title</label> <input type="text" placeholder="Spring Boot Masterclass">
+                    <small>This
+                        will be shown publicly</small>
+                </div>
+                <div class="form-group">
+                    <label>Short Description</label> <textarea rows="3"
+                        placeholder="Learn Spring Boot with real projects"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Category</label>
+                    <select>
+                        <option>Programming</option>
+                        <option>Web Development</option>
+                        <option>Data Science</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- PRICING -->
+            <div class="card">
+                <h3>Pricing</h3>
+                <div class="form-group">
+                    <label>Course Type</label>
+                    <select>
+                        <option>Free</option>
+                        <option>Paid</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Price (₹)</label> <input type="number" placeholder="499"> <small>Only required for paid
+                        courses</small>
+                </div>
+            </div>
+
+            <!-- CURRICULUM -->
+            <div class="card">
+                <h3>Curriculum</h3>
+                <div id="modulesContainer"></div>
+                <button class="btn btn-outline" onclick="addModule()">+ Add Module</button>
+            </div>
+
+            <!-- PUBLISH -->
+            <div class="card">
+                <h3>Publish</h3>
+                <p>Your course will be reviewed before publishing. You can save it as a draft anytime. </p> <button
+                    class="btn btn-warning">Publish Course</button>
+            </div>
+
+            <div class="action-bar">
+                <button class="btn btn-outline">Save Draft</button>
+                <button class="btn btn-primary">Next</button>
+            </div>
+
+        </div>
+   
+</main>
+
+<script th:src="@{/javascript/teacher-js/create-course.js}"></script>
+</body>
+</html>

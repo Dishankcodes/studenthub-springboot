@@ -296,30 +296,27 @@ footer .copy {
       <img th:src="@{/images/img-01.png}" alt="login">
     </div>
 
-    <form 
-    class="login-form validate-form">
+    <form th:action="@{/teacher-send-otp}"
+    class="login-form validate-form"
+    method="post">
     
       <div class="login-title">Teacher Login</div>
+<div th:if="${error}"
+     style="color:red; font-size:14px; text-align:center; margin-bottom:15px;">
+    <i class="fa fa-exclamation-circle"></i>
+    <span th:text="${error}"></span>
+</div>
 
+		
       <div class="input-wrap validate-input">
-      
-        <input type="text" 
-        name="phone" placeholder="Entet Mobile-Number"
-        maxlength="10" required>
-        <i class="fa fa-phone"></i>
+        <input type="email" name="email" placeholder="Enter Email" required>
+        <i class="fa fa-user"></i>
       </div>
 
-      <div class="input-wrap validate-input">
-      
-        <input type="text" name="otp" placeholder="Enter OTP"
-        maxlength="6" required>
-        <i class="fa fa-lock"></i>
-      </div>
-
-      <button class="login-btn">Login</button>
+      <button class="login-btn">Validate</button>
 
       <div class="text-center">
-        <a href="@{teacher-forgot}">Change Mobile Number?</a>
+        <a href="@{teacher-forgot}">Forget Email?</a>
       </div>
 
       <div class="text-center" style="margin-top:40px;">

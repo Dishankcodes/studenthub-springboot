@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title>EduPlatform Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Google Font : Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- Tilt -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
+
+<style>
+:root {
+      --primary: #f6a623;
+      --primary-light: #fff3c4;
+      --dark: #2f2f55;
+      --muted: #555;
+      --bg: #fdfdf8;
+    }
+/* ================= FONT ================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body, html {
+  height: 100%;
+}
+
+/* ================= BACKGROUND ================= */
+.container-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff3c4; 
+  padding: 15px;
+}
+
+/* ================= CARD ================= */
+.login-box {
+  background: #fff; /* white card like homepage */
+  border-radius: 22px;
+  width: 900px;
+  display: flex;
+  padding: 120px 100px 40px;
+  justify-content: space-between;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+  transition: 0.3s;
+}
+
+.login-box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+}
+
+/* ================= IMAGE ================= */
+.login-img {
+  width: 320px;
+}
+.login-img img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* ================= FORM ================= */
+.login-form {
+  width: 300px;
+}
+
+.login-title {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 50px;
+  color: #f6a623; 
+}
+
+/* ================= INPUT ================= */
+.input-wrap {
+  position: relative;
+  margin-bottom: 15px;
+}
+
+.input-wrap input {
+  width: 100%;
+  height: 50px;
+  border-radius: 25px;
+  background: #fff3c4; /* homepage input light accent */
+  padding-left: 60px;
+  font-size: 15px;
+  border: 1px solid #f6a623;
+  color: #333;
+}
+
+.input-wrap i {
+  position: absolute;
+  top: 50%;
+  left: 25px;
+  transform: translateY(-50%);
+  color: #f6a623; /* homepage accent icon color */
+}
+
+/* ================= BUTTON ================= */
+.login-btn {
+  width: 100%;
+  height: 50px;
+  border-radius: 25px;
+  background: linear-gradient(135deg, #f6a623, #ffb347); /* homepage gradient */
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  border: none;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background: linear-gradient(135deg, #ffb347, #f6a623);
+}
+
+/* ================= LINKS ================= */
+.text-center {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.text-center a {
+  color: #f6a623;
+  font-size: 13px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.text-center a:hover {
+  text-decoration: underline;
+}
+
+/* ================= VALIDATION ================= */
+.alert-validate::after {
+  content: "\f06a";
+  font-family: FontAwesome;
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: red;
+}
+
+/* ================= HOME BUTTON ================= */
+.home-btn {
+    position: fixed;
+    top: 10px;
+    right: 20px;
+    background: #fff;
+    color: #f6a623;
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    border: 2px solid #f6a623;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s ease-in-out;
+}
+
+.home-btn:hover {
+    background: linear-gradient(135deg, #f6a623, #ffb347);
+    color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .login-box {
+    padding: 60px 30px;
+    flex-direction: column;
+    gap: 30px;
+  }
+  .login-img {
+    display: none;
+  }
+  .login-form {
+    width: 100%;
+  }
+}
+
+/* ================= FOOTER ================= */
+footer {
+  background: #2e3440;
+  padding: 40px 80px 20px;
+  border-top: 1px solid #eee;
+  font-family: "Poppins", sans-serif;
+  color: #cfd8dc;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  margin-bottom: 30px;
+}
+
+.footer-grid h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.footer-grid p {
+  font-size: 14px;
+  color: #cfd8dc;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.footer-grid p:hover {
+  color: #f6a623;
+}
+
+footer .copy {
+  text-align: center;
+  font-size: 13px;
+  color: #b0bec5;
+  border-top: 1px solid #424857;
+  padding-top: 15px;
+}
+
+/* ================= FOOTER RESPONSIVE ================= */
+@media (max-width: 768px) {
+  footer {
+    padding: 30px 20px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    text-align: center;
+  }
+}
+ header {
+      display:flex; justify-content:space-between; align-items:center;
+      padding: 20px 80px;
+      background: var(--primary);
+    }
+    .logo { font-size:26px; font-weight:700; color:white; }
+    nav { display:flex; gap:35px; }
+    nav a { text-decoration:none; color:white; font-weight:500; position:relative; }
+    nav a::after { content:""; position:absolute; width:0; height:2px; background:var(--primary-light); left:0; bottom:-6px; transition:0.3s; }
+    nav a:hover::after { width:100%; }
+    .roles { display:flex; gap:10px; }
+    .role-btn {
+      padding:8px 18px; border-radius:25px; border:none; font-weight:600; cursor:pointer; transition:0.3s;
+    }
+    .student { background:white; color:var(--primary); }
+    .teacher { background:var(--primary-light); color:var(--dark); }
+    .admin { background:#2f2f55; color:white; }
+    .role-btn:hover { transform:translateY(-2px); }
+
+
+/* GROUPED TEXT */
+.form-links{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  font-size:13px;
+}
+
+.form-links a,
+.form-links button{
+  background:none;
+  border:none;
+  color:var(--primary);
+  font-weight:600;
+  cursor:pointer;
+  text-decoration:none;
+}
+
+.form-links button:disabled{
+  color:#aaa;
+  cursor:not-allowed;
+}
+
+.timer{
+  margin-left:5px;
+  color:#999;
+  }
+.error-msg{
+  color:red;
+  text-align:center;
+  margin-bottom:10px;
+  font-size:14px;
+}
+.text-center{
+  text-align:center;
+  margin-top:15px;
+}
+.text-center a{
+  color:var(--primary);
+  font-size:13px;
+  text-decoration:none;
+  font-weight:500;
+}
+</style>
+
+</head>
+
+<body>
+ <header>
+    <div class="logo">EduPlatform</div>
+    <nav>
+      <a th:href="@{/teacher-homepage}">Home</a>
+      <a th:href="@{/teacher_about}">About</a>
+      <a th:href="@{/teacher-privacy}">Privacy</a>
+    </nav>
+    <div class="roles">
+      <button class="role-btn student" th:onclick="|location.href='@{index}'|">Student</button>
+      <button class="role-btn teacher" th:onclick="|location.href='@{teacher-auth}'|">Teacher</button>
+      <button class="role-btn admin" th:onclick="|location.href='@{admin-homepage}'|">Admin</button>
+    </div>
+  </header>
+<div class="container-login">
+  <div class="login-box">
+    
+    <div class="login-img js-tilt">
+      <img th:src="@{/images/img-01.png}" alt="login">
+    </div>
+
+    <form th:action="@{/teacher-verify-otp}"
+    class="login-form validate-form"
+    method="post">
+    
+      <div class="login-title"> Login Verification </div>
+
+<input type="hidden" name="email" th:value="${session.OTP_EMAIL}">
+ <p th:if="${error}" th:text="${error}" style="color:red" ></p>
+
+
+      <div class="input-wrap validate-input">
+        <input type="text" name="otp" placeholder="Enter OTP" maxlength="6" required>
+        <i class="fa fa-lock"></i>
+      </div>
+
+      <button class="login-btn">Login</button>
+
+	<div class="form-links">
+
+        <p>
+      Didn’t get OTP?
+      <button type="submit"
+        id="resendBtn" formaction="/teacher-resend-otp" formmethod="post">
+        Resend OTP
+      </button>
+      <span id="timer"></span>
+    </p>
+
+        <a th:href="@{/teacher-auth}">Change Email?</a>
+        <a th:href="@{/teacher-homepage}">Back to Home →</a>
+
+      </div>
+ </form>
+  </div>
+</div>
+
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h4>EduPlatform</h4>
+                <p>Empowering educators worldwide.</p>
+            </div>
+
+            <div>
+                <h4>Teacher Panel</h4>
+                <p>Dashboard</p>
+                <p>Create Course</p>
+                <p>Analytics</p>
+            </div>
+
+            <div>
+                <h4>Support</h4>
+                <p>Help Center</p>
+                <p>Community</p>
+                <p>Policies</p>
+            </div>
+        </div>
+
+        <p class="copy">© 2025 EduPlatform — Teacher Interface</p>
+    </footer>
+<script>
+$('.js-tilt').tilt({ scale: 1.05 });
+
+$('.validate-form').on('submit', function () {
+  let valid = true;
+  $('.validate-input input').each(function () {
+    if ($(this).val().trim() === '') {
+      $(this).parent().addClass('alert-validate');
+      valid = false;
+    }
+  });
+  return valid;
+});
+
+$('.validate-input input').focus(function () {
+  $(this).parent().removeClass('alert-validate');
+});
+
+
+
+let timeLeft = 30;
+const btn = document.getElementById("resendBtn");
+const timer = document.getElementById("timer");
+
+btn.disabled = true;
+const interval = setInterval(() => {
+  timer.textContent = ` (${timeLeft}s)`;
+  timeLeft--;
+  if(timeLeft < 0){
+    clearInterval(interval);
+    btn.disabled = false;
+    timer.textContent = "";
+  }
+},1000);
+
+</script>
+
+</body>
+</html>

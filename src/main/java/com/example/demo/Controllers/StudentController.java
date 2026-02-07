@@ -14,12 +14,7 @@ public class StudentController {
 		return "student-dashboard";
 	}
 	
-	@GetMapping("/student-course")
-	public String student_course()
-	{
 	
-		return "student-course";
-	}
 	
 	@GetMapping("/student-learning")
 	public String student_learning()

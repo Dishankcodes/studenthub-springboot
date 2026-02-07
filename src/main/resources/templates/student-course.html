@@ -11,7 +11,7 @@
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-	<link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+    <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -23,93 +23,231 @@
         body {
             background: #f4f7ff;
         }
-     
-	    .main {
-	        margin-left: 240px;
+
+        .main {
+            margin-left: 240px;
             margin-top: 56px;
             padding: 20px;
             transition: 0.3s ease;
-	    }
-	    
-	     	
-     	
-       
+        }
 
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        /* SEARCH & FILTER */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .filters input,
+        .filters select {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+
+        /* COURSE GRID */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        /* COURSE CARD */
+        .course-card {
+            background: #fff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+            transition: transform .3s;
+        }
+
+        .course-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .course-thumb {
+            height: 160px;
+            background: #ddd;
+        }
+
+        .course-content {
+            padding: 18px;
+        }
+
+        .course-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .free {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .paid {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .course-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 8px 0;
+        }
+
+        .course-meta {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rating {
+            font-size: 13px;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            background: #1f1f2e;
+            color: #fff;
+            cursor: pointer;
+            font-size: 13px;
+        }
     </style>
 </head>
 
 <body>
 
-<!-- ===== SIDEBAR ===== -->
-<div class="sidebar collapsed" id="sidebar">
-    <button class="toggle-btn" id="toggle">
-        <i class="bi bi-chevron-right"></i>
-    </button>
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar collapsed" id="sidebar">
+        <button class="toggle-btn" id="toggle">
+            <i class="bi bi-chevron-right"></i>
+        </button>
 
-    <div class="sidebar-brand">
-        <a href="/student-dashboard">
+        <div class="sidebar-brand">
+            <a href="/student-dashboard">
                 <img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
             </a>
-        <h2 class="platform-name">
-            EduPlatform
-        </h2>
-    </div>
-
-<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-<a th:href="@{/student-course}" class="active"><i class="bi bi-search"></i><span>Explore Courses</span></a>
-<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
-<a th:href="@{/student-instructor-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
-<a th:href="@{/student-news}"><i class="bi bi-megaphone"></i><span>Announcements</span></a>
-<a th:href="@{/student-notes}"><i class="bi bi-graph-up"></i><span>Notes</span></a>
-<a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
-<a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
-<a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-<a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
-
-</div>
-
-<!-- ===== TOPBAR ===== -->
-<div class="student-topbar">
-    <span class="page-title">Courses</span>
-    	 <div class="topbar-right">
-        <div class="notif">
-        <a th:href="@{/student-notification}">
-            <i class="bi bi-bell"></i>
-            <span class="dot"></span> </a>
+            <h2 class="platform-name">
+                EduPlatform
+            </h2>
         </div>
 
-        <div class="profile">
-        <a th:href="@{/student-profile}" class="profile-link">
-            <img src="/images/default.jpg" alt="Profile">
-            <span class="student-name">Dishank</span>
-          </a>
-        </div>
-        
+        <a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+        <a th:href="@{/student-course}" class="active"><i class="bi bi-search"></i><span>Explore Courses</span></a>
+        <a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
+        <a th:href="@{/student-instructor-feedback}"><i class="bi bi-person-video3"></i><span>Instructor
+                Overview</span></a>
+        <a th:href="@{/student-news}" ><i class="bi bi-megaphone"></i><span>Announcements</span></a>
+        <a th:href="@{/student-notes}"><i class="bi bi-graph-up"></i><span>Notes</span></a>
+        <a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
+        <a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
+        <a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+        <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+
     </div>
 
-</div>
+    <!-- ===== TOPBAR ===== -->
+    <div class="student-topbar">
+        <span class="page-title">Browse Courses</span>
+        <div class="topbar-right">
+            <div class="notif">
+                <a th:href="@{/student-notification}">
+                    <i class="bi bi-bell"></i>
+                    <span class="dot"></span> </a>
+            </div>
 
-<div class="main">
-  
-</div>
+            <div class="profile">
+                <a th:href="@{/student-profile}" class="profile-link">
+                    <img src="/images/default.jpg" alt="Profile">
+                    <span class="student-name">Dishank</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="container">
+            <div class="filters">
+                <input type="text" placeholder="Search courses...">
+                <select>
+                    <option>All Categories</option>
+                    <option>Programming</option>
+                    <option>Web Development</option>
+                    <option>Data Science</option>
+                </select>
+            </div>
+
+            <div class="course-grid">
+
+                <!-- COURSE -->
+                <div class="course-card">
+                    <div class="course-thumb"></div>
+                    <div class="course-content">
+                        <span class="course-badge paid">Paid</span>
+                        <div class="course-title">Spring Boot Masterclass</div>
+                        <div class="course-meta">By John Doe</div>
+                        <div class="course-footer">
+                            <span class="rating">⭐ 4.8</span>
+                            <button class="btn" th:onclick="|window.location.href='@{/student-course-details}'|">View</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COURSE -->
+                <div class="course-card">
+                    <div class="course-thumb"></div>
+                    <div class="course-content">
+                        <span class="course-badge free">Free</span>
+                        <div class="course-title">HTML & CSS Basics</div>
+                        <div class="course-meta">By Jane Smith</div>
+                        <div class="course-footer">
+                            <span class="rating">⭐ 4.6</span>
+                          <button class="btn" th:onclick="|window.location.href='@{/student-course-details}'|">View</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 
 
-<!-- ===== SCRIPT ===== -->
-<script>
-    const sidebar = document.getElementById("sidebar");
-    const toggle = document.getElementById("toggle");
-    const icon = toggle.querySelector("i");
+    <!-- ===== SCRIPT ===== -->
+    <script>
+        const sidebar = document.getElementById("sidebar");
+        const toggle = document.getElementById("toggle");
+        const icon = toggle.querySelector("i");
 
-    toggle.addEventListener("click", () => {
-        if (window.innerWidth <= 768) {
-            sidebar.classList.toggle("mobile-show");
-        } else {
-            sidebar.classList.toggle("collapsed");
-            icon.classList.toggle("bi-chevron-right");
-            icon.classList.toggle("bi-chevron-left");
-        }
-    });
-</script>
+        toggle.addEventListener("click", () => {
+            if (window.innerWidth <= 768) {
+                sidebar.classList.toggle("mobile-show");
+            } else {
+                sidebar.classList.toggle("collapsed");
+                icon.classList.toggle("bi-chevron-right");
+                icon.classList.toggle("bi-chevron-left");
+            }
+        });
+    </script>
 
 </body>
+
 </html>
