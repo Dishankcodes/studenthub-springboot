@@ -124,6 +124,7 @@
            <table class="table table-bordered table-striped mt-3">
         <thead>
         <tr>
+        		<th>Sr. No. </th>
             <th>Full Name</th>
             <th>College</th>
             <th>Email</th>
@@ -132,7 +133,8 @@
         </thead>
 
         <tbody>
-        <tr th:each="student : ${students}">
+        <tr th:each="student , number : ${students}">
+        		<td th:text="${number.index+1}"></td>
             <td th:text="${student.fullname}"></td>
             <td th:text="${student.college}"></td>
             <td th:text="${student.email}"></td>
