@@ -12,15 +12,16 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
-
-
-
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: #f4f7ff;
         }
 
         .main {
@@ -30,142 +31,106 @@
             transition: 0.3s ease;
         }
 
-        body {
-            background: #f4f6f9;
-            color: #1f1f2e;
-        }
-
-        /* ===== COURSE HEADER ===== */
-        .course-header {
-            background: linear-gradient(135deg, #1f1f2e, #2a2a4a);
-            color: #fff;
+        .container {
+            max-width: 1200px;
+            margin: auto;
             padding: 30px;
         }
 
-        .course-header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .course-meta {
+        /* SEARCH & FILTER */
+        .filters {
             display: flex;
-            gap: 20px;
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .enroll-btn {
-            margin-top: 20px;
-            padding: 12px 22px;
-            border: none;
-            background: #f6a623;
-            color: #1f1f2e;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        /* ===== LAYOUT ===== */
-        .course-container {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            min-height: calc(100vh - 180px);
-        }
-
-        /* ===== SIDEBAR ===== */
-        .course-sidebar {
-            background: #ffffff;
-            border-right: 1px solid #ddd;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .module {
-            margin-bottom: 20px;
-        }
-
-        .module h3 {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-
-        .lesson {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .lesson:hover {
-            background: #f4f6f9;
-        }
-
-        .lesson.locked {
-            color: #999;
-        }
-
-        .lesson i {
-            font-size: 16px;
-        }
-
-        /* ===== MAIN CONTENT ===== */
-        .course-content {
-            padding: 30px;
-        }
-
-        .content-title {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
-
-        /* VIDEO */
-        .video-box {
-            background: #000;
-            height: 360px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 18px;
+            gap: 15px;
             margin-bottom: 25px;
         }
 
-        /* NOTES */
-        .notes-box {
+        .filters input,
+        .filters select {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+
+        /* COURSE GRID */
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        /* COURSE CARD */
+        .course-card {
             background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            line-height: 1.7;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+            transition: transform .3s;
         }
 
-        /* QUIZ */
-        .quiz-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
+        .course-card:hover {
+            transform: translateY(-6px);
         }
 
-        .quiz-question {
-            margin-bottom: 15px;
+        .course-thumb {
+            height: 160px;
+            background: #ddd;
         }
 
-        .quiz-question strong {
-            display: block;
+        .course-content {
+            padding: 18px;
+        }
+
+        .course-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
             margin-bottom: 8px;
         }
 
-        .quiz-question label {
-            display: block;
-            margin-bottom: 6px;
+        .free {
+            background: #d1e7dd;
+            color: #0f5132;
+        }
+
+        .paid {
+            background: #fff3cd;
+            color: #664d03;
+        }
+
+        .course-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 8px 0;
+        }
+
+        .course-meta {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 10px;
+        }
+
+        .course-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rating {
+            font-size: 13px;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: none;
+            background: #1f1f2e;
+            color: #fff;
+            cursor: pointer;
+            font-size: 13px;
         }
     </style>
-
-
 </head>
 
 <body>
@@ -190,7 +155,7 @@
         <a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
         <a th:href="@{/student-instructor-feedback}"><i class="bi bi-person-video3"></i><span>Instructor
                 Overview</span></a>
-        <a th:href="@{/student-news}"><i class="bi bi-megaphone"></i><span>Announcements</span></a>
+        <a th:href="@{/student-news}" ><i class="bi bi-megaphone"></i><span>Announcements</span></a>
         <a th:href="@{/student-notes}"><i class="bi bi-graph-up"></i><span>Notes</span></a>
         <a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
         <a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
@@ -201,7 +166,7 @@
 
     <!-- ===== TOPBAR ===== -->
     <div class="student-topbar">
-        <span class="page-title">Courses</span>
+        <span class="page-title">Browse Courses</span>
         <div class="topbar-right">
             <div class="notif">
                 <a th:href="@{/student-notification}">
@@ -215,95 +180,52 @@
                     <span class="student-name">Dishank</span>
                 </a>
             </div>
-
         </div>
-
     </div>
 
     <div class="main">
-        <div class="course-header">
-            <h1>Spring Boot Masterclass</h1>
-
-            <div class="course-meta">
-                <span><i class="bi bi-person"></i> Dishank Prajapati</span>
-                <span><i class="bi bi-clock"></i> 12 Hours</span>
-                <span><i class="bi bi-star-fill"></i> 4.8 Rating</span>
-                <span><i class="bi bi-currency-rupee"></i> Paid</span>
+        <div class="container">
+            <div class="filters">
+                <input type="text" placeholder="Search courses...">
+                <select>
+                    <option>All Categories</option>
+                    <option>Programming</option>
+                    <option>Web Development</option>
+                    <option>Data Science</option>
+                </select>
             </div>
 
-            <button class="enroll-btn">Enroll Now</button>
-        </div>
+            <div class="course-grid">
 
-        <!-- ===== BODY ===== -->
-        <div class="course-container">
-
-            <!-- SIDEBAR -->
-            <aside class="course-sidebar">
-
-                <div class="module">
-                    <h3>Module 1: Introduction</h3>
-
-                    <div class="lesson">
-                        <i class="bi bi-play-circle"></i> Welcome Video
-                    </div>
-
-                    <div class="lesson">
-                        <i class="bi bi-file-earmark-text"></i> Course Overview (Notes)
+                <!-- COURSE -->
+                <div class="course-card">
+                    <div class="course-thumb"></div>
+                    <div class="course-content">
+                        <span class="course-badge paid">Paid</span>
+                        <div class="course-title">Spring Boot Masterclass</div>
+                        <div class="course-meta">By John Doe</div>
+                        <div class="course-footer">
+                            <span class="rating">⭐ 4.8</span>
+                            <button class="btn" th:onclick="|window.location.href='@{/student-course-details}'|">View</button>
+                        </div>
                     </div>
                 </div>
 
-                <div class="module">
-                    <h3>Module 2: Spring Boot Basics</h3>
-
-                    <div class="lesson">
-                        <i class="bi bi-play-circle"></i> Spring Boot Architecture
+                <!-- COURSE -->
+                <div class="course-card">
+                    <div class="course-thumb"></div>
+                    <div class="course-content">
+                        <span class="course-badge free">Free</span>
+                        <div class="course-title">HTML & CSS Basics</div>
+                        <div class="course-meta">By Jane Smith</div>
+                        <div class="course-footer">
+                            <span class="rating">⭐ 4.6</span>
+                          <button class="btn" th:onclick="|window.location.href='@{/student-course-details}'|">View</button>
+                        </div>
                     </div>
-
-                    <div class="lesson locked">
-                        <i class="bi bi-lock-fill"></i> Quiz: Basics Test
-                    </div>
                 </div>
 
-            </aside>
-
-            <!-- MAIN CONTENT -->
-            <main class="course-content">
-
-                <div class="content-title">
-                    Welcome Video
-                </div>
-
-                <!-- VIDEO -->
-                <div class="video-box">
-                    ▶ Video Player (Dummy)
-                </div>
-
-                <!-- NOTES -->
-                <div class="notes-box">
-                    <h3>Lesson Notes</h3>
-                    <p>
-                        Spring Boot makes it easy to create stand-alone,
-                        production-grade Spring based Applications that you can
-                        "just run".
-                    </p>
-                    <p>
-                        In this course, you will learn Spring Boot fundamentals,
-                        REST APIs, database integration, and more.
-                    </p>
-                </div>
-
-                <!-- QUIZ (Hidden now, backend later decides) -->
-                <!--
-        <div class="quiz-box">
-            <div class="quiz-question">
-                <strong>1. What is Spring Boot?</strong>
-                <label><input type="radio"> A framework</label>
-                <label><input type="radio"> A database</label>
             </div>
-        </div>
-        -->
-
-            </main>
 
         </div>
     </div>
