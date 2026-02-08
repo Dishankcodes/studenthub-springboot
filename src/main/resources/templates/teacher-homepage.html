@@ -298,9 +298,9 @@
     </nav>
 
     <div class="roles">
-        <button class="role-btn student" th:onclick="|location.href='@{index}'|">Student</button>
-        <button class="role-btn teacher" th:onclick="|location.href='@{teacher-auth}'|">Teacher</button>
-        <button class="role-btn admin" th:onclick="|location.href='@{admin-homepage}'|">Admin</button>
+        <button class="role-btn student" th:onclick="|location.href='@{/index}'|">Student</button>
+        <button class="role-btn teacher" th:onclick="|location.href='@{/teacher-auth}'|">Teacher</button>
+        <button class="role-btn admin" th:onclick="|location.href='@{/admin-homepage}'|">Admin</button>
     </div>
 </header>
 
@@ -310,8 +310,8 @@
         <p>Design impactful courses, guide learners, and track progress — all from one intuitive platform.</p>
 
         <div class="hero-buttons">
-            <button class="btn-primary" th:onclick="|location.href='@{teacher-auth}'|">Create Course</button>
-            <button class="btn-primary" th:onclick="|location.href='@{teacher-auth}'|">Sign In</button>
+            <button class="btn-primary" th:onclick="|location.href='@{/teacher-dashboard}'|">Create Course</button>
+            <button class="btn-primary" th:onclick="|location.href='@{/teacher-auth}'|">Sign In</button>
         </div>
     </div>
 

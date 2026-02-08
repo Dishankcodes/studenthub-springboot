@@ -251,55 +251,18 @@
     <span class="logo-text">EduPlatform</span>
 </div>
 
-    <nav class="sidebar-menu">
-    <a th:href="@{/teacher-dashboard}">
-        <i class="bi bi-speedometer2"></i>
-        <span> Dashboard</span>
-    </a>
-
-    <a th:href="@{/teacher-course}" >
-        <i class="bi bi-journal-bookmark"></i>
-        <span>Course Management</span>
-    </a>
     
-    
-    <a th:href="@{/teacher-course}"  class="active">
-        <i class="bi bi-journal-bookmark"></i>
-        <span>Create Course</span>
-    </a>
-    
-
-    <a th:href="@{/teacher-exams}">
-        <i class="bi bi-pencil-square"></i>
-        <span>Exams & Quizzes</span>
-    </a>
-
-    <a th:href="@{/teacher-students}">
-        <i class="bi bi-people"></i>
-        <span>Students</span>
-    </a>
-
-    <a th:href="@{/teacher-communication}">
-        <i class="bi bi-chat-dots"></i>
-        <span>Communication</span>
-    </a>
-
-    <a th:href="@{/teacher-feedback}">
-        <i class="bi bi-star"></i>
-        <span>Feedback & Ratings</span>
-    </a>
-
-    <a th:href="@{/teacher-profile}">
-        <i class="bi bi-gear"></i>
-        <span>Profile</span>
-    </a>
-
-    <a th:href="@{/logout}" class="logout">
-        <i class="bi bi-box-arrow-right"></i>
-        <span>Logout</span>
-    </a>
-</nav>
-</aside>
+        <nav class="sidebar-menu">
+            <a th:href="@{/teacher-dashboard}"><i class="bi bi-speedometer2"></i><span> Dashboard </span></a>
+            <a th:href="@{/teacher-course}"><i class="bi bi-journal-text"></i><span>Course Management</span></a>
+            <a th:href="@{/teacher-creates-course}" class="active"><i class="bi bi-journal-plus"></i><span>Create Course</span></a>
+            <a th:href="@{/teacher-exams}"><i class="bi bi-pencil-square"></i><span>Exams & Quizzes</span></a>
+            <a th:href="@{/teacher-students}"><i class="bi bi-people"></i><span>Students</span></a>
+            <a th:href="@{/teacher-communication}"><i class="bi bi-chat-dots"></i><span >Communication</span></a>
+            <a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback & Ratings</span></a>
+            <a th:href="@{/teacher-profile}"><i class="bi bi-gear"></i><span>Profile</span></a>
+            <a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+        </nav></aside>
 
 <!-- ===== MAIN CONTENT ===== -->
 <main class="main-content">

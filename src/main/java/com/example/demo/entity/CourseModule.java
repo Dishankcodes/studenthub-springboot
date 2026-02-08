@@ -1,5 +1,9 @@
 package com.example.demo.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,6 +29,9 @@ public class CourseModule {
 	@JoinColumn(name = "course_id", nullable = false)
 	private Course course;
 
+	@OneToMany(mappedBy = "module" , cascade =  CascadeType.ALL)
+	private List<Lesson> lessons =new ArrayList<>();
+	
 	@Column(nullable = false)
 	private Integer position;
 
@@ -57,6 +65,14 @@ public class CourseModule {
 
 	public void setPosition(Integer position) {
 		this.position = position;
+	}
+
+	public List<Lesson> getLessons() {
+		return lessons;
+	}
+
+	public void setLessons(List<Lesson> lessons) {
+		this.lessons = lessons;
 	}
 
 }
