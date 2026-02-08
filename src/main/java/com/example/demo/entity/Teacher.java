@@ -1,11 +1,15 @@
 package com.example.demo.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -13,8 +17,6 @@ import jakarta.persistence.Table;
 @Table(name = "teacher")
 public class Teacher {
 	
-	
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer teacherId;
@@ -31,11 +33,24 @@ public class Teacher {
 	
 	private String password;
 
-	public String countryCode;
+	private String countryCode;
 
 	@OneToOne(mappedBy = "teacher",cascade = CascadeType.ALL)
 	private TeacherProfile profile;
 	
+	@OneToMany(mappedBy = "teacher",cascade = CascadeType.ALL)	
+	private List<Course> teacherCourse =new ArrayList<>();
+	
+	
+
+	public List<Course> getTeacherCourse() {
+		return teacherCourse;
+	}
+
+	public void setTeacherCourse(List<Course> teacherCourse) {
+		this.teacherCourse = teacherCourse;
+	}
+
 	public TeacherProfile getProfile() {
 		return profile;
 	}
