@@ -246,7 +246,6 @@
     border-radius: 50%;
     background: #f6a623;
     color: #1f1f2e;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -308,7 +307,7 @@
 .page-title {
     font-size: 28px;
     font-weight: 600;
-    margin-top: 30px;
+    margin-top: 20px;
     margin-left:20px;
 }
 /* MOBILE */
@@ -317,14 +316,12 @@
         display: none;
     }
 }
+
+
 .main-content {
     margin-left: 260px;
     padding: 20 30px;
     transition: margin-left 0.3s ease;
-}
-/* When sidebar is collapsed */
-body.sidebar-collapsed .main-content {
-    margin-left: 80px;
 }
 
 

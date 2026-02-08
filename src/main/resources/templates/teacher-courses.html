@@ -28,7 +28,7 @@
         /* ===== MAIN CONTENT (SAME AS DASHBOARD) ===== */
         .main-content {
             margin-left: 260px;
-            padding: 20px 30px;
+            padding: 10px 20px;
             transition: margin-left 0.3s ease;
         }
 
@@ -94,7 +94,7 @@
         /* ===== COURSE GRID ===== */
         .course-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
             gap: 22px;
         }
 
@@ -102,7 +102,7 @@
             background: #fff;
             border-radius: 14px;
             overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
             transition: 0.3s;
         }
 
@@ -168,10 +168,25 @@
             text-decoration: none;
         }
 
-        .edit { background: #1f1f2e; color: #fff; }
-        .continue { background: #f6a623; color: #1f1f2e; }
-        .analytics { background: #e9ecf3; color: #1f1f2e; }
-        .delete { background: #ffe5e5; color: #b02a37; }
+        .edit {
+            background: #1f1f2e;
+            color: #fff;
+        }
+
+        .continue {
+            background: #f6a623;
+            color: #1f1f2e;
+        }
+
+        .analytics {
+            background: #e9ecf3;
+            color: #1f1f2e;
+        }
+
+        .delete {
+            background: #ffe5e5;
+            color: #b02a37;
+        }
 
         /* ===== MOBILE ===== */
         @media (max-width: 768px) {
@@ -180,136 +195,217 @@
                 padding: 20px;
             }
         }
+
+        @media (max-width: 768px) {
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .empty-state {
+            display: none;
+        }
+
+        .course-grid:empty+.empty-state {
+            display: block;
+        }
     </style>
 </head>
 
 <body class="sidebar-collapsed">
 
-<!-- ===== SIDEBAR ===== -->
-<aside class="sidebar collapsed">
-    <div class="sidebar-logo">
-        <img th:src="@{/images/logo.png}">
-        <span class="logo-text">EduPlatform</span>
-    </div>
-
-<nav class="sidebar-menu">
-    <a th:href="@{/teacher-dashboard}">
-        <i class="bi bi-speedometer2"></i>
-        <span> Dashboard </span>
-    </a>
-
-    <a th:href="@{/teacher-course}" class="active">
-        <i class="bi bi-journal-bookmark"></i>
-        <span>Course Management</span>
-    </a>
-
-
-	<a th:href="@{/teacher-creates-course}">
-        <i class="bi bi-journal-bookmark"></i>
-        <span>Create Course</span>
-    </a>
-    
-    <a th:href="@{/teacher-exams}">
-        <i class="bi bi-pencil-square"></i>
-        <span>Exams & Quizzes</span>
-    </a>
-
-    <a th:href="@{/teacher-students}">
-        <i class="bi bi-people"></i>
-        <span>Students</span>
-    </a>
-
-    <a th:href="@{/teacher-communication}">
-        <i class="bi bi-chat-dots"></i>
-        <span>Communication</span>
-    </a>
-
-    <a th:href="@{/teacher-feedback}">
-        <i class="bi bi-star"></i>
-        <span>Feedback & Ratings</span>
-    </a>
-
-    <a th:href="@{/teacher-profile}">
-        <i class="bi bi-gear"></i>
-        <span>Profile</span>
-    </a>
-
-    <a th:href="@{/logout}" class="logout">
-        <i class="bi bi-box-arrow-right"></i>
-        <span>Logout</span>
-    </a>
-</nav>
-
-</aside>
-
-<!-- ===== MAIN CONTENT ===== -->
-<main class="main-content">
-
-<header class="top-header">
-    <div class="header-left">
-        <button class="sidebar-toggle" id="sidebarToggle">
-            <i class="bi bi-list"></i>
-        </button>
-        <span class="page-title">My Courses</span>
-    </div>
-</header>
-
-<hr class="header-divider">
-
-<!-- SEARCH -->
-<div class="top-bar">
-    <div class="search-box">
-        <i class="bi bi-search"></i>
-        <input type="text" placeholder="Search courses...">
-    </div>
-
-    <select>
-        <option>All</option>
-        <option>Published</option>
-        <option>Draft</option>
-    </select>
-
-    <a href="/teacher-creates-course" class="btn">
-        <i class="bi bi-plus-lg"></i> Create Course
-    </a>
-</div>
-
-<!-- COURSES -->
-<div class="course-grid">
-
-    <div class="course-card">
-        <div class="course-thumb">📘</div>
-        <div class="course-body">
-            <div class="course-header">
-                <strong>Spring Boot Masterclass</strong>
-                <span class="badge published">Published</span>
-            </div>
-            <div class="course-meta">
-                <span>620 Students</span>
-                <span>₹1.8L</span>
-            </div>
-            <div class="course-actions">
-                <a class="edit">Edit</a>
-                <a class="analytics">Analytics</a>
-                <a class="delete">Delete</a>
-            </div>
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="sidebar collapsed">
+        <div class="sidebar-logo">
+            <img th:src="@{/images/logo.png}">
+            <span class="logo-text">EduPlatform</span>
         </div>
+
+        <nav class="sidebar-menu">
+            <a th:href="@{/teacher-dashboard}">
+                <i class="bi bi-speedometer2"></i>
+                <span> Dashboard </span>
+            </a>
+
+            <a th:href="@{/teacher-course}" class="active">
+                <i class="bi bi-journal-bookmark"></i>
+                <span>Course Management</span>
+            </a>
+
+
+            <a th:href="@{/teacher-creates-course}">
+                <i class="bi bi-journal-bookmark"></i>
+                <span>Create Course</span>
+            </a>
+
+            <a th:href="@{/teacher-exams}">
+                <i class="bi bi-pencil-square"></i>
+                <span>Exams & Quizzes</span>
+            </a>
+
+            <a th:href="@{/teacher-students}">
+                <i class="bi bi-people"></i>
+                <span>Students</span>
+            </a>
+
+            <a th:href="@{/teacher-communication}">
+                <i class="bi bi-chat-dots"></i>
+                <span>Communication</span>
+            </a>
+
+            <a th:href="@{/teacher-feedback}">
+                <i class="bi bi-star"></i>
+                <span>Feedback & Ratings</span>
+            </a>
+
+            <a th:href="@{/teacher-profile}">
+                <i class="bi bi-gear"></i>
+                <span>Profile</span>
+            </a>
+
+            <a th:href="@{/logout}" class="logout">
+                <i class="bi bi-box-arrow-right"></i>
+                <span>Logout</span>
+            </a>
+        </nav>
+
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+
+        <header class="top-header">
+            <div class="header-left">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <span class="page-title">Course Management</span>
+            </div>
+            <div class="header-right">
+                <div class="profile-trigger" id="profileToggle">
+                    <span th:text="${teacher.firstname + ' ' + teacher.lastname}">
+                        Dishank
+                    </span>
+                    <div class="avatar">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <i class="bi bi-caret-down-fill"></i>
+                </div>
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a th:href="@{/teacher-profile}">Profile</a>
+                    <a href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </header>
+
+        <hr class="header-divider">
+
+        <!-- SEARCH -->
+        <div class="top-bar">
+            <div class="search-box">
+                <i class="bi bi-search"></i>
+                <input type="text" placeholder="Search courses...">
+            </div>
+
+            <select>
+                <option>All</option>
+                <option>Published</option>
+                <option>Draft</option>
+            </select>
+
+            <a href="/teacher-creates-course" class="btn">
+                <i class="bi bi-plus-lg"></i> Create Course
+            </a>
+        </div>
+
+        <div class="course-grid">
+
+            <!-- COURSE CARD -->
+            <div class="course-card">
+                <div class="course-thumb">
+                    📘
+                </div>
+
+                <div class="course-body">
+                    <div class="course-header">
+                        <div class="course-title">Spring Boot Masterclass</div>
+                        <span class="badge published">Published</span>
+                    </div>
+
+                    <div class="course-meta">
+                        <span><i class="bi bi-people"></i> 620</span>
+                        <span><i class="bi bi-currency-rupee"></i> 1.8L</span>
+                    </div>
+
+                    <div class="course-actions">
+                        <a class="edit">Edit</a>
+                        <a class="analytics">Analytics</a>
+                        <a class="delete">Delete</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DRAFT COURSE -->
+            <div class="course-card">
+                <div class="course-thumb">
+                    📗
+                </div>
+
+                <div class="course-body">
+                    <div class="course-header">
+                        <div class="course-title">Java Fundamentals</div>
+                        <span class="badge draft">Draft</span>
+                    </div>
+
+                    <div class="course-meta">
+                        <span>0 Students</span>
+                        <span>Not Published</span>
+                    </div>
+
+                    <div class="course-actions">
+                        <a class="continue">Continue</a>
+                        <a class="delete">Delete</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- EMPTY STATE 
+    <div class="empty-state">
+
+        <div class="empty-icon">
+            <i class="bi bi-journal-plus"></i>
+        </div>
+
+        <h2>No courses yet</h2>
+
+        <p>
+            You haven’t created any courses yet.<br>
+            Start by creating your first course and share your knowledge.
+        </p>
+
+        <a href="/teacher-course/create" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Create Your First Course
+        </a>
+
     </div>
+-->
+    </main>
 
-</div>
+    <script>
+        const toggleBtn = document.getElementById("sidebarToggle");
+        const sidebar = document.querySelector(".sidebar");
+        const body = document.body;
 
-</main>
-
-<script>
-const toggleBtn = document.getElementById("sidebarToggle");
-const sidebar = document.querySelector(".sidebar");
-const body = document.body;
-
-toggleBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("collapsed");
-    body.classList.toggle("sidebar-collapsed");
-});
-</script>
+        toggleBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("collapsed");
+            body.classList.toggle("sidebar-collapsed");
+        });
+    </script>
 
 </body>
+
 </html>

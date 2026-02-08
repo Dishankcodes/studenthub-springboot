@@ -16,32 +16,30 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "teacher")
 public class Teacher {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer teacherId;
-	
+
 	private String firstname;
-	
+
 	private String lastname;
-	
-	@Column(nullable=false, unique = true)
+
+	@Column(nullable = false, unique = true)
 	private String phoneno;
-	
-	@Column(nullable = false ,unique =true)
+
+	@Column(nullable = false, unique = true)
 	private String email;
-	
+
 	private String password;
 
 	private String countryCode;
 
-	@OneToOne(mappedBy = "teacher",cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "teacher", cascade = CascadeType.ALL)
 	private TeacherProfile profile;
-	
-	@OneToMany(mappedBy = "teacher",cascade = CascadeType.ALL)	
-	private List<Course> teacherCourse =new ArrayList<>();
-	
-	
+
+	@OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+	private List<Course> teacherCourse = new ArrayList<>();
 
 	public List<Course> getTeacherCourse() {
 		return teacherCourse;
@@ -58,7 +56,7 @@ public class Teacher {
 	public void setProfile(TeacherProfile profile) {
 		this.profile = profile;
 	}
-	
+
 	public Integer getTeacherId() {
 		return teacherId;
 	}
@@ -115,5 +113,4 @@ public class Teacher {
 		this.password = password;
 	}
 
-	
 }

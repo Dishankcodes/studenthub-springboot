@@ -2,23 +2,21 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
-
 @Entity
-@Table(name="student")
+@Table(name = "student")
 public class Student {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer studid;
-	
+
 	private String fullname;
-	
+
 	private String college;
-	
-	
-	@Column(nullable = false ,unique = true)
+
+	@Column(nullable = false, unique = true)
 	private String email;
-	
+
 	private String password;
 
 	public Integer getStud_id() {
@@ -53,15 +51,12 @@ public class Student {
 		this.email = email;
 	}
 
-	 public void setPassword(String password) {
-	        this.password = password;
-	 }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-	 public String getPassword() {
-		    return password;
-		}
+	public String getPassword() {
+		return password;
+	}
 
-	
-
-	
 }

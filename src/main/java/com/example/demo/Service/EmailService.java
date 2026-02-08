@@ -11,15 +11,13 @@ public class EmailService {
 	@Autowired
 	private JavaMailSender mailSender;
 
+	public void sendOtp(String toEmail, String otp) {
+		SimpleMailMessage message = new SimpleMailMessage();
+		message.setTo(toEmail);
+		message.setSubject("EduPlatform - Login OTP Verification");
+		message.setText("Your OTP is: " + otp + "\nValid for 5 minutes.");
 
-	 public void sendOtp(String toEmail, String otp) {
-	        SimpleMailMessage message = new SimpleMailMessage();
-	        message.setTo(toEmail);
-	        message.setSubject("EduPlatform - Login OTP Verification");
-	        message.setText("Your OTP is: " + otp + "\nValid for 5 minutes.");
-
-	        mailSender.send(message);
-	    }
-
+		mailSender.send(message);
+	}
 
 }

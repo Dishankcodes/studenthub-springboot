@@ -6,17 +6,16 @@ import jakarta.persistence.*;
 @Table(name = "admin")
 
 public class Admin {
-	
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer admin_id;
-	
+
 	private String username;
-	
-	@Column(nullable = false ,unique = true)
+
+	@Column(nullable = false, unique = true)
 	private String email;
-	
+
 	private String password;
 
 	public Integer getAdmin_id() {
@@ -50,7 +49,5 @@ public class Admin {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
-	
-	
+
 }

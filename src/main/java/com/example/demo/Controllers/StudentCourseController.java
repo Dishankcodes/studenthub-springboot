@@ -7,20 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class StudentCourseController {
 
 	@GetMapping("/student-course")
-	public String exploreCourse()
-	{
-	
+	public String exploreCourse() {
+
 		return "student-course";
 	}
-	
+
 	@GetMapping("/student-course-details")
 	public String viewCourse() {
 		return "student-course-details";
 	}
-	
+
 	@GetMapping("/student-enroll")
-	public String enrollCourse()
-	{
+	public String enrollCourse() {
 		return "student-enroll";
 	}
 }

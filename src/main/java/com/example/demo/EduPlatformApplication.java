@@ -8,7 +8,7 @@ public class EduPlatformApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EduPlatformApplication.class, args);
-		
+
 		System.out.println("Project Run SuccessFully");
 	}
 

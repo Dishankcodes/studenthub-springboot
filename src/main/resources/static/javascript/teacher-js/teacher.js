@@ -59,4 +59,40 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+	/* ===== EMAIL MODAL ===== */
+	  const openEmail = document.getElementById("openEmailModal");
+	  const emailModal = document.getElementById("emailModal");
+	  const closeEmail = document.getElementById("closeEmailModal");
+	  const cancelEmail = document.getElementById("cancelEmail");
+
+	  openEmail?.addEventListener("click", () => {
+	    emailModal.classList.add("show");
+	  });
+
+	  function closeEmailModal() {
+	    emailModal.classList.remove("show");
+	  }
+
+	  closeEmail?.addEventListener("click", closeEmailModal);
+	  cancelEmail?.addEventListener("click", closeEmailModal);
+
+
+	  /* ===== PHONE MODAL ===== */
+	  const openPhone = document.getElementById("openPhoneModal");
+	  const phoneModal = document.getElementById("phoneModal");
+	  const closePhone = document.getElementById("closePhoneModal");
+	  const cancelPhone = document.getElementById("cancelPhone");
+
+	  openPhone?.addEventListener("click", () => {
+	    phoneModal.classList.add("show");
+	  });
+
+	  function closePhoneModal() {
+	    phoneModal.classList.remove("show");
+	  }
+
+	  closePhone?.addEventListener("click", closePhoneModal);
+	  cancelPhone?.addEventListener("click", closePhoneModal);
+
+
 });

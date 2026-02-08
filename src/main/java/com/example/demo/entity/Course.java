@@ -21,50 +21,43 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-	
+
 @Entity
-@Table (name = "course",
-		uniqueConstraints = {
-				@UniqueConstraint(columnNames = {"title","teacher_id"})
-	}
-)
+@Table(name = "course", uniqueConstraints = { @UniqueConstraint(columnNames = { "title", "teacher_id" }) })
 public class Course {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer course_id;
-	
+
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "teacher_id", nullable = false)
 	private Teacher teacher;
 
-	
-	@OneToMany(mappedBy = "course",cascade = CascadeType.ALL , orphanRemoval = true)
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("position ASC")
 	private List<CourseModule> modules = new ArrayList<>();
-	
-	
+
 	@Column(nullable = false)
 	private String title;
-	
+
 	private String description;
-	
+
 	private Double price;
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private CourseType type; // free paid
-	
+
 	@Enumerated(EnumType.STRING)
 	private CourseLevel level; // adv , beg , inter
-	
+
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private CourseStatus status; // published , block , draft
-	
+
 	private String thumbnailURL;
-	
-	
+
 	public Integer getCourse_id() {
 		return course_id;
 	}
@@ -144,5 +137,5 @@ public class Course {
 	public void setModules(List<CourseModule> modules) {
 		this.modules = modules;
 	}
-	
+
 }
