@@ -1,4 +1,25 @@
 
+const thumbnailInput = document.getElementById("thumbnailInput");
+const thumbnailPreview = document.getElementById("thumbnailPreview");
+
+// Click UI box → open file dialog
+thumbnailPreview.addEventListener("click", () => {
+    thumbnailInput.click();
+});
+
+// Show preview after selection
+thumbnailInput.addEventListener("change", () => {
+    const file = thumbnailInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+        thumbnailPreview.innerHTML = `<img src="${reader.result}" alt="Thumbnail">`;
+    };
+    reader.readAsDataURL(file);
+});
+
+
 const toggleBtn = document.getElementById("sidebarToggle");
 const sidebar = document.querySelector(".sidebar");
 

@@ -28,7 +28,7 @@ public class Course {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer course_id;
+	private Integer courseId;
 
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "teacher_id", nullable = false)
@@ -58,12 +58,14 @@ public class Course {
 
 	private String thumbnailURL;
 
-	public Integer getCourse_id() {
-		return course_id;
+	
+
+	public Integer getCourseId() {
+		return courseId;
 	}
 
-	public void setCourse_id(Integer course_id) {
-		this.course_id = course_id;
+	public void setCourseId(Integer courseId) {
+		this.courseId = courseId;
 	}
 
 	public String getTitle() {

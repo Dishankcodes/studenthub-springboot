@@ -15,7 +15,7 @@ public class Quiz {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer quiz_id;
+	private Integer quizId;
 
 	@OneToOne
 	@JoinColumn(name = "lesson_id", nullable = false)
@@ -24,12 +24,14 @@ public class Quiz {
 	@Column(nullable = false)
 	private Integer timeLimit;
 
-	public Integer getQuiz_id() {
-		return quiz_id;
+	
+
+	public Integer getQuizId() {
+		return quizId;
 	}
 
-	public void setQuiz_id(Integer quiz_id) {
-		this.quiz_id = quiz_id;
+	public void setQuizId(Integer quizId) {
+		this.quizId = quizId;
 	}
 
 	public Lesson getLesson() {

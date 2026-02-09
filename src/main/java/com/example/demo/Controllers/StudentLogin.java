@@ -38,7 +38,7 @@ public class StudentLogin {
 
 	// ================== SIGNUP ==================
 	@PostMapping("/student-login")
-	public String registerStudent(@Valid @ModelAttribute("stundent") Student student, BindingResult result,
+	public String registerStudent(@ModelAttribute Student student, 
 			Model model) {
 
 		if (repo.existsByEmail(student.getEmail())) {
@@ -47,9 +47,9 @@ public class StudentLogin {
 			return "student-login";
 		}
 
-		if (result.hasErrors()) {
-			return "student-login";
-		}
+//		if (result.hasErrors()) {
+//			return "student-login";
+//		}
 
 		repo.save(student);
 		return "redirect:/student-login";

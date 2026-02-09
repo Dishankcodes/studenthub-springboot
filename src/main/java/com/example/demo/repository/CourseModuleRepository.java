@@ -8,6 +8,6 @@ import com.example.demo.entity.CourseModule;
 public interface CourseModuleRepository extends JpaRepository<CourseModule, Integer>{
 
 	
-	List<CourseModule> findByCourseCourseModule(Integer courseId);
+	List<CourseModule> findByCourseCourseIdOrderByPosition(Integer courseId);
 
 }

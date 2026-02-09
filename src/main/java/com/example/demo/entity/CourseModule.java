@@ -20,7 +20,7 @@ public class CourseModule {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer module_id;
+	private Integer moduleId;
 
 	@Column(nullable = false)
 	private String title;
@@ -35,12 +35,14 @@ public class CourseModule {
 	@Column(nullable = false)
 	private Integer position;
 
-	public Integer getModule_id() {
-		return module_id;
+	
+
+	public Integer getModuleId() {
+		return moduleId;
 	}
 
-	public void setModule_id(Integer module_id) {
-		this.module_id = module_id;
+	public void setModuleId(Integer moduleId) {
+		this.moduleId = moduleId;
 	}
 
 	public Course getCourse() {
