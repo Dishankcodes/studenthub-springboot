@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.Student;
 import com.example.demo.repository.StudentRepo;
+
+import jakarta.validation.Valid;
 
 @Controller
 public class StudentLogin {
@@ -35,16 +38,23 @@ public class StudentLogin {
 
 	// ================== SIGNUP ==================
 	@PostMapping("/student-login")
-	public String registerStudent(@ModelAttribute Student student, Model model) {
+	public String registerStudent(@Valid @ModelAttribute("stundent") Student student,BindingResult result, 
+			Model model) {
 
 		if (repo.existsByEmail(student.getEmail())) {
 			model.addAttribute("signupError", "Email already registered");
 			model.addAttribute("student", student);
 			return "student-login";
 		}
+		
+		
+		if(result.hasErrors())
+		{
+			return "student-login";
+		}
 
 		repo.save(student);
-		return "redirect:/student-login?success=true";
+		return "redirect:/student-login";
 	}
 
 	// ================== LOGIN ==================

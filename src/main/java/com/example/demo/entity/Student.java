@@ -1,6 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "student")
@@ -10,6 +11,7 @@ public class Student {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer studid;
 
+	@NotBlank(message ="Full Name Required")
 	private String fullname;
 
 	private String college;

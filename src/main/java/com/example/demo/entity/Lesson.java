@@ -3,16 +3,17 @@ package com.example.demo.entity;
 
 import com.example.demo.enums.LessonType;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.EnumeratedValue;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -41,6 +42,11 @@ public class Lesson {
 	@JoinColumn(nullable = false ,  name = "module_id")
 	private CourseModule module;
 
+	
+	@OneToOne(mappedBy = "lesson" ,cascade = CascadeType.ALL)
+	private Quiz quiz; 
+	
+	
 	public Integer getLessonId() {
 		return lessonId;
 	}
@@ -95,6 +101,14 @@ public class Lesson {
 
 	public void setModule(CourseModule module) {
 		this.module = module;
+	}
+
+	public Quiz getQuiz() {
+		return quiz;
+	}
+
+	public void setQuiz(Quiz quiz) {
+		this.quiz = quiz;
 	}
 	
 	

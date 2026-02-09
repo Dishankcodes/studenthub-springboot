@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 
+
 @Entity
 @Table(name = "admin")
 
@@ -11,6 +12,7 @@ public class Admin {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer admin_id;
 
+	
 	private String username;
 
 	@Column(nullable = false, unique = true)
