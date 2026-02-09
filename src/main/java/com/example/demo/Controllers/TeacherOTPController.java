@@ -2,14 +2,13 @@ package com.example.demo.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.Service.EmailService;
-import com.example.demo.repository.TeacherRepo;
+import com.example.demo.repository.TeacherRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -20,7 +19,7 @@ public class TeacherOTPController {
 	private EmailService mailService;
 
 	@Autowired
-	private TeacherRepo teacherRepo;
+	private TeacherRepository teacherRepo;
 
 	private String generateOtp() {
 		return String.valueOf((int) (Math.random() * 900000) + 100000);

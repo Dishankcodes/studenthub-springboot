@@ -4,7 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.entity.Teacher;
 
-public interface TeacherRepo extends JpaRepository<Teacher, Integer> {
+public interface TeacherRepository extends JpaRepository<Teacher, Integer> {
 
 	boolean existsByEmail(String email);
 

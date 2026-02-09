@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherProfile;
 import com.example.demo.repository.TeacherProfileRepo;
-import com.example.demo.repository.TeacherRepo;
+import com.example.demo.repository.TeacherRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpSession;
 public class TeacherController {
 
 	@Autowired
-	private TeacherRepo teacherRepo;
+	private TeacherRepository teacherRepo;
 
 	@Autowired
 	private TeacherProfileRepo teacherProfileRepo;

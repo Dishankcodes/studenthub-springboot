@@ -13,37 +13,37 @@ import jakarta.persistence.Table;
 @Table(name = "quiz_question")
 public class QuizQuestion {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer questionId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer questionId;
 
-    @ManyToOne
-    @JoinColumn(name = "quiz_id", nullable = false)
-    private Quiz quiz;
+	@ManyToOne
+	@JoinColumn(name = "quiz_id", nullable = false)
+	private Quiz quiz;
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String questionText;
+	
+	private String questionText;
 
-    @Column(nullable = false)
-    private String optionA;
+	@Column(nullable = false)
+	private String optionA;
 
-    @Column(nullable = false)
-    private String optionB;
+	@Column(nullable = false)
+	private String optionB;
 
-    @Column(nullable = false)
-    private String optionC;
+	@Column(nullable = false)
+	private String optionC;
 
-    @Column(nullable = false)
-    private String optionD;
+	@Column(nullable = false)
+	private String optionD;
 
-    @Column(nullable = false)
-    private String correctOption; // A, B, C, D
+	@Column(nullable = false)
+	private String correctOption; // A, B, C, D
 
-    @Column(nullable = false)
-    private Integer marks;
+	@Column(nullable = false)
+	private Integer marks;
 
-    @Column(nullable = false)
-    private Integer position;
+	@Column(nullable = false)
+	private Integer position;
 
 	public Integer getQuestionId() {
 		return questionId;
@@ -125,7 +125,4 @@ public class QuizQuestion {
 		this.position = position;
 	}
 
-  
-    
-    
 }

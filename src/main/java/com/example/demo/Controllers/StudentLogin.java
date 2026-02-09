@@ -11,16 +11,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.Student;
-import com.example.demo.repository.StudentRepo;
+import com.example.demo.repository.StudentRepository;
 
 import jakarta.validation.Valid;
 
 @Controller
 public class StudentLogin {
 
-	private final StudentRepo repo;
+	private final StudentRepository repo;
 
-	public StudentLogin(StudentRepo repo) {
+	public StudentLogin(StudentRepository repo) {
 		this.repo = repo;
 	}
 
@@ -38,7 +38,7 @@ public class StudentLogin {
 
 	// ================== SIGNUP ==================
 	@PostMapping("/student-login")
-	public String registerStudent(@Valid @ModelAttribute("stundent") Student student,BindingResult result, 
+	public String registerStudent(@Valid @ModelAttribute("stundent") Student student, BindingResult result,
 			Model model) {
 
 		if (repo.existsByEmail(student.getEmail())) {
@@ -46,10 +46,8 @@ public class StudentLogin {
 			model.addAttribute("student", student);
 			return "student-login";
 		}
-		
-		
-		if(result.hasErrors())
-		{
+
+		if (result.hasErrors()) {
 			return "student-login";
 		}
 

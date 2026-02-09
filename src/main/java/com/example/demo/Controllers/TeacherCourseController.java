@@ -6,13 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.demo.entity.Teacher;
-import com.example.demo.repository.TeacherRepo;
+import com.example.demo.repository.TeacherRepository;
 
 @Controller
 public class TeacherCourseController {
 
 	@Autowired
-	private TeacherRepo teacherRepo;
+	private TeacherRepository teacherRepo;
 
 	// ===== COURSE MANAGEMENT =====
 	@GetMapping("/teacher-course")

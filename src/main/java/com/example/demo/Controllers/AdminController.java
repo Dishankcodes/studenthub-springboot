@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
-import com.example.demo.repository.StudentRepo;
-import com.example.demo.repository.TeacherRepo;
+import com.example.demo.repository.StudentRepository;
+import com.example.demo.repository.TeacherRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -18,10 +18,10 @@ import jakarta.servlet.http.HttpSession;
 public class AdminController {
 
 	@Autowired
-	private StudentRepo repo;
+	private StudentRepository repo;
 
 	@Autowired
-	TeacherRepo teacherRepo;
+	TeacherRepository teacherRepo;
 
 	@GetMapping("/admin-dashboard")
 	public String admin_dashboard(HttpSession session, Model model) {

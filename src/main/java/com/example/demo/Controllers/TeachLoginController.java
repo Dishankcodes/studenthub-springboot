@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.Teacher;
-import com.example.demo.repository.TeacherRepo;
+import com.example.demo.repository.TeacherRepository;
 
 @Controller
 public class TeachLoginController {
 
 	@Autowired
-	private TeacherRepo teacherRepo;
+	private TeacherRepository teacherRepo;
 
 	@GetMapping("/teacher-register")
 	public String teacher_register(Model model) {
