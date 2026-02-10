@@ -209,6 +209,25 @@
         .course-grid:empty+.empty-state {
             display: block;
         }
+        .course-actions form {
+		    flex: 1;
+		    margin: 0;
+		}
+		
+		.course-actions form button {
+		    width: 100%;
+		    padding: 8px;
+		    border-radius: 8px;
+		    font-size: 14px;
+		    cursor: pointer;
+		    border: none;
+		}
+		      
+		 .course-actions .delete {
+		    background: #ffe5e5;
+		    color: #b02a37;
+		}
+		        
     </style>
 </head>
 
@@ -277,7 +296,7 @@
                 <option>Draft</option>
             </select>
 
-            <a href="/teacher-creates-course" class="btn">
+            <a th:href="@{/teacher-creates-course}" class="btn">
                 <i class="bi bi-plus-lg"></i> Create Course
             </a>
         </div>
@@ -285,59 +304,57 @@
         <div class="course-grid">
 
             <!-- COURSE CARD -->
-            <div class="course-card">
+            <div class="course-card" th:each="course : ${courses} ">
                 <div class="course-thumb">
-                    📘
+                    <img th:if="${course.thumbnailURL != null}" th:src="${course.thumbnailURL}" 
+                    style="width:100%; height:100%; object-fit:cover;">
+                    <span th:if="${course.thumbnailURL == null}"> 📘 </span>
                 </div>
 
                 <div class="course-body">
                     <div class="course-header">
-                        <div class="course-title">Spring Boot Masterclass</div>
-                        <span class="badge published">Published</span>
+                        <div class="course-title" th:text="${course.title}"> </div>
+                        
+                        <span class="badge" th:classappend="${course.status.name() == 'PUBLISHED'} ? 'published' : 'draft' "
+                        th:text="${course.status}">
+                        </span>
                     </div>
 
                     <div class="course-meta">
                         <span><i class="bi bi-people"></i> 620</span>
-                        <span><i class="bi bi-currency-rupee"></i> 1.8L</span>
+                        <span>
+                        <i class="bi bi-currency-rupee"></i>
+                        <span  th:text="${course.type.name() == 'free' ? 'Free' : course.price}"></span>
+                        </span>
+                        
+                        <span th:text="${course.type}"></span>
                     </div>
 
                     <div class="course-actions">
-                        <a class="edit">Edit</a>
-                        <a class="analytics">Analytics</a>
-                        <a class="delete">Delete</a>
+                        <a th:if="${course.status.name() == 'PUBLISHED'}" 
+                        th:href="@{/teacher-course/edit/{id}(id=${course.courseId})}" class="edit">Edit</a>
+                        
+                        <a th:if="${course.status.name() == 'DRAFT'}"
+                        th:href="@{/teacher-course/edit/{id}(id=${course.courseId})}" class="continue"> Continue</a>
+                        
+                        <a th:if="${course.status.name() == 'PUBLISHED'}"
+                        class="analytics" >Analytics</a>
+                        
+                        <form th:action="@{/teacher-course/delete/{id}(id=${course.courseId})}" method="post" 
+                        onsubmit="return confirm('Are you sure you want to delete this course?');"> 
+                        <button type="submit" class="delete">Delete </button>
+                        </form>
                     </div>
                 </div>
             </div>
 
             <!-- DRAFT COURSE -->
-            <div class="course-card">
-                <div class="course-thumb">
-                    📗
-                </div>
-
-                <div class="course-body">
-                    <div class="course-header">
-                        <div class="course-title">Java Fundamentals</div>
-                        <span class="badge draft">Draft</span>
-                    </div>
-
-                    <div class="course-meta">
-                        <span>0 Students</span>
-                        <span>Not Published</span>
-                    </div>
-
-                    <div class="course-actions">
-                        <a class="continue">Continue</a>
-                        <a class="delete">Delete</a>
-                    </div>
-                </div>
-            </div>
 
         </div>
 
 
-        <!-- EMPTY STATE 
-    <div class="empty-state">
+       
+    <div class="empty-state" th:if="${#lists.isEmpty(courses)}">
 
         <div class="empty-icon">
             <i class="bi bi-journal-plus"></i>
@@ -350,12 +367,12 @@
             Start by creating your first course and share your knowledge.
         </p>
 
-        <a href="/teacher-course/create" class="btn btn-primary">
+        <a th:href="@{/teacher-creates-course}" class="btn btn-primary">
             <i class="bi bi-plus-lg"></i> Create Your First Course
         </a>
 
     </div>
--->
+
     </main>
 
     <script>

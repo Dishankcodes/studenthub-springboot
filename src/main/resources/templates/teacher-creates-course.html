@@ -240,6 +240,13 @@ body.sidebar-collapsed .main-content {
 	justify-content: space-between;
 	margin-top: 30px;
 }
+#priceGroup {
+    transition: all 0.3s ease;
+}
+.hidden {
+    display: none;
+}
+
 </style>
 </head>
 
@@ -317,6 +324,7 @@ body.sidebar-collapsed .main-content {
 				    </small>
 				</div>
 				
+				<input type="hidden" th:field="*{courseId}"> 
 				<div class="form-group">
 					<label>Course Title</label> 
 					<input type="text"
@@ -344,15 +352,15 @@ body.sidebar-collapsed .main-content {
 				<h3>Pricing</h3>
 				<div class="form-group">
 					<label>Course Type</label> 
-					<select th:field="*{type}">
+					<select th:field="*{type}" id="courseType">
 						<option value="free">Free</option>
 						<option value="paid">Paid</option>
 					</select>
 				</div>
-				<div class="form-group">
 				
+				<div class="form-group" id="priceGroup">
 					<label>Price (₹)</label> 
-					<input type="number" placeholder="499" th:field="*{price}">
+					<input type="number" placeholder="499" th:field="*{price}" id="priceInput">
 					<small>Only required for paid courses</small>
 				</div>
 			</div>
@@ -370,11 +378,11 @@ body.sidebar-collapsed .main-content {
 				<h3>Publish</h3>
 				<p>Your course will be reviewed before publishing. You can save
 					it as a draft anytime.</p>
-				<button class="btn btn-warning">Publish Course</button>
+				<button type="submit" name="action" value="publish" class="btn btn-warning"> Publish Course</button>
 			</div>
 
 			<div class="action-bar">
-				<button class="btn btn-outline">Save Draft</button>
+				<button type="submit" name="action" value="draft" class="btn btn-outline"> Save Draft</button>
 				<button class="btn btn-primary">Next</button>
 			</div>
 

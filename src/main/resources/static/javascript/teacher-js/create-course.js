@@ -1,3 +1,21 @@
+	const courseType = document.getElementById("courseType");
+    const priceGroup = document.getElementById("priceGroup");
+    const priceInput = document.getElementById("priceInput");
+
+    function togglePrice() {
+        if (courseType.value === "paid") {
+            priceGroup.classList.remove("hidden");
+        } else {
+            priceGroup.classList.add("hidden");
+            priceInput.value = ""; // clear price if free
+        }
+    }
+
+    // run on page load (important for edit mode)
+    togglePrice();
+
+    // run when user changes type
+    courseType.addEventListener("change", togglePrice);
 
 const thumbnailInput = document.getElementById("thumbnailInput");
 const thumbnailPreview = document.getElementById("thumbnailPreview");
