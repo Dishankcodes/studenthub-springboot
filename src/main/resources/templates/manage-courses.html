@@ -87,6 +87,81 @@
     <main class="home-section">
       <h1>Manage Courses (Delete & View)</h1>
       <p>Welcome, <span th:text="${username}">Admin</span></p>
+      
+       <table class="table table-bordered table-striped align-middle mt-3">
+    <thead class="table-dark">
+    <tr>
+        <th>#</th>
+        <th>Course Name</th>
+        <th>Instructor</th>
+        <th>Status</th>
+        <th>Type / Price</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="course, stat : ${courses}">
+
+        <!-- Index -->
+        <td th:text="${stat.index + 1}"></td>
+
+        <!-- Course Title -->
+        <td th:text="${course.title}"></td>
+
+        <!-- Teacher -->
+        <td>
+            By
+            <span th:text="${course.teacher.firstname}"></span>
+            <span th:text="${course.teacher.lastname}"></span>
+        </td>
+
+        <!-- Status -->
+        <td>
+            <span class="badge"
+                  th:classappend="${course.status.name() == 'PUBLISHED'} ? 'bg-success' : 'bg-secondary'"
+                  th:text="${course.status}">
+            </span>
+        </td>
+
+        <!-- Type / Price -->
+        <td>
+            <span th:text="${course.type}"></span>
+            <span th:if="${course.type.name() != 'FREE'}">
+                - ₹<span th:text="${course.price}"></span>
+            </span>
+            <span th:if="${course.type.name() == 'FREE'}">
+                - Free
+            </span>
+        </td>
+
+        <!-- Actions -->
+        <td>
+            <a th:href="@{/admin/course/view/{id}(id=${course.courseId})}"
+               class="btn btn-info btn-sm">
+                <i class="bi bi-eye"></i>
+            </a>
+
+            <a th:href="@{/admin/course/edit/{id}(id=${course.courseId})}"
+               class="btn btn-warning btn-sm">
+                <i class="bi bi-pencil"></i>
+            </a>
+
+            <form th:action="@{/admin/course/delete/{id}(id=${course.courseId})}"
+                  method="post"
+                  class="d-inline"
+                  onsubmit="return confirm('Are you sure you want to delete this course?');">
+                <button type="submit" class="btn btn-danger btn-sm">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </form>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+
+      
     </main>
   </div>
 

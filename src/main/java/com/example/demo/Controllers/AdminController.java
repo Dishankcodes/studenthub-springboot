@@ -7,8 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.example.demo.entity.Course;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
+import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.repository.TeacherRepository;
 
@@ -22,6 +24,9 @@ public class AdminController {
 
 	@Autowired
 	TeacherRepository teacherRepo;
+	
+	@Autowired
+	CourseRepository courseRepo;
 
 	@GetMapping("/admin-dashboard")
 	public String admin_dashboard(HttpSession session, Model model) {
@@ -66,8 +71,15 @@ public class AdminController {
 	}
 
 	@GetMapping("/manage-courses")
-	public String admin_courses() {
+	public String admin_courses(HttpSession session ,Model model) {
+		
+		if (session.getAttribute("adminEmail") == null) {
+			return "redirect:/admin-login";
+		}
 
+		
+		List<Course> courses = courseRepo.findAll();
+		model.addAttribute("courses", courses);
 		return "manage-courses";
 	}
 
