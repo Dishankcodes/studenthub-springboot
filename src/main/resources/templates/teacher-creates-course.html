@@ -240,13 +240,14 @@ body.sidebar-collapsed .main-content {
 	justify-content: space-between;
 	margin-top: 30px;
 }
+
 #priceGroup {
-    transition: all 0.3s ease;
-}
-.hidden {
-    display: none;
+	transition: all 0.3s ease;
 }
 
+.hidden {
+	display: none;
+}
 </style>
 </head>
 
@@ -280,14 +281,20 @@ body.sidebar-collapsed .main-content {
 	<!-- ===== MAIN CONTENT ===== -->
 	<main class="main-content">
 		<button class="sidebar-toggle" id="sidebarToggle">☰</button>
+		
 
 		<form class="container" th:action="@{/teacher-creates-course}"
-		th:object="${course}"
-		method="post">
+			th:object="${course}" method="post">
 			<!-- HEADER -->
 			<div class="page-header">
-				<div class="page-title">Create Course</div>
-				<span class="draft-badge">Draft</span>
+				<div class="page-title">
+					<h3 th:if="${course.courseId == null}">Create Course</h3>
+					<h3 th:if="${course.courseId != null}">Edit Course</h3>
+
+				</div>
+				<span class="draft-badge"
+					th:text="${course.status != null ? course.status : 'DRAFT'}">
+				</span>
 			</div>
 
 			<!-- STEPPER -->
@@ -303,45 +310,43 @@ body.sidebar-collapsed .main-content {
 				<h3>Course Details</h3>
 
 				<div class="form-group">
-				    <label>Course Thumbnail</label>
-				
-				    <div class="thumbnail-upload">
-				        <!-- Hidden file input -->
-				        <input type="file"
-				               id="thumbnailInput"
-				               accept="image/*"
-				               hidden>
-				
-				        <!-- Clickable UI box -->
-				        <div class="thumbnail-preview" id="thumbnailPreview">
-				            <i class="bi bi-image"></i>
-				            <span>Upload thumbnail</span>
-				        </div>
-				    </div>
-				
-				    <small>
-				        Recommended size: 1280 × 720 (16:9). JPG or PNG.
-				    </small>
+					<label>Course Thumbnail</label>
+
+					<div class="thumbnail-upload">
+						<!-- Hidden file input -->
+						<input type="file" id="thumbnailInput" accept="image/*" hidden>
+
+						<!-- Clickable UI box -->
+						<div class="thumbnail-preview" id="thumbnailPreview">
+							<i class="bi bi-image"></i> <span>Upload thumbnail</span>
+						</div>
+					</div>
+
+					<small> Recommended size: 1280 × 720 (16:9). JPG or PNG. </small>
 				</div>
-				
-				<input type="hidden" th:field="*{courseId}"> 
+
+				<input type="hidden" th:field="*{courseId}">
+
 				<div class="form-group">
-					<label>Course Title</label> 
-					<input type="text"
-						placeholder="Spring Boot Masterclass" th:field="*{title}"> 
-						<small>This	will be shown publicly</small>
+				<div th:if="${error}"
+			style="background: #ffe5e5; color: #b02a37; padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+			<span th:text="${error}"></span>
+		</div>
+					<label>Course Title</label> <input type="text"
+						placeholder="Spring Boot Masterclass" th:field="*{title}">
+					<small>This will be shown publicly</small>
 				</div>
 				<div class="form-group">
 					<label>Short Description</label>
 					<textarea rows="3"
-						placeholder="Learn Spring Boot with real projects" th:field="*{description}"></textarea>
+						placeholder="Learn Spring Boot with real projects"
+						th:field="*{description}"></textarea>
 				</div>
 
 				<div class="form-group">
-					<label>Category</label> 
-					<select th:field="*{level}">
-						<option th:value="BEGINNER">Beginner </option>
-						<option th:value="INTERMEDIATE">Intermediate </option>
+					<label>Category</label> <select th:field="*{level}">
+						<option th:value="BEGINNER">Beginner</option>
+						<option th:value="INTERMEDIATE">Intermediate</option>
 						<option th:value="ADVANCED">Advanced</option>
 					</select>
 				</div>
@@ -351,44 +356,125 @@ body.sidebar-collapsed .main-content {
 			<div class="card">
 				<h3>Pricing</h3>
 				<div class="form-group">
-					<label>Course Type</label> 
-					<select th:field="*{type}" id="courseType">
+					<label>Course Type</label> <select th:field="*{type}"
+						id="courseType">
 						<option value="free">Free</option>
 						<option value="paid">Paid</option>
 					</select>
 				</div>
-				
+
 				<div class="form-group" id="priceGroup">
-					<label>Price (₹)</label> 
-					<input type="number" placeholder="499" th:field="*{price}" id="priceInput">
-					<small>Only required for paid courses</small>
+					<label>Price (₹)</label> <input type="number" placeholder="499"
+						th:field="*{price}" id="priceInput"> <small>Only
+						required for paid courses</small>
 				</div>
 			</div>
 
 			<!-- CURRICULUM -->
+			<!-- CURRICULUM -->
 			<div class="card">
 				<h3>Curriculum</h3>
+
+				<!-- MODULES -->
 				<div id="modulesContainer"></div>
-				<button class="btn btn-outline" th:onclick="addModule()">+
-					Add Module</button>
+
+				<button type="button" class="btn btn-outline" onclick="addModule()">
+					+ Add Module</button>
 			</div>
+			<template id="moduleTemplate">
+				<div class="module">
+					<div class="module-header">
+						<input type="text" name="modules[__index__].title"
+							placeholder="Module title" class="module-title">
+
+						<button type="button" class="btn btn-outline"
+							onclick="addLesson(this)">+ Lesson</button>
+					</div>
+
+					<div class="lessons"></div>
+				</div>
+			</template>
+			<template id="lessonTemplate">
+				<div class="lesson">
+					<div class="lesson-header">
+						<input type="text"
+							name="modules[__mIndex__].lessons[__lIndex__].title"
+							placeholder="Lesson title"> <select
+							name="modules[__mIndex__].lessons[__lIndex__].type">
+							<option value="VIDEO">Video</option>
+							<option value="NOTES">Notes</option>
+							<option value="QUIZ">Quiz</option>
+						</select>
+
+						<button type="button" onclick="removeBlock(this)">🗑</button>
+					</div>
+				</div>
+			</template>
+
+
 
 			<!-- PUBLISH -->
 			<div class="card">
 				<h3>Publish</h3>
 				<p>Your course will be reviewed before publishing. You can save
 					it as a draft anytime.</p>
-				<button type="submit" name="action" value="publish" class="btn btn-warning"> Publish Course</button>
+				<button type="submit" name="action"
+					th:value="${course.courseId==null || course.status.name() == 'DRAFT' ? 'publish' : 'update'}"
+					class="btn btn-warning"
+					th:text="${course.status != null && course.status.name() == 'PUBLISHED' ? 'Update Course' : 'Publish Course'}">
+					Publish Course</button>
 			</div>
 
 			<div class="action-bar">
-				<button type="submit" name="action" value="draft" class="btn btn-outline"> Save Draft</button>
-				<button class="btn btn-primary">Next</button>
+				<button type="submit" name="action" value="draft"
+					class="btn btn-outline">Save Draft</button>
+				<button type="button" class="btn btn-primary"
+					onclick="saveStructure()">Save Curriculum</button>
+
 			</div>
 
-			</form>
+		</form>
 	</main>
 
-	<script th:src="@{/javascript/teacher-js/create-course.js}"></script>
+	<!--<script th:src="@{/javascript/teacher-js/create-course.js}"></script> -->
+	<script>
+let moduleIndex = 0;
+
+function addModule() {
+    const template = document.getElementById("moduleTemplate").innerHTML;
+    const html = template.replaceAll("__index__", moduleIndex);
+
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = html;
+
+    document.getElementById("modulesContainer")
+        .appendChild(wrapper.firstElementChild);
+
+    moduleIndex++;
+}
+
+function addLesson(btn) {
+    const module = btn.closest(".module");
+    const lessonsDiv = module.querySelector(".lessons");
+
+    const mIndex = [...document.querySelectorAll(".module")].indexOf(module);
+    const lIndex = lessonsDiv.children.length;
+
+    let template = document.getElementById("lessonTemplate").innerHTML;
+    template = template
+        .replaceAll("__mIndex__", mIndex)
+        .replaceAll("__lIndex__", lIndex);
+
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = template;
+
+    lessonsDiv.appendChild(wrapper.firstElementChild);
+}
+
+function removeBlock(btn) {
+    btn.closest(".lesson, .module").remove();
+}
+</script>
+
 </body>
 </html>

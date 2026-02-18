@@ -17,5 +17,10 @@ public interface CourseRepository extends JpaRepository<Course, Integer>{
 	
 	List<Course> findByTeacherTeacherIdAndStatusNot(Integer teacherId, CourseStatus status);
 
-	
+	boolean existsByTeacherTeacherIdAndTitleAndStatusNot(
+	        Integer teacherId,
+	        String title,
+	        CourseStatus status
+	);
+
 }

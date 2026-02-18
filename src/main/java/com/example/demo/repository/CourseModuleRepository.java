@@ -10,4 +10,6 @@ public interface CourseModuleRepository extends JpaRepository<CourseModule, Inte
 	
 	List<CourseModule> findByCourseCourseIdOrderByPosition(Integer courseId);
 
+	int countByCourseCourseId(Integer courseId);
+
 }

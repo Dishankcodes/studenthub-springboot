@@ -1,21 +1,27 @@
-	const courseType = document.getElementById("courseType");
-    const priceGroup = document.getElementById("priceGroup");
-    const priceInput = document.getElementById("priceInput");
+let courseDraft = {
+    courseId: document.querySelector('input[name="courseId"]')?.value || null,
+    modules: []
+};
 
-    function togglePrice() {
-        if (courseType.value === "paid") {
-            priceGroup.classList.remove("hidden");
-        } else {
-            priceGroup.classList.add("hidden");
-            priceInput.value = ""; // clear price if free
-        }
+
+const courseType = document.getElementById("courseType");
+const priceGroup = document.getElementById("priceGroup");
+const priceInput = document.getElementById("priceInput");
+
+function togglePrice() {
+    if (courseType.value === "paid") {
+        priceGroup.classList.remove("hidden");
+    } else {
+        priceGroup.classList.add("hidden");
+        priceInput.value = ""; // clear price if free
     }
+}
 
-    // run on page load (important for edit mode)
-    togglePrice();
+// run on page load (important for edit mode)
+togglePrice();
 
-    // run when user changes type
-    courseType.addEventListener("change", togglePrice);
+// run when user changes type
+courseType.addEventListener("change", togglePrice);
 
 const thumbnailInput = document.getElementById("thumbnailInput");
 const thumbnailPreview = document.getElementById("thumbnailPreview");
@@ -64,63 +70,95 @@ if (profileToggle) {
     });
 }
 
-            let moduleCount = 0;
+let moduleCount = 0;
 
-            /* ADD MODULE */
-            function addModule() {
-                moduleCount++;
-                const module = document.createElement("div");
-                module.className = "module";
-                module.innerHTML = `
+/* ADD MODULE */
+function addModule() {
+    const index = courseDraft.modules.length;
+
+    courseDraft.modules.push({
+        title: "",
+        lessons: []
+    });
+
+    renderModule(index);
+}
+
+function renderModule(index) {
+    const module = document.createElement("div");
+    module.className = "module";
+    module.dataset.index = index;
+
+    module.innerHTML = `
         <div class="module-header">
-            <input placeholder="Module title" style="border:none;width:70%">
-            <button class="btn btn-outline" onclick="addLesson(${moduleCount})">+ Lesson</button>
+            <input 
+                placeholder="Module title"
+                oninput="courseDraft.modules[${index}].title = this.value"
+                style="border:none;width:70%">
+            <button class="btn btn-outline" onclick="addLesson(${index})">+ Lesson</button>
         </div>
-        <div class="lessons" id="lessons-${moduleCount}"></div>
+        <div class="lessons" id="lessons-${index}"></div>
     `;
-                document.getElementById("modulesContainer").appendChild(module);
-            }
 
-            /* ADD LESSON */
-            function addLesson(id) {
-                const lessons = document.getElementById(`lessons-${id}`);
-                const lesson = document.createElement("div");
-                lesson.className = "lesson";
-                lesson.innerHTML = `
+    document.getElementById("modulesContainer").appendChild(module);
+}
+
+
+/* ADD LESSON */
+function addLesson(moduleIndex) {
+    const lessonIndex = courseDraft.modules[moduleIndex].lessons.length;
+
+    courseDraft.modules[moduleIndex].lessons.push({
+        title: "",
+        type: "video"
+    });
+
+    const lessons = document.getElementById(`lessons-${moduleIndex}`);
+
+    const lesson = document.createElement("div");
+    lesson.className = "lesson";
+
+    lesson.innerHTML = `
         <div class="lesson-header">
-            <input placeholder="Lesson title">
-            <select onchange="lessonTypeChange(this)">
+            <input placeholder="Lesson title"
+                oninput="courseDraft.modules[${moduleIndex}].lessons[${lessonIndex}].title = this.value">
+            <select onchange="courseDraft.modules[${moduleIndex}].lessons[${lessonIndex}].type = this.value">
                 <option value="video">Video</option>
                 <option value="notes">Notes</option>
                 <option value="quiz">Quiz</option>
             </select>
-            <button onclick="removeItem(this)">🗑</button>
+            <button type="button" onclick="removeLesson(${moduleIndex}, ${lessonIndex})">🗑</button>
         </div>
-        <div class="lesson-content"></div>
     `;
-                lessons.appendChild(lesson);
-            }
 
-            /* CHANGE TYPE */
-            function lessonTypeChange(select) {
-                const content = select.closest(".lesson").querySelector(".lesson-content");
-                if (select.value === "video") {
-                    content.innerHTML = `<input type="file"><label><input type="checkbox"> Free Preview</label>`;
-                }
-                if (select.value === "notes") {
-                    content.innerHTML = `<input type="file" accept="application/pdf">`;
-                }
-                if (select.value === "quiz") {
-                    content.innerHTML = `<button class="btn btn-outline" onclick="addQuizQuestion(this)">+ Add Question</button><div class="quiz-questions"></div>`;
-                }
-            }
+    lessons.appendChild(lesson);
+}
 
-            /* ADD QUIZ */
-            function addQuizQuestion(btn) {
-                const container = btn.nextElementSibling;
-                const q = document.createElement("div");
-                q.className = "quiz-question";
-                q.innerHTML = `
+function reloadModules() {
+    document.getElementById("modulesContainer").innerHTML = "";
+    courseDraft.modules.forEach((_, i) => renderModule(i));
+}
+
+/* CHANGE TYPE */
+function lessonTypeChange(select) {
+    const content = select.closest(".lesson").querySelector(".lesson-content");
+    if (select.value === "video") {
+        content.innerHTML = `<input type="file"><label><input type="checkbox"> Free Preview</label>`;
+    }
+    if (select.value === "notes") {
+        content.innerHTML = `<input type="file" accept="application/pdf">`;
+    }
+    if (select.value === "quiz") {
+        content.innerHTML = `<button class="btn btn-outline" onclick="addQuizQuestion(this)">+ Add Question</button><div class="quiz-questions"></div>`;
+    }
+}
+
+/* ADD QUIZ */
+function addQuizQuestion(btn) {
+    const container = btn.nextElementSibling;
+    const q = document.createElement("div");
+    q.className = "quiz-question";
+    q.innerHTML = `
         <input placeholder="Question">
         <div class="quiz-options">
             <input placeholder="Option A">
@@ -135,12 +173,22 @@ if (profileToggle) {
             <option>C</option>
             <option>D</option>
         </select>
-        <button onclick="removeItem(this)">Remove</button>
+        <button type="" onclick="removeItem(this)">Remove</button>
     `;
-                container.appendChild(q);
-            }
+    container.appendChild(q);
+}
 
-            function removeItem(btn) {
-                btn.closest(".lesson, .quiz-question").remove();
-            }
-        
+function removeItem(btn) {
+    btn.closest(".lesson, .quiz-question").remove();
+}
+
+function saveStructure() {
+    fetch("/teacher-course/save-structure", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(courseDraft)
+    });
+}
+

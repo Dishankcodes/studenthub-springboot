@@ -30,19 +30,14 @@ public class TeacherCourseController {
 	public String courseManagement(Model model) {
 
 		Integer teacherId = 2;
-		
 
-        Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
-        // ✅ ONLY fetch NON-DELETED courses
-        List<Course> courses =
-                courseRepo.findByTeacherTeacherIdAndStatusNot(
-                        teacherId,
-                        CourseStatus.DELETED
-                );
+		// ✅ ONLY fetch NON-DELETED courses
+		List<Course> courses = courseRepo.findByTeacherTeacherIdAndStatusNot(teacherId, CourseStatus.DELETED);
 
-        model.addAttribute("courses", courses);
-        model.addAttribute("teacher", teacher);
+		model.addAttribute("courses", courses);
+		model.addAttribute("teacher", teacher);
 		return "teacher-courses";
 	}
 
@@ -54,55 +49,65 @@ public class TeacherCourseController {
 	}
 
 	@PostMapping("/teacher-creates-course")
-	public String saveCourse(@ModelAttribute Course course,
-			@RequestParam("action") String action ) {
+	public String saveCourse(@ModelAttribute Course course, @RequestParam("action") String action, Model model) {
 
 		Integer teacherId = 2;
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+
+		if (teacher == null) {
+			return "redirect:/teacher-course";
+		}
+
+		if (course.getCourseId() == null) {
+			boolean alreadyExists = courseRepo.existsByTeacherTeacherIdAndTitleAndStatusNot(teacherId,
+					course.getTitle(), CourseStatus.DELETED);
+
+			if (alreadyExists) {
+				model.addAttribute("course", course);
+				model.addAttribute("error", "You already created a course with this title.");
+				return "teacher-creates-course";
+			}
+		}
 		
 		course.setTeacher(teacher);
-		
-		if("publish".equals(action)) {
-		course.setStatus(CourseStatus.PUBLISHED);
-		}
-		else {
+
+		if ("publish".equals(action)) {
+			course.setStatus(CourseStatus.PUBLISHED);
+		} else {
 			course.setStatus(CourseStatus.DRAFT);
 		}
-		
+
 		courseRepo.save(course);
 		return "redirect:/teacher-course";
 
 	}
-	
+
 	@GetMapping("/teacher-course/edit/{id}")
-	public String editCourse(@PathVariable("id") Integer courseId,
-			Model model)
-	{
-		
-		model.addAttribute("course", courseRepo.findById(courseId));
+	public String editCourse(@PathVariable("id") Integer courseId, Model model) {
+
+		Course course = courseRepo.findById(courseId).orElse(null);
+
+		if (course == null) {
+			return "redirect:/teacher-course";
+		}
+
+		model.addAttribute("course", course);
 		return "teacher-creates-course";
 	}
-	
-	
+
 	@PostMapping("/teacher-course/delete/{id}")
-	public String deleteCourse(@PathVariable("id") Integer courseId)
-	{
-		Integer teacherId= 2;
-		
+	public String deleteCourse(@PathVariable("id") Integer courseId) {
+		Integer teacherId = 2;
+
 		Course course = courseRepo.findById(courseId).orElse(null);
-	
 
-		
-		if (course != null && 
-	            course.getTeacher().getTeacherId().equals(teacherId)) {
+		if (course != null && course.getTeacher().getTeacherId().equals(teacherId)) {
 
-	            course.setStatus(CourseStatus.DELETED);
-	            courseRepo.save(course);
-	            return "redirect:/teacher-course";
-	        }
-		
-		
-		
+			course.setStatus(CourseStatus.DELETED);
+			courseRepo.save(course);
+			return "redirect:/teacher-course";
+		}
+
 		return "redirect:/teacher-course";
 	}
 }
