@@ -43,7 +43,9 @@ public class TeacherCourseController {
 	}
 
 	@GetMapping("/teacher-creates-course")
-	public String createOrEditCourse(@RequestParam(required = false) Integer courseId, Model model) {
+	public String createOrEditCourse(@RequestParam(required = false) Integer courseId,
+		     @RequestParam(required = false) Integer editModule, 
+			Model model) {
 		Course course;
 
 		if (courseId != null) {
@@ -56,6 +58,7 @@ public class TeacherCourseController {
 		}
 
 		model.addAttribute("course", course);
+		model.addAttribute("editModule", editModule); 
 		return "teacher-creates-course";
 	}
 	@PostMapping("/teacher-creates-course")

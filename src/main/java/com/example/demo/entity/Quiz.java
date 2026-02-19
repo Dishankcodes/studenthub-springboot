@@ -1,12 +1,19 @@
 package com.example.demo.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,7 +31,10 @@ public class Quiz {
 	@Column(nullable = false)
 	private Integer timeLimit;
 
-	
+	@OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
+	@OrderBy("position ASC")
+	private List<QuizQuestion> questions = new ArrayList<>();
+
 
 	public Integer getQuizId() {
 		return quizId;
@@ -49,5 +59,14 @@ public class Quiz {
 	public void setTimeLimit(Integer timeLimit) {
 		this.timeLimit = timeLimit;
 	}
+
+	public List<QuizQuestion> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(List<QuizQuestion> questions) {
+		this.questions = questions;
+	}
+	
 
 }

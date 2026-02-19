@@ -9,5 +9,6 @@ import com.example.demo.entity.Quiz;
 public interface QuizRepository extends JpaRepository<Quiz, Integer>{
 
 	
-	Optional<Quiz> findByLessonLessonId(Integer lessonId);
+	Quiz findByLessonLessonId(Integer lessonId);
+
 }

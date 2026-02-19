@@ -8,4 +8,6 @@ import com.example.demo.entity.QuizQuestion;
 public interface QuizQuestionRepository extends JpaRepository<QuizQuestion, Integer>{
 	
 	List<QuizQuestion> findByQuizQuizIdOrderByPosition(Integer quizId);
+	
+	long countByQuizQuizId(Integer quizId);
 }

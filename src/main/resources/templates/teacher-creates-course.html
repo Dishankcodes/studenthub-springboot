@@ -279,6 +279,218 @@
 		.hidden {
 			display: none;
 		}
+
+		/* ================= MODULE HEADER STATES ================= */
+		.module-header-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+		}
+
+		.module-edit-form {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			flex: 1;
+		}
+
+		.module-edit-form .module-title-input {
+			flex: 1;
+		}
+
+		/* Push Save button to right */
+		.module-edit-form .btn {
+			margin-left: auto;
+		}
+
+		.module-title-input {
+			flex: 1;
+			padding: 10px;
+			border-radius: 8px;
+			border: 1px solid #cfd4dc;
+			font-weight: 500;
+		}
+
+		.module-actions {
+			display: flex;
+			gap: 8px;
+			align-items: center;
+		}
+
+		/* Make buttons consistent */
+		.module-actions form {
+			margin: 0;
+		}
+
+		.module-actions .btn {
+			white-space: nowrap;
+		}
+
+		/* ================= BUTTON CONSISTENCY FIX ================= */
+
+		/* Force same look for all outline-style buttons */
+		.btn-outline {
+			background: #ffffff;
+			border: 1px solid #1f1f2e;
+			color: #1f1f2e;
+		}
+
+		.btn-outline:hover {
+			background: #1f1f2e;
+			color: #ffffff;
+		}
+
+		/* Remove weird Bootstrap defaults */
+		button.btn,
+		a.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+		}
+
+		.btn {
+			height: 40px;
+			font-size: 14px;
+		}
+
+		/* ================= LESSON INLINE ROW ================= */
+		.lesson-inline {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		.lesson-inline .spacer {
+			margin-left: auto;
+		}
+
+		.free-preview {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		/* ================= QUIZ ACTION BAR ================= */
+		.quiz-action-bar {
+			margin-top: 16px;
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+		}
+
+		/* TOP ROW */
+		.quiz-action-top {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		.quiz-info {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			font-size: 15px;
+		}
+
+		.quiz-type {
+			background: #e9ecf3;
+			padding: 4px 10px;
+			border-radius: 14px;
+			font-size: 12px;
+			font-weight: 600;
+			color: #1f1f2e;
+		}
+
+		/* BOTTOM ROW */
+		.quiz-action-bottom {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+		/* Danger button tweak */
+		.btn-danger {
+			border-color: #dc3545;
+			color: #dc3545;
+		}
+
+		.btn-danger:hover {
+			background: #dc3545;
+			color: #fff;
+		}
+
+		/* ================= QUIZ LINK BUTTON FIX ================= */
+
+		/* Remove default anchor styling */
+		.lesson-content a {
+			text-decoration: none;
+			color: inherit;
+		}
+
+		/* Make quiz action links look like buttons */
+		.lesson-content a.btn {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+			padding: 8px 14px;
+			border-radius: 8px;
+			font-size: 14px;
+			font-weight: 500;
+			border: 1px solid #1f1f2e;
+			background: #ffffff;
+			color: #1f1f2e;
+			transition: all 0.2s ease;
+		}
+
+		/* Hover effect */
+		.lesson-content a.btn:hover {
+			background: #1f1f2e;
+			color: #ffffff;
+		}
+
+		/* Danger button (Delete Lesson) */
+		.lesson-content a.btn-danger {
+			border-color: #dc3545;
+			color: #dc3545;
+		}
+
+		.lesson-content a.btn-danger:hover {
+			background: #dc3545;
+			color: #ffffff;
+		}
+
+		/* ================= QUIZ ACTION SPACING ================= */
+
+		/* Space between quiz buttons */
+		.lesson-content form {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			margin-top: 12px;
+		}
+
+		/* Individual question spacing */
+		.quiz-question {
+			margin-bottom: 16px;
+		}
+
+		/* Space between options & select */
+		.quiz-question select {
+			margin-top: 10px;
+		}
+
+		/* Delete Question link spacing */
+		.quiz-question a.btn {
+			margin-top: 10px;
+		}
+
+		/* Prevent inline chaos */
+		.quiz-action-bar {
+			margin-top: 20px;
+		}
 	</style>
 </head>
 
@@ -292,18 +504,18 @@
 
 
 		<nav class="sidebar-menu">
-			<a th:href="@{/teacher-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard </span></a>
-			<a th:href="@{/teacher-course}"><i class="bi bi-journal-text"></i><span>Course Management</span></a>
-			<a th:href="@{/teacher-creates-course}" class="active"><i class="bi bi-journal-plus"></i><span>Create
-					Course</span></a>
-			<a th:href="@{/teacher-exams}"><i class="bi bi-pencil-square"></i><span>Exams
+			<a th:href="@{/teacher-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard
+				</span></a> <a th:href="@{/teacher-course}"><i class="bi bi-journal-text"></i><span>Course
+					Management</span></a> <a th:href="@{/teacher-creates-course}" class="active"><i
+					class="bi bi-journal-plus"></i><span>Create Course</span></a> <a th:href="@{/teacher-exams}"><i
+					class="bi bi-pencil-square"></i><span>Exams
 					& Quizzes</span></a> <a th:href="@{/teacher-students}"><i
-					class="bi bi-people"></i><span>Students</span></a>
-			<a th:href="@{/teacher-communication}"><i class="bi bi-chat-dots"></i><span>Communication</span></a>
+					class="bi bi-people"></i><span>Students</span></a> <a th:href="@{/teacher-communication}"><i
+					class="bi bi-chat-dots"></i><span>Communication</span></a>
 			<a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback
 					& Ratings</span></a> <a th:href="@{/teacher-profile}"><i
-					class="bi bi-gear"></i><span>Profile</span></a>
-			<a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+					class="bi bi-gear"></i><span>Profile</span></a> <a th:href="@{/logout}" class="logout"><i
+					class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 		</nav>
 	</aside>
 
@@ -385,8 +597,7 @@
 
 					<div class="form-group" id="priceGroup">
 						<label>Price (₹)</label> <input type="number" placeholder="499" th:field="*{price}"
-							id="priceInput">
-						<small>Only
+							id="priceInput"> <small>Only
 							required for paid courses</small>
 					</div>
 				</div>
@@ -398,15 +609,14 @@
 			</form>
 			<!-- CURRICULUM -->
 
+			<!-- ================= CURRICULUM ================= -->
 			<div th:if="${course.courseId != null}">
-
 				<div class="card">
 					<h3>Curriculum</h3>
 
-
-					<!-- ✅ WHEN NO MODULES -->
-					<div th:if="${#lists.isEmpty(course.modules)}"
-						style="padding: 20px; text-align: center; color: #666;">
+					<!-- WHEN NO MODULES -->
+					<div th:if="${course.modules == null or course.modules.empty}"
+						style="padding: 20px; text-align: center; color: #666">
 						<p>No modules yet.</p>
 						<p>Start by adding your first module.</p>
 					</div>
@@ -414,156 +624,221 @@
 					<!-- MODULE LOOP -->
 					<div th:each="module : ${course.modules}" class="module">
 
-						<!-- UPDATE MODULE -->
-						<form th:action="@{/teacher/module/update}" method="post" class="module-header">
+						<!-- MODULE HEADER -->
 
-							<input type="hidden" name="moduleId" th:value="${module.moduleId}" />
+						<div class="module-header">
 
-							<input type="text" name="title" th:value="${module.title}" placeholder="Module title" />
+							<!-- NORMAL MODE -->
+							<div class="module-header-row"
+								th:if="${editModule == null or editModule != module.moduleId}">
 
-							<div class="module-actions">
-								<button class="btn btn-outline">Update</button>
+								<span th:text="${module.title}">Module title</span>
+
+								<div class="module-actions">
+
+									<!-- EDIT -->
+									<a th:href="@{/teacher-creates-course(
+                    courseId=${course.courseId},
+                    editModule=${module.moduleId}
+                )}" class="btn btn-outline"> Edit </a>
+
+									<!-- ADD LESSON -->
+									<form th:action="@{/teacher/lesson/add}" method="post">
+										<input type="hidden" name="moduleId" th:value="${module.moduleId}">
+										<button class="btn btn-outline">+ Lesson</button>
+									</form>
+
+									<!-- DELETE MODULE -->
+									<form th:action="@{/teacher/module/delete}" method="post">
+										<input type="hidden" name="moduleId" th:value="${module.moduleId}">
+										<button class="btn btn-outline">🗑</button>
+									</form>
+
+								</div>
 							</div>
-						</form>
 
-						<!-- DELETE MODULE -->
-						<form th:action="@{/teacher/module/delete}" method="post" style="margin-top:8px;">
-							<input type="hidden" name="moduleId" th:value="${module.moduleId}" />
-							<button class="btn btn-outline">🗑 Delete Module</button>
-						</form>
+							<!-- EDIT MODE -->
+							<div class="module-header-row" th:if="${editModule == module.moduleId}">
 
+								<!-- SAVE -->
+								<form th:action="@{/teacher/module/update}" method="post" class="module-edit-form">
 
-						<div class="lessons" th:if="${!#lists.isEmpty(module.lessons)}">
-							<div th:each="lesson : ${module.lessons}" class="lesson">
-								<span th:text="${lesson.title}"></span>
+									<input type="hidden" name="moduleId" th:value="${module.moduleId}"> <input
+										type="text" name="title" th:value="${module.title}" class="module-title-input"
+										placeholder="Module title">
+
+									<button class="btn btn-outline">Save</button>
+								</form>
+
+								<div class="module-actions">
+
+									<!-- CANCEL -->
+									<a th:href="@{/teacher-creates-course(courseId=${course.courseId})}"
+										class="btn btn-outline"> Cancel </a>
+
+									<!-- DELETE MODULE -->
+									<form th:action="@{/teacher/module/delete}" method="post">
+										<input type="hidden" name="moduleId" th:value="${module.moduleId}">
+										<button class="btn btn-outline">🗑</button>
+									</form>
+
+								</div>
 							</div>
+
 						</div>
 
-						<!-- LESSON LOOP -->
-						<div class="lessons" th:if="${!#lists.isEmpty(module.lessons)}">
+						<!-- LESSONS -->
+						<div class="lessons">
+
 							<div th:each="lesson : ${module.lessons}" class="lesson">
 
+								<!-- LESSON TITLE + TYPE -->
+								<div class="lesson-header">
+									<strong th:text="${lesson.title}">Lesson title</strong> <span class="badge"
+										th:text="${lesson.type}">VIDEO</span>
+								</div>
+
 								<!-- UPDATE LESSON -->
-								<form th:action="@{/teacher/lesson/update}" method="post" class="lesson-header">
-									<input type="hidden" name="lessonId" th:value="${lesson.lessonId}" />
-									<input type="text" name="title" th:value="${lesson.title}" />
-									<span th:text="${lesson.type}"></span>
-									<button class="btn btn-outline">Update</button>
-								</form>
+								<form th:action="@{/teacher/lesson/update}" method="post" enctype="multipart/form-data">
 
-								<!-- DELETE LESSON -->
-								<form th:action="@{/teacher/lesson/delete}" method="post">
-									<input type="hidden" name="lessonId" th:value="${lesson.lessonId}" />
-									<button class="btn btn-outline">🗑 Delete Lesson</button>
-								</form>
-
-								<form th:if="${lesson.type.name() == 'VIDEO'}"
-									th:action="@{/teacher/lesson/video/upload}" method="post"
-									enctype="multipart/form-data">
 									<input type="hidden" name="lessonId" th:value="${lesson.lessonId}">
-									<input type="file" name="video">
-									<label><input type="checkbox" name="freePreview"> Free Preview</label>
-									<button class="btn btn-outline">Save</button>
-								</form>
 
-								<!-- NOTES -->
-								<form th:if="${lesson.type.name() == 'NOTES'}"
-									th:action="@{/teacher/lesson/notes/upload}" method="post"
-									enctype="multipart/form-data">
-									<input type="hidden" name="lessonId" th:value="${lesson.lessonId}">
-									<input type="file" name="notes">
-									<button class="btn btn-outline">Save</button>
-								</form>
+									<!-- TITLE -->
+									<input name="title" th:value="${lesson.title}" placeholder="Lesson title">
 
-								<!-- QUIZ -->
-								<div th:if="${lesson.type == 'QUIZ'}" class="lesson-content">
+									<!-- TYPE -->
+									<select name="type">
+										<option value="VIDEO" th:selected="${lesson.type.name()=='VIDEO'}">Video
+										</option>
+										<option value="NOTES" th:selected="${lesson.type.name()=='NOTES'}">Notes
+										</option>
+										<option value="QUIZ" th:selected="${lesson.type.name()=='QUIZ'}">Quiz</option>
+									</select>
 
-									<div th:each="q : ${lesson.questions}" class="quiz-question">
-										<input th:value="${q.question}">
-										<input th:value="${q.optionA}">
-										<input th:value="${q.optionB}">
-										<input th:value="${q.optionC}">
-										<input th:value="${q.optionD}">
-										<select th:value="${q.correct}">
-											<option>A</option>
-											<option>B</option>
-											<option>C</option>
-											<option>D</option>
-										</select>
+									<!-- VIDEO -->
+									<div th:if="${lesson.type.name()=='VIDEO'}" class="lesson-content">
+
+										<div class="lesson-inline">
+											<input type="hidden" name="lessonId" th:value="${lesson.lessonId}"> <input
+												type="file" name="video"> <label class="free-preview"> <input
+													type="checkbox" name="freePreview"
+													th:checked="${lesson.freePreview}"> Free Preview
+											</label> <span class="spacer"></span>
+
+											<!-- SAVE -->
+											<button type="submit" class="btn btn-outline"
+												th:formaction="@{/teacher/lesson/update}">Save</button>
+											<!-- DELETE -->
+											<button type="submit" class="btn btn-outline"
+												th:formaction="@{/teacher/lesson/delete}">🗑 Delete
+												Lesson</button>
+										</div>
 									</div>
+									<!-- NOTES -->
+									<div th:if="${lesson.type.name()=='NOTES'}" class="lesson-content">
+										<input type="hidden" name="lessonId" th:value="${lesson.lessonId}"> <input
+											type="file" name="notes" accept="application/pdf"> <span
+											class="spacer"></span>
+										<button type="submit" class="btn btn-outline"
+											th:formaction="@{/teacher/lesson/update}">Save</button>
+										<button type="submit" class="btn btn-outline"
+											th:formaction="@{/teacher/lesson/delete}">🗑 Delete
+											Lesson</button>
 
-									<form th:action="@{/teacher/quiz/question/add}" method="post">
-										<input type="hidden" name="lessonId" th:value="${lesson.lessonId}">
-										<button class="btn btn-outline">+ Add Question</button>
+									</div>
+								</form>
+								<!-- QUIZ LESSON -->
+								<!-- ================= QUIZ LESSON ================= -->
+								<div th:if="${lesson.type.name() == 'QUIZ'}" class="lesson-content">
+
+									<!-- ================= SAVE QUIZ ================= -->
+									<form th:action="@{/teacher/quiz/question/update}" method="post">
+
+										<input type="hidden" name="lessonId" th:value="${lesson.lessonId}" />
+
+										<div th:if="${lesson.quiz != null}">
+
+											<div th:each="q : ${lesson.quiz.questions}" class="quiz-question">
+
+												<input type="hidden" name="questionIds" th:value="${q.questionId}" />
+
+												<!-- QUESTION -->
+												<input name="questionTexts" th:value="${q.questionText}"
+													placeholder="Question" required />
+
+												<!-- OPTIONS -->
+												<div class="quiz-options">
+													<input name="optionAs" th:value="${q.optionA}"
+														placeholder="Option A" required /> <input name="optionBs"
+														th:value="${q.optionB}" placeholder="Option B" required />
+													<input name="optionCs" th:value="${q.optionC}"
+														placeholder="Option C" required /> <input name="optionDs"
+														th:value="${q.optionD}" placeholder="Option D" required />
+												</div>
+
+												<!-- CORRECT ANSWER (SELECT, NOT RADIO) -->
+												<select name="correctOptions" required>
+													<option value="" disabled>Correct Answer</option>
+													<option value="A" th:selected="${q.correctOption=='A'}">Option
+														A</option>
+													<option value="B" th:selected="${q.correctOption=='B'}">Option
+														B</option>
+													<option value="C" th:selected="${q.correctOption=='C'}">Option
+														C</option>
+													<option value="D" th:selected="${q.correctOption=='D'}">Option
+														D</option>
+												</select>
+												<!-- DELETE QUESTION (selected later / future) -->
+												<a th:href="@{/teacher/quiz/question/delete(questionId=${lesson.quiz.questions[0].questionId},lessonId=${lesson.lessonId})}"
+													class="btn btn-outline"
+													onclick="return confirm('Delete this question?')"> 🗑
+													Delete Question </a>
+											</div>
+										</div>
+
+										<button class="btn btn-primary">💾 Save Quiz</button>
+
+										<a th:href="@{/teacher/quiz/question/add(lessonId=${lesson.lessonId})}"
+											class="btn btn-outline"> ➕ Add Question </a>
+
+										<!-- DELETE LESSON -->
+										<a th:href="@{/teacher/lesson/delete(lessonId=${lesson.lessonId})}"
+											class="btn btn-outline btn-danger"
+											onclick="return confirm('Delete entire lesson?')"> 🗑
+											Delete Lesson </a>
+
 									</form>
 
 								</div>
 							</div>
 						</div>
-						<!-- ADD LESSON -->
-						<form th:action="@{/teacher/lesson/add}" method="post" style="margin-top:12px;">
-							<input type="hidden" name="moduleId" th:value="${module.moduleId}" />
-							<input name="title" placeholder="Lesson title" required />
-							<select name="type" required>
-								<option value="VIDEO">Video</option>
-								<option value="NOTES">Notes</option>
-								<option value="QUIZ">Quiz</option>
-							</select>
-							<button class="btn btn-primary">+ Add Lesson</button>
-						</form>
-
 
 					</div>
-
-					<!-- ADD MODULE -->
-					<form th:action="@{/teacher/module/add}" method="post" style="margin-top:20px;">
-
-						<input type="hidden" name="courseId" th:value="${course.courseId}" />
-
-						<input name="title" placeholder="New module title" required />
-
-						<button class="btn btn-primary">
-							+ Add Module
-						</button>
-					</form>
-
 				</div>
-
-
-
-				<form th:action="@{/teacher-course/status}" method="post" th:if="${course.courseId != null}">
-
+				<!-- ADD MODULE -->
+				<form th:action="@{/teacher/module/add}" method="post" style="margin-top: 20px">
 					<input type="hidden" name="courseId" th:value="${course.courseId}">
-
-					<div class="card publish-card" th:if="${!#lists.isEmpty(course.modules)}">
-
-						<h3>Publish</h3>
-
-						<p>
-							Your course will be reviewed before publishing.
-							You can save it as a draft anytime.
-						</p>
-
-						<button type="submit" name="action" value="publish" class="btn btn-warning">
-							Publish Course
-						</button>
-					</div>
-
-					<div class="action-bar">
-						<button type="submit" name="action" value="draft" class="btn btn-outline">
-							Save Draft
-						</button>
-
-						<button type="submit" name="action" value="next" class="btn btn-primary">
-							Next
-						</button>
-					</div>
-
+					<input name="title" placeholder="New module title" required>
+					<button class="btn btn-primary">+ Add Module</button>
 				</form>
 
+				<!-- PUBLISH -->
+				<form th:action="@{/teacher-course/status}" method="post" th:if="${course.courseId != null}">
+					<input type="hidden" name="courseId" th:value="${course.courseId}">
+					<div class="card publish-card" th:if="${!#lists.isEmpty(course.modules)}">
+						<h3>Publish</h3>
+						<p>Your course will be reviewed before publishing. You can
+							save it as a draft anytime.</p>
+						<button type="submit" name="action" value="publish" class="btn btn-warning">Publish
+							Course</button>
+					</div>
+					<!-- DRAFT -->
+					<div class="action-bar">
+						<button type="submit" name="action" value="draft" class="btn btn-outline">Save Draft</button>
+					</div>
+				</form>
 			</div>
-
+		</div>
 	</main>
 </body>
-
 </html>
