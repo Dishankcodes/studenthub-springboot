@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.Course;
+import com.example.demo.entity.CourseModule;
 import com.example.demo.entity.Teacher;
 import com.example.demo.enums.CourseStatus;
 import com.example.demo.repository.CourseRepository;
@@ -42,44 +43,86 @@ public class TeacherCourseController {
 	}
 
 	@GetMapping("/teacher-creates-course")
-	public String createCourse(Model model) {
+	public String createOrEditCourse(@RequestParam(required = false) Integer courseId, Model model) {
+		Course course;
 
-		model.addAttribute("course", new Course());
+		if (courseId != null) {
+			course = courseRepo.findById(courseId).orElse(null);
+			if (course == null) {
+				return "redirect:/teacher-course";
+			}
+		} else {
+			course = new Course();
+		}
+
+		model.addAttribute("course", course);
 		return "teacher-creates-course";
 	}
-
 	@PostMapping("/teacher-creates-course")
-	public String saveCourse(@ModelAttribute Course course, @RequestParam("action") String action, Model model) {
+	public String saveCourse(
+	        @ModelAttribute Course formCourse,
+	        @RequestParam String action,
+	        Model model
+	) {
+	    Integer teacherId = 2;
+	    Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
-		Integer teacherId = 2;
-		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+	    if (teacher == null) {
+	        return "redirect:/teacher-course";
+	    }
 
-		if (teacher == null) {
-			return "redirect:/teacher-course";
-		}
+	    Course course;
 
-		if (course.getCourseId() == null) {
-			boolean alreadyExists = courseRepo.existsByTeacherTeacherIdAndTitleAndStatusNot(teacherId,
-					course.getTitle(), CourseStatus.DELETED);
+	    /* ================= CREATE vs UPDATE ================= */
 
-			if (alreadyExists) {
-				model.addAttribute("course", course);
-				model.addAttribute("error", "You already created a course with this title.");
-				return "teacher-creates-course";
-			}
-		}
-		
-		course.setTeacher(teacher);
+	    if (formCourse.getCourseId() != null) {
+	        // UPDATE existing course
+	        course = courseRepo.findById(formCourse.getCourseId()).orElseThrow();
 
-		if ("publish".equals(action)) {
-			course.setStatus(CourseStatus.PUBLISHED);
-		} else {
-			course.setStatus(CourseStatus.DRAFT);
-		}
+	        course.setTitle(formCourse.getTitle());
+	        course.setDescription(formCourse.getDescription());
+	        course.setLevel(formCourse.getLevel());
+	        course.setType(formCourse.getType());
+	        course.setPrice(formCourse.getPrice());
 
-		courseRepo.save(course);
-		return "redirect:/teacher-course";
+	    } else {
+	        // CREATE new course
+	        boolean exists = courseRepo.existsByTeacherTeacherIdAndTitleAndStatusNot(
+	                teacherId,
+	                formCourse.getTitle(),
+	                CourseStatus.DELETED
+	        );
 
+	        if (exists) {
+	            model.addAttribute("course", formCourse);
+	            model.addAttribute("error", "You already created a course with this title.");
+	            return "teacher-creates-course";
+	        }
+
+	        course = formCourse;
+	        course.setTeacher(teacher);
+	        course.setStatus(CourseStatus.DRAFT);
+	    }
+
+	    /* ================= STATUS HANDLING ================= */
+
+	    if ("publish".equals(action)) {
+	        course.setStatus(CourseStatus.PUBLISHED);
+	    } else {
+	        // draft OR next
+	        course.setStatus(CourseStatus.DRAFT);
+	    }
+
+	    Course savedCourse = courseRepo.save(course);
+
+	    /* ================= REDIRECT FLOW ================= */
+
+	    if ("publish".equals(action)) {
+	        return "redirect:/teacher-course";
+	    }
+
+	    // draft OR next
+	    return "redirect:/teacher-creates-course?courseId=" + savedCourse.getCourseId();
 	}
 
 	@GetMapping("/teacher-course/edit/{id}")
@@ -110,4 +153,28 @@ public class TeacherCourseController {
 
 		return "redirect:/teacher-course";
 	}
+
+
+
+
+	@PostMapping("/teacher-course/status")
+	public String updateCourseStatus(
+	        @RequestParam Integer courseId,
+	        @RequestParam String action
+	) {
+	    Course course = courseRepo.findById(courseId).orElseThrow();
+
+	    if ("publish".equals(action)) {
+	        course.setStatus(CourseStatus.PUBLISHED);
+	        courseRepo.save(course);
+	        return "redirect:/teacher-course";
+	    }
+
+	    // draft or next
+	    course.setStatus(CourseStatus.DRAFT);
+	    courseRepo.save(course);
+
+	    return "redirect:/teacher-creates-course?courseId=" + courseId;
+	}
+
 }

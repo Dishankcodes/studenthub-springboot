@@ -315,10 +315,11 @@
                     <div class="course-header">
                         <div class="course-title" th:text="${course.title}"> </div>
                         
-                        <span class="badge" th:classappend="${course.status.name() == 'PUBLISHED'} ? 'published' : 'draft' "
-                        th:text="${course.status}">
-                        </span>
-                    </div>
+                       <span class="badge"
+      th:classappend="${course.status.name().toLowerCase()}"
+      th:text="${course.status}">
+</span>
+</div>
 
                     <div class="course-meta">
                         <span><i class="bi bi-people"></i> 620</span>
@@ -331,12 +332,11 @@
                     </div>
 
                     <div class="course-actions">
-                        <a th:if="${course.status.name() == 'PUBLISHED'}" 
-                        th:href="@{/teacher-course/edit/{id}(id=${course.courseId})}" class="edit">Edit</a>
-                        
-                        <a th:if="${course.status.name() == 'DRAFT'}"
-                        th:href="@{/teacher-course/edit/{id}(id=${course.courseId})}" class="continue"> Continue</a>
-                        
+                      <a th:href="@{/teacher-course/edit/{id}(id=${course.courseId})}"
+   th:text="${course.status.name() == 'DRAFT' ? 'Continue' : 'Edit'}"
+   th:class="${course.status.name() == 'DRAFT' ? 'continue' : 'edit'}">
+</a>
+  
                         <a th:if="${course.status.name() == 'PUBLISHED'}"
                         class="analytics" >Analytics</a>
                         

@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,8 +30,14 @@ public class CourseModule {
 	@JoinColumn(name = "course_id", nullable = false)
 	private Course course;
 
-	@OneToMany(mappedBy = "module" , cascade =  CascadeType.ALL)
-	private List<Lesson> lessons =new ArrayList<>();
+	@OneToMany(
+		    mappedBy = "module",
+		    cascade = CascadeType.ALL,
+		    orphanRemoval = true
+		)
+		@OrderBy("position ASC")
+		private List<Lesson> lessons = new ArrayList<>();
+
 	
 	@Column(nullable = false)
 	private Integer position;

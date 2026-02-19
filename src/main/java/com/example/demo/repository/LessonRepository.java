@@ -12,4 +12,5 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer>{
 	List<Lesson> findByModuleModuleIdOrderByPosition(Integer moduleId);
 	
 	List<Lesson> findByModuleModuleIdAndFreePreviewTrue(Integer moduleId);
+	int countByModuleModuleId(Integer moduleId);
 }
