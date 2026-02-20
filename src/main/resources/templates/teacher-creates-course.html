@@ -10,6 +10,7 @@
 
 
 	<link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
+	<link rel="stylesheet" th:href="@{/css/teacher-css/teacher-course.css}">
 	<style>
 		/* ================= BASE ================= */
 		* {
@@ -35,462 +36,29 @@
 		body.sidebar-collapsed .main-content {
 			margin-left: 10px;
 		}
-
-		.container {
-			max-width: 1200px;
-			margin: auto;
-			padding: 20px;
-		}
-
-		/* ================= HEADER ================= */
-		.page-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 25px;
-		}
-
-		.page-title {
-			font-size: 26px;
-			font-weight: 600;
-		}
-
-		.draft-badge {
-			background: #fff3cd;
-			color: #664d03;
-			padding: 6px 14px;
-			border-radius: 20px;
-			font-size: 13px;
-		}
-
-		/* ================= STEPPER ================= */
-		.stepper {
-			display: flex;
-			gap: 12px;
-			margin-bottom: 25px;
-		}
-
-		.step {
-			flex: 1;
-			padding: 10px;
-			background: #e9ecf3;
-			border-radius: 8px;
-			text-align: center;
-			font-size: 14px;
-			font-weight: 500;
-		}
-
-		.step.active {
-			background: #1f1f2e;
-			color: #fff;
-		}
-
-		/* ================= CARD ================= */
-		.card {
-			background: #ffffff;
-			border-radius: 14px;
-			padding: 24px;
-			margin-bottom: 28px;
-		}
-
-		/* ================= FORM ================= */
-		.form-group {
-			margin-bottom: 18px;
-		}
-
-		.form-group label {
-			font-weight: 500;
-			display: block;
-			margin-bottom: 6px;
-		}
-
-		.form-group input,
-		.form-group textarea,
-		.form-group select {
-			width: 100%;
-			padding: 12px;
-			border-radius: 8px;
-			border: 1px solid #ccc;
-		}
-
-		.form-group small {
-			font-size: 12px;
-			color: #777;
-		}
-
-		/* ================= BUTTONS ================= */
-		.btn {
-			padding: 10px 18px;
-			border-radius: 8px;
-			border: none;
-			cursor: pointer;
-			font-weight: 500;
-		}
-
-		.btn-primary {
-			background: #1f1f2e;
-			color: #ffffff;
-		}
-
-		.btn-outline {
-			background: transparent;
-			border: 1px solid #1f1f2e;
-			color: #1f1f2e;
-		}
-
-		.btn-warning {
-			background: #f6a623;
-			color: #1f1f2e;
-		}
-
-		/* ================= THUMBNAIL ================= */
-		.thumbnail-upload {
-			display: flex;
-			gap: 16px;
-			align-items: center;
-		}
-
-		.thumbnail-preview {
-			width: 280px;
-			height: 160px;
-			border-radius: 12px;
-			border: 2px dashed #ccc;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-			align-items: center;
-			color: #777;
-			cursor: pointer;
-		}
-
-		.thumbnail-preview i {
-			font-size: 32px;
-		}
-
-		/* ================= CURRICULUM ================= */
-
-		/* Module Card */
-		.module {
-			background: #ffffff;
-			border-radius: 14px;
-			border: 1px solid #e2e6ef;
-			margin-bottom: 20px;
-			overflow: hidden;
-		}
-
-		/* Module Header */
-		.module-header {
-			background: #f4f6f9;
-			padding: 14px 16px;
-			display: grid;
-			grid-template-columns: 1fr auto;
-			gap: 12px;
-			align-items: center;
-			border-bottom: 1px solid #e2e6ef;
-		}
-
-		.module-header input {
-			width: 100%;
-			padding: 10px;
-			border-radius: 8px;
-			border: 1px solid #cfd4dc;
-			font-weight: 500;
-		}
-
-		.module-actions {
-			display: flex;
-			gap: 8px;
-			white-space: nowrap;
-		}
-
-		/* Lessons Container */
-		.lessons {
-			padding: 12px 16px 16px;
-			display: flex;
-			flex-direction: column;
-			gap: 12px;
-		}
-
-		/* ================= LESSON ================= */
-		.lesson {
-			background: #f8f9fb;
-			border-radius: 12px;
-			padding: 14px;
-			border: 1px solid #e2e6ef;
-			display: flex;
-			flex-direction: column;
-			gap: 10px;
-		}
-
-		/* Lesson Header */
-		.lesson-header {
-			display: grid;
-			grid-template-columns: 1fr 140px 36px;
-			gap: 10px;
-			align-items: center;
-		}
-
-		.lesson-header input,
-		.lesson-header select {
-			padding: 8px 10px;
-			border-radius: 8px;
-			border: 1px solid #cfd4dc;
-		}
-
-		/* Lesson Content */
-		.lesson-content {
-			background: #ffffff;
-			border-radius: 10px;
-			padding: 12px;
-			border: 1px solid #e2e6ef;
-		}
-
-		/* ================= QUIZ ================= */
-		.quiz-question {
-			background: #ffffff;
-			border-radius: 10px;
-			padding: 12px;
-			border: 1px solid #e2e6ef;
-			margin-top: 10px;
-		}
-
-		.quiz-options {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			gap: 8px;
-		}
-
-		.quiz-options input,
-		.quiz-question select {
-			width: 100%;
-			padding: 8px;
-			border-radius: 8px;
-			border: 1px solid #cfd4dc;
-		}
-
-		/* ================= ACTION BAR ================= */
-		.action-bar {
-			display: flex;
-			justify-content: space-between;
-			margin-top: 30px;
-		}
-
-		/* ================= UTILITIES ================= */
-		.hidden {
-			display: none;
-		}
-
-		/* ================= MODULE HEADER STATES ================= */
-		.module-header-row {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			width: 100%;
-		}
-
-		.module-edit-form {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			flex: 1;
-		}
-
-		.module-edit-form .module-title-input {
-			flex: 1;
-		}
-
-		/* Push Save button to right */
-		.module-edit-form .btn {
-			margin-left: auto;
-		}
-
-		.module-title-input {
-			flex: 1;
-			padding: 10px;
-			border-radius: 8px;
-			border: 1px solid #cfd4dc;
-			font-weight: 500;
-		}
-
-		.module-actions {
-			display: flex;
-			gap: 8px;
-			align-items: center;
-		}
-
-		/* Make buttons consistent */
-		.module-actions form {
-			margin: 0;
-		}
-
-		.module-actions .btn {
-			white-space: nowrap;
-		}
-
-		/* ================= BUTTON CONSISTENCY FIX ================= */
-
-		/* Force same look for all outline-style buttons */
-		.btn-outline {
-			background: #ffffff;
-			border: 1px solid #1f1f2e;
-			color: #1f1f2e;
-		}
-
-		.btn-outline:hover {
-			background: #1f1f2e;
-			color: #ffffff;
-		}
-
-		/* Remove weird Bootstrap defaults */
-		button.btn,
-		a.btn {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			gap: 6px;
-		}
-
-		.btn {
-			height: 40px;
-			font-size: 14px;
-		}
-
-		/* ================= LESSON INLINE ROW ================= */
-		.lesson-inline {
-			display: flex;
-			align-items: center;
-			gap: 12px;
-		}
-
-		.lesson-inline .spacer {
-			margin-left: auto;
-		}
-
-		.free-preview {
-			display: flex;
-			align-items: center;
-			gap: 6px;
-		}
-
-		/* ================= QUIZ ACTION BAR ================= */
-		.quiz-action-bar {
-			margin-top: 16px;
-			display: flex;
-			flex-direction: column;
-			gap: 12px;
-		}
-
-		/* TOP ROW */
-		.quiz-action-top {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-		}
-
-		.quiz-info {
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			font-size: 15px;
-		}
-
-		.quiz-type {
-			background: #e9ecf3;
-			padding: 4px 10px;
-			border-radius: 14px;
-			font-size: 12px;
-			font-weight: 600;
-			color: #1f1f2e;
-		}
-
-		/* BOTTOM ROW */
-		.quiz-action-bottom {
-			display: flex;
-			gap: 10px;
-			flex-wrap: wrap;
-		}
-
-		/* Danger button tweak */
-		.btn-danger {
-			border-color: #dc3545;
-			color: #dc3545;
-		}
-
-		.btn-danger:hover {
-			background: #dc3545;
-			color: #fff;
-		}
-
-		/* ================= QUIZ LINK BUTTON FIX ================= */
-
-		/* Remove default anchor styling */
-		.lesson-content a {
-			text-decoration: none;
-			color: inherit;
-		}
-
-		/* Make quiz action links look like buttons */
-		.lesson-content a.btn {
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-			gap: 6px;
-			padding: 8px 14px;
-			border-radius: 8px;
-			font-size: 14px;
-			font-weight: 500;
-			border: 1px solid #1f1f2e;
-			background: #ffffff;
-			color: #1f1f2e;
-			transition: all 0.2s ease;
-		}
-
-		/* Hover effect */
-		.lesson-content a.btn:hover {
-			background: #1f1f2e;
-			color: #ffffff;
-		}
-
-		/* Danger button (Delete Lesson) */
-		.lesson-content a.btn-danger {
-			border-color: #dc3545;
-			color: #dc3545;
-		}
-
-		.lesson-content a.btn-danger:hover {
-			background: #dc3545;
-			color: #ffffff;
-		}
-
-		/* ================= QUIZ ACTION SPACING ================= */
-
-		/* Space between quiz buttons */
-		.lesson-content form {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 10px;
-			margin-top: 12px;
-		}
-
-		/* Individual question spacing */
-		.quiz-question {
-			margin-bottom: 16px;
-		}
-
-		/* Space between options & select */
-		.quiz-question select {
-			margin-top: 10px;
-		}
-
-		/* Delete Question link spacing */
-		.quiz-question a.btn {
-			margin-top: 10px;
-		}
-
-		/* Prevent inline chaos */
-		.quiz-action-bar {
-			margin-top: 20px;
-		}
+		.lesson-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Title input */
+.lesson-title-input {
+  width: 40%;
+  min-width: 200px;
+}
+
+/* Type select */
+.lesson-type-select {
+  width: 140px;
+}
+
+/* Right-side buttons */
+.lesson-actions {
+  margin-left: auto;   /* MAGIC LINE */
+  display: flex;
+  gap: 10px;
+}
 	</style>
 </head>
 
@@ -543,6 +111,16 @@
 					<div class="step">Publish</div>
 				</div>
 
+				<!-- FLASH MESSAGES -->
+				<div th:if="${success}" class="alert alert-success">
+					<i class="bi bi-check-circle"></i>
+					<span th:text="${success}"></span>
+				</div>
+
+				<div th:if="${error}" class="alert alert-danger">
+					<i class="bi bi-exclamation-triangle"></i>
+					<span th:text="${error}"></span>
+				</div>
 				<!-- BASIC INFO -->
 				<div class="card">
 					<h3>Course Details</h3>
@@ -622,7 +200,8 @@
 					</div>
 
 					<!-- MODULE LOOP -->
-					<div th:each="module : ${course.modules}" class="module">
+					<div th:each="module : ${course.modules}" class="module" th:id="'module-' + ${module.moduleId}"
+						th:classappend="${openModule == module.moduleId} ? ' expanded' : ''">
 
 						<!-- MODULE HEADER -->
 
@@ -690,7 +269,9 @@
 						<!-- LESSONS -->
 						<div class="lessons">
 
-							<div th:each="lesson : ${module.lessons}" class="lesson">
+							<div th:each="lesson : ${module.lessons}" class="lesson"
+								th:id="'lesson-' + ${lesson.lessonId}"
+								th:classappend="${openLesson == lesson.lessonId or openQuiz == lesson.lessonId} ? ' expanded' : ''">
 
 								<!-- LESSON TITLE + TYPE -->
 								<div class="lesson-header">
@@ -699,15 +280,17 @@
 								</div>
 
 								<!-- UPDATE LESSON -->
-								<form th:action="@{/teacher/lesson/update}" method="post" enctype="multipart/form-data">
+								<form th:action="@{/teacher/lesson/update}" method="post" enctype="multipart/form-data"
+									class="lesson-row">
 
 									<input type="hidden" name="lessonId" th:value="${lesson.lessonId}">
 
 									<!-- TITLE -->
-									<input name="title" th:value="${lesson.title}" placeholder="Lesson title">
+									<input name="title" th:value="${lesson.title}" placeholder="Lesson title"
+										class="lesson-title-input">
 
 									<!-- TYPE -->
-									<select name="type">
+									<select name="type" class="lesson-type-select">
 										<option value="VIDEO" th:selected="${lesson.type.name()=='VIDEO'}">Video
 										</option>
 										<option value="NOTES" th:selected="${lesson.type.name()=='NOTES'}">Notes
@@ -715,6 +298,20 @@
 										<option value="QUIZ" th:selected="${lesson.type.name()=='QUIZ'}">Quiz</option>
 									</select>
 
+
+									<!-- PUSH RIGHT -->
+									<div class="lesson-actions">
+										<button type="submit" class="btn btn-outline"
+											th:formaction="@{/teacher/lesson/update}">
+											Save
+										</button>
+
+										<button type="submit" class="btn btn-outline btn-danger"
+											th:formaction="@{/teacher/lesson/delete}">
+											🗑 Delete Lesson
+										</button>
+									</div>
+										</form>
 									<!-- VIDEO -->
 									<div th:if="${lesson.type.name()=='VIDEO'}" class="lesson-content">
 
@@ -725,13 +322,7 @@
 													th:checked="${lesson.freePreview}"> Free Preview
 											</label> <span class="spacer"></span>
 
-											<!-- SAVE -->
-											<button type="submit" class="btn btn-outline"
-												th:formaction="@{/teacher/lesson/update}">Save</button>
-											<!-- DELETE -->
-											<button type="submit" class="btn btn-outline"
-												th:formaction="@{/teacher/lesson/delete}">🗑 Delete
-												Lesson</button>
+
 										</div>
 									</div>
 									<!-- NOTES -->
@@ -739,17 +330,12 @@
 										<input type="hidden" name="lessonId" th:value="${lesson.lessonId}"> <input
 											type="file" name="notes" accept="application/pdf"> <span
 											class="spacer"></span>
-										<button type="submit" class="btn btn-outline"
-											th:formaction="@{/teacher/lesson/update}">Save</button>
-										<button type="submit" class="btn btn-outline"
-											th:formaction="@{/teacher/lesson/delete}">🗑 Delete
-											Lesson</button>
-
 									</div>
-								</form>
+							
 								<!-- QUIZ LESSON -->
 								<!-- ================= QUIZ LESSON ================= -->
-								<div th:if="${lesson.type.name() == 'QUIZ'}" class="lesson-content">
+								<div th:if="${lesson.type.name() == 'QUIZ'}" class="lesson-content"
+									th:id="'quiz-' + ${lesson.lessonId}">
 
 									<!-- ================= SAVE QUIZ ================= -->
 									<form th:action="@{/teacher/quiz/question/update}" method="post">
@@ -795,18 +381,18 @@
 													Delete Question </a>
 											</div>
 										</div>
+										<div class="quiz-action-bar">
+											<button class="btn btn-primary">💾 Save Quiz</button>
 
-										<button class="btn btn-primary">💾 Save Quiz</button>
+											<a th:href="@{/teacher/quiz/question/add(lessonId=${lesson.lessonId})}"
+												class="btn btn-outline"> ➕ Add Question </a>
 
-										<a th:href="@{/teacher/quiz/question/add(lessonId=${lesson.lessonId})}"
-											class="btn btn-outline"> ➕ Add Question </a>
-
-										<!-- DELETE LESSON -->
-										<a th:href="@{/teacher/lesson/delete(lessonId=${lesson.lessonId})}"
-											class="btn btn-outline btn-danger"
-											onclick="return confirm('Delete entire lesson?')"> 🗑
-											Delete Lesson </a>
-
+											<!-- DELETE LESSON -->
+											<a th:href="@{/teacher/lesson/delete(lessonId=${lesson.lessonId})}"
+												class="btn btn-outline btn-danger"
+												onclick="return confirm('Delete entire lesson?')"> 🗑
+												Delete Lesson </a>
+										</div>
 									</form>
 
 								</div>
@@ -814,13 +400,15 @@
 						</div>
 
 					</div>
+					<!-- ADD MODULE -->
+
+					<form th:action="@{/teacher/module/add}" method="post" style="margin-top: 20px">
+						<input type="hidden" name="courseId" th:value="${course.courseId}">
+						<input name="title" placeholder="New module title" required>
+						<button class="btn btn-primary">+ Add Module</button>
+					</form>
 				</div>
-				<!-- ADD MODULE -->
-				<form th:action="@{/teacher/module/add}" method="post" style="margin-top: 20px">
-					<input type="hidden" name="courseId" th:value="${course.courseId}">
-					<input name="title" placeholder="New module title" required>
-					<button class="btn btn-primary">+ Add Module</button>
-				</form>
+
 
 				<!-- PUBLISH -->
 				<form th:action="@{/teacher-course/status}" method="post" th:if="${course.courseId != null}">
@@ -838,7 +426,28 @@
 					</div>
 				</form>
 			</div>
+
+
+
+
 		</div>
+
 	</main>
+	<script>
+		if (window.location.hash) {
+			requestAnimationFrame(() => {
+				const target = document.querySelector(window.location.hash);
+				if (target) {
+					target.scrollIntoView({ behavior: "smooth", block: "start" });
+				}
+			});
+		}
+	</script>
+	<script>
+		setTimeout(() => {
+			document.querySelectorAll('.alert').forEach(a => a.remove());
+		}, 3500);
+	</script>
 </body>
+
 </html>
