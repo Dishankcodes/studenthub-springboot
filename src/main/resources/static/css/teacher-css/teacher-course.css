@@ -427,7 +427,6 @@
 
 		/* Space between quiz buttons */
 		.lesson-content form {
-
 			flex-wrap: wrap;
 			gap: 10px;
 			margin-top: 12px;
@@ -527,8 +526,65 @@
 			color: #842029;
 			border: 1px solid #f5c2c7;
 		}
+
 		.lesson-actions {
-  display: flex;
-  gap: 10px;
-  margin-left: auto; /* pushes buttons to right */
-}
+			display: flex;
+			gap: 10px;
+			margin-left: auto;
+			/* pushes buttons to right */
+		}
+
+		.lesson-row {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+		/* Title input */
+		.lesson-title-input {
+			width: 40%;
+			min-width: 200px;
+		}
+
+		/* Type select */
+		.lesson-type-select {
+			width: 140px;
+		}
+
+		/* Right-side buttons */
+		.lesson-actions {
+			margin-left: auto;
+			/* MAGIC LINE */
+			display: flex;
+			gap: 10px;
+		}
+
+		.inline-alert {
+			margin-top: 10px;
+			padding: 8px 12px;
+			border-radius: 8px;
+			font-size: 13px;
+		}
+
+		.inline-alert.success {
+			background: #e8f7ee;
+			border: 1px solid #b7ebcd;
+			color: #1e7e34;
+		}
+
+		.inline-alert.error {
+			background: #fdecea;
+			border: 1px solid #f5c6cb;
+			color: #a71d2a;
+		}
+
+		#priceGroup {
+			transition: opacity 0.2s ease, height 0.2s ease;
+		}
+
+		#priceGroup.hidden {
+			opacity: 0;
+			height: 0;
+			overflow: hidden;
+			pointer-events: none;
+		}

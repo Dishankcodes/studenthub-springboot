@@ -36,29 +36,7 @@
 		body.sidebar-collapsed .main-content {
 			margin-left: 10px;
 		}
-		.lesson-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
 
-/* Title input */
-.lesson-title-input {
-  width: 40%;
-  min-width: 200px;
-}
-
-/* Type select */
-.lesson-type-select {
-  width: 140px;
-}
-
-/* Right-side buttons */
-.lesson-actions {
-  margin-left: auto;   /* MAGIC LINE */
-  display: flex;
-  gap: 10px;
-}
 	</style>
 </head>
 
@@ -200,12 +178,31 @@
 					</div>
 
 					<!-- MODULE LOOP -->
+
 					<div th:each="module : ${course.modules}" class="module" th:id="'module-' + ${module.moduleId}"
 						th:classappend="${openModule == module.moduleId} ? ' expanded' : ''">
 
 						<!-- MODULE HEADER -->
+						<!-- MODULE SUCCESS MESSAGES -->
+						<div th:if="${param.msg != null 
+             and param.msg[0] == 'module_added'
+             and openModule == module.moduleId}" class="inline-alert success">
+							✅ Module added
+						</div>
 
+						<div th:if="${param.msg != null 
+             and param.msg[0] == 'module_updated'
+             and openModule == module.moduleId}" class="inline-alert success">
+							✅ Module updated
+						</div>
+
+						<div th:if="${param.msg != null 
+             and param.msg[0] == 'module_deleted'
+             and openModule == module.moduleId}" class="inline-alert success">
+							🗑 Module deleted
+						</div>
 						<div class="module-header">
+
 
 							<!-- NORMAL MODE -->
 							<div class="module-header-row"
@@ -216,10 +213,14 @@
 								<div class="module-actions">
 
 									<!-- EDIT -->
-									<a th:href="@{/teacher-creates-course(
-                    courseId=${course.courseId},
-                    editModule=${module.moduleId}
-                )}" class="btn btn-outline"> Edit </a>
+									<form th:action="@{/teacher-creates-course}" method="get" style="display:inline">
+										<input type="hidden" name="courseId" th:value="${course.courseId}">
+										<input type="hidden" name="editModule" th:value="${module.moduleId}">
+										<input type="hidden" name="openModule" th:value="${module.moduleId}">
+										<button type="submit" class="btn btn-outline">
+											Edit
+										</button>
+									</form>
 
 									<!-- ADD LESSON -->
 									<form th:action="@{/teacher/lesson/add}" method="post">
@@ -252,9 +253,12 @@
 								<div class="module-actions">
 
 									<!-- CANCEL -->
-									<a th:href="@{/teacher-creates-course(courseId=${course.courseId})}"
-										class="btn btn-outline"> Cancel </a>
-
+									<form th:action="@{/teacher-creates-course}" method="get">
+										<input type="hidden" name="courseId" th:value="${course.courseId}">
+										<button type="submit" class="btn btn-outline">
+											Cancel
+										</button>
+									</form>
 									<!-- DELETE MODULE -->
 									<form th:action="@{/teacher/module/delete}" method="post">
 										<input type="hidden" name="moduleId" th:value="${module.moduleId}">
@@ -311,27 +315,26 @@
 											🗑 Delete Lesson
 										</button>
 									</div>
-										</form>
-									<!-- VIDEO -->
-									<div th:if="${lesson.type.name()=='VIDEO'}" class="lesson-content">
+								</form>
+								<!-- VIDEO -->
+								<div th:if="${lesson.type.name()=='VIDEO'}" class="lesson-content">
 
-										<div class="lesson-inline">
-											<input type="hidden" name="lessonId" th:value="${lesson.lessonId}"> <input
-												type="file" name="video"> <label class="free-preview"> <input
-													type="checkbox" name="freePreview"
-													th:checked="${lesson.freePreview}"> Free Preview
-											</label> <span class="spacer"></span>
-
-
-										</div>
-									</div>
-									<!-- NOTES -->
-									<div th:if="${lesson.type.name()=='NOTES'}" class="lesson-content">
+									<div class="lesson-inline">
 										<input type="hidden" name="lessonId" th:value="${lesson.lessonId}"> <input
-											type="file" name="notes" accept="application/pdf"> <span
-											class="spacer"></span>
+											type="file" name="video"> <label class="free-preview"> <input
+												type="checkbox" name="freePreview" th:checked="${lesson.freePreview}">
+											Free Preview
+										</label> <span class="spacer"></span>
+
+
 									</div>
-							
+								</div>
+								<!-- NOTES -->
+								<div th:if="${lesson.type.name()=='NOTES'}" class="lesson-content">
+									<input type="hidden" name="lessonId" th:value="${lesson.lessonId}"> <input
+										type="file" name="notes" accept="application/pdf"> <span class="spacer"></span>
+								</div>
+
 								<!-- QUIZ LESSON -->
 								<!-- ================= QUIZ LESSON ================= -->
 								<div th:if="${lesson.type.name() == 'QUIZ'}" class="lesson-content"
@@ -388,10 +391,13 @@
 												class="btn btn-outline"> ➕ Add Question </a>
 
 											<!-- DELETE LESSON -->
-											<a th:href="@{/teacher/lesson/delete(lessonId=${lesson.lessonId})}"
-												class="btn btn-outline btn-danger"
-												onclick="return confirm('Delete entire lesson?')"> 🗑
-												Delete Lesson </a>
+											<input type="hidden" name="lessonId" th:value="${lesson.lessonId}" />
+
+											<button type="submit" class="btn btn-outline btn-danger"
+												th:formaction="@{/teacher/lesson/delete}" formmethod="post"
+												onclick="return confirm('Delete entire lesson?')">
+												🗑 Delete Lesson
+											</button>
 										</div>
 									</form>
 
@@ -442,12 +448,56 @@
 				}
 			});
 		}
-	</script>
-	<script>
+
 		setTimeout(() => {
 			document.querySelectorAll('.alert').forEach(a => a.remove());
 		}, 3500);
 	</script>
+	<script>
+		setTimeout(() => {
+			document.querySelectorAll(".inline-alert").forEach(el => el.remove());
+		}, 2500);
+	</script>
+	<script>
+		window.addEventListener("load", () => {
+			const params = new URLSearchParams(window.location.search);
+			const openModule = params.get("openModule");
+
+			if (openModule) {
+				const el = document.getElementById("module-" + openModule);
+				if (el) {
+					el.scrollIntoView({
+						behavior: "smooth",
+						block: "start"
+					});
+				}
+			}
+		});
+	</script>
+	<script>
+  function togglePrice() {
+    const courseType = document.getElementById("courseType");
+    const priceGroup = document.getElementById("priceGroup");
+
+    if (!courseType || !priceGroup) return;
+
+    if (courseType.value === "paid") {
+      priceGroup.classList.remove("hidden");
+    } else {
+      priceGroup.classList.add("hidden");
+      // optional: clear price when free
+      const priceInput = document.getElementById("priceInput");
+      if (priceInput) priceInput.value = "";
+    }
+  }
+
+  // run on load
+  document.addEventListener("DOMContentLoaded", togglePrice);
+
+  // run on change
+  document.getElementById("courseType")
+    ?.addEventListener("change", togglePrice);
+</script>
 </body>
 
 </html>

@@ -36,8 +36,11 @@ public class TeacherModuleController {
 		moduleRepo.save(module);
 
 		ra.addFlashAttribute("success", "Module added successfully");
-		return "redirect:/teacher-creates-course?courseId=" + courseId + "&openModule=" + module.getModuleId()
-				+ "#module-" + module.getModuleId();
+		return "redirect:/teacher-creates-course?courseId=" 
+		+ courseId
+		+ "&openModule=" + module.getModuleId()
+		+ "&msg=module_added"
+		+ "#module-" + module.getModuleId();
 	}
 
 	// ✅ UPDATE MODULE
@@ -55,7 +58,7 @@ public class TeacherModuleController {
 
 		ra.addFlashAttribute("success", "Module updated successfully");
 		return "redirect:/teacher-creates-course?courseId=" + module.getCourse().getCourseId() + "&openModule="
-				+ module.getModuleId() + "#module-" + module.getModuleId();
+				+ module.getModuleId() + "&msg=module_updated" + "#module-" + module.getModuleId();
 	}
 
 	// ✅ DELETE MODULE
@@ -72,6 +75,8 @@ public class TeacherModuleController {
 
 		ra.addFlashAttribute("success", "Module deleted");
 		
-		return "redirect:/teacher-creates-course?courseId=" + courseId;
+		return "redirect:/teacher-creates-course?courseId="
+	     + courseId
+	     + "&msg=module_deleted";
 	}
 }

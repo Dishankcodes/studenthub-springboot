@@ -13,4 +13,5 @@ public interface LessonRepository extends JpaRepository<Lesson, Integer>{
 	
 	List<Lesson> findByModuleModuleIdAndFreePreviewTrue(Integer moduleId);
 	long countByModuleModuleId(Integer moduleId);
+	
 }

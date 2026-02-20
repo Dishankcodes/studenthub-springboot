@@ -7,9 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.example.demo.entity.Admin;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
+import com.example.demo.repository.AdminRepository;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.repository.TeacherRepository;
@@ -27,6 +29,9 @@ public class AdminController {
 	
 	@Autowired
 	CourseRepository courseRepo;
+	
+	@Autowired
+	private AdminRepository adminRepo;
 
 	@GetMapping("/admin-dashboard")
 	public String admin_dashboard(HttpSession session, Model model) {
@@ -70,18 +75,7 @@ public class AdminController {
 		return "manage-instructor";
 	}
 
-	@GetMapping("/manage-courses")
-	public String admin_courses(HttpSession session ,Model model) {
-		
-		if (session.getAttribute("adminEmail") == null) {
-			return "redirect:/admin-login";
-		}
-
-		
-		List<Course> courses = courseRepo.findAll();
-		model.addAttribute("courses", courses);
-		return "manage-courses";
-	}
+	
 
 	@GetMapping("/manage-internships")
 	public String admin_internships() {
