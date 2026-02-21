@@ -508,3 +508,48 @@ color: #eaeaf0;
 .sidebar__list a.active i {
   color: #3b82f6;
 }
+/* ============================
+   COLLAPSED SIDEBAR HOVER FIX
+============================ */
+
+/* Make collapsed sidebar truly narrow */
+.vertical-sidebar:not(:has(:checked)) nav {
+  width: var(--collapsed);
+}
+
+/* Limit link hover area to icon only */
+.vertical-sidebar:not(:has(:checked)) .sidebar__link {
+  justify-content: center;
+  padding: 0;
+}
+
+/* Icon centered, no extra spacing */
+.vertical-sidebar:not(:has(:checked)) .icon {
+  margin: 0;
+}
+
+/* Hide text cleanly (no layout space) */
+.vertical-sidebar:not(:has(:checked)) .text {
+  display: none;
+}
+
+/* Reduce tooltip distance */
+[data-tooltip]::before {
+  translate: calc(var(--item) * 1.1) calc(var(--item) * 0.15);
+  padding: 0.4rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+/* Prevent large invisible hover zones */
+.vertical-sidebar:not(:has(:checked)) .sidebar__item {
+  width: var(--collapsed);
+  display: flex;
+  justify-content: center;
+}
+
+/* Clean hover background */
+.vertical-sidebar:not(:has(:checked)) 
+.sidebar__link:hover {
+  background: rgba(255,255,255,0.12);
+  border-radius: 0.6rem;
+}

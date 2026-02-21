@@ -1,7 +1,9 @@
 package com.example.demo.entity;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.example.demo.enums.CourseLevel;
 import com.example.demo.enums.CourseStatus;
@@ -36,7 +38,7 @@ public class Course {
 
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("position ASC")
-	private List<CourseModule> modules = new ArrayList<>();
+	private Set<CourseModule> modules = new LinkedHashSet<>();
 
 	@Column(nullable = false)
 	private String title;
@@ -132,12 +134,13 @@ public class Course {
 		this.teacher = teacher;
 	}
 
-	public List<CourseModule> getModules() {
+	public Set<CourseModule> getModules() {
 		return modules;
 	}
 
-	public void setModules(List<CourseModule> modules) {
+	public void setModules(Set<CourseModule> modules) {
 		this.modules = modules;
 	}
 
+	
 }

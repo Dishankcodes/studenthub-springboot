@@ -14,6 +14,7 @@ public class AdminCourseSummaryDTO {
 	private Long moduleCount;
 	private Long lessonCount;
 	private Long quizCount;
+	
 
 	public AdminCourseSummaryDTO(Integer courseId, String title, String instructorName, CourseStatus status,
 			CourseType type, Double price, Long moduleCount, Long lessonCount, Long quizCount) {

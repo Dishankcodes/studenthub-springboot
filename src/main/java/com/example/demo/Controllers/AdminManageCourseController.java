@@ -43,7 +43,7 @@ public class AdminManageCourseController {
 		List<AdminCourseSummaryDTO> courses = courseRepo.fetchAdminCourseSummary();
 
 		model.addAttribute("courses", courses);
-		model.addAttribute("username", admin);
+		model.addAttribute("username", admin.getUsername());
 		// model.addAttribute("username", session.getAttribute("adminUsername"));
 		return "manage-courses";
 	}
@@ -55,7 +55,7 @@ public class AdminManageCourseController {
 		course.setStatus(status);
 		courseRepo.save(course);
 
-		return "redirect:/manage-course#course-" + id;
+		return "redirect:/manage-courses#course-" + id;
 	}
 
 	@PostMapping("/manage-course/delete/{id}")
@@ -74,8 +74,10 @@ public class AdminManageCourseController {
 
 	@GetMapping("/admin-course/view/{id}")
 	public String viewCourse(@PathVariable Integer id, Model model) {
+		
+		
 		Course course = courseRepo.findAllWithStructure(id);
-
+		
 		if (course == null) {
 			return "redirect:/manage-courses";
 		}
