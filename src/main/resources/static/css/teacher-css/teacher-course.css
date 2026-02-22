@@ -588,3 +588,124 @@
 			overflow: hidden;
 			pointer-events: none;
 		}
+		
+				.thumbnail-preview {
+			width: 240px;
+			height: 135px;
+			border: 2px dashed #ccc;
+			border-radius: 8px;
+			background-size: cover;
+			background-position: center;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.thumbnail-preview.has-image {
+			border: none;
+		}
+
+		/* ================= THUMBNAIL CARD ================= */
+		.thumbnail-card {
+			margin-top: 24px;
+		}
+
+		.thumbnail-update-form {
+			display: flex;
+			gap: 20px;
+			align-items: center;
+			flex-wrap: wrap;
+		}
+
+		/* Preview box */
+		.thumbnail-preview.editable {
+			width: 240px;
+			height: 135px;
+			border-radius: 10px;
+			background-color: #f1f3f6;
+			background-size: cover;
+			background-position: center;
+			border: 2px dashed #cfd6e4;
+			cursor: pointer;
+			position: relative;
+			transition: all 0.25s ease;
+			overflow: hidden;
+		}
+
+		/* Hover effect */
+		.thumbnail-preview.editable:hover {
+			border-color: #4f46e5;
+			box-shadow: 0 8px 20px rgba(79, 70, 229, 0.15);
+		}
+
+		/* Overlay */
+		.thumbnail-preview.editable .overlay {
+			position: absolute;
+			inset: 0;
+			background: rgba(31, 31, 46, 0.55);
+			color: #fff;
+			display: flex;
+			flex-direction: column;
+			gap: 6px;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			transition: opacity 0.25s ease;
+			font-size: 14px;
+		}
+
+		.thumbnail-preview.editable:hover .overlay {
+			opacity: 1;
+		}
+
+		.thumbnail-preview.editable i {
+			font-size: 20px;
+		}
+
+		/* Button alignment */
+		.thumbnail-update-form button {
+			height: fit-content;
+		}
+
+		.video-upload-form {
+			display: flex;
+			align-items: center;
+			gap: 14px;
+			flex-wrap: wrap;
+		}
+
+		.video-input input[type="file"] {
+			font-size: 14px;
+		}
+
+		.free-preview {
+			display: flex;
+			align-items: center;
+			gap: 6px;
+			font-size: 14px;
+		}
+
+		.text-muted {
+			font-size: 13px;
+			color: #6b7280;
+		}
+
+		.inline-alert {
+			margin-bottom: 10px;
+			padding: 8px 12px;
+			border-radius: 6px;
+			font-size: 14px;
+		}
+
+		.inline-alert.success {
+			background: #ecfdf5;
+			color: #065f46;
+			border: 1px solid #10b981;
+		}
+
+		.inline-alert.error {
+			background: #fef2f2;
+			color: #7f1d1d;
+			border: 1px solid #ef4444;
+		}
