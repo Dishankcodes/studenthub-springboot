@@ -305,10 +305,11 @@
 					<div class="price" th:if="${course.type.name() == 'FREE'}">
 						Free
 					</div>
-
-					<a class="btn-enroll" th:href="@{/student-enroll}">
-						Enroll Now
-					</a>
+					
+<form th:action="@{/student-enroll}" method="post">
+    <input type="hidden" name="courseId" th:value="${course.courseId}">
+    <button class="btn-enroll">Enroll Now</button>
+</form>
 
 					<ul style="margin-top:15px;text-align:left;font-size:14px;color:#555">
 						<li>✔ Lifetime access</li>
@@ -374,7 +375,7 @@
 			</div>
 
 		</div>
-
+</div>
 
 		<!-- ===== SCRIPT ===== -->
 		<script>

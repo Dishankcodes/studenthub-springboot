@@ -88,88 +88,96 @@ public class TeacherCourseController {
 	        @RequestParam(required = false) List<String> highlightTexts,
 	        Model model
 	) throws IOException {
-		
-		Integer teacherId = 2;
-		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
-		if (teacher == null) {
-			return "redirect:/teacher-course";
-		}
-		
-		Course course;
-		
+	    Integer teacherId = 2;
+	    Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+	    if (teacher == null) {
+	        return "redirect:/teacher-course";
+	    }
 
-		/* ================= CREATE vs UPDATE ================= */
+	    Course course;
 
-		if (formCourse.getCourseId() != null) {
-			// UPDATE existing course
-			course = courseRepo.findById(formCourse.getCourseId()).orElseThrow();
+	    /* ================= CREATE vs UPDATE ================= */
 
-			course.setTitle(formCourse.getTitle());
-			course.setDescription(formCourse.getDescription());
-			course.setLevel(formCourse.getLevel());
-			course.setType(formCourse.getType());
-			course.setPrice(formCourse.getPrice());
+	    if (formCourse.getCourseId() != null) {
+	        // UPDATE
+	        course = courseRepo.findById(formCourse.getCourseId()).orElseThrow();
 
-		} else {
-			// CREATE new course
-			boolean exists = courseRepo.existsByTeacherTeacherIdAndTitleAndStatusNot(teacherId, formCourse.getTitle(),
-					CourseStatus.DELETED);
+	        course.setTitle(formCourse.getTitle());
+	        course.setDescription(formCourse.getDescription());
+	        course.setLevel(formCourse.getLevel());
+	        course.setType(formCourse.getType());
+	        course.setPrice(formCourse.getPrice());
 
-			if (exists) {
-				model.addAttribute("course", formCourse);
-				model.addAttribute("error", "You already created a course with this title.");
-				return "teacher-creates-course";
-			}
+	    } else {
+	        // CREATE
+	        boolean exists = courseRepo
+	                .existsByTeacherTeacherIdAndTitleAndStatusNot(
+	                        teacherId,
+	                        formCourse.getTitle(),
+	                        CourseStatus.DELETED
+	                );
 
-			course = formCourse;
-			course.setTeacher(teacher);
-			course.setStatus(CourseStatus.DRAFT);
-		}
-		
+	        if (exists) {
+	            model.addAttribute("course", formCourse);
+	            model.addAttribute("error", "You already created a course with this title.");
+	            return "teacher-creates-course";
+	        }
 
-		/* ================= STATUS HANDLING ================= */
+	        course = new Course();
+	        course.setTeacher(teacher);
+	        course.setTitle(formCourse.getTitle());
+	        course.setDescription(formCourse.getDescription());
+	        course.setLevel(formCourse.getLevel());
+	        course.setType(formCourse.getType());
+	        course.setPrice(formCourse.getPrice());
+	    }
 
-		if ("publish".equals(action)) {
-			course.setStatus(CourseStatus.PUBLISHED);
-		} else {
-			// draft OR next
-			course.setStatus(CourseStatus.DRAFT);
-		}
+	    /* ================= STATUS ================= */
 
-		Course savedCourse = courseRepo.save(course);
-		
-		/* ================= THUMBNAIL UPLOAD ================= */
+	    course.setStatus(
+	            "publish".equals(action)
+	                    ? CourseStatus.PUBLISHED
+	                    : CourseStatus.DRAFT
+	    );
 
-	
-		if (thumbnail != null && !thumbnail.isEmpty()) {
-		    String path = saveThumbnail(thumbnail, savedCourse.getCourseId());
-		    savedCourse.setThumbnailURL(path);
-		    // update thumbnail
-		}
+	    /* ================= SAVE COURSE FIRST (NO HIGHLIGHTS) ================= */
 
-		/* ================= HIGHLIGHTS (IMPORTANT) ================= */
-	    savedCourse.getHighlights().clear(); // orphanRemoval = true
+	    course = courseRepo.save(course); // 🔥 ID guaranteed here
+
+	    /* ================= THUMBNAIL ================= */
+
+	    if (thumbnail != null && !thumbnail.isEmpty()) {
+	        String path = saveThumbnail(thumbnail, course.getCourseId());
+	        course.setThumbnailURL(path);
+	    }
+
+	    /* ================= HIGHLIGHTS (SAFE & FINAL) ================= */
+
+	    course.getHighlights().clear(); // orphanRemoval = true
 
 	    if (highlightTexts != null) {
 	        for (String text : highlightTexts) {
 	            if (text != null && !text.trim().isEmpty()) {
 	                CourseHighlight h = new CourseHighlight();
-	                h.setCourse(savedCourse);
+	                h.setCourse(course);           // 🔥 NEVER NULL
 	                h.setText(text.trim());
-	                savedCourse.getHighlights().add(h);
+	                course.getHighlights().add(h);
 	            }
 	        }
 	    }
-	    courseRepo.save(savedCourse);
-		/* ================= REDIRECT FLOW ================= */
 
-		if ("publish".equals(action)) {
-			return "redirect:/teacher-course";
-		}
+	    /* ================= FINAL SAVE ================= */
 
-		// draft OR next
-		return "redirect:/teacher-creates-course?courseId=" + savedCourse.getCourseId();
+	    courseRepo.save(course);
+
+	    /* ================= REDIRECT ================= */
+
+	    if ("publish".equals(action)) {
+	        return "redirect:/teacher-course";
+	    }
+
+	    return "redirect:/teacher-creates-course?courseId=" + course.getCourseId();
 	}
 
 	@GetMapping("/teacher-course/edit/{id}")

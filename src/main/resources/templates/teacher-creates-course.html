@@ -205,26 +205,21 @@
 
 						<!-- COURSE HIGHLIGHTS -->
 						<div class="card">
-							<h3>Course Highlights</h3>
+  <h3>Course Highlights</h3>
 
-							<div id="highlightContainer">
-								<div th:each="h : ${course.highlights}">
-									<input type="text" name="highlightTexts" th:value="${h.text}"
-										placeholder="e.g. Build REST APIs with Spring Boot" class="highlight-input">
-								</div>
+  <div id="highlightContainer">
+    <input type="text"
+           name="highlightTexts"
+           placeholder="e.g. Build REST APIs with Spring Boot"
+           class="highlight-input"/>
+  </div>
 
-								<div th:if="${course.highlights == null || course.highlights.empty}">
-									<input type="text" name="highlightTexts" placeholder="e.g. Learn Spring Security"
-										class="highlight-input">
-								</div>
-							</div>
+  <button type="button" class="btn btn-outline" onclick="addHighlight()">
+    + Add Highlight
+  </button>
 
-							<button type="button" class="btn btn-outline" onclick="addHighlight()">
-								+ Add Highlight
-							</button>
-
-							<small>Maximum 8 highlights</small>
-						</div>
+  <small>Maximum 8 highlights</small>
+</div>
 					</div>
 
 					<div class="form-group">
@@ -692,18 +687,19 @@
 	</script>
 </body>
 <script>
-	function addHighlight() {
-		const container = document.getElementById("highlightContainer");
-		if (container.children.length >= 8) return;
+function addHighlight() {
+  const container = document.getElementById("highlightContainer");
+  const count = container.querySelectorAll("input").length;
+  if (count >= 8) return;
 
-		const input = document.createElement("input");
-		input.type = "text";
-		input.name = "highlightTexts";
-		input.placeholder = "e.g. Deploy projects to production";
-		input.className = "highlight-input";
+  const input = document.createElement("input");
+  input.type = "text";
+  input.name = "highlightTexts"; // 🔥 MUST MATCH controller
+  input.placeholder = "e.g. Deploy projects to production";
+  input.className = "highlight-input";
 
-		container.appendChild(input);
-	}
+  container.appendChild(input);
+}
 </script>
 
 </html>

@@ -43,6 +43,8 @@ public class Course {
 	@OrderBy("position ASC")
 	private Set<CourseModule> modules = new LinkedHashSet<>();
 
+	
+	@Transient
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CourseHighlight> highlights = new ArrayList<>();
 
