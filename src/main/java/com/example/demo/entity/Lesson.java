@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.demo.enums.LessonType;
 
 import jakarta.persistence.CascadeType;
@@ -15,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "module_lesson")
@@ -46,6 +49,9 @@ public class Lesson {
 	@OneToOne(mappedBy = "lesson" ,cascade = CascadeType.ALL)
 	private Quiz quiz; 
 	
+	
+	@Transient
+	private MultipartFile contentFile;
 	
 	public Integer getLessonId() {
 		return lessonId;
@@ -109,6 +115,14 @@ public class Lesson {
 
 	public void setQuiz(Quiz quiz) {
 		this.quiz = quiz;
+	}
+
+	public MultipartFile getContentFile() {
+		return contentFile;
+	}
+
+	public void setContentFile(MultipartFile contentFile) {
+		this.contentFile = contentFile;
 	}
 	
 	

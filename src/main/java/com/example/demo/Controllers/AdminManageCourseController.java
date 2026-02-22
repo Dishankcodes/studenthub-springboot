@@ -75,8 +75,10 @@ public class AdminManageCourseController {
 	@GetMapping("/admin-course/view/{id}")
 	public String viewCourse(@PathVariable Integer id, Model model) {
 		
-		
-		Course course = courseRepo.findAllWithStructure(id);
+
+	    List<Course> courses = courseRepo.findAllWithStructure(id);
+
+		  Course course = courses.get(0); 
 		
 		if (course == null) {
 			return "redirect:/manage-courses";

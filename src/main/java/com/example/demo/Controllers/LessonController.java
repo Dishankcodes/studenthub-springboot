@@ -74,7 +74,7 @@ public class LessonController {
             @RequestParam Integer lessonId,
             @RequestParam String title,
             @RequestParam(required = false) LessonType type,
-            @RequestParam(required = false) Boolean freePreview,RedirectAttributes ra
+            RedirectAttributes ra
     ) {
         Lesson lesson = lessonRepo.findById(lessonId).orElseThrow();
 
@@ -84,7 +84,7 @@ public class LessonController {
             lesson.setType(type);
         }
 
-        lesson.setFreePreview(freePreview != null);
+      
 
         lessonRepo.save(lesson);
 

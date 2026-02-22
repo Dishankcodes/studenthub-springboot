@@ -30,13 +30,17 @@
 			margin-left: 260px;
 			padding: 20px 30px;
 			transition: margin-left 0.3s ease;
-		}
-
+			
+    height: 100vh;
+    overflow-y: auto;
+}
 		/* When sidebar is collapsed */
 		body.sidebar-collapsed .main-content {
 			margin-left: 10px;
 		}
-
+.lesson {
+    scroll-margin-top: 90px; /* adjust for header/sidebar */
+}
 	</style>
 </head>
 
@@ -69,7 +73,8 @@
 	<main class="main-content">
 		<button class="sidebar-toggle" id="sidebarToggle">☰</button>
 		<div class="container">
-			<form th:action="@{/teacher-creates-course}" th:object="${course}" method="post" enctype="multipart/form-data">
+			<form th:action="@{/teacher-creates-course}" th:object="${course}" method="post"
+				enctype="multipart/form-data">
 				<!-- HEADER -->
 				<div class="page-header">
 					<div class="page-title">
@@ -108,11 +113,20 @@
 
 						<div class="thumbnail-upload">
 							<!-- Hidden file input -->
-							<input type="file" id="thumbnailInput" accept="image/*" th:field="*{thumbnailFile}" hidden>
 
-							<!-- Clickable UI box -->
-							<div class="thumbnail-preview" id="thumbnailPreview">
-								<i class="bi bi-image"></i> <span>Upload thumbnail</span>
+							<div class="thumbnail-upload">
+								<input type="file" id="thumbnailInput" accept="image/*" th:field="*{thumbnailFile}"
+									hidden>
+
+								<div class="thumbnail-preview" id="thumbnailPreview" th:style="${course.thumbnailURL != null}
+             ? 'background-image:url(' + @{${course.thumbnailURL}} + ')'
+             : ''">
+
+									<i class="bi bi-image" th:if="${course.thumbnailURL == null}"></i>
+									<span th:if="${course.thumbnailURL == null}">
+										Upload thumbnail
+									</span>
+								</div>
 							</div>
 						</div>
 
@@ -157,13 +171,46 @@
 							required for paid courses</small>
 					</div>
 				</div>
+
+
 				<!-- SAVE & CONTINUE (FIRST TIME ONLY) -->
 				<button type="submit" name="action" value="draft" class="btn btn-primary"
 					th:if="${course.courseId == null}">
 					Save & Continue</button>
-
 			</form>
-			<!-- CURRICULUM -->
+			<div th:if="${param.msg != null}">
+
+				<div class="inline-alert success" th:if="${param.msg[0] == 'thumbnail_updated'}">
+					🖼 Thumbnail updated successfully
+				</div>
+
+			</div>
+			<div class="card thumbnail-card" th:if="${course.courseId != null}">
+				<h3>Update Thumbnail</h3>
+
+				<form th:action="@{/teacher-course/thumbnail}" method="post" enctype="multipart/form-data"
+					class="thumbnail-update-form">
+
+					<input type="hidden" name="courseId" th:value="${course.courseId}">
+
+					<label class="thumbnail-preview editable" th:style="${course.thumbnailURL != null}
+                   ? 'background-image:url(' + @{${course.thumbnailURL}} + ')'
+                   : ''">
+
+						<input type="file" name="thumbnailFile" accept="image/*" required hidden>
+
+						<div class="overlay">
+							<i class="bi bi-camera"></i>
+							<span>Change Thumbnail</span>
+						</div>
+					</label>
+
+					<button class="btn btn-primary">
+						💾 Save Thumbnail
+					</button>
+				</form>
+			</div>
+
 
 			<!-- ================= CURRICULUM ================= -->
 			<div th:if="${course.courseId != null}">
@@ -282,6 +329,17 @@
 									<strong th:text="${lesson.title}">Lesson title</strong> <span class="badge"
 										th:text="${lesson.type}">VIDEO</span>
 								</div>
+								<div th:if="${param.msg != null and openLesson == lesson.lessonId}"
+     class="inline-alert success">
+
+    <span th:switch="${param.msg[0]}">
+        <span th:case="'video_uploaded'">🎥 Video uploaded</span>
+        <span th:case="'video_updated'">♻️ Video updated</span>
+        <span th:case="'notes_uploaded'">📄 Notes uploaded</span>
+        <span th:case="'notes_updated'">♻️ Notes updated</span>
+    </span>
+
+</div>
 
 								<!-- UPDATE LESSON -->
 								<form th:action="@{/teacher/lesson/update}" method="post" enctype="multipart/form-data"
@@ -316,25 +374,76 @@
 										</button>
 									</div>
 								</form>
+								
 								<!-- VIDEO -->
 								<div th:if="${lesson.type.name()=='VIDEO'}" class="lesson-content">
 
-									<div class="lesson-inline">
-										<input type="hidden" name="lessonId" th:value="${lesson.lessonId}"> <input
-											type="file" name="video"> <label class="free-preview"> <input
-												type="checkbox" name="freePreview" th:checked="${lesson.freePreview}">
+									<form th:action="@{/teacher/lesson/video}" method="post"
+										enctype="multipart/form-data" class="lesson-inline video-upload-form">
+
+										<input type="hidden" name="lessonId" th:value="${lesson.lessonId}">
+
+										<!-- FILE INPUT -->
+										<div class="video-input">
+											<input type="file" name="videoFile" accept="video/*" required>
+										</div>
+
+										<!-- FREE PREVIEW -->
+										<label class="free-preview">
+											<input type="checkbox" name="freePreview"
+												th:checked="${lesson.freePreview}">
 											Free Preview
-										</label> <span class="spacer"></span>
+										</label>
+
+										<!-- UPLOAD BUTTON -->
+										<button type="submit" class="btn btn-outline">
+											Upload Video
+										</button>
+
+										<!-- EXISTING VIDEO INFO -->
+										<p class="text-muted" th:if="${lesson.contentUrl != null}">
+											Video uploaded ✔
+										</p>
+
+									</form>
 
 
-									</div>
 								</div>
-								<!-- NOTES -->
-								<div th:if="${lesson.type.name()=='NOTES'}" class="lesson-content">
-									<input type="hidden" name="lessonId" th:value="${lesson.lessonId}"> <input
-										type="file" name="notes" accept="application/pdf"> <span class="spacer"></span>
-								</div>
+								<div th:if="${lesson.type.name()=='NOTES'}"
+     class="lesson-content">
 
+    <form th:action="@{/teacher/lesson/notes}"
+          method="post"
+          enctype="multipart/form-data"
+          class="lesson-inline">
+
+        <input type="hidden"
+               name="lessonId"
+               th:value="${lesson.lessonId}">
+
+        <input type="file"
+               name="notesFile"
+               accept="application/pdf"
+               required>
+
+        <label class="free-preview">
+            <input type="checkbox"
+                   name="freePreview"
+                   th:checked="${lesson.freePreview}">
+            Free Preview
+        </label>
+
+        <button class="btn btn-outline">
+            Upload Notes
+        </button>
+
+        <p class="text-muted"
+           th:if="${lesson.contentUrl != null}">
+            Notes uploaded ✔
+        </p>
+
+    </form>
+</div>
 								<!-- QUIZ LESSON -->
 								<!-- ================= QUIZ LESSON ================= -->
 								<div th:if="${lesson.type.name() == 'QUIZ'}" class="lesson-content"
@@ -440,63 +549,81 @@
 
 	</main>
 	<script>
-		if (window.location.hash) {
-			requestAnimationFrame(() => {
-				const target = document.querySelector(window.location.hash);
-				if (target) {
-					target.scrollIntoView({ behavior: "smooth", block: "start" });
-				}
-			});
-		}
+	history.scrollRestoration = "manual";
 
-		setTimeout(() => {
-			document.querySelectorAll('.alert').forEach(a => a.remove());
-		}, 3500);
-	</script>
-	<script>
-		setTimeout(() => {
-			document.querySelectorAll(".inline-alert").forEach(el => el.remove());
-		}, 2500);
-	</script>
-	<script>
-		window.addEventListener("load", () => {
-			const params = new URLSearchParams(window.location.search);
-			const openModule = params.get("openModule");
+	window.addEventListener("load", () => {
+	    const params = new URLSearchParams(window.location.search);
+	    const targetId = params.get("scroll");
+	    if (!targetId) return;
 
-			if (openModule) {
-				const el = document.getElementById("module-" + openModule);
-				if (el) {
-					el.scrollIntoView({
-						behavior: "smooth",
-						block: "start"
-					});
-				}
-			}
-		});
-	</script>
-	<script>
-  function togglePrice() {
+	    const container = document.querySelector(".main-content");
+	    const target = document.getElementById(targetId);
+
+	    if (!container || !target) return;
+
+	    const offset =
+	        target.offsetTop - 20;
+
+	    container.scrollTop = offset;
+	});
+	
+	
+
+
+/* =============================
+   AUTO-HIDE ALERTS
+   ============================= */
+   setTimeout(() => {
+	    document.querySelectorAll(".alert, .inline-alert").forEach(el => {
+	        el.style.opacity = "0";
+	    });
+	}, 4500);
+
+/* =============================
+   COURSE TYPE → PRICE TOGGLE
+   ============================= */
+function togglePrice() {
     const courseType = document.getElementById("courseType");
     const priceGroup = document.getElementById("priceGroup");
+    const priceInput = document.getElementById("priceInput");
 
     if (!courseType || !priceGroup) return;
 
     if (courseType.value === "paid") {
-      priceGroup.classList.remove("hidden");
+        priceGroup.classList.remove("hidden");
     } else {
-      priceGroup.classList.add("hidden");
-      // optional: clear price when free
-      const priceInput = document.getElementById("priceInput");
-      if (priceInput) priceInput.value = "";
+        priceGroup.classList.add("hidden");
+        if (priceInput) priceInput.value = "";
     }
-  }
+}
 
-  // run on load
-  document.addEventListener("DOMContentLoaded", togglePrice);
+document.addEventListener("DOMContentLoaded", togglePrice);
+document.getElementById("courseType")?.addEventListener("change", togglePrice);
 
-  // run on change
-  document.getElementById("courseType")
-    ?.addEventListener("change", togglePrice);
+/* =============================
+   THUMBNAIL CLICK + PREVIEW
+   ============================= */
+const thumbnailInput = document.getElementById("thumbnailInput");
+const thumbnailPreview = document.getElementById("thumbnailPreview");
+
+if (thumbnailInput && thumbnailPreview) {
+    thumbnailPreview.addEventListener("click", () => {
+        thumbnailInput.click();
+    });
+
+    thumbnailInput.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = e => {
+            thumbnailPreview.style.backgroundImage = `url(${e.target.result})`;
+            thumbnailPreview.classList.add("has-image");
+            thumbnailPreview.innerHTML = "";
+        };
+        reader.readAsDataURL(file);
+    });
+}
 </script>
 </body>
 

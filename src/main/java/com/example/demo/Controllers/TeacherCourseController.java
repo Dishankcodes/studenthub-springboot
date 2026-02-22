@@ -1,5 +1,7 @@
 package com.example.demo.Controllers;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseModule;
@@ -25,6 +29,9 @@ public class TeacherCourseController {
 	private TeacherRepository teacherRepo;
 	@Autowired
 	private CourseRepository courseRepo;
+	
+	private static final String UPLOAD_BASE =
+	        System.getProperty("user.dir") + File.separator + "uploads";
 
 	// ===== COURSE MANAGEMENT =====
 	@GetMapping("/teacher-course")
@@ -73,15 +80,21 @@ public class TeacherCourseController {
 	}
 
 	@PostMapping("/teacher-creates-course")
-	public String saveCourse(@ModelAttribute Course formCourse, @RequestParam String action, Model model) {
+	public String saveCourse(
+	        @ModelAttribute Course formCourse,
+	        @RequestParam("thumbnailFile") MultipartFile thumbnail,
+	        @RequestParam String action,
+	        Model model
+	) throws IOException {
 		Integer teacherId = 2;
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
 		if (teacher == null) {
 			return "redirect:/teacher-course";
 		}
-
+		
 		Course course;
+		
 
 		/* ================= CREATE vs UPDATE ================= */
 
@@ -110,6 +123,7 @@ public class TeacherCourseController {
 			course.setTeacher(teacher);
 			course.setStatus(CourseStatus.DRAFT);
 		}
+		
 
 		/* ================= STATUS HANDLING ================= */
 
@@ -121,6 +135,16 @@ public class TeacherCourseController {
 		}
 
 		Course savedCourse = courseRepo.save(course);
+		
+		/* ================= THUMBNAIL UPLOAD ================= */
+
+		
+		
+		if (thumbnail != null && !thumbnail.isEmpty()) {
+		    String path = saveThumbnail(thumbnail, savedCourse.getCourseId());
+		    savedCourse.setThumbnailURL(path);
+		    courseRepo.save(savedCourse); // update thumbnail
+		}
 
 		/* ================= REDIRECT FLOW ================= */
 
@@ -177,5 +201,43 @@ public class TeacherCourseController {
 
 		return "redirect:/teacher-creates-course?courseId=" + courseId;
 	}
+	
+	private String saveThumbnail(MultipartFile file, Integer courseId) throws IOException {
 
+	    String folderPath = UPLOAD_BASE
+	            + File.separator + "course-thumbnails"
+	            + File.separator + courseId;
+
+	    File dir = new File(folderPath);
+	    if (!dir.exists()) {
+	        dir.mkdirs();   // this WILL create full path
+	    }
+
+	    String fileName = System.currentTimeMillis()
+	            + "_" + file.getOriginalFilename();
+
+	    File destination = new File(dir, fileName);
+
+	    file.transferTo(destination);
+
+	    // what we store in DB (relative URL)
+	    return "/uploads/course-thumbnails/" + courseId + "/" + fileName;
+	}
+	
+	
+	@PostMapping("/teacher-course/thumbnail")
+	public String updateThumbnail(
+	        @RequestParam Integer courseId,
+	        @RequestParam MultipartFile thumbnailFile
+	) throws IOException {
+
+	    Course course = courseRepo.findById(courseId).orElseThrow();
+	    String path = saveThumbnail(thumbnailFile, courseId);
+	    course.setThumbnailURL(path);
+	    courseRepo.save(course);
+
+	    return "redirect:/teacher-creates-course?courseId=" + courseId
+	    		+ "&msg-thumbnail_updated";
+	}
+	
 }

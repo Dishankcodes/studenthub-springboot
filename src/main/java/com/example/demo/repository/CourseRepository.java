@@ -1,9 +1,11 @@
 package com.example.demo.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.example.demo.dto.AdminCourseSummaryDTO;
 import com.example.demo.entity.Course;
@@ -21,13 +23,14 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 	boolean existsByTeacherTeacherIdAndTitleAndStatusNot(Integer teacherId, String title, CourseStatus status);
 
 	@Query("""
-			    SELECT DISTINCT c FROM Course c
-			    LEFT JOIN FETCH c.modules m
-			    LEFT JOIN FETCH m.lessons l
-			    LEFT JOIN FETCH l.quiz q
-			""")
-	Course findAllWithStructure(Integer id);
-
+		    SELECT DISTINCT c
+		    FROM Course c
+		    LEFT JOIN FETCH c.modules m
+		    LEFT JOIN FETCH m.lessons l
+		    LEFT JOIN FETCH l.quiz
+		    WHERE c.id = :id
+		""")
+		List<Course> findAllWithStructure(@Param("id") Integer id);
 	@Query("""
 			SELECT new com.example.demo.dto.AdminCourseSummaryDTO(
 			    c.courseId,
