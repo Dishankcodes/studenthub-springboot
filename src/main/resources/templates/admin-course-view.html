@@ -8,9 +8,110 @@
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+    :root {
+    --expanded: 16.875rem;
+    --collapsed: 3.25rem;
+    --bg-primary: linear-gradient(135deg, #0b0b1f, #14142f);
+    --bg-content: #1a1a3d; /* slightly lighter than topbar */
+    --accent: #3b82f6;
+    --text-light: #eaeaf0;
+    --text-muted: #9ca3af;
+    --shadow-topbar: rgba(0,0,0,0.4);
+}
+    /* ===== PAGE BACKGROUND ===== */
+body {
+    background: var(--bg-content);
+    color: var(--text-light);
+}
+
+/* ===== HEADER ===== */
+.container > .d-flex {
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.container h3 {
+    color: var(--text-light);
+}
+
+.btn-secondary {
+    background: #2a2a55;
+    border: none;
+}
+
+.btn-secondary:hover {
+    background: #34346a;
+}
+
+/* ===== COURSE INFO CARD ===== */
+.card.shadow-sm.mb-4 {
+    background: #232357;
+    color: var(--text-light);
+}
+
+.card.shadow-sm.mb-4 p {
+    color: var(--text-muted);
+}
+
+/* ===== BADGES ===== */
+.badge.bg-info {
+    background: rgba(59,130,246,0.2) !important;
+    color: #93c5fd;
+}
+
+.badge.bg-primary {
+    background: var(--accent) !important;
+}
+
+/* ===== MODULE CARD ===== */
+.card.mb-3.shadow-sm {
+    background: #1f1f46;
+    border-left: 4px solid var(--accent);
+}
+
+/* ===== MODULE HEADER ===== */
+.card-header.bg-dark {
+    background: var(--bg-primary) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* ===== LESSON BLOCK ===== */
+.card-body .border.rounded {
+    background: #2a2a5c;
+    border-color: rgba(255,255,255,0.08) !important;
+}
+
+/* ===== LESSON TITLE ===== */
+.card-body h6 {
+    color: var(--text-light);
+}
+
+/* ===== QUIZ SECTION ===== */
+.list-group-item {
+    background: transparent;
+    color: var(--text-muted);
+    border-color: rgba(255,255,255,0.06);
+}
+
+.list-group-item i {
+    color: var(--accent);
+}
+
+/* ===== EMPTY STATES ===== */
+.alert-warning {
+    background: rgba(251,191,36,0.15);
+    border: none;
+    color: #fde68a;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+    </style>
 </head>
 
-<body class="bg-light">
+<body class="bg-dark">
 
 <div class="container my-4">
 
