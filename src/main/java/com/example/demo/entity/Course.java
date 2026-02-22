@@ -48,6 +48,14 @@ public class Course {
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<CourseHighlight> highlights = new ArrayList<>();
 
+	
+	@OneToMany(
+		    mappedBy = "course",
+		    cascade = CascadeType.ALL,
+		    orphanRemoval = true
+		)
+		private List<Enrollment> enrollments;
+	
 	@Column(nullable = false)
 	private String title;
 
@@ -77,6 +85,14 @@ public class Course {
 
 	public void setThumbnailFile(MultipartFile thumbnailFile) {
 		this.thumbnailFile = thumbnailFile;
+	}
+
+	public List<Enrollment> getEnrollments() {
+		return enrollments;
+	}
+
+	public void setEnrollments(List<Enrollment> enrollments) {
+		this.enrollments = enrollments;
 	}
 
 	public Integer getCourseId() {

@@ -2,299 +2,542 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Dashboard | EduPlatform</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Student Dashboard | EduPlatform</title>
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<!-- Bootstrap Icons -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+	rel="stylesheet">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+<!-- Google Font -->
+<link
+	href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+	rel="stylesheet">
 
 
+<style>
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont,
+		sans-serif;
+}
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+.main {
+	margin-top: 0;
+	padding: 0;
+}
 
-        .main {
-            margin-left: 240px;
-            margin-top: 56px;
-            padding: 20px;
-            transition: 0.3s ease;
-        }
+body {
+	background: #f4f6f9;
+	color: #1f1f2e;
+}
 
-        body {
-            background: #f4f6f9;
-            color: #1f1f2e;
-        }
+/* ===== COURSE HEADER ===== */
+.course-header {
+	background: linear-gradient(135deg, #1f1f2e, #2a2a4a);
+	color: #fff;
+	padding: 30px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
 
-        /* ===== COURSE HEADER ===== */
-        .course-header {
-            background: linear-gradient(135deg, #1f1f2e, #2a2a4a);
-            color: #fff;
-            padding: 30px;
-        }
+.course-header h1 {
+	font-size: 28px;
+	margin-bottom: 10px;
+}
 
-        .course-header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
+.course-meta {
+	display: flex;
+	gap: 20px;
+	font-size: 14px;
+	opacity: 0.9;
+}
 
-        .course-meta {
-            display: flex;
-            gap: 20px;
-            font-size: 14px;
-            opacity: 0.9;
-        }
+.enroll-btn {
+	margin-top: 20px;
+	padding: 12px 22px;
+	border: none;
+	background: #f6a623;
+	color: #1f1f2e;
+	font-weight: 600;
+	border-radius: 8px;
+	cursor: pointer;
+}
 
-        .enroll-btn {
-            margin-top: 20px;
-            padding: 12px 22px;
-            border: none;
-            background: #f6a623;
-            color: #1f1f2e;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-        }
+/* ===== LAYOUT ===== */
+.course-container {
+	display: grid;
+	grid-template-columns: 320px 1fr;
+	min-height: calc(100vh - 180px);
+}
 
-        /* ===== LAYOUT ===== */
-        .course-container {
-            display: grid;
-            grid-template-columns: 320px 1fr;
-            min-height: calc(100vh - 180px);
-        }
+/* ===== SIDEBAR ===== */
+.course-sidebar {
+	background: #ffffff;
+	border-right: 1px solid #ddd;
+	padding: 20px;
+	overflow-y: auto;
+}
 
-        /* ===== SIDEBAR ===== */
-        .course-sidebar {
-            background: #ffffff;
-            border-right: 1px solid #ddd;
-            padding: 20px;
-            overflow-y: auto;
-        }
+.module {
+	margin-bottom: 20px;
+}
 
-        .module {
-            margin-bottom: 20px;
-        }
+.module h3 {
+	font-size: 15px;
+	font-weight: 600;
+	margin-bottom: 10px;
+}
 
-        .module h3 {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
+.lesson {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 14px;
+}
 
-        .lesson {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        }
+.lesson:hover {
+	background: #f4f6f9;
+}
 
-        .lesson:hover {
-            background: #f4f6f9;
-        }
+.lesson.locked {
+	color: #999;
+}
 
-        .lesson.locked {
-            color: #999;
-        }
+.lesson i {
+	font-size: 16px;
+}
 
-        .lesson i {
-            font-size: 16px;
-        }
+/* ===== MAIN CONTENT ===== */
+.course-content {
+	padding: 30px;
+}
 
-        /* ===== MAIN CONTENT ===== */
-        .course-content {
-            padding: 30px;
-        }
+.content-title {
+	font-size: 22px;
+	margin-bottom: 15px;
+}
 
-        .content-title {
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
+/* VIDEO */
+.video-box {
+	background: #000;
+	height: 360px;
+	border-radius: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	font-size: 18px;
+	margin-bottom: 25px;
+}
 
-        /* VIDEO */
-        .video-box {
-            background: #000;
-            height: 360px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 18px;
-            margin-bottom: 25px;
-        }
+/* NOTES */
+.notes-box {
+	background: #fff;
+	padding: 20px;
+	border-radius: 10px;
+	line-height: 1.7;
+}
 
-        /* NOTES */
-        .notes-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            line-height: 1.7;
-        }
+/* QUIZ */
+.quiz-box {
+	background: #fff;
+	padding: 20px;
+	border-radius: 10px;
+}
 
-        /* QUIZ */
-        .quiz-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-        }
+.quiz-question {
+	margin-bottom: 15px;
+}
 
-        .quiz-question {
-            margin-bottom: 15px;
-        }
+.quiz-question strong {
+	display: block;
+	margin-bottom: 8px;
+}
 
-        .quiz-question strong {
-            display: block;
-            margin-bottom: 8px;
-        }
+.quiz-question label {
+	display: block;
+	margin-bottom: 6px;
+}
+/* ===== COURSE TOPBAR ===== */
+.course-topbar {
+	width: 100%;
+	height: 56px;
+	background: linear-gradient(135deg, #1f1f2e, #2a2a4a);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 24px;
+	color: #fff;
+}
 
-        .quiz-question label {
-            display: block;
-            margin-bottom: 6px;
-        }
-    </style>
+/* LEFT */
+.topbar-left {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.home-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	color: #ffffff;
+	text-decoration: none;
+	font-size: 14px;
+	opacity: 0.9;
+}
+
+.home-link:hover {
+	opacity: 1;
+}
+
+.divider {
+	width: 1px;
+	height: 20px;
+	background: rgba(255, 255, 255, 0.3);
+}
+
+.course-name {
+	font-size: 14px;
+	font-weight: 500;
+	opacity: 0.9;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	max-width: 300px;
+}
+
+/* RIGHT */
+.topbar-right {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.icon-btn {
+	position: relative;
+	color: #fff;
+	font-size: 18px;
+	text-decoration: none;
+	opacity: 0.9;
+}
+
+.icon-btn:hover {
+	opacity: 1;
+}
+
+.icon-btn .dot {
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	width: 7px;
+	height: 7px;
+	background: #ff4d4f;
+	border-radius: 50%;
+}
+
+.profile-link {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	color: #fff;
+	text-decoration: none;
+	font-size: 14px;
+}
+
+.profile-link img {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.lesson.active {
+	background: #eef2ff;
+	font-weight: 600;
+	border-left: 4px solid #4f46e5;
+}
+
+.lesson.completed {
+	opacity: 0.85;
+}
+
+.lesson.completed i {
+	color: #22c55e;
+}
+
+.lesson.active {
+	background: #eef2ff;
+	font-weight: 600;
+}
+/* ===== LESSON ACTION BAR ===== */
+.lesson-actions {
+	margin-top: 24px;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.complete-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 20px;
+	background: linear-gradient(135deg, #4f46e5, #6366f1);
+	color: #fff;
+	border: none;
+	border-radius: 10px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
+	transition: all 0.25s ease;
+}
+
+.complete-btn i {
+	font-size: 18px;
+}
+
+.complete-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 12px 26px rgba(79, 70, 229, 0.35);
+}
+
+.complete-btn:active {
+	transform: translateY(0);
+}
+/* ===== COURSE PROGRESS ===== */
+.progress-wrapper {
+	padding: 12px 24px 0;
+}
+
+.progress-track {
+	height: 10px;
+	background: rgba(255, 255, 255, 0.15);
+	border-radius: 999px;
+	overflow: hidden;
+	backdrop-filter: blur(6px);
+}
+
+.progress-fill {
+	height: 100%;
+	background: linear-gradient(90deg, #4f46e5, #6366f1, #818cf8);
+	border-radius: 999px;
+	transition: width 0.6s ease;
+}
+
+/* ===== COURSE PROGRESS TEXT ===== */
+.progress-label {
+	margin-top: 6px;
+	font-size: 11.5px;
+	font-weight: 500;
+	letter-spacing: 0.3px;
+	color: rgba(255, 255, 255, 0.75);
+	text-align: right;
+}
+</style>
 
 
 </head>
 
 <body>
 
-    <!-- ===== SIDEBAR ===== -->
+	<!-- ===== SIDEBAR ===== -->
 
 
-    <!-- ===== TOPBAR ===== -->
-    <div class="student-topbar">
-       <a th:href="@{/student-course}"
-   style="
-     display:inline-flex;
-     align-items:center;
-     gap:6px;
-     color:#fff;
-     text-decoration:none;
-     font-size:14px;
-     margin-bottom:10px;
-     opacity:0.9;">
-    <i class="bi bi-arrow-left"></i> Home
-</a>
-        <div class="topbar-right">
-            <div class="notif">
-                <a th:href="@{/student-notification}">
-                    <i class="bi bi-bell"></i>
-                    <span class="dot"></span> </a>
-            </div>
+	<!-- ===== TOPBAR ===== -->
+	<header class="course-topbar">
+		<div class="topbar-left">
+			<a th:href="@{/student-course}" class="home-link"> <i
+				class="bi bi-arrow-left"></i> <span>Home</span>
+			</a> <span class="divider"></span> <span class="course-name"
+				th:text="${course.title}">Course Title</span>
+		</div>
 
-            <div class="profile">
-                <a th:href="@{/student-profile}" class="profile-link">
-                    <img src="/images/default.jpg" alt="Profile">
-                    <span class="student-name">Dishank</span>
-                </a>
-            </div>
+		<div class="topbar-right">
+			<a th:href="@{/student-notification}" class="icon-btn"> <i
+				class="bi bi-bell"></i> <span class="dot"></span>
+			</a> <a th:href="@{/student-profile}" class="profile-link"> <img
+				src="/images/default.jpg" alt="Profile"> <span>Dishank</span>
+			</a>
+		</div>
+	</header>
 
-        </div>
+	<div class="progress-wrapper">
+		<div class="progress-track">
+			<div class="progress-fill"
+				th:style="'width:' + ${progressPercent} + '%'"></div>
+		</div>
 
-    </div>
+		<div class="progress-label">
+			<span th:text="${progressPercent}"></span>% completed
+		</div>
+	</div>
+	<div class="main">
+		<div class="course-header">
+			<h1 th:text="${course.title}"></h1>
+			<div class="course-meta">
+				<span> <i class="bi bi-person"></i> <span
+					th:text="${course.teacher.firstname + ' ' + course.teacher.lastname}"></span>
+				</span> <span> <i class="bi bi-star-fill"></i> 4.8 Rating
+				</span> <span> <i class="bi bi-currency-rupee"></i> <span
+					th:text="${course.type.name()}"></span>
+				</span>
+			</div>
+		</div>
 
-    <div class="main">
-        <div class="course-header">
-            <h1 th:text="${course.title}"></h1>
-            <div class="course-meta">
-    <span>
-        <i class="bi bi-person"></i>
-        <span th:text="${course.teacher.firstname + ' ' + course.teacher.lastname}"></span>
-    </span>
+		<!-- ===== BODY ===== -->
+		<div class="course-container">
 
-    <span>
-        <i class="bi bi-star-fill"></i> 4.8 Rating
-    </span>
+			<!-- SIDEBAR -->
+			<aside class="course-sidebar">
 
-    <span>
-        <i class="bi bi-currency-rupee"></i>
-        <span th:text="${course.type.name()}"></span>
-    </span>
+				<div class="module" th:each="module : ${course.modules}">
+					<h3 th:text="${module.title}"></h3>
+					<div th:each="lesson : ${module.lessons}" class="lesson"
+						th:classappend="
+        ${lesson.lessonId == currentLesson.lessonId} ? 'active' :
+        (${completedLessonIds.contains(lesson.lessonId)} ? 'completed' : '')">
+
+						<a
+							th:href="@{/student-course-player/{cId}(cId=${course.courseId}, lessonId=${lesson.lessonId})}"
+							style="text-decoration: none; color: inherit; display: flex; gap: 10px; align-items: center; width: 100%;">
+							<i class="bi bi-check-circle-fill text-success"
+							th:if="${completedLessonIds.contains(lesson.lessonId)}"></i> <i
+							class="bi bi-play-circle"
+							th:if="${!completedLessonIds.contains(lesson.lessonId) 
+            and lesson.type.name() == 'VIDEO'}"></i>
+
+							<i class="bi bi-file-earmark-text"
+							th:if="${!completedLessonIds.contains(lesson.lessonId) 
+            and lesson.type.name() == 'NOTES'}"></i>
+
+							<i class="bi bi-patch-question"
+							th:if="${!completedLessonIds.contains(lesson.lessonId) 
+            and lesson.type.name() == 'QUIZ'}"></i>
+
+							<span th:text="${lesson.title}"></span>
+
+						</a>
+					</div>
+				</div>
+
+			</aside>
+			<!-- MAIN CONTENT -->
+			<main class="course-content">
+
+				<div class="content-title" th:text="${currentLesson.title}"></div>
+				<!-- VIDEO -->
+				<div class="video-box"
+					th:if="${currentLesson.type.name() == 'VIDEO'}">
+					<video controls width="100%" height="100%">
+						<source th:src="${currentLesson.contentUrl}" type="video/mp4">
+					</video>
+
+
+
+<div class="lesson-actions">
+					<button id="completeBtn" class="complete-btn">
+						<i class="bi bi-check-circle"></i> Mark lesson as completed
+					</button>
+				</div>
+				
+				</div>
+
+				<!-- NOTES -->
+
+				<div class="notes-box"
+					th:if="${currentLesson.type.name() == 'NOTES'}">
+
+					<!-- PDF -->
+					<iframe
+						th:if="${#strings.endsWith(currentLesson.contentUrl,'.pdf')}"
+						th:src="${currentLesson.contentUrl}" width="100%" height="600px"
+						style="border: none;"> </iframe>
+
+					<!-- HTML / TEXT -->
+					<div th:if="${!#strings.endsWith(currentLesson.contentUrl,'.pdf')}"
+						th:utext="${currentLesson.contentUrl}"></div>
+
+					<!-- DOWNLOAD -->
+					<a th:href="${currentLesson.contentUrl}" target="_blank"
+						style="display: inline-block; margin-top: 16px; font-weight: 600; color: #4f46e5;">
+						Download Notes </a>
+
+					<div class="lesson-actions">
+					<button id="completeBtn" class="complete-btn">
+						<i class="bi bi-check-circle"></i> Mark lesson as completed
+					</button>
+				</div>
+					</div>
+				
+				<div class="quiz-box"
+     th:if="${currentLesson.type.name() == 'QUIZ'}">
+
+    <h3>Quiz</h3>
+
+    <form th:action="@{/student/quiz/submit}" method="post">
+
+        <input type="hidden"
+               name="lessonId"
+               th:value="${currentLesson.lessonId}" />
+
+   <div th:each="q, i : ${questions}" class="quiz-question">
+
+    <strong th:text="|${i.count}. ${q.questionText}|"></strong>
+
+    <label>
+        <input type="radio"
+               th:name="|q_${q.questionId}|"
+               value="A">
+        <span th:text="${q.optionA}"></span>
+    </label>
+
+    <label>
+        <input type="radio"
+               th:name="|q_${q.questionId}|"
+               value="B">
+        <span th:text="${q.optionB}"></span>
+    </label>
+
+    <label>
+        <input type="radio"
+               th:name="|q_${q.questionId}|"
+               value="C">
+        <span th:text="${q.optionC}"></span>
+    </label>
+
+    <label>
+        <input type="radio"
+               th:name="|q_${q.questionId}|"
+               value="D">
+        <span th:text="${q.optionD}"></span>
+    </label>
+
 </div>
-            </div>
 
-        <!-- ===== BODY ===== -->
-        <div class="course-container">
+        <button type="submit"
+                class="enroll-btn"
+                style="margin-top:20px;">
+            Submit Quiz
+        </button>
 
-            <!-- SIDEBAR -->
-           <aside class="course-sidebar">
+    </form>
+</div>
+			</main>
 
-    <div class="module" th:each="module : ${course.modules}">
-        <h3 th:text="${module.title}"></h3>
-
-        <div th:each="lesson : ${module.lessons}"
-             class="lesson"
-             th:classappend="${lesson.lessonId == currentLesson.lessonId} ? 'active' : ''">
-
-            <i class="bi"
-   th:classappend="${lesson.type.name() == 'VIDEO' ? 
-                    'bi-play-circle' : 
-                    (lesson.type.name() == 'NOTES' ? 
-                     'bi-file-earmark-text' : 
-                     'bi-patch-question')}">
-</i>
-
-            <span th:text="${lesson.title}"></span>
-        </div>
-    </div>
-
-</aside>            <!-- MAIN CONTENT -->
-            <main class="course-content">
-
-                <div class="content-title">
-                    Welcome Video
-                </div>
-
-                <!-- VIDEO -->
-                <div class="video-box">
-                    ▶ Video Player (Dummy)
-                </div>
-
-                <!-- NOTES -->
-                <div class="notes-box">
-                    <h3>Lesson Notes</h3>
-                    <p>
-                        Spring Boot makes it easy to create stand-alone,
-                        production-grade Spring based Applications that you can
-                        "just run".
-                    </p>
-                    <p>
-                        In this course, you will learn Spring Boot fundamentals,
-                        REST APIs, database integration, and more.
-                    </p>
-                </div>
-
-                <!-- QUIZ (Hidden now, backend later decides) -->
-                <!--
-        <div class="quiz-box">
-            <div class="quiz-question">
-                <strong>1. What is Spring Boot?</strong>
-                <label><input type="radio"> A framework</label>
-                <label><input type="radio"> A database</label>
-            </div>
-        </div>
-        -->
-
-            </main>
-
-        </div>
-    </div>
+		</div>
+	</div>
 
 
-    <!-- ===== SCRIPT ===== -->
-    <script>
+	<!-- ===== SCRIPT ===== -->
+	<script>
         const sidebar = document.getElementById("sidebar");
         const toggle = document.getElementById("toggle");
         const icon = toggle.querySelector("i");
@@ -309,7 +552,13 @@
             }
         });
     </script>
-
+	<script>
+document.getElementById("completeBtn")?.addEventListener("click", () => {
+    fetch("/student/lesson/complete?lessonId=[[${currentLesson.lessonId}]]",
+        { method: "POST" }
+    ).then(() => location.reload());
+});
+</script>
 </body>
 
 </html>

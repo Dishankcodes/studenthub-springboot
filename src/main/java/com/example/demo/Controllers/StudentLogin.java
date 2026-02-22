@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.entity.Student;
 import com.example.demo.repository.StudentRepository;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -57,16 +58,24 @@ public class StudentLogin {
 
 	// ================== LOGIN ==================
 	@PostMapping("/student-dashboard")
-	public String loginStudent(@RequestParam String email, @RequestParam String password, Model model) {
+	public String loginStudent(
+	        @RequestParam String email,
+	        @RequestParam String password,
+	        Model model,
+	        HttpSession session
+	) {
+	    Optional<Student> opt = repo.findByEmail(email);
 
-		Optional<Student> opt = repo.findByEmail(email);
+	    if (opt.isEmpty() || !password.equals(opt.get().getPassword())) {
+	        model.addAttribute("loginError", "Invalid email or password");
+	        model.addAttribute("student", new Student());
+	        return "student-login";
+	    }
 
-		if (opt.isEmpty() || !password.equals(opt.get().getPassword())) {
-			model.addAttribute("loginError", "Invalid email or password");
-			model.addAttribute("student", new Student());
-			return "student-login";
-		}
+	    // ✅ SAME STYLE AS ADMIN
+	    session.setAttribute("studentId", opt.get().getStudid()); // or getStudentId()
+	    session.setAttribute("studentEmail", opt.get().getEmail());
 
-		return "redirect:/student-dashboard";
+	    return "redirect:/student-dashboard";
 	}
 }

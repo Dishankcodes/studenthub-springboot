@@ -1,6 +1,7 @@
 package com.example.demo.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -103,23 +104,27 @@ public class LessonController {
        DELETE LESSON
        =============================== */
     @PostMapping("/teacher/lesson/delete")
-    public String deleteLesson(@RequestParam Integer lessonId,
-    		RedirectAttributes ra) {
+    public String deleteLesson(
+            @RequestParam Integer lessonId,
+            RedirectAttributes ra) {
 
         Lesson lesson = lessonRepo.findById(lessonId).orElseThrow();
 
         Integer courseId = lesson.getModule().getCourse().getCourseId();
-        Integer moduleId = lesson.getModule().getModuleId(); // 👈 capture BEFORE delete
+        Integer moduleId = lesson.getModule().getModuleId(); // capture BEFORE delete
 
-        lessonRepo.delete(lesson);
+        try {
+            lessonRepo.delete(lesson);
+            ra.addFlashAttribute("success", "✅ Lesson deleted successfully");
+        } catch (DataIntegrityViolationException e) {
+            ra.addFlashAttribute(
+                "error",
+                "❌ Cannot delete lesson. Students have already started this lesson."
+            );
+        }
 
-        
-        ra.addFlashAttribute("success", "Lesson deleted");
-        
-        
         return "redirect:/teacher-creates-course?courseId="
                 + courseId
                 + "&openModule=" + moduleId
                 + "#module-" + moduleId;
-    }
-}
+    }}

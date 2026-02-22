@@ -195,11 +195,16 @@
             <td th:text="${teacher.email}"></td>
 
             <td>
-                <a th:href="@{/}"
-                   class="btn btn-danger btn-sm"
-                   onclick="return confirm('Are you sure?')">
-                    Delete
-                </a>
+              <td>
+    <form th:action="@{/admin-teacher/delete/{id}(id=${teacher.teacherId})}"
+          method="post"
+          onsubmit="return confirm('Are you sure you want to delete this instructor?');">
+
+        <button type="submit" class="btn btn-danger btn-sm">
+            Delete
+        </button>
+    </form>
+</td>
             </td>
         </tr>
         </tbody>

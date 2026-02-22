@@ -253,6 +253,14 @@
 				<button type="submit" name="action" value="draft" class="btn btn-primary"
 					th:if="${course.courseId == null}">
 					Save & Continue</button>
+					
+					<button type="submit"
+        name="action"
+        value="draft"
+        class="btn btn-outline"
+        th:if="${course.courseId != null}">
+     Save Changes
+</button>
 			</form>
 			<div th:if="${param.msg != null}">
 
@@ -416,6 +424,13 @@
 									</span>
 
 								</div>
+								<div th:if="${success}" class="alert alert-success">
+    [[${success}]]
+</div>
+
+<div th:if="${error}" class="alert alert-danger">
+    [[${error}]]
+</div>
 
 								<!-- UPDATE LESSON -->
 								<form th:action="@{/teacher/lesson/update}" method="post" enctype="multipart/form-data"

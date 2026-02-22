@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -17,10 +18,15 @@ public class Enrollment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer enrollmentId;
 
-	  private Integer studentId;
+	@ManyToOne
+	@JoinColumn(name = "student_id")
+	private Student student;
 
-	    @ManyToOne
-	    private Course course;
+	
+
+    @ManyToOne
+    @JoinColumn(name = "course_course_id", nullable = false)
+    private Course course;
 
 	    private LocalDateTime enrolledAt = LocalDateTime.now();
 
@@ -32,12 +38,14 @@ public class Enrollment {
 			this.enrollmentId = enrollmentId;
 		}
 
-		public Integer getStudentId() {
-			return studentId;
+	
+
+		public Student getStudent() {
+			return student;
 		}
 
-		public void setStudentId(Integer studentId) {
-			this.studentId = studentId;
+		public void setStudent(Student student) {
+			this.student = student;
 		}
 
 		public Course getCourse() {

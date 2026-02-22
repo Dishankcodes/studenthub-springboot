@@ -2,7 +2,10 @@ package com.example.demo.repository;
 
 import java.util.List;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.demo.entity.Quiz;
 import com.example.demo.entity.QuizQuestion;
 
 public interface QuizQuestionRepository extends JpaRepository<QuizQuestion, Integer>{
@@ -10,4 +13,6 @@ public interface QuizQuestionRepository extends JpaRepository<QuizQuestion, Inte
 	List<QuizQuestion> findByQuizQuizIdOrderByPosition(Integer quizId);
 	
 	long countByQuizQuizId(Integer quizId);
+
+	 List<QuizQuestion> findByQuiz(Quiz quiz);
 }

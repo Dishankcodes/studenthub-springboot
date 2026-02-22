@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.enums.LessonType;
@@ -15,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
@@ -49,7 +52,12 @@ public class Lesson {
 	@OneToOne(mappedBy = "lesson" ,cascade = CascadeType.ALL)
 	private Quiz quiz; 
 	
-	
+	@OneToMany(
+		    mappedBy = "lesson",
+		    cascade = CascadeType.ALL,
+		    orphanRemoval = true
+		)
+		private List<LessonProgress> lessonProgressList;
 	@Transient
 	private MultipartFile contentFile;
 	
@@ -123,6 +131,14 @@ public class Lesson {
 
 	public void setContentFile(MultipartFile contentFile) {
 		this.contentFile = contentFile;
+	}
+
+	public List<LessonProgress> getLessonProgressList() {
+		return lessonProgressList;
+	}
+
+	public void setLessonProgressList(List<LessonProgress> lessonProgressList) {
+		this.lessonProgressList = lessonProgressList;
 	}
 	
 	

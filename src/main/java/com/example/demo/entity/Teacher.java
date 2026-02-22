@@ -39,7 +39,7 @@ public class Teacher {
 	@OneToOne(mappedBy = "teacher", cascade = CascadeType.ALL)
 	private TeacherProfile profile;
 
-	@OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL,orphanRemoval = true)
 	private List<Course> teacherCourse = new ArrayList<>();
 
 	public List<Course> getTeacherCourse() {

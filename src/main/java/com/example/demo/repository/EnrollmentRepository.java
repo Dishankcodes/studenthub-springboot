@@ -7,8 +7,5 @@ import com.example.demo.entity.Enrollment;
 public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer> {
 
 	
-	 boolean existsByStudentIdAndCourseCourseId(
-	            Integer studentId,
-	            Integer courseId
-	    );
+	boolean existsByStudentStudidAndCourseCourseId(Integer studid, Integer courseId);
 }

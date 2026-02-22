@@ -83,7 +83,7 @@ public class TeacherCourseController {
 	@PostMapping("/teacher-creates-course")
 	public String saveCourse(
 	        @ModelAttribute Course formCourse,
-	        @RequestParam("thumbnailFile") MultipartFile thumbnail,
+	        @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnail,
 	        @RequestParam String action,
 	        @RequestParam(required = false) List<String> highlightTexts,
 	        Model model
@@ -181,16 +181,8 @@ public class TeacherCourseController {
 	}
 
 	@GetMapping("/teacher-course/edit/{id}")
-	public String editCourse(@PathVariable("id") Integer courseId, Model model) {
-
-		Course course = courseRepo.findById(courseId).orElse(null);
-
-		if (course == null) {
-			return "redirect:/teacher-course";
-		}
-
-		model.addAttribute("course", course);
-		return "teacher-creates-course";
+	public String editCourse(@PathVariable Integer id) {
+	    return "redirect:/teacher-creates-course?courseId=" + id;
 	}
 
 	@PostMapping("/teacher-course/delete/{id}")

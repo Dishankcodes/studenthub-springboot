@@ -1,6 +1,16 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
 @Entity
@@ -21,13 +31,44 @@ public class Student {
 
 	private String password;
 
-	public Integer getStud_id() {
+	
+	 // 🔥 Enrollments
+    @OneToMany(mappedBy = "student",
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
+    private List<Enrollment> enrollments = new ArrayList<>();
+
+    // 🔥 Lesson Progress
+    @OneToMany(mappedBy = "student",
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
+    private List<LessonProgress> lessonProgressList = new ArrayList<>();
+
+	public Integer getStudid() {
 		return studid;
 	}
 
-	public void setStud_id(Integer studid) {
+	public void setStudid(Integer studid) {
 		this.studid = studid;
 	}
+
+	public List<Enrollment> getEnrollments() {
+		return enrollments;
+	}
+
+	public void setEnrollments(List<Enrollment> enrollments) {
+		this.enrollments = enrollments;
+	}
+
+	public List<LessonProgress> getLessonProgressList() {
+		return lessonProgressList;
+	}
+
+	public void setLessonProgressList(List<LessonProgress> lessonProgressList) {
+		this.lessonProgressList = lessonProgressList;
+	}
+
+
 
 	public String getFullname() {
 		return fullname;

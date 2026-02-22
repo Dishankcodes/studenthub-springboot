@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.entity.Admin;
-import com.example.demo.entity.Course;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
 import com.example.demo.repository.AdminRepository;
@@ -58,6 +60,23 @@ public class AdminController {
 
 		return "manage-students";
 	}
+	
+	@PostMapping("/admin-student/delete/{studId}")
+	public String deleteStudent(
+	        @PathVariable Integer studId,
+	        RedirectAttributes ra,
+	        HttpSession session) {
+
+	    if (session.getAttribute("adminEmail") == null) {
+	        return "redirect:/admin-login";
+	    }
+
+	    repo.deleteById(studId); // 🔥 cascades automatically
+
+	    ra.addFlashAttribute("success", "✅ Student deleted permanently");
+
+	    return "redirect:/manage-students";
+	}
 
 	@GetMapping("/manage-teachers")
 	public String admin_instructor(HttpSession session, Model model) {
@@ -76,7 +95,22 @@ public class AdminController {
 	}
 
 	
+	@PostMapping("/admin-teacher/delete/{teacherId}")
+	public String deleteTeacher(
+	        @PathVariable Integer teacherId,
+	        RedirectAttributes ra,
+	        HttpSession session
+	) {
+	    if (session.getAttribute("adminEmail") == null) {
+	        return "redirect:/admin-login";
+	    }
 
+	    teacherRepo.deleteById(teacherId);
+
+	    ra.addFlashAttribute("success", "✅ Instructor deleted successfully");
+
+	    return "redirect:/manage-teachers";
+	}
 	@GetMapping("/manage-internships")
 	public String admin_internships() {
 
