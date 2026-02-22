@@ -154,6 +154,22 @@
 			font-size: 40px;
 			height: 100%;
 		}
+		a.btn {
+    text-decoration: none;   /* remove underline */
+    color: #fff;             /* same as button text */
+    background: #1f1f2e;
+    padding: 8px 14px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+a.btn:hover {
+    background: #151528;
+}
 	</style>
 </head>
 
@@ -246,9 +262,10 @@
 						</div>
 						<div class="course-footer">
 							<span class="rating">⭐ 4.8</span>
-							<button class="btn"
-								th:onclick="|window.location.href='@{/student-course-details}'|">View</button>
-						</div>
+<a class="btn"
+   th:href="@{/student-course-details(courseId=${course.courseId})}">
+   View
+</a>				</div>
 					</div>
 				</div>
 

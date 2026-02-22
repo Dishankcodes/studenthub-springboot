@@ -30,17 +30,75 @@
 			margin-left: 260px;
 			padding: 20px 30px;
 			transition: margin-left 0.3s ease;
-			
-    height: 100vh;
-    overflow-y: auto;
-}
+
+			height: 100vh;
+			overflow-y: auto;
+		}
+
 		/* When sidebar is collapsed */
 		body.sidebar-collapsed .main-content {
 			margin-left: 10px;
 		}
-.lesson {
-    scroll-margin-top: 90px; /* adjust for header/sidebar */
-}
+
+		.lesson {
+			scroll-margin-top: 90px;
+			/* adjust for header/sidebar */
+		}
+
+		/* ================= COURSE HIGHLIGHTS ================= */
+
+		.card .card {
+			margin-top: 18px;
+			padding: 18px;
+			border-radius: 12px;
+			background: #ffffff;
+			border: 1px solid #e6e8f0;
+		}
+
+		/* Container */
+		#highlightContainer {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			margin: 12px 0 16px;
+		}
+
+		/* Highlight input */
+		.highlight-input {
+			width: 100%;
+			padding: 12px 14px;
+			font-size: 14px;
+			border-radius: 10px;
+			border: 1px solid #dcdfea;
+			background: #f9faff;
+			transition: all 0.25s ease;
+		}
+
+		.highlight-input::placeholder {
+			color: #9aa0b4;
+		}
+
+		/* Focus state – same as other inputs */
+		.highlight-input:focus {
+			outline: none;
+			border-color: #6c63ff;
+			background: #ffffff;
+			box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.12);
+		}
+
+		/* Add Highlight button alignment */
+		.card button.btn-outline {
+			margin-top: 6px;
+			width: fit-content;
+		}
+
+		/* Helper text */
+		.card small {
+			display: block;
+			margin-top: 8px;
+			color: #6b7280;
+			font-size: 12px;
+		}
 	</style>
 </head>
 
@@ -144,6 +202,29 @@
 						<label>Short Description</label>
 						<textarea rows="3" placeholder="Learn Spring Boot with real projects"
 							th:field="*{description}"></textarea>
+
+						<!-- COURSE HIGHLIGHTS -->
+						<div class="card">
+							<h3>Course Highlights</h3>
+
+							<div id="highlightContainer">
+								<div th:each="h : ${course.highlights}">
+									<input type="text" name="highlightTexts" th:value="${h.text}"
+										placeholder="e.g. Build REST APIs with Spring Boot" class="highlight-input">
+								</div>
+
+								<div th:if="${course.highlights == null || course.highlights.empty}">
+									<input type="text" name="highlightTexts" placeholder="e.g. Learn Spring Security"
+										class="highlight-input">
+								</div>
+							</div>
+
+							<button type="button" class="btn btn-outline" onclick="addHighlight()">
+								+ Add Highlight
+							</button>
+
+							<small>Maximum 8 highlights</small>
+						</div>
 					</div>
 
 					<div class="form-group">
@@ -330,16 +411,16 @@
 										th:text="${lesson.type}">VIDEO</span>
 								</div>
 								<div th:if="${param.msg != null and openLesson == lesson.lessonId}"
-     class="inline-alert success">
+									class="inline-alert success">
 
-    <span th:switch="${param.msg[0]}">
-        <span th:case="'video_uploaded'">🎥 Video uploaded</span>
-        <span th:case="'video_updated'">♻️ Video updated</span>
-        <span th:case="'notes_uploaded'">📄 Notes uploaded</span>
-        <span th:case="'notes_updated'">♻️ Notes updated</span>
-    </span>
+									<span th:switch="${param.msg[0]}">
+										<span th:case="'video_uploaded'">🎥 Video uploaded</span>
+										<span th:case="'video_updated'">♻️ Video updated</span>
+										<span th:case="'notes_uploaded'">📄 Notes uploaded</span>
+										<span th:case="'notes_updated'">♻️ Notes updated</span>
+									</span>
 
-</div>
+								</div>
 
 								<!-- UPDATE LESSON -->
 								<form th:action="@{/teacher/lesson/update}" method="post" enctype="multipart/form-data"
@@ -374,7 +455,7 @@
 										</button>
 									</div>
 								</form>
-								
+
 								<!-- VIDEO -->
 								<div th:if="${lesson.type.name()=='VIDEO'}" class="lesson-content">
 
@@ -409,41 +490,25 @@
 
 
 								</div>
-								<div th:if="${lesson.type.name()=='NOTES'}"
-     class="lesson-content">
+								<div th:if="${lesson.type.name()=='NOTES'}" class="lesson-content">
 
-    <form th:action="@{/teacher/lesson/notes}"
-          method="post"
-          enctype="multipart/form-data"
-          class="lesson-inline">
+									<form th:action="@{/teacher/lesson/notes}" method="post"
+										enctype="multipart/form-data" class="lesson-inline">
 
-        <input type="hidden"
-               name="lessonId"
-               th:value="${lesson.lessonId}">
+										<input type="hidden" name="lessonId" th:value="${lesson.lessonId}">
 
-        <input type="file"
-               name="notesFile"
-               accept="application/pdf"
-               required>
+										<input type="file" name="notesFile" accept="application/pdf" required>
 
-        <label class="free-preview">
-            <input type="checkbox"
-                   name="freePreview"
-                   th:checked="${lesson.freePreview}">
-            Free Preview
-        </label>
+										<button class="btn btn-outline">
+											Upload Notes
+										</button>
 
-        <button class="btn btn-outline">
-            Upload Notes
-        </button>
+										<p class="text-muted" th:if="${lesson.contentUrl != null}">
+											Notes uploaded ✔
+										</p>
 
-        <p class="text-muted"
-           th:if="${lesson.contentUrl != null}">
-            Notes uploaded ✔
-        </p>
-
-    </form>
-</div>
+									</form>
+								</div>
 								<!-- QUIZ LESSON -->
 								<!-- ================= QUIZ LESSON ================= -->
 								<div th:if="${lesson.type.name() == 'QUIZ'}" class="lesson-content"
@@ -549,82 +614,96 @@
 
 	</main>
 	<script>
-	history.scrollRestoration = "manual";
+		history.scrollRestoration = "manual";
 
-	window.addEventListener("load", () => {
-	    const params = new URLSearchParams(window.location.search);
-	    const targetId = params.get("scroll");
-	    if (!targetId) return;
+		window.addEventListener("load", () => {
+			const params = new URLSearchParams(window.location.search);
+			const targetId = params.get("scroll");
+			if (!targetId) return;
 
-	    const container = document.querySelector(".main-content");
-	    const target = document.getElementById(targetId);
+			const container = document.querySelector(".main-content");
+			const target = document.getElementById(targetId);
 
-	    if (!container || !target) return;
+			if (!container || !target) return;
 
-	    const offset =
-	        target.offsetTop - 20;
+			const offset =
+				target.offsetTop - 20;
 
-	    container.scrollTop = offset;
-	});
-	
-	
+			container.scrollTop = offset;
+		});
 
 
-/* =============================
-   AUTO-HIDE ALERTS
-   ============================= */
-   setTimeout(() => {
-	    document.querySelectorAll(".alert, .inline-alert").forEach(el => {
-	        el.style.opacity = "0";
-	    });
-	}, 4500);
 
-/* =============================
-   COURSE TYPE → PRICE TOGGLE
-   ============================= */
-function togglePrice() {
-    const courseType = document.getElementById("courseType");
-    const priceGroup = document.getElementById("priceGroup");
-    const priceInput = document.getElementById("priceInput");
 
-    if (!courseType || !priceGroup) return;
+		/* =============================
+		   AUTO-HIDE ALERTS
+		   ============================= */
+		setTimeout(() => {
+			document.querySelectorAll(".alert, .inline-alert").forEach(el => {
+				el.style.opacity = "0";
+			});
+		}, 4500);
 
-    if (courseType.value === "paid") {
-        priceGroup.classList.remove("hidden");
-    } else {
-        priceGroup.classList.add("hidden");
-        if (priceInput) priceInput.value = "";
-    }
-}
+		/* =============================
+		   COURSE TYPE → PRICE TOGGLE
+		   ============================= */
+		function togglePrice() {
+			const courseType = document.getElementById("courseType");
+			const priceGroup = document.getElementById("priceGroup");
+			const priceInput = document.getElementById("priceInput");
 
-document.addEventListener("DOMContentLoaded", togglePrice);
-document.getElementById("courseType")?.addEventListener("change", togglePrice);
+			if (!courseType || !priceGroup) return;
 
-/* =============================
-   THUMBNAIL CLICK + PREVIEW
-   ============================= */
-const thumbnailInput = document.getElementById("thumbnailInput");
-const thumbnailPreview = document.getElementById("thumbnailPreview");
+			if (courseType.value === "paid") {
+				priceGroup.classList.remove("hidden");
+			} else {
+				priceGroup.classList.add("hidden");
+				if (priceInput) priceInput.value = "";
+			}
+		}
 
-if (thumbnailInput && thumbnailPreview) {
-    thumbnailPreview.addEventListener("click", () => {
-        thumbnailInput.click();
-    });
+		document.addEventListener("DOMContentLoaded", togglePrice);
+		document.getElementById("courseType")?.addEventListener("change", togglePrice);
 
-    thumbnailInput.addEventListener("change", function () {
-        const file = this.files[0];
-        if (!file) return;
+		/* =============================
+		   THUMBNAIL CLICK + PREVIEW
+		   ============================= */
+		const thumbnailInput = document.getElementById("thumbnailInput");
+		const thumbnailPreview = document.getElementById("thumbnailPreview");
 
-        const reader = new FileReader();
-        reader.onload = e => {
-            thumbnailPreview.style.backgroundImage = `url(${e.target.result})`;
-            thumbnailPreview.classList.add("has-image");
-            thumbnailPreview.innerHTML = "";
-        };
-        reader.readAsDataURL(file);
-    });
-}
-</script>
+		if (thumbnailInput && thumbnailPreview) {
+			thumbnailPreview.addEventListener("click", () => {
+				thumbnailInput.click();
+			});
+
+			thumbnailInput.addEventListener("change", function () {
+				const file = this.files[0];
+				if (!file) return;
+
+				const reader = new FileReader();
+				reader.onload = e => {
+					thumbnailPreview.style.backgroundImage = `url(${e.target.result})`;
+					thumbnailPreview.classList.add("has-image");
+					thumbnailPreview.innerHTML = "";
+				};
+				reader.readAsDataURL(file);
+			});
+		}
+	</script>
 </body>
+<script>
+	function addHighlight() {
+		const container = document.getElementById("highlightContainer");
+		if (container.children.length >= 8) return;
+
+		const input = document.createElement("input");
+		input.type = "text";
+		input.name = "highlightTexts";
+		input.placeholder = "e.g. Deploy projects to production";
+		input.className = "highlight-input";
+
+		container.appendChild(input);
+	}
+</script>
 
 </html>

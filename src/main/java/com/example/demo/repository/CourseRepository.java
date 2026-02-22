@@ -30,6 +30,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 		    LEFT JOIN FETCH l.quiz
 		    WHERE c.id = :id
 		""")
+	
 		List<Course> findAllWithStructure(@Param("id") Integer id);
 	@Query("""
 			SELECT new com.example.demo.dto.AdminCourseSummaryDTO(
@@ -58,4 +59,19 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 			    c.price
 			""")
 	List<AdminCourseSummaryDTO> fetchAdminCourseSummary();
+	
+	
+	@Query("""
+		    SELECT DISTINCT c
+		    FROM Course c
+		    LEFT JOIN FETCH c.modules m
+		    LEFT JOIN FETCH m.lessons l
+		    WHERE c.courseId = :courseId
+		      AND c.status = :status
+		""")
+		Course findPublishedCourseForStudent(
+		    @Param("courseId") Integer courseId,
+		    @Param("status") CourseStatus status
+		);
+	
 }

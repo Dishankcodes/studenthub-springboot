@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -41,6 +43,9 @@ public class Course {
 	@OrderBy("position ASC")
 	private Set<CourseModule> modules = new LinkedHashSet<>();
 
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CourseHighlight> highlights = new ArrayList<>();
+
 	@Column(nullable = false)
 	private String title;
 
@@ -64,8 +69,6 @@ public class Course {
 	@Transient
 	private MultipartFile thumbnailFile;
 
-	
-	
 	public MultipartFile getThumbnailFile() {
 		return thumbnailFile;
 	}
@@ -154,5 +157,12 @@ public class Course {
 		this.modules = modules;
 	}
 
+	public List<CourseHighlight> getHighlights() {
+	    return highlights;
+	}
 	
+	public void setHighlights(List<CourseHighlight> highlights) {
+		this.highlights = highlights;
+	}
+
 }

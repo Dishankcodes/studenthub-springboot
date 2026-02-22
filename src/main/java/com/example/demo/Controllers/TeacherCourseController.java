@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import com.example.demo.entity.Course;
+import com.example.demo.entity.CourseHighlight;
 import com.example.demo.entity.CourseModule;
 import com.example.demo.entity.Teacher;
 import com.example.demo.enums.CourseStatus;
@@ -84,8 +85,10 @@ public class TeacherCourseController {
 	        @ModelAttribute Course formCourse,
 	        @RequestParam("thumbnailFile") MultipartFile thumbnail,
 	        @RequestParam String action,
+	        @RequestParam(required = false) List<String> highlightTexts,
 	        Model model
 	) throws IOException {
+		
 		Integer teacherId = 2;
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
@@ -138,14 +141,27 @@ public class TeacherCourseController {
 		
 		/* ================= THUMBNAIL UPLOAD ================= */
 
-		
-		
+	
 		if (thumbnail != null && !thumbnail.isEmpty()) {
 		    String path = saveThumbnail(thumbnail, savedCourse.getCourseId());
 		    savedCourse.setThumbnailURL(path);
-		    courseRepo.save(savedCourse); // update thumbnail
+		    // update thumbnail
 		}
 
+		/* ================= HIGHLIGHTS (IMPORTANT) ================= */
+	    savedCourse.getHighlights().clear(); // orphanRemoval = true
+
+	    if (highlightTexts != null) {
+	        for (String text : highlightTexts) {
+	            if (text != null && !text.trim().isEmpty()) {
+	                CourseHighlight h = new CourseHighlight();
+	                h.setCourse(savedCourse);
+	                h.setText(text.trim());
+	                savedCourse.getHighlights().add(h);
+	            }
+	        }
+	    }
+	    courseRepo.save(savedCourse);
 		/* ================= REDIRECT FLOW ================= */
 
 		if ("publish".equals(action)) {

@@ -2,215 +2,401 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Dashboard | EduPlatform</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Student Dashboard | EduPlatform</title>
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+	<!-- Bootstrap Icons -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+	<link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+		}
 
-        body {
-          background: #fff;
-    line-height: 1.6;
-        }
+		body {
+			background: #fff;
+			line-height: 1.6;
+		}
 
-        .main {
-            margin-left: 240px;
-            margin-top: 56px;
-            padding: 20px;
-            transition: 0.3s ease;
-        }
+		.main {
+			margin-left: 240px;
+			margin-top: 56px;
+			padding: 20px;
+			transition: 0.3s ease;
+		}
 
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            padding: 30px;
-        }
+		.container {
+			max-width: 1100px;
+			margin: auto;
+			padding: 30px;
+		}
 
-        .course-header {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 30px;
-        }
+		.course-header {
+			display: grid;
+			grid-template-columns: 2fr 1fr;
+			gap: 30px;
+			margin-bottom: 40px;
+		}
 
-        .course-info {
-            background: #fff;
-            padding: 25px;
-            border-radius: 14px;
-        }
+		.course-info {
+			background: #fff;
+			padding: 25px;
+			border-radius: 14px;
+		}
 
-        .course-info h1 {
-            font-size: 26px;
-            margin-bottom: 10px;
-        }
+		.course-info h1 {
+			font-size: 26px;
+			margin-bottom: 10px;
+		}
 
-        .course-info p {
-            color: #555;
-            margin-bottom: 15px;
-        }
+		.course-info p {
+			color: #555;
+			margin-bottom: 15px;
+		}
 
-        .enroll-box {
-            background: #fff;
-            padding: 25px;
-            border-radius: 14px;
-            text-align: center;
-        }
+		.course-highlights {
+			background: #fff;
+			padding: 22px;
+			border-radius: 14px;
+		}
 
-        .price {
-            font-size: 22px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
+		.course-highlights h3 {
+			font-size: 18px;
+			margin-bottom: 12px;
+		}
 
-        .btn-enroll {
-            background: #1f1f2e;
-            color: #fff;
-            padding: 12px;
-            border-radius: 10px;
-            border: none;
-            width: 100%;
-            cursor: pointer;
-        }
+		.course-highlights ul {
+			list-style: none;
+			padding: 0;
+		}
 
-        .curriculum {
-            margin-top: 30px;
-            background: #fff;
-            padding: 25px;
-            border-radius: 14px;
-        }
+		.course-highlights li {
+			display: flex;
+			align-items: flex-start;
+			gap: 8px;
+			margin-bottom: 10px;
+			font-size: 14px;
+			color: #444;
+		}
 
-        .module {
-            margin-bottom: 15px;
-        }
+		.course-highlights i {
+			color: #22c55e;
+			font-size: 16px;
+			margin-top: 2px;
+		}
 
-        .lesson {
-            font-size: 14px;
-            color: #777;
-            padding-left: 15px;
-        }
-    </style>
+		.btn-enroll {
+			display: inline-block;
+			background: #1f1f2e;
+			color: #fff;
+			padding: 14px;
+			border-radius: 12px;
+			border: none;
+			width: 100%;
+			cursor: pointer;
+			font-weight: 600;
+			text-decoration: none;
+			/* 🔥 FIX underline */
+			transition: all 0.25s ease;
+		}
+
+		.btn-enroll:hover {
+			background: #2b2b40;
+			transform: translateY(-1px);
+		}
+
+		.enroll-box {
+			background: #fff;
+			padding: 25px;
+			border-radius: 14px;
+			text-align: center;
+		}
+
+		.price {
+			font-size: 24px;
+			font-weight: 600;
+			margin-bottom: 18px;
+		}
+
+		.curriculum {
+			margin-top: 30px;
+			background: #fff;
+			padding: 25px;
+			border-radius: 14px;
+		}
+
+		.module {
+			margin-bottom: 18px;
+		}
+
+		.lesson {
+			font-size: 14px;
+			color: #555;
+			padding-left: 18px;
+			margin-top: 6px;
+		}
+
+		.lesson i {
+			margin-right: 6px;
+		}
+
+		.reviews {
+			margin-top: 35px;
+			background: #fff;
+			padding: 25px;
+			border-radius: 14px;
+		}
+
+		.reviews h3 {
+			margin-bottom: 18px;
+		}
+
+		.review {
+			border-left: 4px solid #facc15;
+			padding-left: 15px;
+			margin-bottom: 18px;
+		}
+
+		.review p {
+			margin: 6px 0;
+			color: #444;
+		}
+
+		.review small {
+			color: #777;
+		}
+
+		.module-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 14px;
+			background: #f4f6f9;
+			border-radius: 10px;
+			cursor: pointer;
+			font-weight: 600;
+		}
+
+		.module-header i {
+			transition: transform 0.3s ease;
+		}
+
+		.module.open .module-header i {
+			transform: rotate(180deg);
+		}
+
+		.module-lessons {
+			display: none;
+			padding: 12px 18px;
+		}
+
+		.module.open .module-lessons {
+			display: block;
+		}
+
+		.preview-tag {
+			background: #e0f2fe;
+			color: #0369a1;
+			font-size: 11px;
+			padding: 2px 8px;
+			border-radius: 10px;
+			margin-left: 8px;
+		}
+		.enroll-box {
+    position: sticky;
+    top: 90px;
+}
+	</style>
 </head>
 
 <body>
 
-    <!-- ===== SIDEBAR ===== -->
-    <div class="sidebar collapsed" id="sidebar">
-        <button class="toggle-btn" id="toggle">
-            <i class="bi bi-chevron-right"></i>
-        </button>
+	<!-- ===== SIDEBAR ===== -->
+	<div class="sidebar collapsed" id="sidebar">
+		<button class="toggle-btn" id="toggle">
+			<i class="bi bi-chevron-right"></i>
+		</button>
 
-        <div class="sidebar-brand">
-            <a th:href="@{/student-dashboard}">
-                <img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
-            </a>
-            <h2 class="platform-name">
-                EduPlatform
-            </h2>
-        </div>
+		<div class="sidebar-brand">
+			<a th:href="@{/student-dashboard}">
+				<img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
+			</a>
+			<h2 class="platform-name">
+				EduPlatform
+			</h2>
+		</div>
 
-        <a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-        <a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
-        <a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
-        <a th:href="@{/student-instructor-feedback}"><i class="bi bi-person-video3"></i><span>Instructor
-                Overview</span></a>
-        <a th:href="@{/student-news}"><i class="bi bi-megaphone"></i><span>Announcements</span></a>
-        <a th:href="@{/student-notes}"><i class="bi bi-graph-up"></i><span>Notes</span></a>
-        <a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
-        <a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
-        <a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-        <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+		<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+		<a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
+		<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
+		<a th:href="@{/student-instructor-feedback}"><i class="bi bi-person-video3"></i><span>Instructor
+				Overview</span></a>
+		<a th:href="@{/student-news}"><i class="bi bi-megaphone"></i><span>Announcements</span></a>
+		<a th:href="@{/student-notes}"><i class="bi bi-graph-up"></i><span>Notes</span></a>
+		<a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
+		<a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
+		<a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+		<a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
-    </div>
+	</div>
 
-    <!-- ===== TOPBAR ===== -->
-    <div class="student-topbar">
-        <span class="page-title"></span>
-        <div class="topbar-right">
-            <div class="notif">
-                <a th:href="@{/student-notification}">
-                    <i class="bi bi-bell"></i>
-                    <span class="dot"></span> </a>
-            </div>
+	<!-- ===== TOPBAR ===== -->
+	<div class="student-topbar">
+		<span class="page-title"></span>
+		<div class="topbar-right">
+			<div class="notif">
+				<a th:href="@{/student-notification}">
+					<i class="bi bi-bell"></i>
+					<span class="dot"></span> </a>
+			</div>
 
-            <div class="profile">
-                <a th:href="@{/student-profile}" class="profile-link">
-                    <img src="/images/default.jpg" alt="Profile">
-                    <span class="student-name">Dishank</span>
-                </a>
-            </div>
-        </div>
+			<div class="profile">
+				<a th:href="@{/student-profile}" class="profile-link">
+					<img src="/images/default.jpg" alt="Profile">
+					<span class="student-name">Dishank</span>
+				</a>
+			</div>
+		</div>
 
-    </div>
+	</div>
 
-    <div class="main">
+	<div class="main">
 
-        <div class="container">
-            <div class="course-header">
+		<div class="container">
 
-                <div class="course-info">
-                    <h1>Spring Boot Masterclass</h1>
-                    <p>Learn Spring Boot from scratch with real-world projects.</p>
-                    <p>⭐ 4.8 • 1,200 students • By John Doe</p>
-                </div>
+			<!-- ===== TOP SECTION (2 columns) ===== -->
+			<div class="course-header">
 
-                <div class="enroll-box">
-                    <div class="price">₹499</div>
-                  
-                    <button class="btn-enroll" th:onclick="|window.location.href='@{/student-enroll}'|">Enroll
-                        Now</button>
-                </div>
+				<!-- LEFT -->
+				<div class="course-info">
+					<h1 th:text="${course.title}"></h1>
 
-            </div>
+					<p th:text="${course.description}"></p>
 
-            <div class="curriculum">
-                <h3>Curriculum</h3>
+					<p>
+						⭐ 4.8 • 1,200 students • By
+						<span th:text="${course.teacher.firstname + ' ' + course.teacher.lastname}"></span>
+					</p>
 
-                <div class="module">
-                    <strong>Module 1: Introduction</strong>
-                    <div class="lesson">✔ Welcome Video</div>
-                    <div class="lesson">🔒 Spring Setup</div>
-                </div>
+					<div class="course-highlights">
+						<h3>Key Highlights</h3>
+						<ul>
+							<li th:each="h : ${course.highlights}">
+								<i class="bi bi-check-circle-fill"></i>
+								<span th:text="${h.text}"></span>
+							</li>
+						</ul>
+					</div>
+				</div>
 
-                <div class="module">
-                    <strong>Module 2: Core Concepts</strong>
-                    <div class="lesson">🔒 Dependency Injection</div>
-                    <div class="lesson">🔒 REST APIs</div>
-                </div>
-            </div>
-            <!-- -Welcome video  for that course -->
-        </div>
+				<!-- RIGHT -->
+				<div class="enroll-box">
+					<div class="price" th:if="${course.type.name() == 'PAID'}">
+						₹<span th:text="${course.price}"></span>
+					</div>
 
-    </div>
+					<div class="price" th:if="${course.type.name() == 'FREE'}">
+						Free
+					</div>
+
+					<a class="btn-enroll" th:href="@{/student-enroll}">
+						Enroll Now
+					</a>
+
+					<ul style="margin-top:15px;text-align:left;font-size:14px;color:#555">
+						<li>✔ Lifetime access</li>
+						<li>✔ Certificate of completion</li>
+						<li>✔ Beginner friendly</li>
+					</ul>
+				</div>
+
+			</div>
 
 
-    <!-- ===== SCRIPT ===== -->
-    <script>
-        const sidebar = document.getElementById("sidebar");
-        const toggle = document.getElementById("toggle");
-        const icon = toggle.querySelector("i");
+			<!-- ===== FREE PREVIEW (FULL WIDTH) ===== -->
+			<div class="card" th:if="${previewLesson != null and previewLesson.contentUrl != null}">
+				<h3>Free Preview</h3>
 
-        toggle.addEventListener("click", () => {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle("mobile-show");
-            } else {
-                sidebar.classList.toggle("collapsed");
-                icon.classList.toggle("bi-chevron-right");
-                icon.classList.toggle("bi-chevron-left");
-            }
-        });
-    </script>
+				<video controls width="100%">
+					<source th:src="${previewLesson.contentUrl}" type="video/mp4">
+				</video>
 
+				<p style="margin-top:10px;color:#555">
+					Preview: <span th:text="${previewLesson.title}"></span>
+				</p>
+			</div>
+
+
+			<!-- ===== CURRICULUM (FULL WIDTH) ===== -->
+			<div class="curriculum">
+				<h3>Curriculum</h3>
+
+				<div class="module" th:each="module : ${course.modules}">
+					<div class="module-header" onclick="toggleModule(this)">
+						<strong th:text="${module.title}"></strong>
+						<i class="bi bi-chevron-down"></i>
+					</div>
+
+					<div class="module-lessons">
+						<div class="lesson" th:each="lesson : ${module.lessons}">
+							<i class="bi"
+								th:classappend="${lesson.freePreview} ? 'bi-play-circle-fill' : 'bi-lock-fill'"></i>
+							<span th:text="${lesson.title}"></span>
+							<span class="preview-tag" th:if="${lesson.freePreview}">Preview</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+			<!-- ===== STUDENT FEEDBACK (BOTTOM) ===== -->
+			<div class="reviews">
+				<h3>Student Feedback</h3>
+
+				<div class="review">
+					⭐⭐⭐⭐⭐
+					<p>“Best Spring Boot course ever!”</p>
+					<small>— Rahul</small>
+				</div>
+
+				<div class="review">
+					⭐⭐⭐⭐☆
+					<p>“Very clear explanations.”</p>
+					<small>— Nivya</small>
+				</div>
+			</div>
+
+		</div>
+
+
+		<!-- ===== SCRIPT ===== -->
+		<script>
+			const sidebar = document.getElementById("sidebar");
+			const toggle = document.getElementById("toggle");
+			const icon = toggle.querySelector("i");
+
+			toggle.addEventListener("click", () => {
+				if (window.innerWidth <= 768) {
+					sidebar.classList.toggle("mobile-show");
+				} else {
+					sidebar.classList.toggle("collapsed");
+					icon.classList.toggle("bi-chevron-right");
+					icon.classList.toggle("bi-chevron-left");
+				}
+			});
+		</script>
+		<script>
+			function toggleModule(el) {
+				el.parentElement.classList.toggle("open");
+			}
+		</script>
 </body>
 
 </html>
