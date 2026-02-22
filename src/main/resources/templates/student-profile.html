@@ -30,7 +30,151 @@
 	            padding: 20px;
 	            transition: 0.3s ease;
 	        }
-     	
+     	/* ===============================
+   PROFILE CARD (CENTERED)
+================================ */
+.profile-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 32px 36px;
+    max-width: 880px;
+    margin: 40px auto;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+}
+
+/* ===============================
+   PROFILE HEADER
+================================ */
+.profile-header {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #eef1f7;
+    margin-bottom: 28px;
+}
+
+.profile-header img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #e6ebff;
+}
+
+.profile-header h3 {
+    font-size: 22px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.profile-header p {
+    margin-top: 4px;
+    font-size: 14px;
+    color: #6b7280;
+}
+
+/* ===============================
+   PROFILE INFO GRID
+================================ */
+.profile-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.info-box {
+    background: #f8faff;
+    padding: 16px 18px;
+    border-radius: 12px;
+    border: 1px solid #eef1f7;
+    transition: 0.25s ease;
+}
+
+.info-box:hover {
+    background: #eef2ff;
+    border-color: #c7d2fe;
+}
+
+.info-box span {
+    font-size: 12px;
+    color: #6b7280;
+    display: block;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.info-box strong {
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+    line-height: 1.4;
+}
+
+/* ===============================
+   PROFILE ACTION BUTTONS
+================================ */
+.profile-actions {
+    margin-top: 32px;
+    display: flex;
+    gap: 16px;
+}
+
+.profile-actions button {
+    border: none;
+    outline: none;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.25s ease;
+}
+
+.btn-edit {
+    background: #4f46e5;
+    color: #ffffff;
+}
+
+.btn-edit:hover {
+    background: #4338ca;
+}
+
+.btn-password {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.btn-password:hover {
+    background: #d1d5db;
+}
+
+/* ===============================
+   RESPONSIVE (MOBILE)
+================================ */
+@media (max-width: 768px) {
+    .profile-card {
+        padding: 24px;
+        margin: 20px;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .profile-actions {
+        flex-direction: column;
+    }
+
+    .profile-actions button {
+        justify-content: center;
+    }
+}
      	
        
 
@@ -89,7 +233,64 @@
 </div>
 
 <div class="main">
-  
+  <div class="profile-card">
+
+    <!-- PROFILE HEADER -->
+    <div class="profile-header">
+        <img src="/images/default.jpg" alt="Profile Photo">
+
+        <div>
+            <h3>Dishank Prajapati</h3>
+            <p>BCA Student · Aspiring Software Developer</p>
+        </div>
+    </div>
+
+    <!-- PROFILE DETAILS -->
+    <div class="profile-info">
+
+        <div class="info-box">
+            <span>Date of Birth</span>
+            <strong>12 January 2003</strong>
+        </div>
+
+        <div class="info-box">
+            <span>College</span>
+            <strong>GLS University, Ahmedabad</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Degree</span>
+            <strong>Bachelor of Computer Applications (BCA)</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Interests</span>
+            <strong>Web Development, Java, Spring Boot, UI Design</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Joined On</span>
+            <strong>August 2024</strong>
+        </div>
+
+        <div class="info-box">
+            <span>Current Status</span>
+            <strong>Active Student</strong>
+        </div>
+
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="profile-actions">
+        <button class="btn-edit">
+            <i class="bi bi-pencil"></i> Edit Profile
+        </button>
+        <button class="btn-password">
+            <i class="bi bi-shield-lock"></i> Change Password
+        </button>
+    </div>
+
+</div>
 </div>
 
 

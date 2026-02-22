@@ -10,6 +10,119 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <!-- Your Sidebar CSS -->
   <link th:href="@{/css/admin-css/admin_sidebar.css}" rel="stylesheet">
+<style>/* =======================
+   DASHBOARD LAYOUT FIX
+======================= */
+
+.content-area {
+  padding: 0;
+}
+
+.dashboard {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+  color: #e5e7eb;
+}
+
+.dashboard-header h2 {
+  font-weight: 600;
+  font-size: 1.6rem;
+}
+
+.dashboard-header p {
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+/* =======================
+   BOOTSTRAP ROW FIX
+======================= */
+
+.dashboard .row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+/* =======================
+   STAT CARD FIX (Bootstrap-friendly)
+======================= */
+
+.stat-card {
+  height: 100%;
+  background: linear-gradient(145deg, #0f172a, #111827);
+  border-radius: 16px;
+  padding: 22px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 38px rgba(0,0,0,0.55);
+}
+
+.stat-card i {
+  font-size: 32px;
+  color: #38bdf8;
+  min-width: 36px;
+}
+
+.stat-card span {
+  font-size: 13px;
+  color: #9ca3af;
+  display: block;
+}
+
+.stat-card h3 {
+  margin: 2px 0 0;
+  font-weight: 700;
+  font-size: 1.35rem;
+}
+
+/* =======================
+   ACTIVITY CARD FIX
+======================= */
+
+.activity-card {
+  background: linear-gradient(145deg, #020617, #020617cc);
+  border-radius: 18px;
+  padding: 26px;
+  margin-top: 48px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+}
+
+.activity-card h5 {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.activity-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activity-card li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid #1f2937;
+  font-size: 14px;
+}
+
+.activity-card li span {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+.activity-card li:last-child {
+  border-bottom: none;
+}</style>
 </head>
 
 <body>
@@ -69,26 +182,48 @@
     </nav>
   </aside>
 
-  <!-- ===== CONTENT AREA ===== -->
+<!-- CONTENT -->
   <div class="content-area">
-    <!-- ===== TOPBAR ===== -->
+
+    <!-- TOPBAR -->
     <header class="topbar">
-      <span class="page-title"></span>
+      <h5>Dashboard</h5>
       <div class="topbar-right">
-        <button class="profile-btn dropdown-toggle" data-bs-toggle="dropdown">
-          <img th:src="@{/images/admin-avatar.png}" alt="Admin" class="avatar">
-          <span th:text="${username}">Admin</span>
-        </button>
+        <img src="https://i.imgur.com/6VBx3io.png">
+        <span>admin@gmail.com</span>
       </div>
     </header>
 
-    <!-- ===== MAIN CONTENT ===== -->
-    <main class="home-section">
-      <h1>Dashboard</h1>
-      <p>Welcome, <span th:text="${username}">Admin</span></p>
+    <!-- MAIN -->
+    <main class="dashboard">
+
+      <div class="dashboard-header mb-4">
+        <h2>Welcome back, admin@gmail.com 👋</h2>
+        <p>Here’s what’s happening today</p>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-xl-3 col-md-6"><div class="stat-card"><i class="bi bi-book"></i><div><span>Total Courses</span><h3>18</h3></div></div></div>
+        <div class="col-xl-3 col-md-6"><div class="stat-card"><i class="bi bi-credit-card"></i><div><span>Paid Courses</span><h3>6</h3></div></div></div>
+        <div class="col-xl-3 col-md-6"><div class="stat-card"><i class="bi bi-currency-rupee"></i><div><span>Revenue</span><h3>₹45,000</h3></div></div></div>
+        <div class="col-xl-3 col-md-6"><div class="stat-card"><i class="bi bi-person-badge"></i><div><span>Teachers</span><h3>12</h3></div></div></div>
+        <div class="col-xl-3 col-md-6"><div class="stat-card"><i class="bi bi-briefcase"></i><div><span>Internships</span><h3>7</h3></div></div></div>
+        <div class="col-xl-3 col-md-6"><div class="stat-card"><i class="bi bi-chat-dots"></i><div><span>Feedbacks</span><h3>92</h3></div></div></div>
+      </div>
+
+      <div class="activity-card">
+        <h5>Recent Activity</h5>
+        <ul>
+          <li>New student registered <span>2 mins ago</span></li>
+          <li>New course published <span>15 mins ago</span></li>
+          <li>Teacher profile updated <span>1 hour ago</span></li>
+          <li>Internship added <span>Today</span></li>
+          <li>Feedback received <span>Yesterday</span></li>
+        </ul>
+      </div>
+
     </main>
   </div>
-
 </div>
 
 <!-- Bootstrap JS -->
