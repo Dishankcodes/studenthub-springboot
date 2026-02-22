@@ -69,7 +69,7 @@
 	<main class="main-content">
 		<button class="sidebar-toggle" id="sidebarToggle">☰</button>
 		<div class="container">
-			<form th:action="@{/teacher-creates-course}" th:object="${course}" method="post">
+			<form th:action="@{/teacher-creates-course}" th:object="${course}" method="post" enctype="multipart/form-data">
 				<!-- HEADER -->
 				<div class="page-header">
 					<div class="page-title">
@@ -108,7 +108,7 @@
 
 						<div class="thumbnail-upload">
 							<!-- Hidden file input -->
-							<input type="file" id="thumbnailInput" accept="image/*" hidden>
+							<input type="file" id="thumbnailInput" accept="image/*" th:field="*{thumbnailFile}" hidden>
 
 							<!-- Clickable UI box -->
 							<div class="thumbnail-preview" id="thumbnailPreview">

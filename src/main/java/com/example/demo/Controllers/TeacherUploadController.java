@@ -14,6 +14,14 @@ public class TeacherUploadController {
 			@RequestParam(required = false) Boolean freePreview) {
 		
 		
+		return "redirect:/teacher-creates-course?courseId=";
+	}
+	
+	public String uploadNotes(@RequestParam Integer lessonId,
+			@RequestParam("video") MultipartFile video,
+			@RequestParam(required = false) Boolean freePreview) {
+		
+		
 		return "redirect:/teacher-creates-course?courseId="
 				;
 	}

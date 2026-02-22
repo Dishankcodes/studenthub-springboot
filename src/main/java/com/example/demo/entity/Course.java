@@ -1,9 +1,9 @@
 package com.example.demo.entity;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.enums.CourseLevel;
 import com.example.demo.enums.CourseStatus;
@@ -22,6 +22,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
@@ -60,7 +61,18 @@ public class Course {
 
 	private String thumbnailURL;
 
+	@Transient
+	private MultipartFile thumbnailFile;
+
 	
+	
+	public MultipartFile getThumbnailFile() {
+		return thumbnailFile;
+	}
+
+	public void setThumbnailFile(MultipartFile thumbnailFile) {
+		this.thumbnailFile = thumbnailFile;
+	}
 
 	public Integer getCourseId() {
 		return courseId;
