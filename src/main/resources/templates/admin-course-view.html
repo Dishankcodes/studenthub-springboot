@@ -29,74 +29,98 @@
     <!-- ===== COURSE INFO ===== -->
     <div class="card shadow-sm mb-4">
         <div class="card-body">
-            <h4 th:text="${course.title}" class="fw-bold"></h4>
 
+            <!-- Course Title -->
+            <h4 class="fw-bold mb-2" th:text="${course.title}">
+                Course Title
+            </h4>
+
+            <!-- Instructor -->
             <p class="mb-1 text-muted">
                 Instructor:
-                <strong th:text="${course.teacher.firstname + ' ' + course.teacher.lastname}"></strong>
+                <strong th:text="${course.teacher != null 
+                    ? course.teacher.firstname + ' ' + course.teacher.lastname 
+                    : 'Not Assigned'}">
+                    Not Assigned
+                </strong>
             </p>
 
+            <!-- Status -->
             <p class="mb-1">
                 Status:
                 <span class="badge bg-info text-dark"
-                      th:text="${course.status}"></span>
+                      th:text="${course.status}">
+                    ACTIVE
+                </span>
             </p>
 
+            <!-- Type & Price -->
             <p class="mb-0">
                 Type:
                 <span class="badge bg-primary"
-                      th:text="${course.type}"></span>
+                      th:text="${course.type}">
+                    FREE
+                </span>
 
-                <span th:if="${course.type.name() == 'paid'}">
-                    - ₹<span th:text="${course.price}"></span>
+                <span th:if="${course.type != null and course.type.name() == 'PAID'}">
+                    - ₹<span th:text="${course.price}">0</span>
                 </span>
             </p>
+
         </div>
     </div>
 
-    <!-- ===== MODULES ===== -->
-    <div th:if="${#lists.isEmpty(course.modules)}" class="alert alert-warning">
+    <!-- ===== MODULES EMPTY STATE ===== -->
+    <div th:if="${course.modules == null or #lists.isEmpty(course.modules)}"
+         class="alert alert-warning">
         No modules added to this course.
     </div>
 
-    <div th:each="module, mStat : ${course.modules}" class="card mb-3 shadow-sm">
+    <!-- ===== MODULES LIST ===== -->
+    <div th:each="module, mStat : ${course.modules}"
+         class="card mb-3 shadow-sm">
+
+        <!-- Module Header -->
         <div class="card-header bg-dark text-white">
             <strong>
-                Module <span th:text="${mStat.index + 1}"></span>:
-                <span th:text="${module.title}"></span>
+                Module <span th:text="${mStat.index + 1}">1</span>:
+                <span th:text="${module.title}">Module Title</span>
             </strong>
         </div>
 
         <div class="card-body">
 
-            <!-- LESSONS -->
-            <div th:if="${#lists.isEmpty(module.lessons)}"
+            <!-- LESSONS EMPTY STATE -->
+            <div th:if="${module.lessons == null or #lists.isEmpty(module.lessons)}"
                  class="text-muted">
                 No lessons in this module.
             </div>
 
+            <!-- LESSONS LIST -->
             <div th:each="lesson, lStat : ${module.lessons}"
                  class="border rounded p-3 mb-3">
 
-                <h6 class="fw-semibold">
-                    Lesson <span th:text="${lStat.index + 1}"></span>:
-                    <span th:text="${lesson.title}"></span>
+                <h6 class="fw-semibold mb-2">
+                    Lesson <span th:text="${lStat.index + 1}">1</span>:
+                    <span th:text="${lesson.title}">Lesson Title</span>
                 </h6>
 
-                <!-- QUIZZES -->
-     
+                <!-- QUIZ -->
+                <div th:if="${lesson.quiz != null}"
+                     class="list-group list-group-flush mt-2">
 
-<div th:if="${lesson.quiz != null}"
-     class="list-group list-group-flush mt-2">
+                    <div class="list-group-item">
+                        <i class="bi bi-question-circle"></i>
+                        Quiz:
+                        <strong th:text="${lesson.quiz.title}">
+                            Quiz Title
+                        </strong>
+                    </div>
 
-    <div class="list-group-item">
-        <i class="bi bi-question-circle"></i>
-        Quiz:
-        <strong th:text="${lesson.title}"></strong>
-    </div>
+                </div>
 
-</div>
             </div>
+
         </div>
     </div>
 
