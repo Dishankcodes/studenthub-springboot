@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<title>Admin | Certificate Design</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet">
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: "Poppins", sans-serif;
+		}
+
+		body {
+			background: #0d0d2b;
+			color: #ffffff;
+		}
+
+		/* ================= NAVBAR ================= */
+		header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 22px 110px;
+			background: #1a1a3d;
+		}
+
+		.logo {
+			font-size: 26px;
+			font-weight: 700;
+			color: #6c63ff;
+		}
+
+		/* ================= PAGE ================= */
+		.container {
+			padding: 50px 110px;
+		}
+
+		.page-title {
+			font-size: 28px;
+			font-weight: 600;
+			margin-bottom: 6px;
+		}
+
+		.page-subtitle {
+			color: #b5b5ff;
+			margin-bottom: 35px;
+		}
+
+		/* ================= GRID ================= */
+		.grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 30px;
+			margin-bottom: 60px;
+		}
+
+		.card {
+			background: #1a1a3d;
+			border-radius: 14px;
+			padding: 24px;
+		}
+
+		.card h3 {
+			font-size: 18px;
+			margin-bottom: 18px;
+		}
+
+		/* ================= FORM ================= */
+		.form-group {
+			margin-bottom: 16px;
+		}
+
+		label {
+			font-size: 14px;
+			color: #cfcfff;
+			display: block;
+			margin-bottom: 6px;
+		}
+
+		input,
+		select {
+			width: 100%;
+			padding: 10px 12px;
+			border-radius: 8px;
+			border: none;
+			outline: none;
+			background: #0f1035;
+			color: #fff;
+		}
+
+		input[type="file"] {
+			padding: 8px;
+		}
+
+		.btn {
+			margin-top: 10px;
+			padding: 12px 18px;
+			border-radius: 10px;
+			border: none;
+			cursor: pointer;
+			font-weight: 500;
+			background: linear-gradient(135deg, #6c63ff, #857dff);
+			color: #fff;
+		}
+
+		/* ================= PREVIEW ================= */
+		.preview-box {
+			height: 320px;
+			border-radius: 12px;
+			background: #0f1035;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #7777ff;
+			border: 1px dashed #3b3b8f;
+		}
+
+		/* ================= TEMPLATE LIST ================= */
+		.template-list {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+			gap: 24px;
+		}
+
+		.template-card {
+			background: #1a1a3d;
+			border-radius: 14px;
+			padding: 18px;
+		}
+
+		.template-preview {
+			height: 140px;
+			border-radius: 10px;
+			background: #0f1035;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #7777ff;
+			margin-bottom: 12px;
+		}
+
+		.template-name {
+			font-weight: 500;
+			margin-bottom: 6px;
+		}
+
+		.template-meta {
+			font-size: 13px;
+			color: #b5b5ff;
+			margin-bottom: 12px;
+		}
+
+		.actions {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.btn-activate {
+			padding: 8px 14px;
+			border-radius: 8px;
+			border: none;
+			cursor: pointer;
+			background: #6c63ff;
+			color: #fff;
+			font-size: 13px;
+		}
+
+		.badge-active {
+			font-size: 12px;
+			padding: 4px 10px;
+			border-radius: 20px;
+			background: #2ecc71;
+			color: #fff;
+		}
+		.preview-box {
+  position: relative;
+  height: 320px;
+  overflow: hidden;
+}
+
+.preview-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.preview-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+}
+
+.preview-text.name {
+  top: 42%;
+  font-size: 22px;
+}
+
+.preview-text.course {
+  top: 55%;
+  font-size: 16px;
+}
+
+.preview-text.date {
+  top: 65%;
+  font-size: 13px;
+}
+
+.preview-sign {
+  position: absolute;
+  bottom: 30px;
+  right: 40px;
+  width: 90px;
+}
+	</style>
+</head>
+
+<body>
+
+	<header>
+		<div class="logo">EduPlatform Admin</div>
+	</header>
+
+	<div class="container">
+
+		<div class="page-title">Certificate Design</div>
+		<div class="page-subtitle">
+			Create, preview, and activate certificate templates for students
+		</div>
+
+		<!-- ================= CREATE + PREVIEW ================= -->
+		<div class="grid">
+
+			<!-- CREATE TEMPLATE -->
+			<div class="card">
+				<h3>Create New Template</h3>
+
+				<form th:action="@{/certificate-template/save}" method="post" enctype="multipart/form-data">
+
+					<div class="form-group">
+						<label>Template Name</label>
+						<input type="text" placeholder="EduPlatform Certificate" name="name" />
+					</div>
+
+					<div class="form-group">
+						<label>Background Image</label>
+						<input type="file" name="backgroundImage" />
+					</div>
+
+					<div class="form-group">
+						<label>Signature Image (optional)</label>
+						<input type="file" name="signatureImage" />
+					</div>
+
+					<div class="form-group">
+						<label>Font Family</label>
+						<select name="fontFamily">
+							<option>Poppins</option>
+							<option>Montserrat</option>
+							<option>Roboto</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label>Font Color</label>
+						<input type="text" name="fontColor" placeholder="#2c3e50" />
+					</div>
+
+					<button class="btn" type="submit">Save Template</button>
+				</form>
+			</div>
+
+			<!-- PREVIEW -->
+			<div class="card">
+				<h3>Live Preview</h3>
+			<div class="preview-box" id="previewBox">
+  <img id="previewBg" class="preview-bg" alt="Certificate Preview"/>
+  
+  <div class="preview-text name" id="previewName">
+    STUDENT NAME
+  </div>
+
+  <div class="preview-text course" id="previewCourse">
+    COURSE TITLE
+  </div>
+
+  <div class="preview-text date" id="previewDate">
+    Issued on: 24 Feb 2026
+  </div>
+
+  <img id="previewSign" class="preview-sign" />
+</div></div>
+
+		</div>
+
+		<!-- ================= TEMPLATE LIST ================= -->
+		<h3 style="margin-bottom: 20px;">Existing Templates</h3>
+
+		<div class="template-list">
+
+			<!-- TEMPLATE CARD -->
+			<div class="template-card" th:each="t : ${templates}">
+				<div class="template-preview">
+
+					<img th:src="@{${t.backgroundImage}}"
+						style="width:100%; height:100%; object-fit:cover; border-radius:10px;" alt="Preview">
+				</div>
+
+				<div class="template-name" th:text="${t.name}">
+					Template Name
+				</div>
+				<div class="template-meta">
+					Font:
+					<span th:text="${t.fontFamily}"></span>
+					• Created:
+					<span th:text="${t.createdAt}"></span>
+				</div>
+
+				<div class="actions">
+					<span th:if="${t.active}" class="badge-active">ACTIVE</span>
+				</div>
+				
+				<form th:if="${!t.active}" th:action="@{/certificate-template/activate/{id}(id=${t.id})}" method="post">
+					<button class="btn-activate" type="submit">
+						Activate
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+  const bgInput = document.querySelector('input[name="backgroundImage"]');
+  const signInput = document.querySelector('input[name="signatureImage"]');
+  const fontSelect = document.querySelector('select[name="fontFamily"]');
+  const colorInput = document.querySelector('input[name="fontColor"]');
+
+  bgInput?.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) {
+      document.getElementById('previewBg').src = URL.createObjectURL(file);
+    }
+  });
+
+  signInput?.addEventListener('change', e => {
+    const file = e.target.files[0];
+    if (file) {
+      document.getElementById('previewSign').src = URL.createObjectURL(file);
+    }
+  });
+
+  fontSelect?.addEventListener('change', e => {
+    document.querySelectorAll('.preview-text').forEach(t => {
+      t.style.fontFamily = e.target.value;
+    });
+  });
+
+  colorInput?.addEventListener('input', e => {
+    document.querySelectorAll('.preview-text').forEach(t => {
+      t.style.color = e.target.value;
+    });
+  });
+</script>
+</html>

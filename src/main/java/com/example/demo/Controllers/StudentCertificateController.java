@@ -2,6 +2,7 @@ package com.example.demo.Controllers;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.nio.file.Files;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,159 +27,153 @@ import com.lowagie.text.pdf.BaseFont;
 import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfWriter;
 
-
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class StudentCertificateController {
 
-    @Autowired private CourseRepository courseRepo;
-    @Autowired private LessonProgressRepository lessonProgressRepo;
-    @Autowired private CourseCertificateRepository certificateRepo;
-    @Autowired private CertificateTemplateRepository templateRepo;
-    @Autowired private StudentRepository studentRepo;
+	@Autowired
+	private CourseRepository courseRepo;
+	@Autowired
+	private LessonProgressRepository lessonProgressRepo;
+	@Autowired
+	private CourseCertificateRepository certificateRepo;
+	@Autowired
+	private CertificateTemplateRepository templateRepo;
+	@Autowired
+	private StudentRepository studentRepo;
 
-    @GetMapping("/student/certificate/{courseId}")
-    public String generateCertificate(
-            @PathVariable Integer courseId,
-            HttpSession session
-    ) throws Exception {
+	@GetMapping("/student/certificate/{courseId}")
+	public String generateCertificate(@PathVariable Integer courseId, HttpSession session) throws Exception {
 
-        Integer studentId = (Integer) session.getAttribute("studentId");
-        if (studentId == null) return "redirect:/student-login";
+		Integer studentId = (Integer) session.getAttribute("studentId");
+		if (studentId == null) {
+			return "redirect:/student-login";
+		}
 
-        Student student = studentRepo.findById(studentId).orElseThrow();
-        Course course = courseRepo.findById(courseId).orElseThrow();
+		Student student = studentRepo.findById(studentId).orElseThrow();
+		Course course = courseRepo.findById(courseId).orElseThrow();
 
-        /* 1️⃣ Check completion */
-        long completed =
-            lessonProgressRepo
-                .countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(
-                        studentId, courseId);
+		/* 1️⃣ Completion check */
+		long completed = lessonProgressRepo.countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(studentId,
+				courseId);
 
-        long total = course.getModules().stream()
-                .mapToLong(m -> m.getLessons().size())
-                .sum();
+		long total = course.getModules().stream().mapToLong(m -> m.getLessons().size()).sum();
 
-        if (completed != total) {
-            return "redirect:/student-course-player/" + courseId;
-        }
+		if (completed < total) {
+			return "redirect:/student-course-player/" + courseId;
+		}
 
-        /* 2️⃣ Already generated? */
-        if (certificateRepo.existsByStudentIdAndCourseCourseId(studentId, courseId)) {
-            return "redirect:/student-course-player/" + courseId;
-        }
+		/* 2️⃣ Already generated? → DOWNLOAD */
+		CourseCertificate existing = certificateRepo.findByStudentIdAndCourseCourseId(studentId, courseId).orElse(null);
 
-        /* 3️⃣ Active template */
-        CertificateTemplate template =
-            templateRepo.findByActiveTrue()
-                .orElseThrow(() -> new RuntimeException("No active certificate template"));
+		if (existing != null) {
+			return "redirect:/student-learning" + existing.getId();
+		}
 
-        /* 4️⃣ Generate PDF */
-        String pdfPath = generatePdf(student, course, template);
+		/* 3️⃣ Active template */
+		CertificateTemplate template = templateRepo.findByActiveTrue()
+				.orElseThrow(() -> new RuntimeException("No active certificate template"));
 
-        /* 5️⃣ Save record */
-        CourseCertificate cert = new CourseCertificate();
-        cert.setStudentId(studentId);
-        cert.setCourse(course);
-        cert.setTemplate(template);
-        cert.setIssuedAt(LocalDate.now());
-        cert.setCertificateNumber("CERT-" + System.currentTimeMillis());
-        cert.setPdfPath(pdfPath);
+		/* 4️⃣ Generate PDF */
+		String pdfPath = generatePdf(student, course, template);
 
-        certificateRepo.save(cert);
+		/* 5️⃣ Save record */
+		CourseCertificate cert = new CourseCertificate();
+		cert.setStudentId(studentId);
+		cert.setCourse(course);
+		cert.setTemplate(template);
+		cert.setIssuedAt(LocalDate.now());
+		cert.setCertificateNumber("CERT-" + System.currentTimeMillis());
+		cert.setPdfPath(pdfPath);
 
-        return "redirect:/student-course-player/" + courseId;
-    }
+		certificateRepo.save(cert);
 
-    /* ================= PDF GENERATOR ================= */
+		return "redirect:/student-learning" + cert.getId();
+	}
 
-    private String generatePdf(
-            Student student,
-            Course course,
-            CertificateTemplate template
-    ) throws Exception {
+	@GetMapping("/student/certificate/download/{id}")
+	public void downloadCertificate(
+	        @PathVariable Integer id,
+	        HttpSession session,
+	        HttpServletResponse response
+	) throws Exception {
 
-        String baseDir = System.getProperty("user.dir")
-                + "/uploads/certificates/student-"
-                + student.getStudid()
-                + "/course-"
-                + course.getCourseId();
+	    Integer studentId = (Integer) session.getAttribute("studentId");
+	    if (studentId == null) return;
 
-        File dir = new File(baseDir);
-        if (!dir.exists()) dir.mkdirs();
+	    CourseCertificate cert =
+	        certificateRepo.findById(id).orElseThrow();
 
-        String pdfPath = baseDir + "/certificate.pdf";
+	    // 🔒 ownership check
+	    if (!cert.getStudentId().equals(studentId)) {
+	        return;
+	    }
 
-        Document document = new Document(PageSize.A4);
-        PdfWriter writer =
-            PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
+	    File file = new File(System.getProperty("user.dir") + cert.getPdfPath());
 
-        document.open();
+	    response.setContentType("application/pdf");
+	    response.setHeader(
+	        "Content-Disposition",
+	        "attachment; filename=\"certificate.pdf\""
+	    );
 
-        /* Background */
-        Image bg = Image.getInstance(
-            System.getProperty("user.dir") + template.getBackgroundImage()
-        );
-        bg.scaleAbsolute(PageSize.A4.getWidth(), PageSize.A4.getHeight());
-        bg.setAbsolutePosition(0, 0);
-        writer.getDirectContentUnder().addImage(bg);
+	    Files.copy(file.toPath(), response.getOutputStream());
+	    response.getOutputStream().flush();
+	}
+	/* ================= PDF GENERATOR ================= */
 
-        /* Text */
-        PdfContentByte text = writer.getDirectContent();
-        BaseFont font =
-            BaseFont.createFont(BaseFont.HELVETICA_BOLD,
-                    BaseFont.WINANSI,
-                    BaseFont.EMBEDDED);
+	private String generatePdf(Student student, Course course, CertificateTemplate template) throws Exception {
 
-        text.beginText();
-        text.setFontAndSize(font, 28);
-     
+		String baseDir = System.getProperty("user.dir") + "/uploads/certificates/student-" + student.getStudid()
+				+ "/course-" + course.getCourseId();
 
-        text.showTextAligned(
-            Element.ALIGN_CENTER,
-            student.getFullname(),
-            PageSize.A4.getWidth() / 2,
-            420,
-            0
-        );
+		File dir = new File(baseDir);
+		if (!dir.exists())
+			dir.mkdirs();
 
-        text.setFontAndSize(font, 20);
-        text.showTextAligned(
-            Element.ALIGN_CENTER,
-            course.getTitle(),
-            PageSize.A4.getWidth() / 2,
-            360,
-            0
-        );
+		String pdfPath = baseDir + "/certificate.pdf";
 
-        text.setFontAndSize(font, 14);
-        text.showTextAligned(
-            Element.ALIGN_CENTER,
-            "Issued on: " + LocalDate.now(),
-            PageSize.A4.getWidth() / 2,
-            300,
-            0
-        );
+		Document document = new Document(PageSize.A4);
+		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
 
-        text.endText();
+		document.open();
 
-        /* Signature */
-        if (template.getSignatureImage() != null) {
-            Image sign = Image.getInstance(
-                System.getProperty("user.dir") + template.getSignatureImage()
-            );
-            sign.scaleToFit(120, 60);
-            sign.setAbsolutePosition(400, 150);
-            document.add(sign);
-        }
+		/* Background */
+		Image bg = Image.getInstance(System.getProperty("user.dir") + template.getBackgroundImage());
+		bg.scaleAbsolute(PageSize.A4.getWidth(), PageSize.A4.getHeight());
+		bg.setAbsolutePosition(0, 0);
+		writer.getDirectContentUnder().addImage(bg);
 
-        document.close();
+		/* Text */
+		PdfContentByte text = writer.getDirectContent();
+		BaseFont font = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
-        return "/uploads/certificates/student-"
-                + student.getStudid()
-                + "/course-"
-                + course.getCourseId()
-                + "/certificate.pdf";
-    }
+		text.beginText();
+		text.setFontAndSize(font, 28);
+
+		text.showTextAligned(Element.ALIGN_CENTER, student.getFullname(), PageSize.A4.getWidth() / 2, 420, 0);
+
+		text.setFontAndSize(font, 20);
+		text.showTextAligned(Element.ALIGN_CENTER, course.getTitle(), PageSize.A4.getWidth() / 2, 360, 0);
+
+		text.setFontAndSize(font, 14);
+		text.showTextAligned(Element.ALIGN_CENTER, "Issued on: " + LocalDate.now(), PageSize.A4.getWidth() / 2, 300, 0);
+
+		text.endText();
+
+		/* Signature */
+		if (template.getSignatureImage() != null) {
+			Image sign = Image.getInstance(System.getProperty("user.dir") + template.getSignatureImage());
+			sign.scaleToFit(120, 60);
+			sign.setAbsolutePosition(400, 150);
+			document.add(sign);
+		}
+
+		document.close();
+
+		return "/uploads/certificates/student-" + student.getStudid() + "/course-" + course.getCourseId()
+				+ "/certificate.pdf";
+	}
 }

@@ -48,11 +48,13 @@ public class AdminDesignController {
     }
 
 	@GetMapping("/admin-design")
-	public String designTemplate() {
+	public String designTemplate(Model model) {
+		
+		model.addAttribute("templates", templateRepo.findAll());
 		return "admin-design";
 	}
 	
-	@PostMapping("/certitifcate-template/save")
+	@PostMapping("/certificate-template/save")
 	public String saveTemplate(@RequestParam String name,
 		        @RequestParam MultipartFile backgroundImage,
 		        @RequestParam(required = false) MultipartFile signatureImage,
