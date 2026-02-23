@@ -527,8 +527,18 @@ body {
                 style="margin-top:20px;">
             Submit Quiz
         </button>
-
     </form>
+    
+    <div th:if="${courseCompleted}">
+    	<form th:action="@{/student/certificate/generate}" method="post">
+    	  <input type="hidden" name="courseId"
+               th:value="${course.courseId}">
+    	<button class="btn btn-success">
+    			Download Certificate
+    	</button>
+    	</form>
+    
+    </div>
 </div>
 			</main>
 

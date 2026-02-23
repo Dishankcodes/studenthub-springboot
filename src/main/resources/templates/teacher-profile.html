@@ -80,7 +80,7 @@
         <div class="form-group">
             <label>Full Name</label>
            <input type="text"
-       th:value="${teacher.firstname + ' ' + teacher.lastname}"
+       th:field="*{teacher.firstname + ' ' + teacher.lastname}"
        placeholder="Enter full name">
         </div>
 

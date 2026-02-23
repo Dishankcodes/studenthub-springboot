@@ -25,20 +25,24 @@ public class TeacherController {
 
 	// ===== DASHBOARD =====
 	@GetMapping("/teacher-dashboard")
-	public String dashboard(Model model)
-	// HttpSession session)
+	public String dashboard(Model model,
+	 HttpSession session)
 	{
-//	    if (session.getAttribute("TEACHER_LOGGED_IN") == null) {
-//	        return "redirect:/teacher-auth";
-//	    }//	  
+		 Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+		 Integer teacherId = (Integer) session.getAttribute("teacherId");
 
-		Integer teacherId = 1;
+	//	Integer teacherId = 1; // remove this when testing done
+
+		 if (loggedIn == null || !loggedIn || teacherId == null) {
+		 return "redirect:/teacher-auth";
+		 }
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
-
 		if (teacher == null) {
+			 session.invalidate();
 			return "redirect:/teacher-auth";
 		}
+		
 		model.addAttribute("teacher", teacher);
 		return "teacher-dashboard";
 	}
@@ -70,21 +74,21 @@ public class TeacherController {
 	// ===== PROFILE =====
 	@GetMapping("/teacher-profile")
 	public String teacherProfile(
-			// HttpSession session,
+			 HttpSession session,
 			Model model) {
 
-		// Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-		// Integer teacherId = (Integer) session.getAttribute("teacherId");
+		 Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+		 Integer teacherId = (Integer) session.getAttribute("teacherId");
 
-		Integer teacherId = 1; // remove this when testing done
+	//	Integer teacherId = 1; // remove this when testing done
 
-		// if (loggedIn == null || !loggedIn || teacherId == null) {
-		// return "redirect:/teacher-auth";
-		// }
+		 if (loggedIn == null || !loggedIn || teacherId == null) {
+		 return "redirect:/teacher-auth";
+		 }
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {
-			// session.invalidate();
+			 session.invalidate();
 			return "redirect:/teacher-auth";
 		}
 
@@ -102,21 +106,21 @@ public class TeacherController {
 	}
 
 	@PostMapping("/teacher-profile")
-	public String editTeacherProfile(@ModelAttribute("profile") TeacherProfile teacherProfile
-	// HttpSession session
+	public String editTeacherProfile(@ModelAttribute("profile") TeacherProfile teacherProfile,
+	 HttpSession session
 	) {
 
-		Integer teacherId = 1;// demo
-		// Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-		// Integer teacherId = (Integer) session.getAttribute("teacherId");
+	//	Integer teacherId = 1;// demo
+		 Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+		 Integer teacherId = (Integer) session.getAttribute("teacherId");
 
-		// if (loggedIn == null || !loggedIn || teacherId == null) {
-		// return "redirect:/teacher-auth";
-		// }
+		 if (loggedIn == null || !loggedIn || teacherId == null) {
+		 return "redirect:/teacher-auth";
+		 }
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {
-			// session.invalidate();
+			 session.invalidate();
 			return "redirect:/teacher-auth";
 		}
 

@@ -172,6 +172,9 @@ public class StudentCourseController {
 	    int progressPercent =
 	            totalLessons == 0 ? 0 :
 	            (int)((completedLessons * 100) / totalLessons);
+	    
+	    
+	    
 
 	    List<Integer> completedLessonIds =
 	            lessonProgressRepo.findCompletedLessonIds(studentId, courseId);
@@ -183,7 +186,9 @@ public class StudentCourseController {
 	            quizQuestionRepo.findByQuiz(currentLesson.getQuiz())
 	        );
 	    }
+	    boolean courseCompleted = progressPercent ==100;
 	    
+	    model.addAttribute("courseCompleted", courseCompleted);
 	    model.addAttribute("completedLessonIds", completedLessonIds);
 	    model.addAttribute("progressPercent", progressPercent);
 	    model.addAttribute("course", course);
@@ -267,4 +272,5 @@ public class StudentCourseController {
 	           lesson.getModule().getCourse().getCourseId() +
 	           "?lessonId=" + lessonId;
 	}
-}
+	
+	}

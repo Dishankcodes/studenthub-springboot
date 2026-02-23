@@ -23,6 +23,8 @@ import com.example.demo.enums.CourseStatus;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.TeacherRepository;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class TeacherCourseController {
 
@@ -36,12 +38,25 @@ public class TeacherCourseController {
 
 	// ===== COURSE MANAGEMENT =====
 	@GetMapping("/teacher-course")
-	public String courseManagement(Model model) {
+	public String courseManagement(Model model,HttpSession session) {
 
-		Integer teacherId = 2;
+	//	Integer teacherId = 2;
+
+		// Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+
+		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+
+		if (loggedIn == null || !loggedIn || teacherId == null) {
+		    return "redirect:/teacher-auth";
+		}
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
-
+		if (teacher == null) {
+		    session.invalidate();
+		    return "redirect:/teacher-auth";
+		}
+		
 		// ✅ ONLY fetch NON-DELETED courses
 		List<Course> courses = courseRepo.findByTeacherTeacherIdAndStatusNot(teacherId, CourseStatus.DELETED);
 
@@ -86,14 +101,25 @@ public class TeacherCourseController {
 	        @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnail,
 	        @RequestParam String action,
 	        @RequestParam(required = false) List<String> highlightTexts,
-	        Model model
+	        Model model,
+	        HttpSession session
 	) throws IOException {
 
-	    Integer teacherId = 2;
-	    Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
-	    if (teacher == null) {
-	        return "redirect:/teacher-course";
-	    }
+		
+	   // Integer teacherId = 2;
+		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+
+		if (loggedIn == null || !loggedIn || teacherId == null) {
+		    return "redirect:/teacher-auth";
+		}
+
+		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+		if (teacher == null) {
+		    session.invalidate();
+		    return "redirect:/teacher-auth";
+		}
+		
 
 	    Course course;
 
@@ -186,9 +212,20 @@ public class TeacherCourseController {
 	}
 
 	@PostMapping("/teacher-course/delete/{id}")
-	public String deleteCourse(@PathVariable("id") Integer courseId) {
-		Integer teacherId = 2;
+	public String deleteCourse(@PathVariable("id") Integer courseId,
 
+			HttpSession session) {
+		//Integer teacherId = 2;
+
+		 Boolean loggedIn =
+		            (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+		    Integer teacherId =
+		            (Integer) session.getAttribute("teacherId");
+
+		    if (loggedIn == null || !loggedIn || teacherId == null) {
+		        return "redirect:/teacher-auth";
+		    }
+		    
 		Course course = courseRepo.findById(courseId).orElse(null);
 
 		if (course != null && course.getTeacher().getTeacherId().equals(teacherId)) {
