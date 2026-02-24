@@ -19,7 +19,9 @@ public class CourseCertificate {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	private Integer studentId;
+	@ManyToOne
+    @JoinColumn(name = "student_id")
+    private Student student;
 	
 	@ManyToOne
 	@JoinColumn(name = "course_id")
@@ -44,12 +46,13 @@ public class CourseCertificate {
 		this.id = id;
 	}
 
-	public Integer getStudentId() {
-		return studentId;
+
+	public Student getStudent() {
+		return student;
 	}
 
-	public void setStudentId(Integer studentId) {
-		this.studentId = studentId;
+	public void setStudent(Student student) {
+		this.student = student;
 	}
 
 	public Course getCourse() {

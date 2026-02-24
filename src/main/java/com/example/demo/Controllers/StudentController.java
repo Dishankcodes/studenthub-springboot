@@ -30,7 +30,7 @@ public class StudentController {
 
 		Integer studentId = (Integer) session.getAttribute("studentId");
 		
-		List<CourseCertificate> certificates = certificateRepo.findByStudentId(studentId);
+		List<CourseCertificate> certificates = certificateRepo.findByStudentStudid(studentId);
 		model.addAttribute("certificates", certificates);
 		return "student-learning";
 	}

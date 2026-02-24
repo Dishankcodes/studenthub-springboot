@@ -66,10 +66,11 @@ public class StudentCertificateController {
 		}
 
 		/* 2️⃣ Already generated? → DOWNLOAD */
-		CourseCertificate existing = certificateRepo.findByStudentIdAndCourseCourseId(studentId, courseId).orElse(null);
+		CourseCertificate existing = certificateRepo.findByStudentStudidAndCourseCourseId(studentId, courseId)
+				.orElse(null);
 
 		if (existing != null) {
-			return "redirect:/student-learning" + existing.getId();
+			return "redirect:/student/certificate/download/" + existing.getId();
 		}
 
 		/* 3️⃣ Active template */
@@ -81,7 +82,7 @@ public class StudentCertificateController {
 
 		/* 5️⃣ Save record */
 		CourseCertificate cert = new CourseCertificate();
-		cert.setStudentId(studentId);
+		cert.setStudent(student);
 		cert.setCourse(course);
 		cert.setTemplate(template);
 		cert.setIssuedAt(LocalDate.now());
@@ -90,37 +91,34 @@ public class StudentCertificateController {
 
 		certificateRepo.save(cert);
 
-		return "redirect:"+ pdfPath;
+		return "redirect:/student/certificate/download/" + cert.getId();
 	}
 
 	@GetMapping("/student/certificate/download/{id}")
-	public void downloadCertificate(
-	        @PathVariable Integer id,
-	        HttpSession session,
-	        HttpServletResponse response
-	) throws Exception {
+	public void downloadCertificate(@PathVariable Integer id, HttpSession session, HttpServletResponse response)
+			throws Exception {
 
-	    Integer studentId = (Integer) session.getAttribute("studentId");
-	    if (studentId == null) return;
+		Integer studentId = (Integer) session.getAttribute("studentId");
+		if (studentId == null)
+			return;
 
-	    CourseCertificate cert =
-	        certificateRepo.findById(id).orElseThrow();
+		CourseCertificate cert = certificateRepo.findById(id).orElseThrow();
 
-	    // 🔒 ownership check
-	    if (!cert.getStudentId().equals(studentId)) {
-	        return;
-	    }
+		// 🔒 ownership check
+		if (!cert.getStudent().getStudid().equals(studentId)) {
+			return;
+		}
+		File file = new File(System.getProperty("user.dir") + cert.getPdfPath());
 
-	    File file = new File(System.getProperty("user.dir") + cert.getPdfPath());
+		String safeCourseName = cert.getCourse().getTitle().replaceAll("[^a-zA-Z0-9 ]", "").trim().replace(" ", "_");
 
-	    response.setContentType("application/pdf");
-	    response.setHeader(
-	        "Content-Disposition",
-	        "attachment; filename=\"certificate.pdf\""
-	    );
+		String fileName = "EduPlatform-" + safeCourseName + "-Certificate.pdf";
 
-	    Files.copy(file.toPath(), response.getOutputStream());
-	    response.getOutputStream().flush();
+		response.setContentType("application/pdf");
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+
+		Files.copy(file.toPath(), response.getOutputStream());
+		response.getOutputStream().flush();
 	}
 	/* ================= PDF GENERATOR ================= */
 
@@ -148,50 +146,27 @@ public class StudentCertificateController {
 
 		/* Text */
 		PdfContentByte text = writer.getDirectContent();
-		BaseFont bold =
-		    BaseFont.createFont(BaseFont.HELVETICA_BOLD,
-		            BaseFont.WINANSI,
-		            BaseFont.EMBEDDED);
+		BaseFont bold = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
-		BaseFont normal =
-		    BaseFont.createFont(BaseFont.HELVETICA,
-		            BaseFont.WINANSI,
-		            BaseFont.EMBEDDED);
+		BaseFont normal = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
 		/* ================= STUDENT NAME ================= */
 		text.beginText();
 		text.setFontAndSize(bold, 32);
-		text.showTextAligned(
-		    Element.ALIGN_CENTER,
-		    student.getFullname().toUpperCase(),
-		    PageSize.A4.getWidth() / 2,
-		    430,
-		    0
-		);
+		text.showTextAligned(Element.ALIGN_CENTER, student.getFullname().toUpperCase(), PageSize.A4.getWidth() / 2, 430,
+				0);
 		text.endText();
 
 		/* ================= COURSE NAME ================= */
 		text.beginText();
 		text.setFontAndSize(normal, 20);
-		text.showTextAligned(
-		    Element.ALIGN_CENTER,
-		    course.getTitle(),
-		    PageSize.A4.getWidth() / 2,
-		    380,
-		    0
-		);
+		text.showTextAligned(Element.ALIGN_CENTER, course.getTitle(), PageSize.A4.getWidth() / 2, 380, 0);
 		text.endText();
 
 		/* ================= ISSUED DATE ================= */
 		text.beginText();
 		text.setFontAndSize(normal, 13);
-		text.showTextAligned(
-		    Element.ALIGN_CENTER,
-		    "Issued on: " + LocalDate.now(),
-		    PageSize.A4.getWidth() / 2,
-		    340,
-		    0
-		);
+		text.showTextAligned(Element.ALIGN_CENTER, "Issued on: " + LocalDate.now(), PageSize.A4.getWidth() / 2, 340, 0);
 		text.endText();
 		/* Signature */
 		if (template.getSignatureImage() != null) {

@@ -9,13 +9,13 @@ import com.example.demo.entity.CourseCertificate;
 
 public interface CourseCertificateRepository extends JpaRepository<CourseCertificate, Integer>{
 
-	boolean existsByStudentIdAndCourseCourseId(
-			Integer studentId, Integer courseId);
+	boolean existsByStudentStudidAndCourseCourseId(
+			Integer studid, Integer courseId);
 	
 	Optional<CourseCertificate>
-	findByStudentIdAndCourseCourseId(Integer studentId, Integer courseId);
+	findByStudentStudidAndCourseCourseId(Integer studid, Integer courseId);
 	
-	List<CourseCertificate> findByStudentId(Integer studentId);
+	List<CourseCertificate> findByStudentStudid(Integer studid);
 	
 	Optional<CourseCertificate> findByCertificateNumber(String certificateNumber);
 	
