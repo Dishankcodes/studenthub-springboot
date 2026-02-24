@@ -1,10 +1,23 @@
 package com.example.demo.Controllers;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import com.example.demo.entity.CourseCertificate;
+import com.example.demo.repository.CourseCertificateRepository;
+
+import jakarta.mail.Session;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class StudentController {
+	
+	@Autowired
+	private CourseCertificateRepository certificateRepo;
 
 	@GetMapping("/student-dashboard")
 	public String student_dashboard() {
@@ -13,8 +26,12 @@ public class StudentController {
 	}
 
 	@GetMapping("/student-learning")
-	public String student_learning() {
+	public String student_learning(HttpSession session, Model model) {
 
+		Integer studentId = (Integer) session.getAttribute("studentId");
+		
+		List<CourseCertificate> certificates = certificateRepo.findByStudentId(studentId);
+		model.addAttribute("certificates", certificates);
 		return "student-learning";
 	}
 

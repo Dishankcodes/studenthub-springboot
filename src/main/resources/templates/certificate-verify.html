@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div th:if="${invalid}">
+  <h2>❌ Invalid Certificate</h2>
+  <p>This certificate number does not exist this is fake or human generated or edited .</p>
+</div>
+
+<div th:if="${cert}">
+  <h2>✅ Certificate Verified</h2>
+
+ <p><b>Student:</b>
+     <span th:text="${cert.student.fullname}"></span>
+  </p>
+
+  <p><b>Course:</b>
+     <span th:text="${cert.course.title}"></span>
+  </p>
+
+  <p><b>Issued On:</b>
+     <span th:text="${cert.issuedAt}"></span>
+  </p>
+
+  <a th:href="${cert.pdfPath}" target="_blank">
+    View Certificate PDF
+  </a>
+</div>
+</body>
+</html>

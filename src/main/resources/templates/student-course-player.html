@@ -529,11 +529,12 @@ body {
         </button>
     </form>
     
-   <div th:if="${courseCompleted}">
-    <a th:href="@{/student/certificate/{courseId}(courseId=${course.courseId})}"
-       class="btn btn-success">
-        Download Certificate
-    </a>
+  <div th:if="${courseCompleted}">
+  <a th:href="@{/student/certificate/{id}(id=${course.courseId})}"
+     class="btn btn-success"
+     target="_blank">
+    Download Certificate
+  </a>
 </div>
 </div>
 			</main>

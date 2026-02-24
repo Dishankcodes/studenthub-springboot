@@ -90,7 +90,7 @@ public class StudentCertificateController {
 
 		certificateRepo.save(cert);
 
-		return "redirect:/student-learning" + cert.getId();
+		return "redirect:"+ pdfPath;
 	}
 
 	@GetMapping("/student/certificate/download/{id}")
@@ -148,21 +148,51 @@ public class StudentCertificateController {
 
 		/* Text */
 		PdfContentByte text = writer.getDirectContent();
-		BaseFont font = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
+		BaseFont bold =
+		    BaseFont.createFont(BaseFont.HELVETICA_BOLD,
+		            BaseFont.WINANSI,
+		            BaseFont.EMBEDDED);
 
+		BaseFont normal =
+		    BaseFont.createFont(BaseFont.HELVETICA,
+		            BaseFont.WINANSI,
+		            BaseFont.EMBEDDED);
+
+		/* ================= STUDENT NAME ================= */
 		text.beginText();
-		text.setFontAndSize(font, 28);
-
-		text.showTextAligned(Element.ALIGN_CENTER, student.getFullname(), PageSize.A4.getWidth() / 2, 420, 0);
-
-		text.setFontAndSize(font, 20);
-		text.showTextAligned(Element.ALIGN_CENTER, course.getTitle(), PageSize.A4.getWidth() / 2, 360, 0);
-
-		text.setFontAndSize(font, 14);
-		text.showTextAligned(Element.ALIGN_CENTER, "Issued on: " + LocalDate.now(), PageSize.A4.getWidth() / 2, 300, 0);
-
+		text.setFontAndSize(bold, 32);
+		text.showTextAligned(
+		    Element.ALIGN_CENTER,
+		    student.getFullname().toUpperCase(),
+		    PageSize.A4.getWidth() / 2,
+		    430,
+		    0
+		);
 		text.endText();
 
+		/* ================= COURSE NAME ================= */
+		text.beginText();
+		text.setFontAndSize(normal, 20);
+		text.showTextAligned(
+		    Element.ALIGN_CENTER,
+		    course.getTitle(),
+		    PageSize.A4.getWidth() / 2,
+		    380,
+		    0
+		);
+		text.endText();
+
+		/* ================= ISSUED DATE ================= */
+		text.beginText();
+		text.setFontAndSize(normal, 13);
+		text.showTextAligned(
+		    Element.ALIGN_CENTER,
+		    "Issued on: " + LocalDate.now(),
+		    PageSize.A4.getWidth() / 2,
+		    340,
+		    0
+		);
+		text.endText();
 		/* Signature */
 		if (template.getSignatureImage() != null) {
 			Image sign = Image.getInstance(System.getProperty("user.dir") + template.getSignatureImage());

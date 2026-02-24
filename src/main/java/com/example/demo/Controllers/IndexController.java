@@ -1,11 +1,37 @@
 package com.example.demo.Controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import com.example.demo.entity.CourseCertificate;
+import com.example.demo.repository.CourseCertificateRepository;
 
 @Controller
 public class IndexController {
 
+	
+	@Autowired
+	private CourseCertificateRepository certificateRepo;
+	
+	@GetMapping("/verify/{certNumber}")
+	public String certificateVerify(@PathVariable String certNumber,
+			Model model) {
+		
+		
+		CourseCertificate cert= certificateRepo.findByCertificateNumber(certNumber).orElse(null);
+				
+				
+		if (certNumber == null) {
+		model.addAttribute("invalid", true);
+		return "certificate-verify";
+		}
+		
+		model.addAttribute("cert", cert);
+		return "certificate-verify";
+	}
 	@GetMapping("/index")
 	public String index() {
 		return "index";

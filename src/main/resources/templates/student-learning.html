@@ -89,7 +89,33 @@
 </div>
 
 <div class="main">
-  
+  <h2>My Certificates</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Course</th>
+      <th>Issued On</th>
+      <th>Certificate No</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr th:each="cert : ${certificates}">
+      <td th:text="${cert.course.title}"></td>
+      <td th:text="${cert.issuedAt}"></td>
+      <td th:text="${cert.certificateNumber}"></td>
+      <td>
+        <a th:href="${cert.pdfPath}"
+           target="_blank"
+           class="btn btn-sm btn-primary">
+          Open PDF
+        </a>
+      </td>
+    </tr>
+  </tbody>
+</table>
 </div>
 
 
