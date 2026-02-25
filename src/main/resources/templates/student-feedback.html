@@ -232,20 +232,24 @@
 					<div th:if="${!courseFeedbackSubmitted}">
 						<form th:action="@{/student-feedback/{id}(id=${course.courseId})}" method="post">
 
-  <div class="rating-stars" data-rating>
-    <input type="hidden" name="rating" id="ratingValue">
-    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-    <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
-    <i class="bi bi-star-fill"></i>
-  </div>
+    <!-- ⭐ HIDDEN RATING FIELD -->
+    <input type="hidden" name="rating" id="ratingValue" value="0"/>
 
-  <textarea name="comment"
-            placeholder="What did you like? What can be improved?"
-            required></textarea>
+    <div class="rating-stars" data-rating>
+        <i class="bi bi-star-fill"></i>
+        <i class="bi bi-star-fill"></i>
+        <i class="bi bi-star-fill"></i>
+        <i class="bi bi-star-fill"></i>
+        <i class="bi bi-star-fill"></i>
+    </div>
 
-  <button class="submit-btn">
-    <i class="bi bi-send-fill"></i> Submit Course Feedback
-  </button>
+    <textarea name="comment"
+              placeholder="What did you like? What can be improved?"
+              required></textarea>
+
+    <button class="submit-btn">
+        <i class="bi bi-send-fill"></i> Submit Course Feedback
+    </button>
 
 </form>
 					</div>
@@ -297,12 +301,16 @@
 		});
 
 		// stars → hidden input
-		document.querySelectorAll("[data-rating] i").forEach((star, i, all) => {
-		  star.onclick = () => {
-		    all.forEach((s, j) => s.classList.toggle("active", j <= i));
-		    document.getElementById("ratingValue").value = i + 1;
-		  };
-		});
+		document.querySelectorAll("[data-rating] i").forEach((star, index, all) => {
+    star.addEventListener("click", () => {
+        all.forEach((s, i) => {
+            s.classList.toggle("active", i <= index);
+        });
+
+        // ⭐ SAVE RATING VALUE (1–5)
+        document.getElementById("ratingValue").value = index + 1;
+    });
+});
 	</script>
 
 	<script>

@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.dto.AdminCourseSummaryDTO;
 import com.example.demo.entity.Admin;
 import com.example.demo.entity.Course;
+import com.example.demo.entity.CourseFeedback;
 import com.example.demo.enums.CourseStatus;
 import com.example.demo.repository.AdminRepository;
+import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -27,6 +29,9 @@ public class AdminManageCourseController {
 
 	@Autowired
 	private CourseRepository courseRepo;
+	
+	@Autowired
+	private CourseFeedbackRepository feedbackRepo;
 
 	@GetMapping("/manage-courses")
 	public String admin_courses(HttpSession session, Model model) {
@@ -74,17 +79,26 @@ public class AdminManageCourseController {
 
 	@GetMapping("/admin-course/view/{id}")
 	public String viewCourse(@PathVariable Integer id, Model model) {
-		
 
-	    List<Course> courses = courseRepo.findAllWithStructure(id);
+	    Course course = courseRepo.findAllWithStructure(id).get(0);
 
-		  Course course = courses.get(0); 
-		
-		if (course == null) {
-			return "redirect:/manage-courses";
-		}
+	    if (course == null) {
+	        return "redirect:/manage-courses";
+	    }
 
-		model.addAttribute("course", course);
-		return "admin-course-view";
+	    List<CourseFeedback> feedbacks =
+	            feedbackRepo.findByCourseCourseId(id);
+
+	    double avgRating = feedbacks.stream()
+	            .mapToInt(CourseFeedback::getRating)
+	            .average()
+	            .orElse(0.0);
+
+	    model.addAttribute("course", course);
+	    model.addAttribute("feedbacks", feedbacks);
+	    model.addAttribute("avgRating", avgRating);
+	    model.addAttribute("reviewCount", feedbacks.size());
+
+	    return "admin-course-view";
 	}
 }

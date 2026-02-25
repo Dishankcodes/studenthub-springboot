@@ -110,7 +110,110 @@
         </header>
 
         <hr class="header-divider">
+<div class="dashboard">
 
+    <h2 class="section-title">Students Enrolled in Your Courses</h2>
+
+    <div class="card" style="background:#fff;border-radius:12px;padding:20px">
+
+        <table style="width:100%;border-collapse:collapse">
+            <thead>
+                <tr style="text-align:left;border-bottom:1px solid #e5e7eb">
+                    <th>Student</th>
+                    <th>Course</th>
+                    <th>Enrolled On</th>
+<th>Finished On</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="e : ${enrollments}"
+                    style="border-bottom:1px solid #f1f5f9">
+
+                    <!-- Student -->
+                    <td>
+                        <strong th:text="${e.student.fullname}">Student Name</strong><br>
+                        <small th:text="${e.student.email}" style="color:#6b7280">
+                            email@example.com
+                        </small>
+                    </td>
+
+                    <!-- Course -->
+                    <td th:text="${e.course.title}">Course Title</td>
+
+                    <!-- Date -->
+                  <td th:text="${#temporals.format(e.enrolledAt,'dd MMM yyyy')}">
+</td>
+
+<td>
+    <span th:if="${e.completedAt != null}"
+          th:text="${#temporals.format(e.completedAt,'dd MMM yyyy')}"
+          style="color:#16a34a;font-weight:600">
+    </span>
+
+    <span th:if="${e.completedAt == null}"
+          style="color:#9ca3af">
+        In Progress
+    </span>
+</td>
+                    <!-- Status -->
+                    <td>
+                        <span th:if="${e.status.name() == 'ACTIVE'}"
+                              style="color:#16a34a;font-weight:600">
+                            ● Active
+                        </span>
+
+                        <span th:if="${e.status.name() == 'SUSPENDED'}"
+                              style="color:#f59e0b;font-weight:600">
+                            ● Suspended
+                        </span>
+
+                        <span th:if="${e.status.name() == 'BLOCKED'}"
+                              style="color:#dc2626;font-weight:600">
+                            ● Blocked
+                        </span>
+                    </td>
+
+                    <!-- Actions -->
+                    <td style="display:flex;gap:8px">
+
+                        <!-- Suspend -->
+                        <form th:if="${e.status.name() == 'ACTIVE'}"
+                           th:action="@{/teacher/enrollment/block/{id}(id=${e.enrollmentId})}"
+                              method="post">
+                            <button class="btn btn-warning btn-sm">
+                                <i class="bi bi-pause-circle"></i>
+                                Suspend
+                            </button>
+                        </form>
+
+                        <!-- Block -->
+                        <form th:if="${e.status.name() != 'BLOCKED'}"
+                           th:action="@{/teacher/enrollment/block/{id}(id=${e.enrollmentId})}"
+                              method="post">
+                            <button class="btn btn-danger btn-sm">
+                                <i class="bi bi-slash-circle"></i>
+                                Block
+                            </button>
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                <tr th:if="${enrollments.isEmpty()}">
+                    <td colspan="5" style="text-align:center;color:#6b7280;padding:20px">
+                        No students enrolled yet.
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+</div>
         
     </main>
     <script>

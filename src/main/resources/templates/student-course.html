@@ -262,9 +262,9 @@ a.btn:hover {
 						</div>
 						<div class="course-footer">
 							<p>
-    ⭐ <span th:text="${#numbers.formatDecimal(avgRating,1,1)}">0.0</span>
-    • <span th:text="${feedbacks.size()}">0</span> reviews
-   
+ ⭐ <span th:text="${#numbers.formatDecimal(avgRatings[course.courseId], 1, 1)}"></span>
+•
+<span th:text="${reviewCounts[course.courseId]}"></span> reviews
 </p>
 <a class="btn"
    th:href="@{/student-course-details(courseId=${course.courseId})}">

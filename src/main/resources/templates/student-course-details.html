@@ -310,7 +310,8 @@
 					<p th:text="${course.description}"></p>
 
 					<p>
-						⭐ 4.8 • 1,200 students • By
+						⭐ <span th:text="${#numbers.formatDecimal(avgRating,1,1)}">0.0</span>
+    • <span th:text="${feedbacks.size()}">0</span> reviews • 1,200 students • By
 						<span th:text="${course.teacher.firstname + ' ' + course.teacher.lastname}"></span>
 					</p>
 

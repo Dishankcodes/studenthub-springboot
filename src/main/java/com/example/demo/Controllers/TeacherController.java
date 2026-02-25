@@ -1,14 +1,20 @@
 package com.example.demo.Controllers;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.demo.entity.Enrollment;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherProfile;
+import com.example.demo.enums.EnrollmentStatus;
+import com.example.demo.repository.EnrollmentRepository;
 import com.example.demo.repository.TeacherProfileRepo;
 import com.example.demo.repository.TeacherRepository;
 
@@ -22,6 +28,9 @@ public class TeacherController {
 
 	@Autowired
 	private TeacherProfileRepo teacherProfileRepo;
+	
+	@Autowired
+	private EnrollmentRepository enrollmentRepo;
 
 	// ===== DASHBOARD =====
 	@GetMapping("/teacher-dashboard")
@@ -55,8 +64,46 @@ public class TeacherController {
 
 	// ===== STUDENTS =====
 	@GetMapping("/teacher-students")
-	public String studentsPage() {
-		return "teacher-students";
+	public String teacherStudents(HttpSession session, Model model) {
+
+	    Integer teacherId = (Integer) session.getAttribute("teacherId");
+	    if (teacherId == null) {
+	        return "redirect:/teacher-login";
+	    }
+
+	    Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+	    if (teacher == null) {
+	        session.invalidate();
+	        return "redirect:/teacher-login";
+	    }
+
+	    List<Enrollment> enrollments =
+	            enrollmentRepo.findByTeacherId(teacherId);
+
+	    model.addAttribute("teacher", teacher);     // 🔥 THIS WAS MISSING
+	    model.addAttribute("enrollments", enrollments);
+
+	    return "teacher-students";
+	}
+	
+	@PostMapping("/teacher/enrollment/suspend/{id}")
+	public String suspendEnrollment(@PathVariable Integer id) {
+
+	    Enrollment e = enrollmentRepo.findById(id).orElseThrow();
+	    e.setStatus(EnrollmentStatus.SUSPENDED);
+	    enrollmentRepo.save(e);
+
+	    return "redirect:/teacher-students";
+	}
+
+	@PostMapping("/teacher/enrollment/block/{id}")
+	public String blockEnrollment(@PathVariable Integer id) {
+
+	    Enrollment e = enrollmentRepo.findById(id).orElseThrow();
+	    e.setStatus(EnrollmentStatus.BLOCKED);
+	    enrollmentRepo.save(e);
+
+	    return "redirect:/teacher-students";
 	}
 
 	// ===== COMMUNICATION =====

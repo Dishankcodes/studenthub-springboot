@@ -1,6 +1,7 @@
 package com.example.demo.Controllers;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,16 +62,27 @@ public class StudentCourseController {
 	@GetMapping("/student-course")
 	public String exploreCourse(Model model) {
 
-		List<Course> courses = courseRepo.findByStatus(CourseStatus.PUBLISHED);
-		
-		model.addAttribute("courses", courses);
-		model.addAttribute("feedbacks", List.of());
-	    model.addAttribute("avgRating", 0.0);
-	    model.addAttribute("feedbackGiven", false);
-	    
+	    List<Course> courses = courseRepo.findByStatus(CourseStatus.PUBLISHED);
+
+	    Map<Integer, Double> avgRatings = new HashMap<>();
+	    Map<Integer, Long> reviewCounts = new HashMap<>();
+
+	    for (Course course : courses) {
+	        Integer courseId = course.getCourseId();
+
+	        double avg = feedbackRepo.findAverageRating(courseId);
+	        long count = feedbackRepo.countByCourseCourseId(courseId);
+
+	        avgRatings.put(courseId, avg);
+	        reviewCounts.put(courseId, count);
+	    }
+
+	    model.addAttribute("courses", courses);
+	    model.addAttribute("avgRatings", avgRatings);
+	    model.addAttribute("reviewCounts", reviewCounts);
+
 	    return "student-course";
 	}
-	
 	
 	
 	
@@ -245,6 +257,18 @@ public class StudentCourseController {
 	                "questions",
 	                quizQuestionRepo.findByQuiz(currentLesson.getQuiz())
 	        );
+	    }
+	    
+	    if (totalLessons > 0 && completedLessons == totalLessons) {
+
+	        Enrollment enrollment =
+	            enrollmentRepo.findByStudentStudidAndCourseCourseId(studentId, courseId)
+	                .orElse(null);
+
+	        if (enrollment != null && enrollment.getCompletedAt() == null) {
+	            enrollment.setCompletedAt(LocalDateTime.now());
+	            enrollmentRepo.save(enrollment);
+	        }
 	    }
 
 	    model.addAttribute("course", course);
