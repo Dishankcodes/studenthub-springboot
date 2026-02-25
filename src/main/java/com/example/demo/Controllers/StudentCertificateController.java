@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -45,7 +46,7 @@ public class StudentCertificateController {
 	private StudentRepository studentRepo;
 
 	@GetMapping("/student/certificate/{courseId}")
-	public String generateCertificate(@PathVariable Integer courseId, HttpSession session) throws Exception {
+	public String generateCertificate(@PathVariable Integer courseId, HttpSession session,Model model) throws Exception {
 
 		Integer studentId = (Integer) session.getAttribute("studentId");
 		if (studentId == null) {
@@ -74,8 +75,20 @@ public class StudentCertificateController {
 		}
 
 		/* 3️⃣ Active template */
-		CertificateTemplate template = templateRepo.findByActiveTrue()
-				.orElseThrow(() -> new RuntimeException("No active certificate template"));
+		CertificateTemplate template = templateRepo.findByActiveTrue().orElse(null);
+
+		if (template == null) {
+		    session.setAttribute(
+		        "certificateError",
+		        "Certificate is not available right now. Please contact admin or try again later."
+		    );
+		    String certMsg = (String) session.getAttribute("certificateError");
+		    if (certMsg != null) {
+		        model.addAttribute("certificateError", certMsg);
+		        session.removeAttribute("certificateError");
+		    }
+		    return "redirect:/student-course-player/" + courseId;
+		}
 
 		/* 4️⃣ Generate PDF */
 		String pdfPath = generatePdf(student, course, template);

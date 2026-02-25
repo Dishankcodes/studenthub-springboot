@@ -447,6 +447,26 @@
 				</span>
 			</div>
 		</div>
+		<!-- ===== CERTIFICATE ERROR MESSAGE ===== -->
+		<div data-cert-msg th:if="${certificateError}" style="margin:16px 30px;
+            padding:14px;
+            border-radius:8px;
+            background:#fff3cd;
+            color:#856404;
+            border:1px solid #ffeeba;
+            font-weight:600;">
+			<i class="bi bi-exclamation-triangle-fill"></i>
+			<span th:text="${certificateError}"></span>
+			<span style="margin-left:6px;">
+				—
+				<a th:href="@{/student-learning}" style="color:#0c5460;
+                  font-weight:700;
+                  text-decoration:underline;">
+					Click here
+				</a>
+				to go back to My Learning
+			</span>
+		</div>
 
 		<!-- ===== BODY ===== -->
 		<div class="course-container">
@@ -457,8 +477,8 @@
 				<div class="module" th:each="module : ${course.modules}">
 					<h3 th:text="${module.title}"></h3>
 					<div th:each="lesson : ${module.lessons}" class="lesson" th:classappend="
-        ${lesson.lessonId == currentLesson.lessonId} ? 'active' :
-        (${completedLessonIds.contains(lesson.lessonId)} ? 'completed' : '')">
+${!noLessons and lesson.lessonId == currentLesson.lessonId} ? 'active' :
+(${completedLessonIds.contains(lesson.lessonId)} ? 'completed' : '')">
 
 						<a th:href="@{/student-course-player/{cId}(cId=${course.courseId}, lessonId=${lesson.lessonId})}"
 							style="text-decoration: none; color: inherit; display: flex; gap: 10px; align-items: center; width: 100%;">
@@ -494,7 +514,7 @@
 			</aside>
 			<!-- MAIN CONTENT -->
 			<main class="course-content">
-
+				<th:block th:if="${!noLessons}">
 				<div class="content-title" th:text="${currentLesson.title}"></div>
 				<!-- VIDEO -->
 				<div class="video-box" th:if="${currentLesson.type.name() == 'VIDEO'}">
@@ -582,6 +602,39 @@
 
 
 				</div>
+				</th:block>
+				
+				
+				 <!-- ===== EMPTY COURSE STATE ===== -->
+    <th:block th:if="${noLessons}">
+        <div style="
+            padding:40px;
+            text-align:center;
+            background:#ffffff;
+            border-radius:12px;
+            border:1px dashed #ddd;
+        ">
+            <i class="bi bi-info-circle-fill"
+               style="font-size:42px;color:#f59e0b;"></i>
+
+            <h2 style="margin-top:16px;">
+                Lessons not available yet
+            </h2>
+
+            <p style="margin-top:10px;color:#555;">
+                This course does not have any lessons added yet.<br>
+                Please wait for the instructor to publish content.
+            </p>
+
+            <div style="margin-top:24px;">
+                <a th:href="@{/student-course}"
+                   class="enroll-btn"
+                   style="text-decoration:none;">
+                    Explore Other Courses
+                </a>
+            </div>
+        </div>
+    </th:block>
 			</main>
 
 		</div>
@@ -604,14 +657,20 @@
 			}
 		});
 	</script>
+	<script th:if="${!noLessons}">
+    document.querySelectorAll(".completeLessonBtn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            fetch("/student/lesson/complete?lessonId=[[${currentLesson.lessonId}]]", {
+                method: "POST"
+            }).then(() => location.reload());
+        });
+    });
+</script>
 	<script>
-		document.querySelectorAll(".completeLessonBtn").forEach(btn => {
-			btn.addEventListener("click", () => {
-				fetch("/student/lesson/complete?lessonId=[[${currentLesson.lessonId}]]", {
-					method: "POST"
-				}).then(() => location.reload());
-			});
-		});
+		setTimeout(() => {
+			const msg = document.querySelector('[data-cert-msg]');
+			if (msg) msg.style.display = 'none';
+		}, 5000);
 	</script>
 </body>
 

@@ -147,4 +147,14 @@ public class TeacherController {
 		return "redirect:/teacher-auth";
 	}
 
+	@GetMapping("/test-teacher-login")
+	public String testTeacherLogin(HttpSession session) {
+
+	    // simulate logged-in teacher (TESTING ONLY)
+	    session.setAttribute("TEACHER_LOGGED_IN", true);
+	    session.setAttribute("teacherId", 1);   // must exist in DB
+	    session.setAttribute("teacherName", "Test Teacher");
+
+	    return "redirect:/teacher-dashboard";
+	}
 }

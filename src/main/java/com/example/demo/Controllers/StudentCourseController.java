@@ -64,7 +64,8 @@ public class StudentCourseController {
 	@GetMapping("/student-course-details")
 	public String viewCourse(
 	        @RequestParam Integer courseId,
-	        Model model
+	        Model model,
+	        HttpSession session
 	) {
 	    Course course = courseRepo.findPublishedCourseForStudent(
 	            courseId,
@@ -75,19 +76,42 @@ public class StudentCourseController {
 	        return "redirect:/student-course";
 	    }
 
+	    Integer studentId = (Integer) session.getAttribute("studentId");
+
+	    boolean enrolled = false;
+	    boolean courseCompleted = false;
+
+	    if (studentId != null) {
+	        enrolled = enrollmentRepo
+	                .existsByStudentStudidAndCourseCourseId(studentId, courseId);
+
+	        if (enrolled) {
+	            long completedLessons =
+	                    lessonProgressRepo
+	                            .countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(
+	                                    studentId, courseId);
+
+	            long totalLessons = course.getModules().stream()
+	                    .mapToLong(m -> m.getLessons().size())
+	                    .sum();
+
+	            courseCompleted = totalLessons > 0 && completedLessons == totalLessons;
+	        }
+	    }
+
 	    Lesson previewLesson = course.getModules().stream()
 	            .flatMap(m -> m.getLessons().stream())
 	            .filter(Lesson::isFreePreview)
-	            .filter(l -> l.getType() == LessonType.VIDEO)
 	            .findFirst()
 	            .orElse(null);
 
 	    model.addAttribute("course", course);
 	    model.addAttribute("previewLesson", previewLesson);
+	    model.addAttribute("enrolled", enrolled);
+	    model.addAttribute("courseCompleted", courseCompleted);
 
 	    return "student-course-details";
 	}
-
 	@PostMapping("/student-enroll")
 	public String confirmEnrollment(
 	        @RequestParam Integer courseId,
@@ -124,13 +148,11 @@ public class StudentCourseController {
 	        @RequestParam(required = false) Integer lessonId,
 	        Model model,
 	        HttpSession session
-			) {
-			    Integer studentId = (Integer) session.getAttribute("studentId");
-
-			    if (studentId == null) {
-			        return "redirect:/student-login";
-			    }
-
+	) {
+	    Integer studentId = (Integer) session.getAttribute("studentId");
+	    if (studentId == null) {
+	        return "redirect:/student-login";
+	    }
 
 	    // 🔒 enrollment check
 	    boolean enrolled =
@@ -142,24 +164,30 @@ public class StudentCourseController {
 
 	    Course course = courseRepo.findById(courseId).orElseThrow();
 
-	    Lesson currentLesson;
+	    // 🔍 resolve current lesson
+	    Lesson currentLesson =
+	            (lessonId != null)
+	                ? course.getModules().stream()
+	                    .flatMap(m -> m.getLessons().stream())
+	                    .filter(l -> l.getLessonId().equals(lessonId))
+	                    .findFirst()
+	                    .orElse(null)
+	                : course.getModules().stream()
+	                    .flatMap(m -> m.getLessons().stream())
+	                    .findFirst()
+	                    .orElse(null);
 
-	    if (lessonId != null) {
-	        // open clicked lesson
-	        currentLesson = course.getModules().stream()
-	                .flatMap(m -> m.getLessons().stream())
-	                .filter(l -> l.getLessonId().equals(lessonId))
-	                .findFirst()
-	                .orElse(null);
-	    } else {
-	        // default = first lesson
-	        currentLesson = course.getModules().stream()
-	                .flatMap(m -> m.getLessons().stream())
-	                .findFirst()
-	                .orElse(null);
+	    // 🔴 EMPTY COURSE (no lessons at all)
+	    if (currentLesson == null) {
+	        model.addAttribute("course", course);
+	        model.addAttribute("noLessons", true);
+	        model.addAttribute("progressPercent", 0);
+	        model.addAttribute("completedLessonIds", List.of());
+	        model.addAttribute("courseCompleted", false);
+	        return "student-course-player";
 	    }
-	    
-	    
+
+	    // 📊 progress calculation
 	    long completedLessons =
 	            lessonProgressRepo
 	                .countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(
@@ -171,32 +199,28 @@ public class StudentCourseController {
 
 	    int progressPercent =
 	            totalLessons == 0 ? 0 :
-	            (int)((completedLessons * 100) / totalLessons);
-	    
-	    
-	    
+	            (int) ((completedLessons * 100) / totalLessons);
 
 	    List<Integer> completedLessonIds =
 	            lessonProgressRepo.findCompletedLessonIds(studentId, courseId);
-	    
-	    // 🔥 QUIZ QUESTIONS
-	    if (currentLesson != null && currentLesson.getType() == LessonType.QUIZ) {
+
+	    // 🧠 quiz questions
+	    if (currentLesson.getType() == LessonType.QUIZ) {
 	        model.addAttribute(
-	            "questions",
-	            quizQuestionRepo.findByQuiz(currentLesson.getQuiz())
+	                "questions",
+	                quizQuestionRepo.findByQuiz(currentLesson.getQuiz())
 	        );
 	    }
-	    boolean courseCompleted = progressPercent ==100;
-	    
-	    model.addAttribute("courseCompleted", courseCompleted);
-	    model.addAttribute("completedLessonIds", completedLessonIds);
-	    model.addAttribute("progressPercent", progressPercent);
+
 	    model.addAttribute("course", course);
 	    model.addAttribute("currentLesson", currentLesson);
+	    model.addAttribute("noLessons", false);
+	    model.addAttribute("progressPercent", progressPercent);
+	    model.addAttribute("completedLessonIds", completedLessonIds);
+	    model.addAttribute("courseCompleted", progressPercent == 100);
 
 	    return "student-course-player";
 	}
-	
 	@PostMapping("/student/lesson/complete")
 	@ResponseBody
 	public String completeLesson(

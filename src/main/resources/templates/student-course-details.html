@@ -209,10 +209,39 @@
 			border-radius: 10px;
 			margin-left: 8px;
 		}
+
 		.enroll-box {
-    position: sticky;
-    top: 90px;
-}
+			position: sticky;
+			top: 90px;
+		}
+
+		.enroll-primary {
+			background: #1f1f2e;
+		}
+
+		.enroll-continue {
+			background: #4f46e5;
+		}
+
+		.enroll-complete {
+			background: #16a34a;
+		}
+
+		.btn-secondary {
+			background: #facc15;
+			color: #1f2937;
+			padding: 12px;
+			border-radius: 10px;
+			text-align: center;
+			font-weight: 600;
+			text-decoration: none;
+		}
+
+		.btn-enroll i,
+		.btn-secondary i {
+			margin-right: 8px;
+			font-size: 16px;
+		}
 	</style>
 </head>
 
@@ -305,16 +334,55 @@
 					<div class="price" th:if="${course.type.name() == 'FREE'}">
 						Free
 					</div>
-					
-<form th:action="@{/student-enroll}" method="post">
-    <input type="hidden" name="courseId" th:value="${course.courseId}">
-    <button class="btn-enroll">Enroll Now</button>
-</form>
+
+					<!-- ===== COURSE ACTION CTA ===== -->
+
+					<!-- ❌ NOT ENROLLED -->
+					<form th:if="${!enrolled}" th:action="@{/student-enroll}" method="post">
+						<input type="hidden" name="courseId" th:value="${course.courseId}">
+						<button class="btn-enroll enroll-primary">
+							<i class="bi bi-box-arrow-in-right"></i>
+							Enroll Now
+						</button>
+					</form>
+
+					<!-- ▶ ENROLLED BUT NOT COMPLETED -->
+					<a th:if="${enrolled and !courseCompleted}"
+						th:href="@{/student-course-player/{id}(id=${course.courseId})}"
+						class="btn-enroll enroll-continue">
+						<i class="bi bi-play-circle"></i>
+						Continue Learning
+					</a>
+
+					<!-- ✅ COURSE COMPLETED (VIEW COURSE PLAYER) -->
+					<a th:if="${courseCompleted}" th:href="@{/student-course-player/{id}(id=${course.courseId})}"
+						class="btn-enroll enroll-complete">
+						<i class="bi bi-check-circle-fill"></i>
+						Course Completed · View
+					</a>
+
+					<!-- 🎓 CERTIFICATE -->
+					<a th:if="${courseCompleted}" th:href="@{/student/certificate/{id}(id=${course.courseId})}"
+						class="btn-secondary" style="display:block;margin-top:10px;">
+						<i class="bi bi-award-fill"></i>
+						Download Certificate
+					</a>
 
 					<ul style="margin-top:15px;text-align:left;font-size:14px;color:#555">
-						<li>✔ Lifetime access</li>
-						<li>✔ Certificate of completion</li>
-						<li>✔ Beginner friendly</li>
+						<li th:if="${!enrolled}">
+							<i class="bi bi-infinity"></i> Lifetime access
+						</li>
+						<li th:if="${!enrolled}">
+							<i class="bi bi-patch-check"></i> Certificate of completion
+						</li>
+
+						<li th:if="${enrolled and !courseCompleted}">
+							<i class="bi bi-book-half"></i> You’re currently enrolled
+						</li>
+
+						<li th:if="${courseCompleted}">
+							<i class="bi bi-trophy-fill"></i> You’ve completed this course
+						</li>
 					</ul>
 				</div>
 
@@ -375,29 +443,29 @@
 			</div>
 
 		</div>
-</div>
+	</div>
 
-		<!-- ===== SCRIPT ===== -->
-		<script>
-			const sidebar = document.getElementById("sidebar");
-			const toggle = document.getElementById("toggle");
-			const icon = toggle.querySelector("i");
+	<!-- ===== SCRIPT ===== -->
+	<script>
+		const sidebar = document.getElementById("sidebar");
+		const toggle = document.getElementById("toggle");
+		const icon = toggle.querySelector("i");
 
-			toggle.addEventListener("click", () => {
-				if (window.innerWidth <= 768) {
-					sidebar.classList.toggle("mobile-show");
-				} else {
-					sidebar.classList.toggle("collapsed");
-					icon.classList.toggle("bi-chevron-right");
-					icon.classList.toggle("bi-chevron-left");
-				}
-			});
-		</script>
-		<script>
-			function toggleModule(el) {
-				el.parentElement.classList.toggle("open");
+		toggle.addEventListener("click", () => {
+			if (window.innerWidth <= 768) {
+				sidebar.classList.toggle("mobile-show");
+			} else {
+				sidebar.classList.toggle("collapsed");
+				icon.classList.toggle("bi-chevron-right");
+				icon.classList.toggle("bi-chevron-left");
 			}
-		</script>
+		});
+	</script>
+	<script>
+		function toggleModule(el) {
+			el.parentElement.classList.toggle("open");
+		}
+	</script>
 </body>
 
 </html>
