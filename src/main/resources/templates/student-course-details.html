@@ -265,7 +265,7 @@
 		<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
 		<a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
 		<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
-		<a th:href="@{/student-instructor-feedback}"><i class="bi bi-person-video3"></i><span>Instructor
+		<a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor
 				Overview</span></a>
 		<a th:href="@{/student-news}"><i class="bi bi-megaphone"></i><span>Announcements</span></a>
 		<a th:href="@{/student-notes}"><i class="bi bi-graph-up"></i><span>Notes</span></a>
@@ -367,6 +367,22 @@
 						<i class="bi bi-award-fill"></i>
 						Download Certificate
 					</a>
+					
+					<!-- 💬 GIVE FEEDBACK (ONLY IF ENROLLED) -->
+<a th:if="${enrolled and !feedbackGiven}"
+   th:href="@{/student-feedback/{id}(id=${course.courseId})}"
+   class="btn-secondary"
+   style="display:block;margin-top:10px;">
+    <i class="bi bi-chat-dots-fill"></i>
+    Give Feedback
+</a>
+
+<span th:if="${feedbackGiven}"
+      class="btn-secondary"
+      style="display:block;margin-top:10px;background:#dcfce7;color:#166534;">
+    <i class="bi bi-check-circle-fill"></i>
+    Feedback Submitted
+</span>
 
 					<ul style="margin-top:15px;text-align:left;font-size:14px;color:#555">
 						<li th:if="${!enrolled}">
@@ -427,21 +443,24 @@
 
 			<!-- ===== STUDENT FEEDBACK (BOTTOM) ===== -->
 			<div class="reviews">
-				<h3>Student Feedback</h3>
+    <h3>Student Feedback</h3>
 
-				<div class="review">
-					⭐⭐⭐⭐⭐
-					<p>“Best Spring Boot course ever!”</p>
-					<small>— Rahul</small>
-				</div>
+    <div th:if="${feedbacks.isEmpty()}"
+         style="color:#6b7280;">
+        No feedback yet. Be the first to review this course!
+    </div>
 
-				<div class="review">
-					⭐⭐⭐⭐☆
-					<p>“Very clear explanations.”</p>
-					<small>— Nivya</small>
-				</div>
-			</div>
-
+    <div class="review"
+         th:each="f : ${feedbacks}">
+        <p>
+            <span th:text="${'⭐'.repeat(f.rating)}"></span>
+        </p>
+        <p th:text="${f.comment}"></p>
+        <small>
+            —<span th:text="${f.student.fullname}"></span>
+        </small>
+    </div>
+</div>
 		</div>
 	</div>
 

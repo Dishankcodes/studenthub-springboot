@@ -193,7 +193,7 @@ a.btn:hover {
 		<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
 		<a th:href="@{/student-course}" class="active"><i class="bi bi-search"></i><span>Explore Courses</span></a>
 		<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
-		<a th:href="@{/student-instructor-feedback}"><i class="bi bi-person-video3"></i><span>Instructor
+		<a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor
 				Overview</span></a>
 		<a th:href="@{/student-news}"><i class="bi bi-megaphone"></i><span>Announcements</span></a>
 		<a th:href="@{/student-notes}"><i class="bi bi-graph-up"></i><span>Notes</span></a>
@@ -229,9 +229,9 @@ a.btn:hover {
 				<input type="text" placeholder="Search courses...">
 				<select>
 					<option>All Categories</option>
-					<option>Programming</option>
-					<option>Web Development</option>
-					<option>Data Science</option>
+					<option>Beginner</option>
+					<option>Intermediate</option>
+					<option>Advanced</option>
 				</select>
 			</div>
 
@@ -261,7 +261,11 @@ a.btn:hover {
 							By <span th:text="${course.teacher.firstname + ' ' + course.teacher.lastname}"></span>
 						</div>
 						<div class="course-footer">
-							<span class="rating">⭐ 4.8</span>
+							<p>
+    ⭐ <span th:text="${#numbers.formatDecimal(avgRating,1,1)}">0.0</span>
+    • <span th:text="${feedbacks.size()}">0</span> reviews
+   
+</p>
 <a class="btn"
    th:href="@{/student-course-details(courseId=${course.courseId})}">
    View

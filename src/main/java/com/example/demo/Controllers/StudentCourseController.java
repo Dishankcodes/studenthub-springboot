@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Course;
+import com.example.demo.entity.CourseFeedback;
 import com.example.demo.entity.Enrollment;
 import com.example.demo.entity.Lesson;
 import com.example.demo.entity.LessonProgress;
@@ -23,6 +24,7 @@ import com.example.demo.entity.QuizQuestion;
 import com.example.demo.entity.Student;
 import com.example.demo.enums.CourseStatus;
 import com.example.demo.enums.LessonType;
+import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.EnrollmentRepository;
 import com.example.demo.repository.LessonProgressRepository;
@@ -53,14 +55,25 @@ public class StudentCourseController {
 	@Autowired
 	private StudentRepository studentRepo;
 	
+	@Autowired
+	private CourseFeedbackRepository feedbackRepo;
+	
 	@GetMapping("/student-course")
 	public String exploreCourse(Model model) {
 
 		List<Course> courses = courseRepo.findByStatus(CourseStatus.PUBLISHED);
 		
 		model.addAttribute("courses", courses);
-		return "student-course";
+		model.addAttribute("feedbacks", List.of());
+	    model.addAttribute("avgRating", 0.0);
+	    model.addAttribute("feedbackGiven", false);
+	    
+	    return "student-course";
 	}
+	
+	
+	
+	
 	@GetMapping("/student-course-details")
 	public String viewCourse(
 	        @RequestParam Integer courseId,
@@ -80,6 +93,13 @@ public class StudentCourseController {
 
 	    boolean enrolled = false;
 	    boolean courseCompleted = false;
+	    boolean feedbackGiven = false;
+
+	    if (studentId != null) {
+	        feedbackGiven = feedbackRepo
+	            .existsByCourseCourseIdAndStudentStudid(course.getCourseId(), studentId);
+	    }
+
 
 	    if (studentId != null) {
 	        enrolled = enrollmentRepo
@@ -104,7 +124,20 @@ public class StudentCourseController {
 	            .filter(Lesson::isFreePreview)
 	            .findFirst()
 	            .orElse(null);
+	    
+	    List<CourseFeedback> feedbacks =
+	            feedbackRepo.findByCourseCourseId(courseId);
 
+	    double avgRating = feedbacks.stream()
+	            .mapToInt(CourseFeedback::getRating)
+	            .average()
+	            .orElse(0.0);
+
+	    
+
+	    model.addAttribute("feedbacks", feedbacks);
+	    model.addAttribute("avgRating", avgRating);
+	    model.addAttribute("feedbackGiven", feedbackGiven);
 	    model.addAttribute("course", course);
 	    model.addAttribute("previewLesson", previewLesson);
 	    model.addAttribute("enrolled", enrolled);
@@ -112,6 +145,8 @@ public class StudentCourseController {
 
 	    return "student-course-details";
 	}
+	
+	
 	@PostMapping("/student-enroll")
 	public String confirmEnrollment(
 	        @RequestParam Integer courseId,
