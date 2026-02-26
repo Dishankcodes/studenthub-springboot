@@ -12,11 +12,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseCertificate;
 import com.example.demo.entity.CourseFeedback;
+import com.example.demo.entity.InstructorFeedback;
+import com.example.demo.entity.Teacher;
 import com.example.demo.repository.CourseCertificateRepository;
 import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.EnrollmentRepository;
+import com.example.demo.repository.InstructorFeedbackRepository;
 import com.example.demo.repository.StudentRepository;
+import com.example.demo.repository.TeacherRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -38,6 +42,12 @@ public class StudentController {
 	
 	@Autowired
 	private StudentRepository studentRepo;
+	
+	@Autowired
+	private InstructorFeedbackRepository instructorFeedbackRepo;
+	
+	@Autowired
+	private TeacherRepository teacherRepo;
 	
 	
 	@GetMapping("/student-dashboard")
@@ -117,10 +127,20 @@ public class StudentController {
 	        .map(CourseCertificate::getCourse)
 	        .distinct()
 	        .toList();
+	    
+	    List<Teacher> completedTeachers = certificates.stream()
+	            .map(cc -> cc.getCourse().getTeacher())
+	            .distinct()
+	            .toList();
 
+	    model.addAttribute("feedbackMode", "LIST");
+	    model.addAttribute("completedTeachers", completedTeachers);
 	    model.addAttribute("completedCourses", completedCourses);
 	    model.addAttribute("courseSelected", false);
 	    model.addAttribute("courseFeedbackSubmitted", false);
+	    model.addAttribute("canRateInstructor", false);
+	    model.addAttribute("instructorFeedbackGiven", false);
+	    model.addAttribute("teacher", null);
 
 	    return "student-feedback";
 	}	
@@ -140,13 +160,28 @@ public class StudentController {
 	    if (!enrolled) return "redirect:/student-course-details?courseId=" + courseId;
 
 	    Course course = courseRepo.findById(courseId).orElseThrow();
+	    Teacher teacher = course.getTeacher();
+	    
+	    boolean courseFeedbackGiven =
+	            feedbackRepo.existsByCourseCourseIdAndStudentStudid(courseId, studentId);
+	    
 
-	    boolean alreadyGiven =
-	        feedbackRepo.existsByCourseCourseIdAndStudentStudid(courseId, studentId);
+	    boolean canRateInstructor =
+	            canRateInstructor(studentId, teacher.getTeacherId());
 
-	    model.addAttribute("course", course);
-	    model.addAttribute("courseSelected", true);
-	    model.addAttribute("courseFeedbackSubmitted", alreadyGiven);
+	        boolean instructorFeedbackGiven =
+	            instructorFeedbackRepo.existsByTeacherTeacherIdAndStudentStudid(
+	                teacher.getTeacherId(), studentId
+	            );
+
+	        model.addAttribute("feedbackMode", "DIRECT");
+	        model.addAttribute("course", course);
+	        model.addAttribute("teacher", teacher);
+	        model.addAttribute("courseSelected", true);
+	        model.addAttribute("courseFeedbackSubmitted", courseFeedbackGiven);
+	        model.addAttribute("canRateInstructor", canRateInstructor);
+	        model.addAttribute("instructorFeedbackGiven", instructorFeedbackGiven);
+
 
 	    return "student-feedback";
 	}
@@ -172,6 +207,66 @@ public class StudentController {
 
 	    // 🔥 THIS IS KEY
 	    return "redirect:/student-feedback/" + courseId;
+	}
+	
+	@GetMapping("/student-feedback/instructor/{teacherId}")
+	public String instructorFeedbackPage(
+	        @PathVariable Integer teacherId,
+	        HttpSession session,
+	        Model model) {
+
+	    Integer studentId = (Integer) session.getAttribute("studentId");
+	    if (studentId == null) return "redirect:/student-login";
+
+	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+
+	    boolean canRateInstructor = canRateInstructor(studentId, teacherId);
+	    boolean instructorFeedbackGiven =
+	            instructorFeedbackRepo.existsByTeacherTeacherIdAndStudentStudid(
+	                    teacherId, studentId);
+
+	    model.addAttribute("feedbackMode", "DIRECT");
+	    model.addAttribute("teacher", teacher);
+	    model.addAttribute("canRateInstructor", canRateInstructor);
+	    model.addAttribute("instructorFeedbackGiven", instructorFeedbackGiven);
+	    model.addAttribute("courseSelected", false); // important
+
+	    return "student-feedback";
+	}
+	@PostMapping("/student-feedback/instructor/{teacherId}")
+	public String submitInstructorFeedback(
+	        @PathVariable Integer teacherId,
+	        InstructorFeedback feedback,
+	        HttpSession session) {
+
+	    Integer studentId = (Integer) session.getAttribute("studentId");
+	    if (studentId == null) return "redirect:/student-login";
+
+	    if (instructorFeedbackRepo
+	            .existsByTeacherTeacherIdAndStudentStudid(teacherId, studentId)) {
+	        return "redirect:/student-feedback";
+	    }
+
+	    feedback.setTeacher(teacherRepo.findById(teacherId).orElseThrow());
+	    feedback.setStudent(studentRepo.findById(studentId).orElseThrow());
+
+	    instructorFeedbackRepo.save(feedback);
+
+	    return "redirect:/student-feedback";
+	}
+	
+	private boolean canRateInstructor(Integer studentId, Integer teacherId) {
+
+	    List<CourseCertificate> certs =
+	        certificateRepo.findByStudentStudid(studentId);
+
+	    return certs.stream()
+	        .anyMatch(c ->
+	            c.getCourse()
+	             .getTeacher()
+	             .getTeacherId()
+	             .equals(teacherId)
+	        );
 	}
 
 }

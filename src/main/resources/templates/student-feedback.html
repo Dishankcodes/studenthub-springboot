@@ -131,6 +131,106 @@
 			border: 1px solid #16a34a;
 			color: #166534
 		}
+
+		/* ===============================
+   STUDENT FEEDBACK UX POLISH
+================================ */
+
+		/* Headings */
+		.feedback-card h2 {
+			font-size: 24px;
+			font-weight: 600;
+			color: #111827;
+		}
+
+		.feedback-card h3 {
+			font-size: 18px;
+			font-weight: 600;
+			margin-bottom: 10px;
+		}
+
+		/* Course / Instructor list item */
+		.select-item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 14px 16px;
+			border-radius: 14px;
+			border: 1px solid #e5e7eb;
+			background: #ffffff;
+			transition: all 0.2s ease;
+			margin-top: 12px;
+		}
+
+		.select-item:hover {
+			background: #eef2ff;
+			border-color: #6366f1;
+			transform: translateY(-1px);
+		}
+
+		.select-item strong {
+			font-size: 15px;
+			color: #111827;
+		}
+
+		.select-item small {
+			color: #6b7280;
+		}
+
+		/* Feedback action button */
+		.select-item .submit-btn {
+			padding: 10px 16px;
+			font-size: 13.5px;
+			border-radius: 10px;
+		}
+
+		/* Tabs polish */
+		.feedback-tabs {
+			gap: 6px;
+		}
+
+		.tab-btn {
+			transition: all 0.25s ease;
+		}
+
+		.tab-btn:not(.active):hover {
+			background: #e5e7eb;
+		}
+
+		/* Rating block */
+		.rating-stars {
+			background: #f9fafb;
+			padding: 14px;
+			border-radius: 14px;
+			justify-content: center;
+		}
+
+		/* Textarea polish */
+		textarea {
+			transition: border 0.2s ease, box-shadow 0.2s ease;
+		}
+
+		textarea:focus {
+			outline: none;
+			border-color: #6366f1;
+			box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+		}
+
+		/* Success / warning */
+		.coming-soon {
+			font-size: 14.5px;
+		}
+
+		.success-msg {
+			font-weight: 600;
+		}
+
+		/* Instructor list scroll (scales well) */
+		.instructor-list {
+			max-height: 360px;
+			overflow-y: auto;
+			padding-right: 6px;
+		}
 	</style>
 </head>
 
@@ -213,8 +313,7 @@
 					<h3>Select a course</h3>
 					<p>You can give feedback only for completed courses.</p>
 
-					<div th:each="c : ${completedCourses}" style="display:flex;justify-content:space-between;
-              margin-top:12px;padding:12px;border:1px solid #e5e7eb;border-radius:10px">
+					<div th:if="${completedCourses != null}" th:each="c : ${completedCourses}" class="select-item">
 						<div>
 							<strong th:text="${c.title}"></strong><br>
 							<small th:text="${c.teacher.firstname+' '+c.teacher.lastname}"></small>
@@ -232,26 +331,25 @@
 					<div th:if="${!courseFeedbackSubmitted}">
 						<form th:action="@{/student-feedback/{id}(id=${course.courseId})}" method="post">
 
-    <!-- ⭐ HIDDEN RATING FIELD -->
-    <input type="hidden" name="rating" id="ratingValue" value="0"/>
+							<!-- ⭐ HIDDEN RATING FIELD -->
+							<input type="hidden" name="rating" id="ratingValue" value="0" />
 
-    <div class="rating-stars" data-rating>
-        <i class="bi bi-star-fill"></i>
-        <i class="bi bi-star-fill"></i>
-        <i class="bi bi-star-fill"></i>
-        <i class="bi bi-star-fill"></i>
-        <i class="bi bi-star-fill"></i>
-    </div>
+							<div class="rating-stars" data-rating>
+								<i class="bi bi-star-fill"></i>
+								<i class="bi bi-star-fill"></i>
+								<i class="bi bi-star-fill"></i>
+								<i class="bi bi-star-fill"></i>
+								<i class="bi bi-star-fill"></i>
+							</div>
 
-    <textarea name="comment"
-              placeholder="What did you like? What can be improved?"
-              required></textarea>
+							<textarea name="comment" placeholder="What did you like? What can be improved?"
+								required></textarea>
 
-    <button class="submit-btn">
-        <i class="bi bi-send-fill"></i> Submit Course Feedback
-    </button>
+							<button class="submit-btn">
+								<i class="bi bi-send-fill"></i> Submit Course Feedback
+							</button>
 
-</form>
+						</form>
 					</div>
 
 					<div th:if="${courseFeedbackSubmitted}" class="coming-soon success-msg">
@@ -264,56 +362,146 @@
 			<!-- ================= TEACHER TAB ================= -->
 			<div class="tab-content" id="teacher">
 
-  <!-- No course selected -->
-  <div th:if="${!courseSelected}" class="coming-soon">
-    <h3>Instructor Feedback</h3>
-    <p>Select a course to see the instructor details.</p>
-  </div>
+				<!-- ===== LIST MODE ===== -->
+				<div th:if="${feedbackMode == 'LIST'}">
 
-  <!-- Course selected -->
-  <div th:if="${courseSelected}" class="coming-soon">
-    <h3 th:text="${course.teacher.firstname + ' ' + course.teacher.lastname}"></h3>
+					<h3>Select an Instructor</h3>
 
-    <p>
-      Share your experience with the instructor’s teaching style,
-      clarity, and support.
-    </p>
+					<div th:if="${completedTeachers == null or completedTeachers.isEmpty()}" class="coming-soon">
+						❌ You haven’t completed any course yet.
+					</div>
 
-    <p style="margin-top:10px;font-size:14px;">
-      🛠 Instructor feedback submission coming soon.
-    </p>
-  </div>
+					<div class="instructor-list">
+						<div th:each="t : ${completedTeachers}" class="select-item">
+							<div>
+								<strong th:text="${t.firstname + ' ' + t.lastname}"></strong><br>
+								<small th:text="${t.email}"></small>
+							</div>
+							<a class="submit-btn"
+								th:href="@{/student-feedback/instructor/{id}(id=${t.teacherId},tab='teacher')}">
+								Give Instructor Feedback
+							</a>
+						</div>
+					</div>
 
-</div>
+				</div>
+
+				<!-- ===== DIRECT MODE ===== -->
+				<div th:if="${feedbackMode == 'DIRECT'}">
+
+					<div th:if="${feedbackMode == 'DIRECT' and teacher != null}">
+						<h3 th:text="${teacher.firstname + ' ' + teacher.lastname}"></h3>
+					</div>
+
+					<div th:if="${!canRateInstructor}" class="coming-soon">
+						❌ You can rate this instructor only after completing their course.
+					</div>
+
+					<div th:if="${canRateInstructor == true}">
+
+						<div th:if="${instructorFeedbackGiven}" class="coming-soon success-msg">
+							✅ You’ve already rated this instructor.
+						</div>
+
+						<div th:if="${canRateInstructor == true and !instructorFeedbackGiven}">
+							<form th:action="@{/student-feedback/instructor/{id}(id=${teacher.teacherId})}"
+								method="post">
+
+								<input type="hidden" name="rating" id="instructorRating" />
+
+								<div class="rating-stars" data-instructor-rating>
+									<i class="bi bi-star-fill"></i>
+									<i class="bi bi-star-fill"></i>
+									<i class="bi bi-star-fill"></i>
+									<i class="bi bi-star-fill"></i>
+									<i class="bi bi-star-fill"></i>
+								</div>
+
+								<textarea name="comment" placeholder="How was the instructor’s teaching?"
+									required></textarea>
+
+								<button class="submit-btn">
+									<i class="bi bi-send-fill"></i> Submit Instructor Feedback
+								</button>
+							</form>
+						</div>
+
+					</div>
+
+				</div>
+
+			</div>
 
 		</div>
 	</div>
 
 	<script>
-	document.querySelectorAll(".tab-btn").forEach(btn => {
-		  btn.addEventListener("click", () => {
-		    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-		    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+		/* ===============================
+		   ⭐ STAR RATING (COURSE)
+		================================ */
+		document.querySelectorAll("[data-rating] i").forEach((star, index, all) => {
+			star.addEventListener("click", () => {
+				all.forEach((s, i) =>
+					s.classList.toggle("active", i <= index)
+				);
 
-		    btn.classList.add("active");
-		    document.getElementById(btn.dataset.tab).classList.add("active");
-		  });
+				const ratingInput = document.getElementById("ratingValue");
+				if (ratingInput) {
+					ratingInput.value = index + 1;
+				}
+			});
 		});
 
-		// stars → hidden input
-		document.querySelectorAll("[data-rating] i").forEach((star, index, all) => {
-    star.addEventListener("click", () => {
-        all.forEach((s, i) => {
-            s.classList.toggle("active", i <= index);
-        });
+		/* ===============================
+		   ⭐ STAR RATING (INSTRUCTOR)
+		================================ */
+		document.querySelectorAll("[data-instructor-rating] i")
+			.forEach((star, index, all) => {
+				star.addEventListener("click", () => {
+					all.forEach((s, i) =>
+						s.classList.toggle("active", i <= index)
+					);
 
-        // ⭐ SAVE RATING VALUE (1–5)
-        document.getElementById("ratingValue").value = index + 1;
-    });
-});
-	</script>
+					const instructorInput = document.getElementById("instructorRating");
+					if (instructorInput) {
+						instructorInput.value = index + 1;
+					}
+				});
+			});
 
-	<script>
+		/* ===============================
+		   📑 TAB HANDLING (COURSE / TEACHER)
+		================================ */
+		function activateTab(tabId) {
+			document.querySelectorAll(".tab-btn")
+				.forEach(b => b.classList.remove("active"));
+
+			document.querySelectorAll(".tab-content")
+				.forEach(c => c.classList.remove("active"));
+
+			document.querySelector(`.tab-btn[data-tab="${tabId}"]`)
+				?.classList.add("active");
+
+			document.getElementById(tabId)
+				?.classList.add("active");
+		}
+
+		// Click on tab
+		document.querySelectorAll(".tab-btn").forEach(btn => {
+			btn.addEventListener("click", () => {
+				const tab = btn.dataset.tab;
+				activateTab(tab);
+				history.replaceState(null, "", "?tab=" + tab);
+			});
+		});
+
+		// Auto-open tab from URL or default
+		const params = new URLSearchParams(window.location.search);
+		activateTab(params.get("tab") || "course");
+
+		/* ===============================
+		   📌 SIDEBAR (UNCHANGED)
+		================================ */
 		const sidebar = document.getElementById("sidebar");
 		const toggle = document.getElementById("toggle");
 		const icon = toggle.querySelector("i");
@@ -328,31 +516,6 @@
 			}
 		});
 	</script>
-	<!-- ===== SCRIPT ===== -->
-	<script>
-
-		// Tabs
-		document.querySelectorAll(".tab-btn").forEach(btn => {
-			btn.addEventListener("click", () => {
-				document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-				document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-
-				btn.classList.add("active");
-				document.getElementById(btn.dataset.tab).classList.add("active");
-			});
-		});
-
-		// Star rating (UI only for now)
-		document.querySelectorAll("[data-rating] i").forEach((star, index, all) => {
-			star.addEventListener("click", () => {
-				all.forEach((s, i) => {
-					s.classList.toggle("active", i <= index);
-				});
-			});
-		});
-	</script>
-
-
 </body>
 
 </html>
