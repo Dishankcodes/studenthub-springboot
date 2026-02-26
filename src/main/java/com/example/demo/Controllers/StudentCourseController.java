@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import com.example.demo.entity.Quiz;
 import com.example.demo.entity.QuizQuestion;
 import com.example.demo.entity.Student;
 import com.example.demo.enums.CourseStatus;
+import com.example.demo.enums.EnrollmentStatus;
 import com.example.demo.enums.LessonType;
 import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
@@ -173,6 +175,22 @@ public class StudentCourseController {
 
 			    Student student = studentRepo.findById(studentId).orElseThrow();
 
+			    Optional<Enrollment> existingOpt =
+			            enrollmentRepo.findByStudentStudidAndCourseCourseId(studentId, courseId);
+
+			    if (existingOpt.isPresent()) {
+			        Enrollment existing = existingOpt.get();
+
+			        if (existing.getStatus() == EnrollmentStatus.SUSPENDED) {
+			            ra.addFlashAttribute("error", "Your enrollment is suspended");
+			            return "redirect:/student-course-details?courseId=" + courseId;
+			        }
+
+			        if (existing.getStatus() == EnrollmentStatus.BLOCKED) {
+			            ra.addFlashAttribute("error", "You are blocked from this course");
+			            return "redirect:/student-course-details?courseId=" + courseId;
+			        }
+			    }
 	    boolean enrolled =
 	            enrollmentRepo.existsByStudentStudidAndCourseCourseId(studentId, courseId);
 

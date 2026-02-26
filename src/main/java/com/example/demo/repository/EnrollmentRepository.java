@@ -28,4 +28,6 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
 		        Integer studid,
 		        Integer courseId
 		);
+	 
+	 
 }

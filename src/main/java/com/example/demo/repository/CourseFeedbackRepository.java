@@ -25,4 +25,12 @@ long countByCourseCourseId(Integer courseId);
     WHERE f.course.courseId = :courseId
 """)
 double findAverageRating(@Param("courseId") Integer courseId);
+
+@Query("""
+	    SELECT f
+	    FROM CourseFeedback f
+	    WHERE f.course.teacher.teacherId = :teacherId
+	    ORDER BY f.createdAt DESC
+	""")
+	List<CourseFeedback> findByTeacherId(Integer teacherId);
 }

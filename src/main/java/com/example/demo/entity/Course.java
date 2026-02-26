@@ -23,6 +23,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
+import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.persistence.UniqueConstraint;
@@ -44,8 +45,9 @@ public class Course {
 	private Set<CourseModule> modules = new LinkedHashSet<>();
 
 	
-	@Transient
+	
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OrderColumn(name = "position")
 	private List<CourseHighlight> highlights = new ArrayList<>();
 
 	

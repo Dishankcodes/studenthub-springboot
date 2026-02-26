@@ -120,6 +120,21 @@ public class TeacherCourseController {
 		    return "redirect:/teacher-auth";
 		}
 		
+		/* ================= HIGHLIGHT VALIDATION (HERE) ================= */
+
+	    if (highlightTexts != null) {
+
+	        // remove empty entries first
+	        highlightTexts.removeIf(
+	            t -> t == null || t.trim().isEmpty()
+	        );
+
+	        if (highlightTexts.size() > 8) {
+	            model.addAttribute("error", "Maximum 8 highlights allowed.");
+	            model.addAttribute("course", formCourse); // keep form data
+	            return "teacher-creates-course";
+	        }
+	    }
 
 	    Course course;
 
@@ -202,6 +217,7 @@ public class TeacherCourseController {
 	    if ("publish".equals(action)) {
 	        return "redirect:/teacher-course";
 	    }
+	    model.addAttribute("highlightTexts", highlightTexts);
 
 	    return "redirect:/teacher-creates-course?courseId=" + course.getCourseId();
 	}

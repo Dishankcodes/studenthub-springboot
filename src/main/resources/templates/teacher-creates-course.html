@@ -99,6 +99,15 @@
 			color: #6b7280;
 			font-size: 12px;
 		}
+		.thumbnail-preview {
+  width: 260px;
+  height: 150px;
+  border-radius: 12px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 2px dashed #d0d7ff;
+}
 	</style>
 </head>
 
@@ -167,6 +176,7 @@
 					<h3>Course Details</h3>
 
 					<div class="form-group">
+					<div class="form-group" th:if="${course.courseId == null}">
 						<label>Course Thumbnail</label>
 
 						<div class="thumbnail-upload">
@@ -190,6 +200,7 @@
 
 						<small> Recommended size: 1280 × 720 (16:9). JPG or PNG. </small>
 					</div>
+					</div>
 
 					<input type="hidden" th:field="*{courseId}">
 
@@ -204,14 +215,35 @@
 							th:field="*{description}"></textarea>
 
 						<!-- COURSE HIGHLIGHTS -->
-						<div class="card">
+<div class="card">
   <h3>Course Highlights</h3>
 
   <div id="highlightContainer">
-    <input type="text"
+
+    <!-- 1️⃣ Show user-entered highlights if validation failed -->
+    <input th:if="${highlightTexts != null}"
+           th:each="t : ${highlightTexts}"
+           type="text"
            name="highlightTexts"
-           placeholder="e.g. Build REST APIs with Spring Boot"
+           th:value="${t}"
            class="highlight-input"/>
+
+    <!-- 2️⃣ Otherwise show saved highlights -->
+    <input th:if="${highlightTexts == null}"
+           th:each="h : ${course.highlights}"
+           type="text"
+           name="highlightTexts"
+           th:value="${h.text}"
+           class="highlight-input"/>
+
+    <!-- 3️⃣ Empty state -->
+    <input th:if="${highlightTexts == null 
+                   and (course.highlights == null or course.highlights.empty)}"
+           type="text"
+           name="highlightTexts"
+           class="highlight-input"
+           placeholder="e.g. Build REST APIs with Spring Boot"/>
+
   </div>
 
   <button type="button" class="btn btn-outline" onclick="addHighlight()">
@@ -277,10 +309,10 @@
 
 					<input type="hidden" name="courseId" th:value="${course.courseId}">
 
-					<label class="thumbnail-preview editable" th:style="${course.thumbnailURL != null}
-                   ? 'background-image:url(' + @{${course.thumbnailURL}} + ')'
-                   : ''">
-
+					<label class="thumbnail-preview editable"
+       th:style="${course.thumbnailURL != null}
+         ? 'background-image:url(' + ${course.thumbnailURL} + ');'
+         : ''">
 						<input type="file" name="thumbnailFile" accept="image/*" required hidden>
 
 						<div class="overlay">
@@ -617,9 +649,6 @@
 				</form>
 			</div>
 
-
-
-
 		</div>
 
 	</main>
@@ -641,9 +670,6 @@
 
 			container.scrollTop = offset;
 		});
-
-
-
 
 		/* =============================
 		   AUTO-HIDE ALERTS
@@ -703,18 +729,26 @@
 </body>
 <script>
 function addHighlight() {
-  const container = document.getElementById("highlightContainer");
-  const count = container.querySelectorAll("input").length;
-  if (count >= 8) return;
+	  const container = document.getElementById("highlightContainer");
+	  const inputs = container.querySelectorAll("input");
 
-  const input = document.createElement("input");
-  input.type = "text";
-  input.name = "highlightTexts"; // 🔥 MUST MATCH controller
-  input.placeholder = "e.g. Deploy projects to production";
-  input.className = "highlight-input";
+	  if (inputs.length >= 8) return;
 
-  container.appendChild(input);
-}
+	  // prevent adding new if last is empty
+	  if (inputs.length > 0 && inputs[inputs.length - 1].value.trim() === "") {
+	    inputs[inputs.length - 1].focus();
+	    return;
+	  }
+
+	  const input = document.createElement("input");
+	  input.type = "text";
+	  input.name = "highlightTexts";
+	  input.className = "highlight-input";
+	  input.placeholder = "e.g. Deploy projects to production";
+
+	  container.appendChild(input);
+	}
+  
 </script>
 
 </html>
