@@ -1,5 +1,8 @@
 package com.example.demo.Controllers;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseFeedback;
@@ -47,7 +51,7 @@ public class TeacherController {
 //		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
 //		Integer teacherId = (Integer) session.getAttribute("teacherId");
 
-		 Integer teacherId = 1; // remove this when testing done
+		Integer teacherId = 1; // remove this when testing done
 
 //		if (loggedIn == null || !loggedIn || teacherId == null) {
 //			return "redirect:/teacher-auth";
@@ -111,52 +115,46 @@ public class TeacherController {
 	@GetMapping("/teacher-feedback")
 	public String teacherFeedback(HttpSession session, Model model) {
 
-	    Integer teacherId = (Integer) session.getAttribute("teacherId");
-	    if (teacherId == null) return "redirect:/teacher-auth";
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
 
-	    Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
-	    if (teacher == null) {
-	        session.invalidate();
-	        return "redirect:/teacher-auth";
-	    }
+		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+		if (teacher == null) {
+			session.invalidate();
+			return "redirect:/teacher-auth";
+		}
 
-	    List<CourseFeedback> feedbacks =
-	            feedbackRepo.findByTeacherId(teacherId);
+		List<CourseFeedback> feedbacks = feedbackRepo.findByTeacherId(teacherId);
 
-	    // group feedbacks by course
-	    Map<Course, List<CourseFeedback>> courseFeedbackMap =
-	            feedbacks.stream()
-	                     .collect(Collectors.groupingBy(CourseFeedback::getCourse));
+		// group feedbacks by course
+		Map<Course, List<CourseFeedback>> courseFeedbackMap = feedbacks.stream()
+				.collect(Collectors.groupingBy(CourseFeedback::getCourse));
 
-	    // ⭐ NEW: calculate average rating per course
-	    Map<Integer, Double> avgRatingMap =
-	            courseFeedbackMap.entrySet().stream()
-	                .collect(Collectors.toMap(
-	                    e -> e.getKey().getCourseId(),
-	                    e -> e.getValue().stream()
-	                          .mapToInt(CourseFeedback::getRating)
-	                          .average()
-	                          .orElse(0.0)
-	                ));
+		// ⭐ NEW: calculate average rating per course
+		Map<Integer, Double> avgRatingMap = courseFeedbackMap.entrySet().stream()
+				.collect(Collectors.toMap(e -> e.getKey().getCourseId(),
+						e -> e.getValue().stream().mapToInt(CourseFeedback::getRating).average().orElse(0.0)));
 
-	    model.addAttribute("courseFeedbackMap", courseFeedbackMap);
-	    model.addAttribute("avgRatingMap", avgRatingMap);
-	    model.addAttribute("teacher", teacher);
+		model.addAttribute("courseFeedbackMap", courseFeedbackMap);
+		model.addAttribute("avgRatingMap", avgRatingMap);
+		model.addAttribute("teacher", teacher);
 
-	    return "teacher-feedback";
+		return "teacher-feedback";
 	}
+
 	// ===== PROFILE =====
 	@GetMapping("/teacher-profile")
 	public String teacherProfile(HttpSession session, Model model) {
 
-		//Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-		//Integer teacherId = (Integer) session.getAttribute("teacherId");
+		 Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+		 Integer teacherId = (Integer) session.getAttribute("teacherId");
 
-		Integer teacherId = 1; // remove this when testing done
+		// Integer teacherId = 1; // remove this when testing done
 
-//		if (loggedIn == null || !loggedIn || teacherId == null) {
-//			return "redirect:/teacher-auth";
-//		}
+		if (loggedIn == null || !loggedIn || teacherId == null) {
+			return "redirect:/teacher-auth";
+		}
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {
@@ -206,6 +204,37 @@ public class TeacherController {
 		profile.setExperience(teacherProfile.getExperience());
 		profile.setBio(teacherProfile.getBio());
 
+		teacherProfileRepo.save(profile);
+
+		return "redirect:/teacher-profile";
+	}
+
+	@PostMapping("/teacher-profile/upload-image")
+	public String uploadTeacherProfileImage(@RequestParam("image") MultipartFile file, HttpSession session)
+			throws Exception {
+
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
+
+		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+
+		TeacherProfile profile = teacherProfileRepo.findByTeacherTeacherId(teacherId);
+
+		if (profile == null) {
+			profile = new TeacherProfile();
+			profile.setTeacher(teacher);
+		}
+
+		String uploadDir = "uploads/teacher/";
+		Files.createDirectories(Paths.get(uploadDir));
+
+		String fileName = "teacher_" + teacherId + "_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
+
+		Path path = Paths.get(uploadDir + fileName);
+		Files.write(path, file.getBytes());
+
+		profile.setProfileImage("/" + uploadDir + fileName);
 		teacherProfileRepo.save(profile);
 
 		return "redirect:/teacher-profile";

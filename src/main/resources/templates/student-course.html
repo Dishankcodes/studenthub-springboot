@@ -21,7 +21,7 @@
 		}
 
 		body {
-			 background: #fff;
+			background: #fff;
 		}
 
 		.main {
@@ -154,22 +154,25 @@
 			font-size: 40px;
 			height: 100%;
 		}
-		a.btn {
-    text-decoration: none;   /* remove underline */
-    color: #fff;             /* same as button text */
-    background: #1f1f2e;
-    padding: 8px 14px;
-    border-radius: 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    cursor: pointer;
-}
 
-a.btn:hover {
-    background: #151528;
-}
+		a.btn {
+			text-decoration: none;
+			/* remove underline */
+			color: #fff;
+			/* same as button text */
+			background: #1f1f2e;
+			padding: 8px 14px;
+			border-radius: 8px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 13px;
+			cursor: pointer;
+		}
+
+		a.btn:hover {
+			background: #151528;
+		}
 	</style>
 </head>
 
@@ -216,8 +219,15 @@ a.btn:hover {
 
 			<div class="profile">
 				<a th:href="@{/student-profile}" class="profile-link">
-					<img src="/images/default.jpg" alt="Profile">
-					<span class="student-name">Dishank</span>
+
+					<img th:src="${loggedStudent != null and loggedStudent.profileImage != null
+                ? loggedStudent.profileImage
+                : '/images/default.jpg'}" alt="Profile">
+
+					<span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
+						Student
+					</span>
+
 				</a>
 			</div>
 		</div>
@@ -262,14 +272,14 @@ a.btn:hover {
 						</div>
 						<div class="course-footer">
 							<p>
- ⭐ <span th:text="${#numbers.formatDecimal(avgRatings[course.courseId], 1, 1)}"></span>
-•
-<span th:text="${reviewCounts[course.courseId]}"></span> reviews
-</p>
-<a class="btn"
-   th:href="@{/student-course-details(courseId=${course.courseId})}">
-   View
-</a>				</div>
+								⭐ <span th:text="${#numbers.formatDecimal(avgRatings[course.courseId], 1, 1)}"></span>
+								•
+								<span th:text="${reviewCounts[course.courseId]}"></span> reviews
+							</p>
+							<a class="btn" th:href="@{/student-course-details(courseId=${course.courseId})}">
+								View
+							</a>
+						</div>
 					</div>
 				</div>
 

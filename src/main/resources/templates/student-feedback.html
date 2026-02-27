@@ -277,8 +277,15 @@
 
 			<div class="profile">
 				<a th:href="@{/student-profile}" class="profile-link">
-					<img src="/images/default.jpg" alt="Profile">
-					<span class="student-name">Dishank</span>
+
+					<img th:src="${loggedStudent != null and loggedStudent.profileImage != null
+                ? loggedStudent.profileImage
+                : '/images/default.jpg'}" alt="Profile">
+
+					<span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
+						Student
+					</span>
+
 				</a>
 			</div>
 		</div>

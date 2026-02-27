@@ -2,260 +2,261 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Teacher Profile</title>
+	<meta charset="UTF-8">
+	<title>Teacher Profile</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-    <link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
-    <link rel="stylesheet" th:href="@{/css/teacher-css/teacher-profile.css}">
-    <style>
+	<link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
+	<link rel="stylesheet" th:href="@{/css/teacher-css/teacher-profile.css}">
+	<style>
 
-    </style>
+	</style>
 </head>
 
 <body class="sidebar-collapsed">
 
-<!-- ===== SIDEBAR ===== -->
-<aside class="sidebar collapsed">
-    <div class="sidebar-logo">
-        <img th:src="@{/images/logo.png}" alt="EduPlatform Logo">
-        <span class="logo-text">EduPlatform</span>
-    </div>
+	<!-- ===== SIDEBAR ===== -->
+	<aside class="sidebar collapsed">
+		<div class="sidebar-logo">
+			<img th:src="@{/images/logo.png}" alt="EduPlatform Logo">
+			<span class="logo-text">EduPlatform</span>
+		</div>
 
-        <nav class="sidebar-menu">
-            <a th:href="@{/teacher-dashboard}"><i class="bi bi-speedometer2"></i><span> Dashboard </span></a>
-            <a th:href="@{/teacher-course}"><i class="bi bi-journal-text"></i><span>Course Management</span></a>
-            <a th:href="@{/teacher-creates-course}"><i class="bi bi-journal-plus"></i><span>Create Course</span></a>
-            <a th:href="@{/teacher-exams}"><i class="bi bi-pencil-square"></i><span>Exams & Quizzes</span></a>
-            <a th:href="@{/teacher-students}"><i class="bi bi-people"></i><span>Students</span></a>
-            <a th:href="@{/teacher-communication}"><i class="bi bi-chat-dots"></i><span >Communication</span></a>
-            <a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback & Ratings</span></a>
-            <a th:href="@{/teacher-profile}" class="active"><i class="bi bi-gear"></i><span>Profile</span></a>
-            <a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
-        </nav>
-</aside>
+		<nav class="sidebar-menu">
+			<a th:href="@{/teacher-dashboard}"><i class="bi bi-speedometer2"></i><span> Dashboard </span></a>
+			<a th:href="@{/teacher-course}"><i class="bi bi-journal-text"></i><span>Course Management</span></a>
+			<a th:href="@{/teacher-creates-course}"><i class="bi bi-journal-plus"></i><span>Create Course</span></a>
+			<a th:href="@{/teacher-exams}"><i class="bi bi-pencil-square"></i><span>Exams & Quizzes</span></a>
+			<a th:href="@{/teacher-students}"><i class="bi bi-people"></i><span>Students</span></a>
+			<a th:href="@{/teacher-communication}"><i class="bi bi-chat-dots"></i><span>Communication</span></a>
+			<a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback & Ratings</span></a>
+			<a th:href="@{/teacher-profile}" class="active"><i class="bi bi-gear"></i><span>Profile</span></a>
+			<a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+		</nav>
+	</aside>
 
-<!-- ===== MAIN CONTENT ===== -->
-<main class="main-content">
-    <button class="sidebar-toggle" id="sidebarToggle">☰</button>
+	<!-- ===== MAIN CONTENT ===== -->
+	<main class="main-content">
+		<button class="sidebar-toggle" id="sidebarToggle">☰</button>
 
-<header class="page-header">
-	<h1> Profile </h1>
-</header>
-<!-- ===== TEACHER PROFILE ===== -->
-<section class="teacher-profile-wrapper">
-
-
-    <!-- PROFILE CARD -->
-    <div class="teacher-profile-card">
-        <div class="teacher-photo">
-            <img th:src="@{/images/default.jpg}" alt="Teacher Profile">
-            <label class="photo-upload">
-                Change Photo
-                <input type="file" hidden>
-            </label>
-        </div>
-
-        <h2 class="teacher-name"
-    th:text="${teacher.firstname + ' ' + teacher.lastname}">
-</h2>
-
-        <p class="teacher-role">Educator · EduPlatform</p>
-        
-        <button class="edit-profile-btn" id="editProfileBtn">
-    <i class="bi bi-pencil"></i> Edit Profile
-</button>
-        
-    </div>
+		<header class="page-header">
+			<h1> Profile </h1>
+		</header>
+		<!-- ===== TEACHER PROFILE ===== -->
+		<section class="teacher-profile-wrapper">
 
 
+			<!-- PROFILE CARD -->
+			<div class="teacher-profile-card">
+				<div class="teacher-photo">
+					<img th:src="${profile.profileImage != null ? profile.profileImage: '/images/default.jpg'}"
+						alt="Teacher Profile">
+					<form th:action="@{/teacher-profile/upload-image}" method="post" enctype="multipart/form-data">
 
-    <!-- PROFILE FORM -->
-    <form class="teacher-profile-form hidden"
-      th:action="@{/teacher-profile}"
-      method="post"
-      th:object="${profile}">
-        <div class="form-group">
-            <label>Full Name</label>
-           <input type="text"
-       th:field="*{teacher.firstname + ' ' + teacher.lastname}"
-       placeholder="Enter full name">
-        </div>
+						<label class="photo-upload">
+							Change Photo
+							<input type="file" name="image" hidden required onchange="this.form.submit()">
+						</label>
 
-        <div class="form-group">
-            <label>Qualification</label>
-            <input type="text" th:field="*{qualification}" placeholder="e.g. M.Sc, B.Ed, PhD">
+					</form>
+				</div>
 
-        </div>
+				<h2 class="teacher-name" th:text="${teacher.firstname + ' ' + teacher.lastname}">
+				</h2>
 
-        <div class="form-group">
-            <label>Specialist</label>
-            <input type="text" th:field="*{specialist}" placeholder="e.g. Mathematics, Physics">
-        </div>
+				<p class="teacher-role">Educator · EduPlatform</p>
 
-        <div class="form-group">
-            <label>Experience (Years)</label>
-            <input type="number" placeholder="e.g. 5" th:field="*{experience}">
-        </div>
+				<button class="edit-profile-btn" id="editProfileBtn">
+					<i class="bi bi-pencil"></i> Edit Profile
+				</button>
 
-        <div class="form-group">
-            <label>Bio</label>
-            <textarea rows="4" placeholder="Short bio about you" th:field="*{bio}"></textarea>
-        </div>
-
-        <!-- ACTION BUTTONS -->
-        <div class="profile-actions">
-            <button type="button" class="cancel-btn">Cancel Changes</button>
-            <button type="submit" class="save-btn">Save Changes</button>
-        </div>
-
-        <!-- PASSWORD LINK -->
-        <p class="password-link">
-            Want to update your password?
-            <a href="#" id="openPassword">Change Password</a>
-        </p>
-    </form>
-</section>
-<!-- ===== CHANGE PASSWORD MODAL ===== -->
-<div id="passwordModal" class="modal">
-
-    <div class="modal-content">
-        <span class="close-btn" id="closePasswordModal">&times;</span>
-
-        <h2>Change Password</h2>
-        
-
-        <form>
-            <div class="form-group">
-                <label>Current Password</label>
-                <input type="password" placeholder="Enter current password">
-            </div>
-
-            <div class="form-group">
-                <label>New Password</label>
-                <input type="password" placeholder="Enter new password">
-            </div>
-
-            <div class="form-group">
-                <label>Confirm New Password</label>
-                <input type="password" placeholder="Confirm new password">
-            </div>
-<p class="modal-subtext">
-            Forgot your password?
-            <a href="#">Reset it securely</a>
-        </p>
-            <div class="profile-actions">
-                <button type="button" class="cancel-btn" id="cancelPassword">
-                    Cancel
-                </button>
-                <button type="submit" class="save-btn">
-                    Update Password
-                </button>
-            </div>
-            
-        </form>
-    </div>
-</div>
+			</div>
 
 
-<div class="contact-info-card">
 
-  <div class="contact-row">
-    <div class="contact-text">
-      <span class="contact-label">Email</span>
-      <span class="contact-value" th:text="${teacher.email}"></span>
-    </div>
-    <button class="edit-link" id="openEmailModal">Edit Email</button>
-  </div>
+			<!-- PROFILE FORM -->
+			<form class="teacher-profile-form hidden" th:action="@{/teacher-profile}" method="post"
+				th:object="${profile}">
+				<div class="form-group">
+					<label>Full Name</label>
+					<input type="text" th:value="${teacher.firstname + ' ' + teacher.lastname}" disabled>
+				</div>
 
-  <div class="contact-row">
-    <div class="contact-text">
-      <span class="contact-label">Phone</span>
-      <span class="contact-value" th:text="${teacher.phoneno}"></span>
-    </div>
-    <button class="edit-link" id="openPhoneModal">Edit Phone</button>
-  </div>
+				<div class="form-group">
+					<label>Qualification</label>
+					<input type="text" th:field="*{qualification}" placeholder="e.g. M.Sc, B.Ed, PhD">
 
-</div>
+				</div>
 
-<!-- ===== EDIT EMAIL MODAL ===== -->
-<div id="emailModal" class="modal">
+				<div class="form-group">
+					<label>Specialist</label>
+					<input type="text" th:field="*{specialist}" placeholder="e.g. Mathematics, Physics">
+				</div>
 
-  <div class="modal-content">
-    <span class="close-btn" id="closeEmailModal">&times;</span>
+				<div class="form-group">
+					<label>Experience (Years)</label>
+					<input type="number" placeholder="e.g. 5" th:field="*{experience}">
+				</div>
 
-    <h2>Change Email</h2>
+				<div class="form-group">
+					<label>Bio</label>
+					<textarea rows="4" placeholder="Short bio about you" th:field="*{bio}"></textarea>
+				</div>
 
-    <form th:action="@{/teacher-update-email}" method="post">
+				<!-- ACTION BUTTONS -->
+				<div class="profile-actions">
+					<button type="button" class="cancel-btn">Cancel Changes</button>
+					<button type="submit" class="save-btn">Save Changes</button>
+				</div>
 
-      <div class="form-group">
-        <label>New Email</label>
-        <input type="email" name="email" required>
-      </div>
+				<!-- PASSWORD LINK -->
+				<p class="password-link">
+					Want to update your password?
+					<a href="#" id="openPassword">Change Password</a>
+				</p>
+			</form>
+		</section>
+		<!-- ===== CHANGE PASSWORD MODAL ===== -->
+		<div id="passwordModal" class="modal">
 
-      <div class="profile-actions">
-        <button type="button" class="cancel-btn" id="cancelEmail">
-          Cancel
-        </button>
-        <button type="submit" class="save-btn">
-          Update Email
-        </button>
-      </div>
+			<div class="modal-content">
+				<span class="close-btn" id="closePasswordModal">&times;</span>
 
-    </form>
-  </div>
-</div>
-
-
-<!-- ===== EDIT PHONE MODAL ===== -->
-<div id="phoneModal" class="modal">
-
-  <div class="modal-content">
-    <span class="close-btn" id="closePhoneModal">&times;</span>
-
-    <h2>Change Phone</h2>
-
-    <form th:action="@{/teacher-update-phone}" method="post">
-
-      <div class="form-group">
-        <label>New Phone Number</label>
-        <input type="text" name="phoneno" required>
-      </div>
-
-      <div class="profile-actions">
-        <button type="button" class="cancel-btn" id="cancelPhone">
-          Cancel
-        </button>
-        <button type="submit" class="save-btn">
-          Update Phone
-        </button>
-      </div>
-
-    </form>
-  </div>
-</div>
-
-</main>
-
-<script th:src="@{/javascript/teacher-js/teacher.js}"></script>
-<script>
-const editBtn = document.getElementById("editProfileBtn");
-const profileForm = document.querySelector(".teacher-profile-form");
-const cancelBtn = document.querySelector(".cancel-btn");
-
-editBtn.addEventListener("click", () => {
-    profileForm.classList.remove("hidden");
-    editBtn.style.display = "none";
-});
-
-cancelBtn.addEventListener("click", () => {
-    profileForm.classList.add("hidden");
-    editBtn.style.display = "inline-block";
-});
+				<h2>Change Password</h2>
 
 
-</script>
+				<form>
+					<div class="form-group">
+						<label>Current Password</label>
+						<input type="password" placeholder="Enter current password">
+					</div>
+
+					<div class="form-group">
+						<label>New Password</label>
+						<input type="password" placeholder="Enter new password">
+					</div>
+
+					<div class="form-group">
+						<label>Confirm New Password</label>
+						<input type="password" placeholder="Confirm new password">
+					</div>
+					<p class="modal-subtext">
+						Forgot your password?
+						<a href="#">Reset it securely</a>
+					</p>
+					<div class="profile-actions">
+						<button type="button" class="cancel-btn" id="cancelPassword">
+							Cancel
+						</button>
+						<button type="submit" class="save-btn">
+							Update Password
+						</button>
+					</div>
+
+				</form>
+			</div>
+		</div>
+
+
+		<div class="contact-info-card">
+
+			<div class="contact-row">
+				<div class="contact-text">
+					<span class="contact-label">Email</span>
+					<span class="contact-value" th:text="${teacher.email}"></span>
+				</div>
+				<button class="edit-link" id="openEmailModal">Edit Email</button>
+			</div>
+
+			<div class="contact-row">
+				<div class="contact-text">
+					<span class="contact-label">Phone</span>
+					<span class="contact-value" th:text="${teacher.phoneno}"></span>
+				</div>
+				<button class="edit-link" id="openPhoneModal">Edit Phone</button>
+			</div>
+
+		</div>
+
+		<!-- ===== EDIT EMAIL MODAL ===== -->
+		<div id="emailModal" class="modal">
+
+			<div class="modal-content">
+				<span class="close-btn" id="closeEmailModal">&times;</span>
+
+				<h2>Change Email</h2>
+
+				<form th:action="@{/teacher-update-email}" method="post">
+
+					<div class="form-group">
+						<label>New Email</label>
+						<input type="email" name="email" required>
+					</div>
+
+					<div class="profile-actions">
+						<button type="button" class="cancel-btn" id="cancelEmail">
+							Cancel
+						</button>
+						<button type="submit" class="save-btn">
+							Update Email
+						</button>
+					</div>
+
+				</form>
+			</div>
+		</div>
+
+
+		<!-- ===== EDIT PHONE MODAL ===== -->
+		<div id="phoneModal" class="modal">
+
+			<div class="modal-content">
+				<span class="close-btn" id="closePhoneModal">&times;</span>
+
+				<h2>Change Phone</h2>
+
+				<form th:action="@{/teacher-update-phone}" method="post">
+
+					<div class="form-group">
+						<label>New Phone Number</label>
+						<input type="text" name="phoneno" required>
+					</div>
+
+					<div class="profile-actions">
+						<button type="button" class="cancel-btn" id="cancelPhone">
+							Cancel
+						</button>
+						<button type="submit" class="save-btn">
+							Update Phone
+						</button>
+					</div>
+
+				</form>
+			</div>
+		</div>
+
+	</main>
+
+	<script th:src="@{/javascript/teacher-js/teacher.js}"></script>
+	<script>
+		const editBtn = document.getElementById("editProfileBtn");
+		const profileForm = document.querySelector(".teacher-profile-form");
+		const cancelBtn = document.querySelector(".cancel-btn");
+
+		editBtn.addEventListener("click", () => {
+			profileForm.classList.remove("hidden");
+			editBtn.style.display = "none";
+		});
+
+		cancelBtn.addEventListener("click", () => {
+			profileForm.classList.add("hidden");
+			editBtn.style.display = "inline-block";
+		});
+
+
+	</script>
 </body>
+
 </html>

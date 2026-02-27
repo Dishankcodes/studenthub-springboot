@@ -2,114 +2,118 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Dashboard | EduPlatform</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Student Dashboard | EduPlatform</title>
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+	<!-- Bootstrap Icons -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 	<link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
- 	<style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+		}
 
-        body {
-             background: #fff;
-    line-height: 1.6;
-        }
-     
-	     .main {
-	            margin-left: 240px;
-	            margin-top: 56px;
-	            padding: 20px;
-	            transition: 0.3s ease;
-	        }
-     	
-     	
-       
+		body {
+			background: #fff;
+			line-height: 1.6;
+		}
 
-    </style>
+		.main {
+			margin-left: 240px;
+			margin-top: 56px;
+			padding: 20px;
+			transition: 0.3s ease;
+		}
+	</style>
 </head>
 
 <body>
 
-<!-- ===== SIDEBAR ===== -->
-<div class="sidebar collapsed" id="sidebar">
-    <button class="toggle-btn" id="toggle">
-        <i class="bi bi-chevron-right"></i>
-    </button>
+	<!-- ===== SIDEBAR ===== -->
+	<div class="sidebar collapsed" id="sidebar">
+		<button class="toggle-btn" id="toggle">
+			<i class="bi bi-chevron-right"></i>
+		</button>
 
-    <div class="sidebar-brand">
-        <a href="/student-dashboard">
-                <img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
-            </a>
-        <h2 class="platform-name">
-            EduPlatform
-        </h2>
-    </div>
+		<div class="sidebar-brand">
+			<a href="/student-dashboard">
+				<img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
+			</a>
+			<h2 class="platform-name">
+				EduPlatform
+			</h2>
+		</div>
 
-<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-<a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
-<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
-<a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
-<a th:href="@{/student-news}"><i class="bi bi-megaphone"></i><span>Announcements</span></a>
-<a th:href="@{/student-notes}"><i class="bi bi-graph-up"></i><span>Notes</span></a>
-<a th:href="@{/student-chat}" class="active"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
-<a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
-<a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-<a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+		<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+		<a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
+		<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
+		<a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
+		<a th:href="@{/student-news}"><i class="bi bi-megaphone"></i><span>Announcements</span></a>
+		<a th:href="@{/student-notes}"><i class="bi bi-graph-up"></i><span>Notes</span></a>
+		<a th:href="@{/student-chat}" class="active"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
+		<a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
+		<a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+		<a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
-</div>
+	</div>
 
-<!-- ===== TOPBAR ===== -->
-<div class="student-topbar">
-    <span class="page-title">Chat System</span>
-    	<div class="topbar-right">
-        <div class="notif">
-        <a th:href="@{/student-notification}">
-            <i class="bi bi-bell"></i>
-            <span class="dot"></span> </a>
-        </div>
+	<!-- ===== TOPBAR ===== -->
+	<div class="student-topbar">
+		<span class="page-title">Chat System</span>
+		<div class="topbar-right">
+			<div class="notif">
+				<a th:href="@{/student-notification}">
+					<i class="bi bi-bell"></i>
+					<span class="dot"></span> </a>
+			</div>
 
-        <div class="profile">
-        <a th:href="@{/student-profile}" class="profile-link">
-            <img src="/images/default.jpg" alt="Profile">
-            <span class="student-name">Dishank</span>
-          </a>
-        </div>
-    </div>
-    	
+			<div class="profile">
+				<a th:href="@{/student-profile}" class="profile-link">
 
-</div>
+					<img th:src="${loggedStudent != null and loggedStudent.profileImage != null
+                ? loggedStudent.profileImage
+                : '/images/default.jpg'}" alt="Profile">
 
-<div class="main">
-  
-</div>
+					<span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
+						Student
+					</span>
+
+				</a>
+			</div>
+		</div>
 
 
-<!-- ===== SCRIPT ===== -->
-<script>
-    const sidebar = document.getElementById("sidebar");
-    const toggle = document.getElementById("toggle");
-    const icon = toggle.querySelector("i");
+	</div>
 
-    toggle.addEventListener("click", () => {
-        if (window.innerWidth <= 768) {
-            sidebar.classList.toggle("mobile-show");
-        } else {
-            sidebar.classList.toggle("collapsed");
-            icon.classList.toggle("bi-chevron-right");
-            icon.classList.toggle("bi-chevron-left");
-        }
-    });
-</script>
+	<div class="main">
+
+	</div>
+
+
+	<!-- ===== SCRIPT ===== -->
+	<script>
+		const sidebar = document.getElementById("sidebar");
+		const toggle = document.getElementById("toggle");
+		const icon = toggle.querySelector("i");
+
+		toggle.addEventListener("click", () => {
+			if (window.innerWidth <= 768) {
+				sidebar.classList.toggle("mobile-show");
+			} else {
+				sidebar.classList.toggle("collapsed");
+				icon.classList.toggle("bi-chevron-right");
+				icon.classList.toggle("bi-chevron-left");
+			}
+		});
+	</script>
 
 </body>
+
 </html>
