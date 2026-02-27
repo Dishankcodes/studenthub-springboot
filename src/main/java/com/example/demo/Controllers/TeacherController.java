@@ -44,14 +44,14 @@ public class TeacherController {
 	// ===== DASHBOARD =====
 	@GetMapping("/teacher-dashboard")
 	public String dashboard(Model model, HttpSession session) {
-		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-		Integer teacherId = (Integer) session.getAttribute("teacherId");
+//		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+//		Integer teacherId = (Integer) session.getAttribute("teacherId");
 
-		// Integer teacherId = 1; // remove this when testing done
+		 Integer teacherId = 1; // remove this when testing done
 
-		if (loggedIn == null || !loggedIn || teacherId == null) {
-			return "redirect:/teacher-auth";
-		}
+//		if (loggedIn == null || !loggedIn || teacherId == null) {
+//			return "redirect:/teacher-auth";
+//		}
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {
@@ -73,10 +73,11 @@ public class TeacherController {
 	@GetMapping("/teacher-students")
 	public String teacherStudents(HttpSession session, Model model) {
 
-		Integer teacherId = (Integer) session.getAttribute("teacherId");
-		if (teacherId == null) {
-			return "redirect:/teacher-auth";
-		}
+		Integer teacherId = 1;
+//		Integer teacherId = (Integer) session.getAttribute("teacherId");
+//		if (teacherId == null) {
+//			return "redirect:/teacher-auth";
+//		}
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {
@@ -148,14 +149,14 @@ public class TeacherController {
 	@GetMapping("/teacher-profile")
 	public String teacherProfile(HttpSession session, Model model) {
 
-		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		//Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+		//Integer teacherId = (Integer) session.getAttribute("teacherId");
 
-		// Integer teacherId = 1; // remove this when testing done
+		Integer teacherId = 1; // remove this when testing done
 
-		if (loggedIn == null || !loggedIn || teacherId == null) {
-			return "redirect:/teacher-auth";
-		}
+//		if (loggedIn == null || !loggedIn || teacherId == null) {
+//			return "redirect:/teacher-auth";
+//		}
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {

@@ -157,6 +157,37 @@
 .course-card {
     padding: 14px;
 }
+/* ===== COURSE CARD ACTIONS UX ===== */
+.course-footer .btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: #eef2ff;
+    color: #1e3a8a;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.course-footer .btn:hover {
+    background: #2563eb;
+    color: #fff;
+}
+
+.feedback-btn {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.feedback-btn:hover {
+    background: #f59e0b;
+    color: #fff;
+}
+
+.feedback-done {
+    font-size: 12px;
+    color: #16a34a;
+    font-weight: 600;
+}
 	</style>
 </head>
 
@@ -271,7 +302,8 @@
                 </div>
 
                 <!-- Actions -->
-               <div class="course-footer"
+               <!-- Actions -->
+<div class="course-footer"
      style="margin-top:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
 
     <!-- View -->
@@ -282,16 +314,15 @@
     </a>
 
     <!-- Give Feedback -->
-    <a th:if="${!feedbackGiven}"
+    <a th:if="${!courseFeedbackMap[course.courseId]}"
        th:href="@{/student-feedback/{id}(id=${course.courseId})}"
-       class="btn"
-       style="font-size:13px;background:#facc15;">
-        <i class="bi bi-chat-dots-fill"></i> Feedback
+       class="btn feedback-btn">
+        <i class="bi bi-chat-dots-fill"></i> Give Feedback
     </a>
 
     <!-- Submitted -->
-    <span th:if="${feedbackGiven}"
-          style="font-size:12px;color:#16a34a;font-weight:600;">
+    <span th:if="${courseFeedbackMap[course.courseId]}"
+          class="feedback-done">
         <i class="bi bi-check-circle-fill"></i> Feedback submitted
     </span>
 </div>

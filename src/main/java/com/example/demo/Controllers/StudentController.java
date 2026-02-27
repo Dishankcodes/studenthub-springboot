@@ -1,6 +1,8 @@
 package com.example.demo.Controllers;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +15,7 @@ import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseCertificate;
 import com.example.demo.entity.CourseFeedback;
 import com.example.demo.entity.InstructorFeedback;
+import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
 import com.example.demo.repository.CourseCertificateRepository;
 import com.example.demo.repository.CourseFeedbackRepository;
@@ -73,12 +76,23 @@ public class StudentController {
 	            .map(CourseCertificate::getCourse)
 	            .distinct()
 	            .toList();
+	    
+	    
+	    // ✅ FEEDBACK STATUS PER COURSE
+	    Map<Integer, Boolean> courseFeedbackMap = new HashMap<>();
 
+	    for (Course course : completedCourses) {
+	        boolean feedbackGiven =
+	                feedbackRepo.existsByCourseCourseIdAndStudentStudid(
+	                        course.getCourseId(), studentId
+	                );
+	        courseFeedbackMap.put(course.getCourseId(), feedbackGiven);
+	    }
+
+	    model.addAttribute("courseFeedbackMap", courseFeedbackMap);
 	    model.addAttribute("certificates", certificates);
 	    model.addAttribute("completedCourses", completedCourses);
-	    model.addAttribute("feedbackGiven", false);
-	    model.addAttribute("feedbacks", List.of());
-
+	    
 
 	    return "student-learning";
 	}
@@ -108,11 +122,7 @@ public class StudentController {
 		return "student-notification";
 	}
 
-	@GetMapping("/student-profile")
-	public String student_profile() {
-		return "student-profile";
-	}
-	
+		
 	
 	@GetMapping("/student-feedback")
 	public String studentFeedback(HttpSession session, Model model) {
@@ -268,5 +278,7 @@ public class StudentController {
 	             .equals(teacherId)
 	        );
 	}
+	
+
 
 }

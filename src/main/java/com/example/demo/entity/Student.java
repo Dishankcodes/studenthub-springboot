@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,6 +11,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 
@@ -31,6 +33,20 @@ public class Student {
 
 	private String password;
 
+	
+	@Column(length = 100)
+	private String degree;
+
+	@Column(length = 500)
+	private String interests = "";
+	
+	
+	@Column(updatable = false)
+	private LocalDate joinedOn;
+
+	private String profileImage; // image path
+	
+	
 	
 	 // 🔥 Enrollments
     @OneToMany(mappedBy = "student",
@@ -68,7 +84,43 @@ public class Student {
 		this.lessonProgressList = lessonProgressList;
 	}
 
+	@PrePersist
+	protected void onCreate() {
+	    this.joinedOn = LocalDate.now();
+	}
+	
+	
+	public LocalDate getJoinedOn() {
+		return joinedOn;
+	}
 
+	public void setJoinedOn(LocalDate joinedOn) {
+		this.joinedOn = joinedOn;
+	}
+
+	public String getProfileImage() {
+		return profileImage;
+	}
+
+	public void setProfileImage(String profileImage) {
+		this.profileImage = profileImage;
+	}
+
+	public String getDegree() {
+		return degree;
+	}
+
+	public void setDegree(String degree) {
+		this.degree = degree;
+	}
+
+	public String getInterests() {
+		return interests;
+	}
+
+	public void setInterests(String interests) {
+		this.interests = interests;
+	}
 
 	public String getFullname() {
 		return fullname;
