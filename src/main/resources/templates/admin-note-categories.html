@@ -1,40 +1,314 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>Admin Notes Management</title>
+
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Montserrat', sans-serif;
+		}
+
+		body {
+			background: radial-gradient(circle at top, #1a1a3d, #0d0d2b);
+			color: #fff;
+		}
+
+		.dashboard {
+			max-width: 1400px;
+			margin: auto;
+			padding: 48px 64px;
+		}
+
+		.dashboard-header {
+			margin-bottom: 28px;
+		}
+
+		.dashboard-header h2 {
+			font-size: 34px;
+			font-weight: 700;
+		}
+
+		.dashboard-header p {
+			margin-top: 6px;
+			font-size: 15px;
+			color: #cfd2ff;
+		}
+
+		.activity-card {
+			background: rgba(26, 26, 61, 0.95);
+			border-radius: 20px;
+			padding: 28px;
+			margin-bottom: 32px;
+			box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35);
+			backdrop-filter: blur(8px);
+			transition: 0.3s;
+		}
+
+		.activity-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 30px 60px rgba(108, 99, 255, 0.35);
+		}
+
+		.activity-card h5 {
+			font-size: 20px;
+			font-weight: 600;
+			margin-bottom: 14px;
+		}
+
+		form {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+			margin-top: 16px;
+		}
+
+		input {
+			background: #0d0d2b;
+			color: #fff;
+			border: 1px solid #2f2f6d;
+			border-radius: 14px;
+			padding: 12px 16px;
+			font-size: 14px;
+			width: 280px;
+		}
+
+		input::placeholder {
+			color: #9da3ff;
+		}
+
+		input:focus {
+			outline: none;
+			border-color: #6c63ff;
+			box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
+		}
+
+		button {
+			border: none;
+			border-radius: 30px;
+			padding: 10px 20px;
+			font-weight: 600;
+			font-size: 14px;
+			cursor: pointer;
+			transition: 0.3s;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.btn-primary {
+			background: linear-gradient(135deg, #6c63ff, #4e4ae8);
+			color: #fff;
+		}
+
+		.btn-success {
+			background: linear-gradient(135deg, #2ecc71, #27ae60);
+			color: #fff;
+		}
+
+		.btn-warning {
+			background: linear-gradient(135deg, #f39c12, #e67e22);
+			color: #fff;
+		}
+
+		.btn-danger {
+			background: linear-gradient(135deg, #e74c3c, #c0392b);
+			color: #fff;
+		}
+
+		.btn-sm {
+			padding: 6px 16px;
+			font-size: 13px;
+		}
+
+		button:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 12px 26px rgba(0, 0, 0, 0.4);
+		}
+
+		table {
+			width: 100%;
+			border-collapse: separate;
+			border-spacing: 0 12px;
+			margin-top: 18px;
+		}
+
+		thead th {
+			text-align: left;
+			font-size: 13px;
+			font-weight: 600;
+			color: #9da3ff;
+			padding: 10px 16px;
+		}
+
+		tbody tr {
+			background: #0d0d2b;
+			border-radius: 16px;
+			transition: 0.3s;
+		}
+
+		tbody tr:hover {
+			background: #1f1f4d;
+			transform: scale(1.01);
+		}
+
+		td {
+			padding: 14px 16px;
+			font-size: 14px;
+			vertical-align: middle;
+		}
+
+		.text-end {
+			text-align: right;
+		}
+
+		.text-center {
+			text-align: center;
+		}
+
+		.badge {
+			padding: 6px 14px;
+			border-radius: 20px;
+			font-size: 12px;
+			font-weight: 600;
+			display: inline-block;
+		}
+
+		.bg-success {
+			background: linear-gradient(135deg, #2ecc71, #27ae60);
+		}
+
+		.bg-secondary {
+			background: linear-gradient(135deg, #7f8c8d, #636e72);
+		}
+
+		.text-muted {
+			color: #9da3ff;
+			font-size: 14px;
+		}
+
+		.ms-2 {
+			margin-left: 12px;
+		}
+
+		@media (max-width: 768px) {
+			.dashboard {
+				padding: 32px 20px;
+			}
+
+			form {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+
+			input {
+				width: 100%;
+			}
+		}
+	</style>
 </head>
+
 <body>
-<form th:action="@{/admin-note-categories}" method="post" class="top-add-bar">
-    <input type="text" name="name"
-           placeholder="New category name (Java, UI/UX…)" required>
-    <button type="submit">Add</button>
-</form>
 
-<div th:each="c : ${categories}">
-  <span th:text="${c.name}"></span>
-  <span th:text="${c.active ? 'Active' : 'Disabled'}"></span>
+	<main class="dashboard">
 
-  <form th:action="@{/admin-note-categories/toggle/{id}(id=${c.categoryId})}"
-      method="post">
-    <button type="submit">
-        <span th:text="${c.active ? 'Deactivate' : 'Activate'}"></span>
-    </button>
-</form>
-</div>
-<h3>Pending Notes</h3>
+		<div class="dashboard-header">
+			<h2>Notes Management</h2>
+			<p>Manage note categories and approve instructor uploads</p>
+		</div>
+		<div th:if="${success}" class="activity-card" style="border-left:6px solid #2ecc71;">
+			<p th:text="${success}"></p>
+		</div>
 
-<div th:each="n : ${pendingNotes}">
-    <b th:text="${n.title}"></b>
-    <span th:text="${n.teacher.firstname}"></span>
+		<div th:if="${error}" class="activity-card" style="border-left:6px solid #e74c3c;">
+			<p th:text="${error}"></p>
+		</div>
+		<div class="activity-card">
+			<h5>Add Note Category</h5>
+			<form th:action="@{/admin-note-categories}" method="post">
+				<input type="text" name="name" placeholder="Category name (Java, UI/UX…)" required>
+				<button type="submit" class="btn-primary">
+					<i class="bi bi-plus-lg"></i> Add
+				</button>
+			</form>
+		</div>
 
-    <form th:action="@{/admin/notes/approve/{id}(id=${n.noteId})}" method="post">
-        <button>Approve</button>
-    </form>
+		<div class="activity-card">
+			<h5>Note Categories</h5>
+			<table>
+				<thead>
+					<tr>
+						<th>Category</th>
+						<th>Status</th>
+						<th class="text-end">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="c : ${categories}">
+						<td th:text="${c.name}">Java</td>
+						<td>
+							<span th:if="${c.active}" class="badge bg-success">Active</span>
+							<span th:if="${!c.active}" class="badge bg-secondary">Disabled</span>
+						</td>
+						<td class="text-end">
+							<form th:action="@{/admin-note-categories/toggle/{id}(id=${c.categoryId})}" method="post">
+								<button class="btn-sm" th:classappend="${c.active ? 'btn-warning' : 'btn-success'}">
+									<i class="bi" th:classappend="${c.active ? 'bi-x-circle' : 'bi-check-circle'}"></i>
+									<span th:text="${c.active ? 'Deactivate' : 'Activate'}"></span>
+								</button>
+							</form>
+						</td>
+					</tr>
+					<tr th:if="${#lists.isEmpty(categories)}">
+						<td colspan="3" class="text-center text-muted">No categories added yet.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
-    <form th:action="@{/admin/notes/reject/{id}(id=${n.noteId})}" method="post">
-        <button>Reject</button>
-    </form>
-</div>
+		<div class="activity-card">
+			<h5>Pending Notes Approval</h5>
+			<table>
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>Instructor</th>
+						<th class="text-end">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="n : ${pendingNotes}">
+						<td th:text="${n.title}">Spring Boot Notes</td>
+						<td th:text="${n.teacher.firstname}">Instructor</td>
+						<td class="text-end">
+							<form th:action="@{/admin/notes/approve/{id}(id=${n.noteId})}" method="post">
+								<button class="btn-success btn-sm">
+									<i class="bi bi-check-lg"></i> Approve
+								</button>
+							</form>
+							<form th:action="@{/admin/notes/reject/{id}(id=${n.noteId})}" method="post" class="ms-2">
+								<button class="btn-danger btn-sm">
+									<i class="bi bi-x-lg"></i> Reject
+								</button>
+							</form>
+						</td>
+					</tr>
+					<tr th:if="${#lists.isEmpty(pendingNotes)}">
+						<td colspan="3" class="text-center text-muted">No pending notes for approval.</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+	</main>
+
 </body>
+
 </html>

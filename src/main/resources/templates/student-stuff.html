@@ -2,86 +2,233 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Stuff | EduPlatform</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Student Stuff | EduPlatform</title>
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+	<!-- Bootstrap Icons -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 	<link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+		}
 
-        body {
-            background: #f4f7ff;
-        }
-     
-	     .main {
-	            margin-left: 240px;
-	            margin-top: 56px;
-	            padding: 20px;
-	            transition: 0.3s ease;
-	        }
-     	
-     	
-       
+		body {
+			background: #fff;
+		}
 
-    </style>
+		.main {
+			margin-left: 240px;
+			margin-top: 56px;
+			padding: 20px;
+			transition: 0.3s ease;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: auto;
+			padding: 30px;
+		}
+
+
+		/* ===============================
+	FILTER BAR
+	================================ */
+		.filters {
+			display: flex;
+			gap: 12px;
+			align-items: center;
+			background: #ffffff;
+			padding: 14px 16px;
+			border-radius: 14px;
+			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+			margin-bottom: 24px;
+		}
+
+		.filters select,
+		.filters input {
+			padding: 10px 14px;
+			border-radius: 10px;
+			border: 1px solid #d1d5db;
+			font-size: 14px;
+			flex: 1;
+		}
+
+		.filters input:focus,
+		.filters select:focus {
+			outline: none;
+			border-color: #4f46e5;
+			box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+		}
+
+		.filters button {
+			background: #4f46e5;
+			color: #fff;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 10px;
+			font-size: 14px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.filters button:hover {
+			background: #4338ca;
+		}
+
+		/* ===============================
+	NOTES GRID
+	================================ */
+		.notes-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			gap: 20px;
+		}
+
+		.note-card {
+			background: #ffffff;
+			border-radius: 16px;
+			padding: 18px 20px;
+			box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+			transition: 0.3s ease;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.note-card:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+		}
+
+		.note-card h3 {
+			font-size: 16px;
+			font-weight: 600;
+			color: #111827;
+		}
+
+		.note-card p {
+			font-size: 13px;
+			color: #6b7280;
+			line-height: 1.5;
+		}
+
+		.badge {
+			background: #eef2ff;
+			color: #4f46e5;
+			padding: 4px 10px;
+			border-radius: 999px;
+			font-size: 12px;
+			width: fit-content;
+		}
+
+		.note-card small {
+			font-size: 12px;
+			color: #6b7280;
+		}
+
+		/* ===============================
+	CARD ACTIONS
+	================================ */
+		.actions {
+			margin-top: auto;
+			display: flex;
+			gap: 10px;
+		}
+
+		.actions a {
+			flex: 1;
+			text-align: center;
+			padding: 8px 12px;
+			border-radius: 10px;
+			font-size: 13px;
+			font-weight: 500;
+			text-decoration: none;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+		}
+
+		.actions a:first-child {
+			background: #4f46e5;
+			color: #ffffff;
+		}
+
+		.actions a:first-child:hover {
+			background: #4338ca;
+		}
+
+		.actions a:last-child {
+			background: #e5e7eb;
+			color: #111827;
+		}
+
+		.actions a:last-child:hover {
+			background: #d1d5db;
+		}
+
+		.actions a,
+		.filters button {
+			text-decoration: none;
+		}
+	</style>
 </head>
 
 <body>
 
-<!-- ===== SIDEBAR ===== -->
-<div class="sidebar collapsed" id="sidebar">
-    <button class="toggle-btn" id="toggle">
-        <i class="bi bi-chevron-right"></i>
-    </button>
+	<!-- ===== SIDEBAR ===== -->
+	<div class="sidebar collapsed" id="sidebar">
+		<button class="toggle-btn" id="toggle">
+			<i class="bi bi-chevron-right"></i>
+		</button>
 
-    <div class="sidebar-brand">
-        <a href="/student-dashboard">
-                <img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
-            </a>
-        <h2 class="platform-name">
-            EduPlatform
-        </h2>
-    </div>
+		<div class="sidebar-brand">
+			<a href="/student-dashboard">
+				<img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
+			</a>
+			<h2 class="platform-name">
+				EduPlatform
+			</h2>
+		</div>
 
-<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-<a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
-<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
-<a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
-<a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
-<a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
-<a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
-<a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-<a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+		<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+		<a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
+		<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
+		<a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
+		<a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
+		<a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
+		<a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
+		<a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+		<a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
-</div>
+	</div>
 
-<!-- ===== TOPBAR ===== -->
-<div class="student-topbar">
-    <span class="page-title">Download Notes & Stuff</span>
-    	<div class="topbar-right">
-        <div class="notif">
-        <a th:href="@{/student-notification}">
-            <i class="bi bi-bell"></i>
-            <span class="dot"></span> </a>
-        </div>
+	<!-- ===== TOPBAR ===== -->
+	<div class="student-topbar">
+		<span class="page-title">Download Notes & Stuff</span>
+		<div class="topbar-right">
+			<div class="notif">
+				<a th:href="@{/student-notification}">
+					<i class="bi bi-bell"></i>
+					<span class="dot"></span> </a>
+			</div>
 
-        <div class="profile">
+			<div class="profile">
 				<a th:href="@{/student-profile}" class="profile-link">
 
 					<img th:src="${loggedStudent != null and loggedStudent.profileImage != null
-                ? loggedStudent.profileImage
-                : '/images/default.jpg'}" alt="Profile">
+					? loggedStudent.profileImage
+					: '/images/default.jpg'}" alt="Profile">
 
 					<span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
 						Student
@@ -89,65 +236,69 @@
 
 				</a>
 			</div>
-    </div>
-    	
-
-</div>
-
-<div class="main">
-  
-  <form class="filters">
-  <select name="category">
-    <option value="">All Categories</option>
-    <option th:each="c : ${categories}"
-            th:value="${c.categoryId}"
-            th:selected="${c.categoryId == selectedCategory}"
-            th:text="${c.name}">
-    </option>
-  </select>
-
-  <input name="q" placeholder="Search notes"
-         th:value="${q}">
-
-  <button>Apply</button>
-</form>
-
-<div class="notes-grid">
-  <div th:each="n : ${notes}" class="note-card">
-    <h3 th:text="${n.title}"></h3>
-    <p th:text="${n.description}"></p>
-
-    <span class="badge" th:text="${n.category.name}"></span>
-
-    <small>
-      By <span th:text="${n.teacher.firstname}"></span>
-    </small>
-
-    <div class="actions">
-      <a th:href="${n.fileUrl}" download>Download</a>
-      <a th:href="${n.fileUrl}" target="_blank">Open</a>
-    </div>
-  </div>
-</div>
-</div>
+		</div>
 
 
-<!-- ===== SCRIPT ===== -->
-<script>
-    const sidebar = document.getElementById("sidebar");
-    const toggle = document.getElementById("toggle");
-    const icon = toggle.querySelector("i");
+	</div>
 
-    toggle.addEventListener("click", () => {
-        if (window.innerWidth <= 768) {
-            sidebar.classList.toggle("mobile-show");
-        } else {
-            sidebar.classList.toggle("collapsed");
-            icon.classList.toggle("bi-chevron-right");
-            icon.classList.toggle("bi-chevron-left");
-        }
-    });
-</script>
+	<div class="main">
+
+		<form class="filters">
+			<input name="q" placeholder="Search notes" th:value="${q}">
+
+			<select name="category">
+				<option value="">All Categories</option>
+				<option th:each="c : ${categories}" th:value="${c.categoryId}"
+					th:selected="${c.categoryId == selectedCategory}" th:text="${c.name}">
+				</option>
+			</select>
+
+			<button>
+				<i class="bi bi-funnel-fill"></i> Apply
+			</button>
+		</form>
+
+		<div class="notes-grid">
+			<div th:each="n : ${notes}" class="note-card">
+				<h3 th:text="${n.title}"></h3>
+				<p th:text="${n.description}"></p>
+
+				<span class="badge" th:text="${n.category.name}"></span>
+
+				<small>
+					By <span th:text="${n.teacher.firstname}"></span>
+				</small>
+
+				<div class="actions">
+					<a th:href="${n.fileUrl}" download>
+						<i class="bi bi-download"></i> Download
+					</a>
+					<a th:href="${n.fileUrl}" target="_blank">
+						<i class="bi bi-box-arrow-up-right"></i> Open
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- ===== SCRIPT ===== -->
+	<script>
+		const sidebar = document.getElementById("sidebar");
+		const toggle = document.getElementById("toggle");
+		const icon = toggle.querySelector("i");
+
+		toggle.addEventListener("click", () => {
+			if (window.innerWidth <= 768) {
+				sidebar.classList.toggle("mobile-show");
+			} else {
+				sidebar.classList.toggle("collapsed");
+				icon.classList.toggle("bi-chevron-right");
+				icon.classList.toggle("bi-chevron-left");
+			}
+		});
+	</script>
 
 </body>
+
 </html>

@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.entity.NoteCategory;
 
-public interface NoteCategoryRepository
-extends JpaRepository<NoteCategory, Integer> {
+public interface NoteCategoryRepository extends JpaRepository<NoteCategory, Integer> {
 
-List<NoteCategory> findByActiveTrue();
+	List<NoteCategory> findByActiveTrue();
+
+	boolean existsByNameIgnoreCase(String name);
 }

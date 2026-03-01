@@ -20,6 +20,7 @@ public interface TeacherNotesRepository extends JpaRepository<TeacherNotes, Inte
 	@Query("""
 		    SELECT n FROM TeacherNotes n
 		    WHERE n.status = com.example.demo.enums.NoteStatus.APPROVED
+		     AND n.category.active = true
 		    AND (:category IS NULL OR n.category.categoryId = :category)
 		    AND (:q IS NULL OR LOWER(n.title) LIKE LOWER(CONCAT('%', :q, '%')))
 		    ORDER BY n.uploadedAt DESC

@@ -2,306 +2,600 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Teacher Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<title>Teacher Dashboard</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+	<link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Poppins', sans-serif;
+		}
 
-        body {
-            background: #f4f6f9;
-        }
-
-
-        .main-content {
-            margin-left: 260px;
-            padding: 20 30px;
-            transition: margin-left 0.3s ease;
-        }
-
-        /* When sidebar is collapsed */
-        body.sidebar-collapsed .main-content {
-            margin-left: 80px;
-        }
+		body {
+			background: #1f1f2e;
+			color: white;
+		}
 
 
-        .page-title {
-            font-size: 28px;
-            font-weight: 600;
-            margin-top: 30px;
-            margin-left: 20px;
-        }
+		.main-content {
+			margin-left: 260px;
+			padding: 20 30px;
+			transition: margin-left 0.3s ease;
+		}
 
-        /* ===== PAGE HEADER ===== */
-        /* ===== Layout ===== */
-        .dashboard {
-            padding: 30px;
-        }
+		/* When sidebar is collapsed */
+		body.sidebar-collapsed .main-content {
+			margin-left: 80px;
+		}
 
-        .section-title {
-            margin: 30px 0 15px;
-            font-size: 22px;
-            font-weight: 600;
-        }
 
-        /* ===== Cards ===== */
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-            gap: 20px;
-        }
+		.page-title {
+			font-size: 28px;
+			font-weight: 600;
+			margin-top: 30px;
+			margin-left: 20px;
+		}
 
-        .course-card {
-            background: #2a2a4a;
-            color: #fff;
-            padding: 35px;
-            text-align: center;
-            font-weight: 500;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
+		/* ===== PAGE HEADER ===== */
+		/* ===== Layout ===== */
+		.dashboard {
+			padding: 30px;
+		}
 
-        .course-card h2 {
-            font-size: 34px;
-            margin-bottom: 10px;
-        }
+		.section-title {
+			margin: 30px 0 15px;
+			font-size: 22px;
+			font-weight: 600;
+		}
 
-        .course-card span {
-            font-size: 14px;
-            opacity: 0.9;
-        }
+		/* ===== Cards ===== */
+		.cards {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+			gap: 20px;
+		}
 
-        .course-card:hover {
-            transform: translateY(-6px);
-            background: #f6a623;
-            color: #1f1f2e;
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
-        }
+		.course-card {
+			background: #2a2a4a;
+			color: #fff;
+			padding: 35px;
+			text-align: center;
+			font-weight: 500;
+			border-radius: 10px;
+			transition: all 0.3s ease;
+		}
 
-        /* ===== Analytics ===== */
-        .analytics {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 25px;
-        }
+		.course-card h2 {
+			font-size: 34px;
+			margin-bottom: 10px;
+		}
 
-        .chart-box,
-        .list-box {
-            background: #2a2a4a;
-            padding: 25px;
-            border-radius: 12px;
-            color: #fff;
-        }
+		.course-card span {
+			font-size: 14px;
+			opacity: 0.9;
+		}
 
-        /* ===== Tables ===== */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+		.course-card:hover {
+			transform: translateY(-6px);
+			background: #f6a623;
+			color: #1f1f2e;
+			box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+		}
 
-        th,
-        td {
-            padding: 12px;
-            text-align: left;
-        }
+		/* ===== Analytics ===== */
+		.analytics {
+			display: grid;
+			grid-template-columns: 2fr 1fr;
+			gap: 25px;
+		}
 
-        th {
-            COLOR: WHITE;
-        }
+		.chart-box,
+		.list-box {
+			background: #2a2a4a;
+			padding: 25px;
+			border-radius: 12px;
+			color: #fff;
+		}
 
-        tr:nth-child(even) {
-            background: #24243a;
-        }
+		/* ===== Tables ===== */
+		table {
+			width: 100%;
+			border-collapse: collapse;
+		}
 
-        /* ===== Feedback ===== */
-        .feedback {
-            background: #2a2a4a;
-            padding: 25px;
-            border-radius: 12px;
-        }
+		th,
+		td {
+			padding: 12px;
+			text-align: left;
+		}
 
-        .feedback-item {
-            margin-bottom: 15px;
-            border-bottom: 1px solid #3c3c5c;
-            padding-bottom: 10px;
-        }
+		th {
+			COLOR: WHITE;
+		}
 
-        .feedback-item:last-child {
-            border-bottom: none;
-        }
+		tr:nth-child(even) {
+			background: #24243a;
+		}
 
-        /* ===== Responsive ===== */
-        @media(max-width: 900px) {
-            .analytics {
-                grid-template-columns: 1fr;
-            }
-        }
+		/* ===== Feedback ===== */
+		.feedback {
+			background: #2a2a4a;
+			padding: 25px;
+			border-radius: 12px;
+		}
 
-        .course-summary {
-            text-align: left;
-        }
+		.feedback-item {
+			margin-bottom: 15px;
+			border-bottom: 1px solid #3c3c5c;
+			padding-bottom: 10px;
+		}
 
-        .course-summary h3 {
-            font-size: 20px;
-            margin-bottom: 15px;
-        }
+		.feedback-item:last-child {
+			border-bottom: none;
+		}
 
-        .course-summary p {
-            font-size: 15px;
-            margin: 6px 0;
-            display: flex;
-            justify-content: space-between;
-        }
+		/* ===== Responsive ===== */
+		@media(max-width: 900px) {
+			.analytics {
+				grid-template-columns: 1fr;
+			}
+		}
 
-        .course-summary span {
-            opacity: 0.9;
-        }
+		.course-summary {
+			text-align: left;
+		}
 
-        .course-summary hr {
-            margin: 12px 0;
-            border: 0;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.2);
-        }
+		.course-summary h3 {
+			font-size: 20px;
+			margin-bottom: 15px;
+		}
 
-        .course-summary strong {
-            font-size: 18px;
-        }
-    </style>
+		.course-summary p {
+			font-size: 15px;
+			margin: 6px 0;
+			display: flex;
+			justify-content: space-between;
+		}
+
+		.course-summary span {
+			opacity: 0.9;
+		}
+
+		.course-summary hr {
+			margin: 12px 0;
+			border: 0;
+			height: 1px;
+			background: rgba(255, 255, 255, 0.2);
+		}
+
+		.course-summary strong {
+			font-size: 18px;
+		}
+
+		/* ===============================
+   NOTES UPLOAD CARD
+================================ */
+		.notes-upload-card {
+			background: #2a2a4a;
+			padding: 30px;
+			border-radius: 16px;
+			max-width: 600px;
+			margin-top: 20px;
+			box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+		}
+
+		.notes-upload-card h3 {
+			font-size: 20px;
+			font-weight: 600;
+			margin-bottom: 20px;
+			color: #ffffff;
+		}
+
+		/* ===============================
+   FORM LAYOUT
+================================ */
+		.notes-upload-card form {
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+		}
+
+		.notes-upload-card input[type="text"],
+		.notes-upload-card textarea,
+		.notes-upload-card select {
+			background: #1f1f35;
+			border: 1px solid #3c3c5c;
+			color: #ffffff;
+			padding: 12px 14px;
+			border-radius: 10px;
+			font-size: 14px;
+		}
+
+		.notes-upload-card textarea {
+			min-height: 90px;
+			resize: vertical;
+		}
+
+		.notes-upload-card input::placeholder,
+		.notes-upload-card textarea::placeholder {
+			color: #9ca3af;
+		}
+
+		.notes-upload-card input:focus,
+		.notes-upload-card textarea:focus,
+		.notes-upload-card select:focus {
+			outline: none;
+			border-color: #f6a623;
+			box-shadow: 0 0 0 3px rgba(246, 166, 35, 0.25);
+		}
+
+		/* ===============================
+   FILE INPUT
+================================ */
+		.notes-upload-card input[type="file"] {
+			background: #1f1f35;
+			color: #9ca3af;
+			padding: 10px;
+			border-radius: 10px;
+			border: 1px dashed #3c3c5c;
+			cursor: pointer;
+		}
+
+		/* ===============================
+   UPLOAD BUTTON
+================================ */
+		.notes-upload-card button {
+			background: #f6a623;
+			color: #1f1f2e;
+			border: none;
+			padding: 12px 18px;
+			border-radius: 12px;
+			font-size: 15px;
+			font-weight: 600;
+			cursor: pointer;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			width: fit-content;
+		}
+
+		.notes-upload-card button:hover {
+			background: #ffb84d;
+		}
+
+		/* ===============================
+   STATUS BADGES
+================================ */
+		.status-badge {
+			display: inline-block;
+			margin-top: 10px;
+			padding: 6px 12px;
+			border-radius: 999px;
+			font-size: 13px;
+			font-weight: 500;
+		}
+
+		.status-pending {
+			background: rgba(246, 166, 35, 0.2);
+			color: #f6a623;
+		}
+
+		.status-approved {
+			background: rgba(34, 197, 94, 0.2);
+			color: #22c55e;
+		}
+
+		.status-rejected {
+			background: rgba(239, 68, 68, 0.2);
+			color: #ef4444;
+		}
+
+		/* ===============================
+   INFO MESSAGE
+================================ */
+		.info {
+			background: rgba(34, 197, 94, 0.15);
+			color: #22c55e;
+			padding: 14px 18px;
+			border-radius: 12px;
+			margin-bottom: 20px;
+			font-size: 14px;
+		}
+
+		/* ===============================
+   DASHBOARD TWO COLUMN LAYOUT
+================================ */
+		.notes-layout {
+			display: grid;
+			grid-template-columns: 380px 1fr;
+			gap: 30px;
+			align-items: start;
+		}
+
+		@media (max-width: 1100px) {
+			.notes-layout {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		/* ===============================
+   UPLOADED NOTES GRID
+================================ */
+		.uploaded-notes {
+			background: transparent;
+		}
+
+		.uploaded-notes h3 {
+			margin-bottom: 16px;
+			font-size: 22px;
+			font-weight: 600;
+		}
+
+		.notes-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			gap: 20px;
+		}
+
+		.note-item {
+			background: #2a2a4a;
+			border-radius: 14px;
+			padding: 20px;
+			box-shadow: 0 12px 30px rgba(0, 0, 0, .25);
+			display: flex;
+			flex-direction: column;
+		}
+
+		.note-item h4 {
+			font-size: 16px;
+			font-weight: 600;
+			margin-bottom: 6px;
+		}
+
+		.note-item p {
+			font-size: 13px;
+			opacity: .85;
+		}
+
+		.note-item .meta {
+			margin-top: auto;
+			font-size: 12px;
+			opacity: .7;
+		}
+
+		.note-actions {
+			display: flex;
+			gap: 10px;
+			margin-top: 12px;
+		}
+
+		.note-actions a {
+			flex: 1;
+			text-align: center;
+			padding: 8px;
+			border-radius: 10px;
+			background: #1f1f35;
+			color: white;
+			text-decoration: none;
+			font-size: 13px;
+		}
+
+		.note-actions a:hover {
+			background: #f6a623;
+			color: #1f1f2e;
+		}
+	</style>
 </head>
 
 <body class="sidebar-collapsed">
-    <aside class="sidebar collapsed">
-        <div class="sidebar-logo">
-            <img th:src="@{/images/logo.png}" alt="EduPlatform Logo">
-            <span class="logo-text">EduPlatform</span>
-        </div>
+	<aside class="sidebar collapsed">
+		<div class="sidebar-logo">
+			<img th:src="@{/images/logo.png}" alt="EduPlatform Logo">
+			<span class="logo-text">EduPlatform</span>
+		</div>
 
-        <nav class="sidebar-menu">
-            <a th:href="@{/teacher-dashboard}" class="active"><i class="bi bi-speedometer2"></i><span> Dashboard </span></a>
-            <a th:href="@{/teacher-course}"><i class="bi bi-journal-text"></i><span>Course Management</span></a>
-            <a th:href="@{/teacher-creates-course}"><i class="bi bi-journal-plus"></i><span>Create Course</span></a>
-            <a th:href="@{/teacher-activity}"><i class="bi bi-pencil-square"></i><span>Genereal Activities</span></a>
-            <a th:href="@{/teacher-students}"><i class="bi bi-people"></i><span>Students</span></a>
-            <a th:href="@{/teacher-communication}"><i class="bi bi-chat-dots"></i><span >Communication</span></a>
-            <a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback & Ratings</span></a>
-            <a th:href="@{/teacher-profile}"><i class="bi bi-gear"></i><span>Profile</span></a>
-            <a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
-        </nav>
-    </aside>
+		<nav class="sidebar-menu">
+			<a th:href="@{/teacher-dashboard}" class="active"><i class="bi bi-speedometer2"></i><span> Dashboard
+				</span></a>
+			<a th:href="@{/teacher-course}"><i class="bi bi-journal-text"></i><span>Course Management</span></a>
+			<a th:href="@{/teacher-creates-course}"><i class="bi bi-journal-plus"></i><span>Create Course</span></a>
+			<a th:href="@{/teacher-activity}"><i class="bi bi-pencil-square"></i><span>Genereal Activities</span></a>
+			<a th:href="@{/teacher-students}"><i class="bi bi-people"></i><span>Students</span></a>
+			<a th:href="@{/teacher-communication}"><i class="bi bi-chat-dots"></i><span>Communication</span></a>
+			<a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback & Ratings</span></a>
+			<a th:href="@{/teacher-profile}"><i class="bi bi-gear"></i><span>Profile</span></a>
+			<a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+		</nav>
+	</aside>
 
-    <!-- ===== MAIN CONTENT ===== -->
-    <main class="main-content">
-        <!-- ===== TOP HEADER ===== -->
-        <header class="top-header">
-            <div class="header-left">
-                <button class="sidebar-toggle" id="sidebarToggle">
-                    <i class="bi bi-list"></i>
-                </button>
+	<!-- ===== MAIN CONTENT ===== -->
+	<main class="main-content">
+		<!-- ===== TOP HEADER ===== -->
+		<header class="top-header">
+			<div class="header-left">
+				<button class="sidebar-toggle" id="sidebarToggle">
+					<i class="bi bi-list"></i>
+				</button>
 
-                <span class="page-title">Dashboard</span>
-            </div>
+				<span class="page-title">Dashboard</span>
+			</div>
 
-            <div class="header-right">
-                <div class="profile-trigger" id="profileToggle">
-                    <span th:text="${teacher.firstname + ' ' + teacher.lastname}">
-                        Dishank
-                    </span>
-                    <div class="avatar">
-                        <i class="bi bi-person-fill"></i>
-                    </div>
-                    <i class="bi bi-caret-down-fill"></i>
-                </div>
-
-
-                <div class="profile-dropdown" id="profileDropdown">
-                    <a th:href="@{/teacher-profile}">Profile</a>
-                    <a href="@{/logout}">Logout</a>
-                </div>
-            </div>
-        </header>
-
-        <hr class="header-divider">
-
-        <div class="dashboard">
-<p th:if="${param.msg == 'pending'}" class="info">
-    ✅ Notes uploaded successfully.
-    <br>
-    ⏳ Sent for review. It will be auto-approved within 5 minutes.
-</p>
-     <form th:action="@{/teacher-notes/upload}"
-      method="post"
-      enctype="multipart/form-data">
-
-    <input type="text" name="title" placeholder="Notes title" required>
-
-    <textarea name="description" placeholder="Optional description"></textarea>
-
-    <select name="categoryId" required>
-        <option value="">Select category</option>
-        <option th:each="c : ${categories}"
-                th:value="${c.categoryId}"
-                th:text="${c.name}">
-        </option>
-    </select>
-
-    <input type="file" name="file" required>
-<th:block th:if="${note != null and note.status != null}">
-    <span th:switch="${note.status}">
-        <span th:case="'PENDING'" class="badge bg-warning">
-            ⏳ Under review (auto-approve in 5 min)
-        </span>
-        <span th:case="'APPROVED'" class="badge bg-success">
-            ✅ Approved
-        </span>
-        <span th:case="'REJECTED'" class="badge bg-danger">
-            ❌ Rejected
-        </span>
-    </span>
-</th:block>
-    <button type="submit">Upload Notes</button>
-</form>
-        </div>
-    </main>
-    <script>
-
-        const toggleBtn = document.getElementById("sidebarToggle");
-        const sidebar = document.querySelector(".sidebar");
-
-        const body = document.body;
-
-        toggleBtn.addEventListener("click", () => {
-            sidebar.classList.toggle("collapsed");
-            body.classList.toggle("sidebar-collapsed");
-        });
+			<div class="header-right">
+				<div class="profile-trigger" id="profileToggle">
+					<span th:text="${teacher.firstname + ' ' + teacher.lastname}">
+						Dishank
+					</span>
+					<div class="avatar">
+						<i class="bi bi-person-fill"></i>
+					</div>
+					<i class="bi bi-caret-down-fill"></i>
+				</div>
 
 
-        const profileToggle = document.getElementById("profileToggle");
-        const profileDropdown = document.getElementById("profileDropdown");
+				<div class="profile-dropdown" id="profileDropdown">
+					<a th:href="@{/teacher-profile}">Profile</a>
+					<a href="@{/logout}">Logout</a>
+				</div>
+			</div>
+		</header>
 
-        if (profileToggle) {
-            profileToggle.addEventListener("click", () => {
-                profileDropdown.classList.toggle("show");
-            });
+		<hr class="header-divider">
 
-            document.addEventListener("click", (e) => {
-                if (!profileToggle.contains(e.target)) {
-                    profileDropdown.classList.remove("show");
-                }
-            });
-        }
-    </script>
+		<div class="dashboard">
 
+			<!-- ===== TEACHER STATUS MESSAGE ===== -->
+			<div id="statusMessage" th:if="${param.msg == 'pending'}" class="info status-pending">
+				✅ Notes uploaded successfully.<br>
+				⏳ Under review. Auto-approval in progress.
+			</div>
+
+			<div id="statusMessage" th:if="${teacherMsg}" th:switch="${#strings.substringBefore(teacherMsg, ':')}"
+				class="info">
+
+				<span th:case="'approved'" class="status-approved">
+					✅ Your note
+					<strong th:text="${#strings.substringAfter(teacherMsg, ':')}"></strong>
+					has been approved 🎉
+				</span>
+
+				<span th:case="'rejected'" class="status-rejected">
+					❌ Your note
+					<strong th:text="${#strings.substringAfter(teacherMsg, ':')}"></strong>
+					was rejected. Please update and re-upload.
+				</span>
+			</div>
+			<!-- ===== INFO MESSAGE (FULL WIDTH) ===== -->
+			<p th:if="${param.msg == 'pending'}" class="info">
+				✅ Notes uploaded successfully.<br>
+				⏳ Sent for review.
+			</p>
+
+			<!-- ===== TWO COLUMN LAYOUT ===== -->
+			<div class="notes-layout">
+
+				<!-- ===== LEFT: UPLOAD NOTES ===== -->
+				<div class="notes-upload-card">
+					<h3>Upload Notes</h3>
+
+					<form th:action="@{/teacher-notes/upload}" method="post" enctype="multipart/form-data">
+
+						<input type="text" name="title" placeholder="Notes title" required>
+
+						<textarea name="description" placeholder="Optional description"></textarea>
+
+						<select name="categoryId" required>
+							<option value="">Select category</option>
+							<option th:each="c : ${categories}" th:value="${c.categoryId}" th:text="${c.name}">
+							</option>
+						</select>
+
+						<input type="file" name="file" required>
+
+						<button type="submit">
+							<i class="bi bi-upload"></i> Upload Notes
+						</button>
+					</form>
+				</div>
+
+				<!-- ===== RIGHT: UPLOADED NOTES ===== -->
+				<div class="uploaded-notes">
+					<h3>My Uploaded Notes</h3>
+
+					<div th:if="${#lists.isEmpty(notes)}" class="info">
+						You haven’t uploaded any notes yet.
+					</div>
+
+					<div class="notes-grid" th:if="${!#lists.isEmpty(notes)}">
+
+						<div class="note-item" th:each="n : ${notes}">
+
+							<h4 th:text="${n.title}">Note Title</h4>
+
+							<p th:text="${n.description}">
+								Description
+							</p>
+
+							<span th:switch="${n.status}">
+								<span th:case="'PENDING'" class="status-badge status-pending">
+									⏳ PENDING
+								</span>
+								<span th:case="'APPROVED'" class="status-badge status-approved">
+									✅ APPROVED
+								</span>
+								<span th:case="'REJECTED'" class="status-badge status-rejected">
+									❌ REJECTED
+								</span>
+							</span>
+
+							<div class="meta">
+								<strong th:text="${n.category.name}"></strong>
+								•
+								<span th:text="${#temporals.format(n.uploadedAt,'dd MMM yyyy')}"></span>
+							</div>
+
+							<div class="note-actions">
+								<a th:href="${n.fileUrl}" download title="Download">
+									<i class="bi bi-download"></i>
+								</a>
+
+								<a th:href="${n.fileUrl}" target="_blank" title="Open">
+									<i class="bi bi-box-arrow-up-right"></i>
+								</a>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</main>
+	<script>
+
+		const toggleBtn = document.getElementById("sidebarToggle");
+		const sidebar = document.querySelector(".sidebar");
+
+		const body = document.body;
+
+		toggleBtn.addEventListener("click", () => {
+			sidebar.classList.toggle("collapsed");
+			body.classList.toggle("sidebar-collapsed");
+		});
+
+
+		const profileToggle = document.getElementById("profileToggle");
+		const profileDropdown = document.getElementById("profileDropdown");
+
+		if (profileToggle) {
+			profileToggle.addEventListener("click", () => {
+				profileDropdown.classList.toggle("show");
+			});
+
+			document.addEventListener("click", (e) => {
+				if (!profileToggle.contains(e.target)) {
+					profileDropdown.classList.remove("show");
+				}
+			});
+		}
+	</script>
+<script>
+    const statusMsg = document.getElementById("statusMessage");
+
+    if (statusMsg) {
+        setTimeout(() => {
+            statusMsg.style.opacity = "0";
+            statusMsg.style.transform = "translateY(-10px)";
+            setTimeout(() => statusMsg.remove(), 500);
+        }, 30000); // 30 seconds
+    }
+</script>
 </body>
 
 </html>

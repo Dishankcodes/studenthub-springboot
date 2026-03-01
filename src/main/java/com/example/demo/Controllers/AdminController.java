@@ -153,10 +153,27 @@ public class AdminController {
 	}
 
 	@PostMapping("/admin-note-categories")
-	public String addCategory(@RequestParam String name) {
+	public String addCategory(
+	        @RequestParam String name,
+	        RedirectAttributes ra
+	) {
+	    String trimmedName = name.trim();
+
+	    if (categoryRepo.existsByNameIgnoreCase(trimmedName)) {
+	        ra.addFlashAttribute("error",
+	            "⚠️ Category '" + trimmedName + "' already exists");
+	        return "redirect:/admin-note-categories";
+	    }
+
 	    NoteCategory c = new NoteCategory();
-	    c.setName(name);
+	    c.setName(trimmedName);
+	    c.setActive(true);
+
 	    categoryRepo.save(c);
+
+	    ra.addFlashAttribute("success",
+	        "✅ Category '" + trimmedName + "' added successfully");
+
 	    return "redirect:/admin-note-categories";
 	}
 
@@ -169,7 +186,7 @@ public class AdminController {
 	}
 	
 	@PostMapping("/admin/notes/approve/{id}")
-	public String approveNote(@PathVariable Integer id) {
+	public String approveNote(@PathVariable Integer id, RedirectAttributes ra) {
 
 	    TeacherNotes note = teacherNoteRepo.findById(id).orElseThrow();
 	    note.setStatus(NoteStatus.APPROVED);
@@ -177,16 +194,21 @@ public class AdminController {
 	    note.setApprovedAt(LocalDateTime.now());
 
 	    teacherNoteRepo.save(note);
+	    ra.addFlashAttribute("teacherMsg",
+	            "approved:" + note.getTitle());
 	    return "redirect:/admin-note-categories";
 	}
+	
 	@PostMapping("/admin/notes/reject/{id}")
-	public String rejectNote(@PathVariable Integer id) {
+	public String rejectNote(@PathVariable Integer id, RedirectAttributes ra) {
 
 	    TeacherNotes note = teacherNoteRepo.findById(id).orElseThrow();
 	    note.setStatus(NoteStatus.REJECTED);
 	    note.setApproved(false);
 
 	    teacherNoteRepo.save(note);
+	    ra.addFlashAttribute("teacherMsg",
+	            "rejected:" + note.getTitle());
 	    return "redirect:/admin-note-categories";
 	}
 
