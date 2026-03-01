@@ -1,5 +1,6 @@
 package com.example.demo.Controllers;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.entity.NoteCategory;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
+import com.example.demo.entity.TeacherNotes;
+import com.example.demo.enums.NoteStatus;
 import com.example.demo.repository.AdminRepository;
 import com.example.demo.repository.CourseRepository;
+import com.example.demo.repository.NoteCategoryRepository;
 import com.example.demo.repository.StudentRepository;
+import com.example.demo.repository.TeacherNotesRepository;
 import com.example.demo.repository.TeacherRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -34,6 +40,13 @@ public class AdminController {
 	
 	@Autowired
 	private AdminRepository adminRepo;
+	
+	@Autowired
+	private NoteCategoryRepository categoryRepo;
+	
+	@Autowired
+	private TeacherNotesRepository teacherNoteRepo;
+
 
 	@GetMapping("/admin-dashboard")
 	public String admin_dashboard(HttpSession session, Model model) {
@@ -127,6 +140,54 @@ public class AdminController {
 	public String admin_settings() {
 
 		return "admin-settings";
+	}
+	
+	@GetMapping("/admin-note-categories")
+	public String noteCategories(Model model) {
+
+	    model.addAttribute("categories", categoryRepo.findAll());
+	    model.addAttribute("pendingNotes",
+	        teacherNoteRepo.findByStatus(NoteStatus.PENDING));
+
+	    return "admin-note-categories";
+	}
+
+	@PostMapping("/admin-note-categories")
+	public String addCategory(@RequestParam String name) {
+	    NoteCategory c = new NoteCategory();
+	    c.setName(name);
+	    categoryRepo.save(c);
+	    return "redirect:/admin-note-categories";
+	}
+
+	@PostMapping("/admin-note-categories/toggle/{id}")
+	public String toggleCategory(@PathVariable Integer id) {
+	    NoteCategory c = categoryRepo.findById(id).orElseThrow();
+	    c.setActive(!c.isActive());
+	    categoryRepo.save(c);
+	    return "redirect:/admin-note-categories";
+	}
+	
+	@PostMapping("/admin/notes/approve/{id}")
+	public String approveNote(@PathVariable Integer id) {
+
+	    TeacherNotes note = teacherNoteRepo.findById(id).orElseThrow();
+	    note.setStatus(NoteStatus.APPROVED);
+	    note.setApproved(true);
+	    note.setApprovedAt(LocalDateTime.now());
+
+	    teacherNoteRepo.save(note);
+	    return "redirect:/admin-note-categories";
+	}
+	@PostMapping("/admin/notes/reject/{id}")
+	public String rejectNote(@PathVariable Integer id) {
+
+	    TeacherNotes note = teacherNoteRepo.findById(id).orElseThrow();
+	    note.setStatus(NoteStatus.REJECTED);
+	    note.setApproved(false);
+
+	    teacherNoteRepo.save(note);
+	    return "redirect:/admin-note-categories";
 	}
 
 	@GetMapping("/admin-logout")

@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseCertificate;
@@ -22,6 +23,7 @@ import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.EnrollmentRepository;
 import com.example.demo.repository.InstructorFeedbackRepository;
+import com.example.demo.repository.NoteCategoryRepository;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.repository.TeacherNotesRepository;
 import com.example.demo.repository.TeacherRepository;
@@ -54,6 +56,9 @@ public class StudentController {
 	
 	@Autowired
 	private TeacherNotesRepository teacherNoteRepo;
+	
+	@Autowired
+	private NoteCategoryRepository categoryRepo;
 
 	@GetMapping("/student-dashboard")
 	public String student_dashboard() {
@@ -92,11 +97,19 @@ public class StudentController {
 	}
 
 	@GetMapping("/student-stuff")
-	public String student_stuff(Model model) {
+	public String student_stuff(@RequestParam(required = false) Integer category,
+	        @RequestParam(required = false) String q,
+	        Model model) {
 
-		List<TeacherNotes> notes = teacherNoteRepo.findByApprovedTrueOrderByUploadedAtDesc();
+	    model.addAttribute("categories", categoryRepo.findByActiveTrue());
 
-		model.addAttribute("notes", notes);
+	    List<TeacherNotes> notes =
+	        teacherNoteRepo.search(category, q);
+
+	    model.addAttribute("notes", notes);
+	    model.addAttribute("selectedCategory", category);
+	    model.addAttribute("q", q);
+
 		return "student-stuff";
 	}
 

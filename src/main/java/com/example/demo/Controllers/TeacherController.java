@@ -25,6 +25,8 @@ import com.example.demo.entity.TeacherProfile;
 import com.example.demo.enums.EnrollmentStatus;
 import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.EnrollmentRepository;
+import com.example.demo.repository.NoteCategoryRepository;
+import com.example.demo.repository.TeacherNotesRepository;
 import com.example.demo.repository.TeacherProfileRepo;
 import com.example.demo.repository.TeacherRepository;
 
@@ -44,6 +46,12 @@ public class TeacherController {
 
 	@Autowired
 	private CourseFeedbackRepository feedbackRepo;
+	
+	@Autowired
+	private NoteCategoryRepository categoryRepo;
+	
+	@Autowired
+	private TeacherNotesRepository teacherNoteRepo;
 
 	// ===== DASHBOARD =====
 	@GetMapping("/teacher-dashboard")
@@ -240,6 +248,22 @@ public class TeacherController {
 		return "redirect:/teacher-auth";
 	}
 
+	
+	@GetMapping("/teacher-activity")
+	public String teacherNotesAndAnnoucments(Model model,HttpSession session) {
+
+		Integer teacherId =1;
+//		Integer teacherId = (Integer) session.getAttribute("teacherId");
+//		if (teacherId == null)
+//			return "redirect:/teacher-auth";
+		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+
+		model.addAttribute("categories", categoryRepo.findByActiveTrue());
+		model.addAttribute("notes", teacherNoteRepo.findByTeacherTeacherId(teacherId));
+		model.addAttribute("teacher", teacher);
+		return "teacher-activity";
+	}
+	
 	@GetMapping("/test-teacher-login")
 	public String testTeacherLogin(HttpSession session) {
 

@@ -2,92 +2,134 @@ package com.example.demo.entity;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.enums.NoteStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "teacher_notes")
 public class TeacherNotes {
 
-	 @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Integer noteId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer noteId;
 
-	    private String title;
+	private String title;
 
-	    @Column(length = 2000)
-	    private String description;
+	@Column(length = 2000)
+	private String description;
 
-	    private String fileUrl;
+	private String fileUrl;
 
-	    private LocalDateTime uploadedAt;
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private NoteStatus status = NoteStatus.PENDING;
 
-	    @ManyToOne
-	    private Teacher teacher;
+	private LocalDateTime uploadedAt;
+	private LocalDateTime approvedAt;
+	@ManyToOne
+	private Teacher teacher;
 
-	    private boolean approved = true;
+	private boolean approved = false;
 
-		public Integer getNoteId() {
-			return noteId;
-		}
+	@ManyToOne
+	private NoteCategory category;
 
-		public void setNoteId(Integer noteId) {
-			this.noteId = noteId;
-		}
+	public NoteCategory getCategory() {
+		return category;
+	}
 
-		public String getTitle() {
-			return title;
-		}
+	public void setCategory(NoteCategory category) {
+		this.category = category;
+	}
 
-		public void setTitle(String title) {
-			this.title = title;
-		}
+	public Integer getNoteId() {
+		return noteId;
+	}
 
-		public String getDescription() {
-			return description;
-		}
+	public void setNoteId(Integer noteId) {
+		this.noteId = noteId;
+	}
 
-		public void setDescription(String description) {
-			this.description = description;
-		}
+	public String getTitle() {
+		return title;
+	}
 
-		public String getFileUrl() {
-			return fileUrl;
-		}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-		public void setFileUrl(String fileUrl) {
-			this.fileUrl = fileUrl;
-		}
+	@PrePersist
+	public void onCreate() {
+	    this.uploadedAt = LocalDateTime.now();
+	    if (this.status == null) {
+	        this.status = NoteStatus.PENDING;
+	    }
+	}
 
-		public LocalDateTime getUploadedAt() {
-			return uploadedAt;
-		}
+	public String getDescription() {
+		return description;
+	}
 
-		public void setUploadedAt(LocalDateTime uploadedAt) {
-			this.uploadedAt = uploadedAt;
-		}
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-		public Teacher getTeacher() {
-			return teacher;
-		}
+	public String getFileUrl() {
+		return fileUrl;
+	}
 
-		public void setTeacher(Teacher teacher) {
-			this.teacher = teacher;
-		}
+	public void setFileUrl(String fileUrl) {
+		this.fileUrl = fileUrl;
+	}
 
-		public boolean isApproved() {
-			return approved;
-		}
+	public LocalDateTime getUploadedAt() {
+		return uploadedAt;
+	}
 
-		public void setApproved(boolean approved) {
-			this.approved = approved;
-		}
-	    
-	    
-	
+	public void setUploadedAt(LocalDateTime uploadedAt) {
+		this.uploadedAt = uploadedAt;
+	}
+
+	public Teacher getTeacher() {
+		return teacher;
+	}
+
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
+	}
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+
+	public NoteStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(NoteStatus status) {
+		this.status = status;
+	}
+
+	public LocalDateTime getApprovedAt() {
+		return approvedAt;
+	}
+
+	public void setApprovedAt(LocalDateTime approvedAt) {
+		this.approvedAt = approvedAt;
+	}
+
 }

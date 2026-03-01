@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<form th:action="@{/admin-note-categories}" method="post" class="top-add-bar">
+    <input type="text" name="name"
+           placeholder="New category name (Java, UI/UX…)" required>
+    <button type="submit">Add</button>
+</form>
+
+<div th:each="c : ${categories}">
+  <span th:text="${c.name}"></span>
+  <span th:text="${c.active ? 'Active' : 'Disabled'}"></span>
+
+  <form th:action="@{/admin-note-categories/toggle/{id}(id=${c.categoryId})}"
+      method="post">
+    <button type="submit">
+        <span th:text="${c.active ? 'Deactivate' : 'Activate'}"></span>
+    </button>
+</form>
+</div>
+<h3>Pending Notes</h3>
+
+<div th:each="n : ${pendingNotes}">
+    <b th:text="${n.title}"></b>
+    <span th:text="${n.teacher.firstname}"></span>
+
+    <form th:action="@{/admin/notes/approve/{id}(id=${n.noteId})}" method="post">
+        <button>Approve</button>
+    </form>
+
+    <form th:action="@{/admin/notes/reject/{id}(id=${n.noteId})}" method="post">
+        <button>Reject</button>
+    </form>
+</div>
+</body>
+</html>

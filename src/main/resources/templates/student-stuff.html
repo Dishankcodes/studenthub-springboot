@@ -96,21 +96,38 @@
 
 <div class="main">
   
-  <div class="note-card" th:each="n : ${notes}">
+  <form class="filters">
+  <select name="category">
+    <option value="">All Categories</option>
+    <option th:each="c : ${categories}"
+            th:value="${c.categoryId}"
+            th:selected="${c.categoryId == selectedCategory}"
+            th:text="${c.name}">
+    </option>
+  </select>
 
+  <input name="q" placeholder="Search notes"
+         th:value="${q}">
+
+  <button>Apply</button>
+</form>
+
+<div class="notes-grid">
+  <div th:each="n : ${notes}" class="note-card">
     <h3 th:text="${n.title}"></h3>
-
     <p th:text="${n.description}"></p>
 
+    <span class="badge" th:text="${n.category.name}"></span>
+
     <small>
-        By <span th:text="${n.teacher.firstname}"></span>
-        • <span th:text="${#temporals.format(n.uploadedAt,'dd MMM yyyy')}"></span>
+      By <span th:text="${n.teacher.firstname}"></span>
     </small>
 
-    <div class="note-actions">
-        <a th:href="${n.fileUrl}" download>Download</a>
-        <a th:href="${n.fileUrl}" target="_blank">Open</a>
+    <div class="actions">
+      <a th:href="${n.fileUrl}" download>Download</a>
+      <a th:href="${n.fileUrl}" target="_blank">Open</a>
     </div>
+  </div>
 </div>
 </div>
 
