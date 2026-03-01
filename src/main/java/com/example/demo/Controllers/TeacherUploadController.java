@@ -2,21 +2,35 @@ package com.example.demo.Controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.Lesson;
+import com.example.demo.entity.Teacher;
+import com.example.demo.entity.TeacherNotes;
 import com.example.demo.repository.LessonRepository;
+import com.example.demo.repository.TeacherNotesRepository;
+import com.example.demo.repository.TeacherRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class TeacherUploadController {
 
 	@Autowired
 	private LessonRepository lessonRepo;
+	
+	@Autowired
+	private TeacherRepository teacherRepo;
+	
+	@Autowired
+	private TeacherNotesRepository teacherNoteRepo;
 	
 	@PostMapping("/teacher/lesson/video")
 	public String uploadLessonVideo(
@@ -103,5 +117,51 @@ public class TeacherUploadController {
 	    + "&openLesson=" + lessonId
 	    + "&msg=" + (alreadyExists ? "notes_updated" : "notes_uploaded")
 	    + "#module-" + lesson.getModule().getModuleId();
+	}
+	
+	
+	// ===== EXAMS & QUIZZES =====
+		@GetMapping("/teacher-activity")
+		public String teacherNotesAndAnnoucments() {
+			return "teacher-activity";
+		}
+		
+		
+		
+	@PostMapping("/teacher-notes/upload")
+	public String uploadTeacherNote(
+	        @RequestParam String title,
+	        @RequestParam(required = false) String description,
+	        @RequestParam MultipartFile file,
+	        HttpSession session
+	) throws IOException {
+
+	    Integer teacherId = (Integer) session.getAttribute("teacherId");
+	    if (teacherId == null) return "redirect:/teacher-auth";
+
+	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+
+	    String basePath = System.getProperty("user.dir")
+	            + "/uploads/teacher-notes/" + teacherId;
+
+	    File dir = new File(basePath);
+	    if (!dir.exists()) dir.mkdirs();
+
+	    String fileName = System.currentTimeMillis()
+	            + "_" + file.getOriginalFilename();
+
+	    File destination = new File(dir, fileName);
+	    file.transferTo(destination);
+
+	    TeacherNotes note = new TeacherNotes();
+	    note.setTitle(title);
+	    note.setDescription(description);
+	    note.setFileUrl("/uploads/teacher-notes/" + teacherId + "/" + fileName);
+	    note.setTeacher(teacher);
+	    note.setUploadedAt(LocalDateTime.now());
+
+	    teacherNoteRepo.save(note);
+
+	    return "redirect:/teacher-activity?note=uploaded";
 	}
 }

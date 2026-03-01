@@ -1,320 +1,326 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Courses | EduPlatform</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
+	<title>Courses | EduPlatform</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<link
-	href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap"
-	rel="stylesheet">
-<link th:href="@{/css/footer_style.css}" rel="stylesheet">
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+	<link th:href="@{/css/footer_style.css}" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
-<style>
-* {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: 'Montserrat', sans-serif;
-}
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Montserrat', sans-serif;
+		}
 
-body {
-	background: #f4f7ff;
-}
+		body {
+			background: #f4f7ff;
+		}
 
-/* NAVBAR */
-.navbar {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 22px 120px;
-	background: #4481eb;
-}
+		/* NAVBAR */
+		.navbar {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 22px 120px;
+			background: #4481eb;
+		}
 
-.logo {
-	font-size: 26px;
-	font-weight: 700;
-	color: white;
-}
+		.logo {
+			font-size: 26px;
+			font-weight: 700;
+			color: white;
+		}
 
-.navbar nav {
-	display: flex;
-	gap: 30px;
-}
+		.navbar nav {
+			display: flex;
+			gap: 30px;
+		}
 
-.navbar nav a {
-	color: white;
-	text-decoration: none;
-	font-size: 15px;
-	font-weight: 500;
-	position: relative;
-	padding-bottom: 4px;
-	transition: 0.3s;
-}
+		.navbar nav a {
+			color: white;
+			text-decoration: none;
+			font-size: 15px;
+			font-weight: 500;
+			position: relative;
+			padding-bottom: 4px;
+			transition: 0.3s;
+		}
 
-.navbar nav a::after {
-	content: "";
-	position: absolute;
-	width: 0;
-	height: 2px;
-	background: #ffcc66;
-	left: 0;
-	bottom: 0;
-	transition: 0.3s;
-}
+		.navbar nav a::after {
+			content: "";
+			position: absolute;
+			width: 0;
+			height: 2px;
+			background: #ffcc66;
+			left: 0;
+			bottom: 0;
+			transition: 0.3s;
+		}
 
-.navbar nav a:hover::after {
-	width: 100%;
-}
+		.navbar nav a:hover::after {
+			width: 100%;
+		}
 
-.auth-btns button {
-	padding: 8px 16px;
-	border-radius: 20px;
-	border: none;
-	margin-left: 10px;
-	cursor: pointer;
-	font-weight: 600;
-	transition: 0.3s;
-}
+		.auth-btns button {
+			padding: 8px 16px;
+			border-radius: 20px;
+			border: none;
+			margin-left: 10px;
+			cursor: pointer;
+			font-weight: 600;
+			transition: 0.3s;
+		}
 
-.role-btn:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
+		.role-btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+		}
 
-.student {
-	background: white;
-	color: #4481eb;
-}
+		.student {
+			background: white;
+			color: #4481eb;
+		}
 
-.teacher {
-	background: #ffcc66;
-	color: #333;
-}
+		.teacher {
+			background: #ffcc66;
+			color: #333;
+		}
 
-.admin {
-	background: #2c2c54;
-	color: white;
-}
+		.admin {
+			background: #2c2c54;
+			color: white;
+		}
 
-/* PAGE HEADER */
-.page-header {
-	text-align: center;
-	padding: 70px 20px 40px;
-}
+		/* PAGE HEADER */
+		.page-header {
+			text-align: center;
+			padding: 70px 20px 40px;
+		}
 
-.page-header h1 {
-	font-size: 36px;
-	color: #333;
-}
+		.page-header h1 {
+			font-size: 36px;
+			color: #333;
+		}
 
-.page-header p {
-	color: #666;
-	margin-top: 10px;
-}
+		.page-header p {
+			color: #666;
+			margin-top: 10px;
+		}
 
-/* COURSES GRID */
-.courses-container {
-	width: 85%;
-	margin: auto;
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 35px;
-	padding-bottom: 80px;
-}
+		/* COURSES GRID */
+		.courses-container {
+			width: 85%;
+			margin: auto;
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 35px;
+			padding-bottom: 80px;
+		}
 
-.course-card {
-	background: white;
-	border-radius: 20px;
-	overflow: hidden;
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-	transition: 0.3s ease;
-}
+		.course-card {
+			background: white;
+			border-radius: 20px;
+			overflow: hidden;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+			transition: 0.3s ease;
+		}
 
-.course-card:hover {
-	transform: translateY(-8px);
-	box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
-}
+		.course-card:hover {
+			transform: translateY(-8px);
+			box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+		}
 
-.course-card img {
-	width: 100%;
-	height: 180px;
-	object-fit: cover;
-}
+		.course-card img {
+			width: 100%;
+			height: 180px;
+			object-fit: cover;
+		}
 
-.course-content {
-	padding: 25px;
-}
+		.course-content {
+			padding: 25px;
+		}
 
-.course-content h3 {
-	font-size: 18px;
-	margin-bottom: 8px;
-	color: #222;
-}
+		.course-content h3 {
+			font-size: 18px;
+			margin-bottom: 8px;
+			color: #222;
+		}
 
-.course-content p {
-	font-size: 14px;
-	color: #666;
-	margin-bottom: 15px;
-}
+		.course-content p {
+			font-size: 14px;
+			color: #666;
+			margin-bottom: 15px;
+		}
 
-.course-footer {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
+		.course-footer {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
 
-.price {
-	font-weight: 600;
-	color: #4481eb;
-}
+		.price {
+			font-weight: 600;
+			color: #4481eb;
+		}
 
-.view-btn {
-	background: #4481eb;
-	color: white;
-	border: none;
-	padding: 10px 20px;
-	border-radius: 30px;
-	cursor: pointer;
-	font-size: 14px;
-	transition: 0.3s;
-}
+		.view-btn {
+			background: #4481eb;
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 30px;
+			cursor: pointer;
+			font-size: 14px;
+			transition: 0.3s;
+		}
 
-.view-btn:hover {
-	background: #336fe0;
-	transform: translateY(-2px);
-}
+		.view-btn:hover {
+			background: #336fe0;
+			transform: translateY(-2px);
+		}
 
-/* FOOTER */
-.edu-footer {
-	background: #2c2c54;
-	color: white;
-	padding: 60px 120px 30px;
-}
+		/* FOOTER */
+		.edu-footer {
+			background: #2c2c54;
+			color: white;
+			padding: 60px 120px 30px;
+		}
 
-.footer-container {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 40px;
-	justify-content: space-between;
-}
+		.footer-container {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 40px;
+			justify-content: space-between;
+		}
 
-.footer-col h4, .footer-logo {
-	margin-bottom: 12px;
-}
+		.footer-col h4,
+		.footer-logo {
+			margin-bottom: 12px;
+		}
 
-.footer-col a {
-	display: block;
-	color: white;
-	text-decoration: none;
-	margin-bottom: 6px;
-	transition: 0.3s;
-}
+		.footer-col a {
+			display: block;
+			color: white;
+			text-decoration: none;
+			margin-bottom: 6px;
+			transition: 0.3s;
+		}
 
-.footer-col a:hover {
-	color: #ffcc66;
-}
+		.footer-col a:hover {
+			color: #ffcc66;
+		}
 
-.footer-col p {
-	font-size: 14px;
-	opacity: 0.9;
-}
+		.footer-col p {
+			font-size: 14px;
+			opacity: 0.9;
+		}
 
-.footer-bottom {
-	text-align: center;
-	font-size: 13px;
-	opacity: 0.7;
-	margin-top: 30px;
-}
+		.footer-bottom {
+			text-align: center;
+			font-size: 13px;
+			opacity: 0.7;
+			margin-top: 30px;
+		}
 
-/* RESPONSIVE */
-@media ( max-width : 1000px) {
-	.courses-container {
-		grid-template-columns: repeat(2, 1fr);
-	}
-}
+		/* RESPONSIVE */
+		@media (max-width : 1000px) {
+			.courses-container {
+				grid-template-columns: repeat(2, 1fr);
+			}
+		}
 
-@media ( max-width : 600px) {
-	.courses-container {
-		grid-template-columns: 1fr;
-	}
-	.navbar {
-		flex-direction: column;
-		align-items: flex-start;
-		padding: 20px;
-	}
-	.auth-btns {
-		margin-top: 10px;
-	}
-	.footer-container {
-		flex-direction: column;
-		gap: 20px;
-	}
-	.edu-footer {
-		padding: 40px 20px;
-	}
-}
+		@media (max-width : 600px) {
+			.courses-container {
+				grid-template-columns: 1fr;
+			}
 
-.student-hero {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	padding: 90px 80px;
-	background: #3366ff; /* SAME student blue */
-	border-bottom-left-radius: 180px;
-	border-bottom-right-radius: 180px;
-	color: white;
-	text-align: center;
-	margin-bottom: 30px;
-}
+			.navbar {
+				flex-direction: column;
+				align-items: flex-start;
+				padding: 20px;
+			}
 
-.student-hero .hero-content {
-	max-width: 750px;
-}
+			.auth-btns {
+				margin-top: 10px;
+			}
 
-.student-hero h1 {
-	font-size: 42px;
-	line-height: 1.3;
-}
+			.footer-container {
+				flex-direction: column;
+				gap: 20px;
+			}
 
-.student-hero h1 span {
-	color: #ffcc66;
-}
+			.edu-footer {
+				padding: 40px 20px;
+			}
+		}
 
-.student-hero p {
-	margin: 20px 0;
-	opacity: 0.9;
-	font-size: 18px;
-}
+		.student-hero {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 90px 80px;
+			background: #3366ff;
+			/* SAME student blue */
+			border-bottom-left-radius: 180px;
+			border-bottom-right-radius: 180px;
+			color: white;
+			text-align: center;
+			margin-bottom: 30px;
+		}
 
-/* Optional outline style */
-.outline-btn {
-	background: transparent;
-	color: white;
-	border: 2px solid white;
-}
+		.student-hero .hero-content {
+			max-width: 750px;
+		}
 
-.outline-btn:hover {
-	background: white;
-	color: #3366ff;
-}
+		.student-hero h1 {
+			font-size: 42px;
+			line-height: 1.3;
+		}
 
-/* RESPONSIVE */
-@media ( max-width : 768px) {
-	.student-hero {
-		padding: 60px 20px;
-		border-radius: 0 0 100px 100px;
-	}
-	.student-hero h1 {
-		font-size: 34px;
-	}
-	.student-hero p {
-		font-size: 16px;
-	}
-}
-</style>
+		.student-hero h1 span {
+			color: #ffcc66;
+		}
+
+		.student-hero p {
+			margin: 20px 0;
+			opacity: 0.9;
+			font-size: 18px;
+		}
+
+		/* Optional outline style */
+		.outline-btn {
+			background: transparent;
+			color: white;
+			border: 2px solid white;
+		}
+
+		.outline-btn:hover {
+			background: white;
+			color: #3366ff;
+		}
+
+		/* RESPONSIVE */
+		@media (max-width : 768px) {
+			.student-hero {
+				padding: 60px 20px;
+				border-radius: 0 0 100px 100px;
+			}
+
+			.student-hero h1 {
+				font-size: 34px;
+			}
+
+			.student-hero p {
+				font-size: 16px;
+			}
+		}
+	</style>
 </head>
 
 <body>
@@ -328,12 +334,10 @@ body {
 			<a th:href="@{/student-privacy}">Privacy Policy</a>
 		</nav>
 		<div class="auth-btns">
-			<button class="role-btn student"
-				th:onclick="|window.location.href = '@{/student-login}'|">Student</button>
+			<button class="role-btn student" th:onclick="|window.location.href = '@{/student-login}'|">Student</button>
 			<button class="role-btn teacher"
 				th:onclick="|window.location.href = '@{/teacher-homepage}'|">Teacher</button>
-			<button class="role-btn admin"
-				th:onclick="|window.location.href = '@{/admin-homepage}'|">Admin</button>
+			<button class="role-btn admin" th:onclick="|window.location.href = '@{/admin-homepage}'|">Admin</button>
 		</div>
 	</header>
 
@@ -398,16 +402,14 @@ body {
 			</div>
 			<div class="footer-col">
 				<h4>Quick Links</h4>
-				<a th:href="@{/}">Home</a> <a th:href="@{/courses}">Courses</a> <a
-					th:href="@{/career}">Careers</a> <a th:href="@{/contact}">Contact</a>
+				<a th:href="@{/}">Home</a> <a th:href="@{/courses}">Courses</a> <a th:href="@{/career}">Careers</a> <a
+					th:href="@{/contact}">Contact</a>
 			</div>
 			<div class="footer-col">
 				<h4>Learning</h4>
-				<a th:href="@{/courses/java}">Java Development</a> <a
-					th:href="@{/courses/web}">Web Development</a> <a
-					th:href="@{/courses/data-science}">Data Science</a> <a
-					th:href="@{/courses/ai}">AI & Machine Learning</a> <a
-					th:href="@{/courses/ui-ux}">UI / UX Design</a>
+				<a th:href="@{/courses/java}">Java Development</a> <a th:href="@{/courses/web}">Web Development</a> <a
+					th:href="@{/courses/data-science}">Data Science</a> <a th:href="@{/courses/ai}">AI & Machine
+					Learning</a> <a th:href="@{/courses/ui-ux}">UI / UX Design</a>
 			</div>
 			<div class="footer-col">
 				<h4>Support</h4>
@@ -423,10 +425,10 @@ body {
 			</div>
 		</div>
 		<div class="footer-bottom">
-			© 2026 EduPlatform. All Rights Reserved. <span>|</span> <a
-				th:href="@{/student-privacy}">Privacy Policy</a> <span>|</span> <a
-				th:href="@{/}">Terms & Conditions</a>
+			© 2026 EduPlatform. All Rights Reserved. <span>|</span> <a th:href="@{/student-privacy}">Privacy Policy</a>
+			<span>|</span> <a th:href="@{/}">Terms & Conditions</a>
 		</div>
 	</footer>
 </body>
+
 </html>

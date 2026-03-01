@@ -1,285 +1,304 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin | EduPlatform</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin | EduPlatform</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: "Poppins", sans-serif;
+		}
 
-/* ================= BASE ================= */
-body {
-  background: #0d0d2b;
-  color: #ffffff;
-}
+		/* ================= BASE ================= */
+		body {
+			background: #0d0d2b;
+			color: #ffffff;
+		}
 
-/* ================= NAVBAR ================= */
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 22px 110px;
-  background: #1a1a3d;
-}
+		/* ================= NAVBAR ================= */
+		header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 22px 110px;
+			background: #1a1a3d;
+		}
 
-.logo {
-  font-size: 26px;
-  font-weight: 700;
-  color: #6c63ff;
-}
+		.logo {
+			font-size: 26px;
+			font-weight: 700;
+			color: #6c63ff;
+		}
 
-nav {
-  display: flex;
-  gap: 35px;
-}
+		nav {
+			display: flex;
+			gap: 35px;
+		}
 
-nav a {
-  color: #f0f0f0;
-  text-decoration: none;
-  font-weight: 500;
-  position: relative;
-}
+		nav a {
+			color: #f0f0f0;
+			text-decoration: none;
+			font-weight: 500;
+			position: relative;
+		}
 
-nav a::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 2px;
-  background: #6c63ff;
-  left: 0;
-  bottom: -6px;
-  transition: 0.3s;
-}
+		nav a::after {
+			content: "";
+			position: absolute;
+			width: 0;
+			height: 2px;
+			background: #6c63ff;
+			left: 0;
+			bottom: -6px;
+			transition: 0.3s;
+		}
 
-nav a:hover::after {
-  width: 100%;
-}
+		nav a:hover::after {
+			width: 100%;
+		}
 
-/* ================= ROLE BUTTONS ================= */
-.roles {
-  display: flex;
-  gap: 10px;
-}
+		/* ================= ROLE BUTTONS ================= */
+		.roles {
+			display: flex;
+			gap: 10px;
+		}
 
-.role-btn {
-  padding: 8px 18px;
-  border-radius: 25px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
+		.role-btn {
+			padding: 8px 18px;
+			border-radius: 25px;
+			border: none;
+			font-weight: 600;
+			cursor: pointer;
+			transition: 0.3s;
+		}
 
-.student,
-.teacher {
-  background: #2a2a55;
-  color: #fff;
-}
+		.student,
+		.teacher {
+			background: #2a2a55;
+			color: #fff;
+		}
 
-.admin {
-  background: #6c63ff;
-  color: #fff;
-}
+		.admin {
+			background: #6c63ff;
+			color: #fff;
+		}
 
-.role-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(108, 99, 255, 0.4);
-}
+		.role-btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 8px 20px rgba(108, 99, 255, 0.4);
+		}
 
-/* ================= HERO ================= */
-.hero {
-  padding: 120px 20px 140px;
-  text-align: center;
-  background: #1a1a3d;
-  border-bottom-left-radius: 120px;
-  border-bottom-right-radius: 120px;
-}
+		/* ================= HERO ================= */
+		.hero {
+			padding: 120px 20px 140px;
+			text-align: center;
+			background: #1a1a3d;
+			border-bottom-left-radius: 120px;
+			border-bottom-right-radius: 120px;
+		}
 
-.hero h1 {
-  font-size: 56px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: #ffffff;
-}
+		.hero h1 {
+			font-size: 56px;
+			font-weight: 700;
+			margin-bottom: 16px;
+			color: #ffffff;
+		}
 
-.hero p {
-  font-size: 20px;
-  color: #cfd2ff;
-}
+		.hero p {
+			font-size: 20px;
+			color: #cfd2ff;
+		}
 
-/* ================= SECTIONS ================= */
-.section {
-  max-width: 1100px;
-  margin: 100px auto;
-  padding: 0 20px;
-  background: #0d0d2b;
-}
+		/* ================= SECTIONS ================= */
+		.section {
+			max-width: 1100px;
+			margin: 100px auto;
+			padding: 0 20px;
+			background: #0d0d2b;
+		}
 
-.section h2 {
-  font-size: 38px;
-  margin-bottom: 40px;
-  text-align: center;
-  color: #ffffff;
-}
+		.section h2 {
+			font-size: 38px;
+			margin-bottom: 40px;
+			text-align: center;
+			color: #ffffff;
+		}
 
-/* ================= CARDS ================= */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 30px;
-}
+		/* ================= CARDS ================= */
+		.card-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+			gap: 30px;
+		}
 
-.card {
-  background: #1a1a3d;
-  padding: 32px 26px;
-  border-radius: 22px;
-  transition: 0.35s;
-  box-shadow: 0 15px 40px rgba(108, 99, 255, 0.08);
-}
+		.card {
+			background: #1a1a3d;
+			padding: 32px 26px;
+			border-radius: 22px;
+			transition: 0.35s;
+			box-shadow: 0 15px 40px rgba(108, 99, 255, 0.08);
+		}
 
-.card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 25px 60px rgba(108, 99, 255, 0.25);
-}
+		.card:hover {
+			transform: translateY(-8px);
+			box-shadow: 0 25px 60px rgba(108, 99, 255, 0.25);
+		}
 
-.card h4 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: #6c63ff;
-}
+		.card h4 {
+			font-size: 20px;
+			margin-bottom: 10px;
+			color: #6c63ff;
+		}
 
-.card p {
-  font-size: 15px;
-  color: #cfd2ff;
-  line-height: 1.6;
-}
+		.card p {
+			font-size: 15px;
+			color: #cfd2ff;
+			line-height: 1.6;
+		}
 
-/* ================= CTA ================= */
-.cta {
-  text-align: center;
-  margin: 120px 0;
-}
+		/* ================= CTA ================= */
+		.cta {
+			text-align: center;
+			margin: 120px 0;
+		}
 
-.cta a {
-  background: linear-gradient(135deg, #6c63ff, #4e4ae8);
-  color: #fff;
-  padding: 18px 55px;
-  border-radius: 50px;
-  font-size: 22px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: 0.3s;
-}
+		.cta a {
+			background: linear-gradient(135deg, #6c63ff, #4e4ae8);
+			color: #fff;
+			padding: 18px 55px;
+			border-radius: 50px;
+			font-size: 22px;
+			font-weight: 600;
+			text-decoration: none;
+			transition: 0.3s;
+		}
 
-.cta a:hover {
-  transform: translateY(-4px);
-}
+		.cta a:hover {
+			transform: translateY(-4px);
+		}
 
-/* ================= FOOTER ================= */
-footer {
-  background: #1a1a3d;
-  padding: 50px 80px 25px;
-  color: #cfd2ff;
-}
+		/* ================= FOOTER ================= */
+		footer {
+			background: #1a1a3d;
+			padding: 50px 80px 25px;
+			color: #cfd2ff;
+		}
 
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-  margin-bottom: 30px;
-}
+		.footer-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 40px;
+			margin-bottom: 30px;
+		}
 
-footer h4 {
-  color: #ffffff;
-  margin-bottom: 12px;
-}
+		footer h4 {
+			color: #ffffff;
+			margin-bottom: 12px;
+		}
 
-footer p {
-  font-size: 14px;
-  cursor: pointer;
-  transition: 0.3s;
-}
+		footer p {
+			font-size: 14px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
 
-footer p:hover {
-  color: #6c63ff;
-}
+		footer p:hover {
+			color: #6c63ff;
+		}
 
-.copy {
-  text-align: center;
-  font-size: 13px;
-  opacity: 0.7;
-  border-top: 1px solid #2a2a55;
-  padding-top: 15px;
-}
-
-  </style>
+		.copy {
+			text-align: center;
+			font-size: 13px;
+			opacity: 0.7;
+			border-top: 1px solid #2a2a55;
+			padding-top: 15px;
+		}
+	</style>
 </head>
 
 <body>
 
-<header>
-  <div class="logo">EduPlatform</div>
-  <nav>
-    <a th:href="@{/admin-homepage}">Home</a>
-    <a th:href="@{/admin-about}">About</a>
-  </nav>
-  <div class="roles">
-    <button class="role-btn student" th:onclick="|location.href='@{index}'|">Student</button>
-    <button class="role-btn teacher" th:onclick="|location.href='@{teacher-homepage}'|">Teacher</button>
-    <button class="role-btn admin">Admin</button>
-  </div>
-</header>
+	<header>
+		<div class="logo">EduPlatform</div>
+		<nav>
+			<a th:href="@{/admin-homepage}">Home</a>
+			<a th:href="@{/admin-about}">About</a>
+		</nav>
+		<div class="roles">
+			<button class="role-btn student" th:onclick="|location.href='@{index}'|">Student</button>
+			<button class="role-btn teacher" th:onclick="|location.href='@{teacher-homepage}'|">Teacher</button>
+			<button class="role-btn admin">Admin</button>
+		</div>
+	</header>
 
-<section class="hero">
-  <h1>Command. Control. Secure.</h1>
-  <p>Powering the entire EduPlatform ecosystem</p>
-</section>
+	<section class="hero">
+		<h1>Command. Control. Secure.</h1>
+		<p>Powering the entire EduPlatform ecosystem</p>
+	</section>
 
-<section class="section">
-  <h2>Admin Capabilities</h2>
-  <div class="card-grid">
-    <div class="card"><h4>User Management</h4><p>Approve, block, and manage all users.</p></div>
-    <div class="card"><h4>Course Control</h4><p>Monitor, approve, or remove courses.</p></div>
-    <div class="card"><h4>Teacher Verification</h4><p>Review and approve educator profiles.</p></div>
-    <div class="card"><h4>Platform Analytics</h4><p>Track growth, revenue, and engagement.</p></div>
-    <div class="card"><h4>Content Moderation</h4><p>Ensure quality and policy compliance.</p></div>
-    <div class="card"><h4>System Security</h4><p>Maintain uptime and data integrity.</p></div>
-  </div>
-</section>
+	<section class="section">
+		<h2>Admin Capabilities</h2>
+		<div class="card-grid">
+			<div class="card">
+				<h4>User Management</h4>
+				<p>Approve, block, and manage all users.</p>
+			</div>
+			<div class="card">
+				<h4>Course Control</h4>
+				<p>Monitor, approve, or remove courses.</p>
+			</div>
+			<div class="card">
+				<h4>Teacher Verification</h4>
+				<p>Review and approve educator profiles.</p>
+			</div>
+			<div class="card">
+				<h4>Platform Analytics</h4>
+				<p>Track growth, revenue, and engagement.</p>
+			</div>
+			<div class="card">
+				<h4>Content Moderation</h4>
+				<p>Ensure quality and policy compliance.</p>
+			</div>
+			<div class="card">
+				<h4>System Security</h4>
+				<p>Maintain uptime and data integrity.</p>
+			</div>
+		</div>
+	</section>
 
-<div class="cta">
-  <a th:href="@{admin-login}">Enter Admin Panel</a>
-</div>
+	<div class="cta">
+		<a th:href="@{admin-login}">Enter Admin Panel</a>
+	</div>
 
-<footer>
-  <div class="footer-grid">
-    <div>
-      <h4>EduPlatform</h4>
-      <p>Administrative Control Center</p>
-    </div>
-    <div>
-      <h4>Admin Tools</h4>
-      <p>User Management</p>
-      <p>Course Review</p>
-      <p>Reports</p>
-    </div>
-    <div>
-      <h4>Security</h4>
-      <p>Privacy</p>
-      <p>Policies</p>
-      <p>Compliance</p>
-    </div>
-  </div>
-  <p class="copy">© 2026 EduPlatform — Admin Panel</p>
-</footer>
+	<footer>
+		<div class="footer-grid">
+			<div>
+				<h4>EduPlatform</h4>
+				<p>Administrative Control Center</p>
+			</div>
+			<div>
+				<h4>Admin Tools</h4>
+				<p>User Management</p>
+				<p>Course Review</p>
+				<p>Reports</p>
+			</div>
+			<div>
+				<h4>Security</h4>
+				<p>Privacy</p>
+				<p>Policies</p>
+				<p>Compliance</p>
+			</div>
+		</div>
+		<p class="copy">© 2026 EduPlatform — Admin Panel</p>
+	</footer>
 
 </body>
+
 </html>

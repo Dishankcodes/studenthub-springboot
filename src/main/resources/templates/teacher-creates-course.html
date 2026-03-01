@@ -30,7 +30,6 @@
 			margin-left: 260px;
 			padding: 20px 30px;
 			transition: margin-left 0.3s ease;
-
 			height: 100vh;
 			overflow-y: auto;
 		}
@@ -46,7 +45,6 @@
 		}
 
 		/* ================= COURSE HIGHLIGHTS ================= */
-
 		.card .card {
 			margin-top: 18px;
 			padding: 18px;
@@ -99,15 +97,16 @@
 			color: #6b7280;
 			font-size: 12px;
 		}
+
 		.thumbnail-preview {
-  width: 260px;
-  height: 150px;
-  border-radius: 12px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border: 2px dashed #d0d7ff;
-}
+			width: 260px;
+			height: 150px;
+			border-radius: 12px;
+			background-size: cover;
+			background-position: center;
+			background-repeat: no-repeat;
+			border: 2px dashed #d0d7ff;
+		}
 	</style>
 </head>
 
@@ -122,17 +121,18 @@
 
 		<nav class="sidebar-menu">
 			<a th:href="@{/teacher-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard
-				</span></a> <a th:href="@{/teacher-course}"><i class="bi bi-journal-text"></i><span>Course
-					Management</span></a> <a th:href="@{/teacher-creates-course}" class="active"><i
-					class="bi bi-journal-plus"></i><span>Create Course</span></a> <a th:href="@{/teacher-exams}"><i
-					class="bi bi-pencil-square"></i><span>Exams
-					& Quizzes</span></a> <a th:href="@{/teacher-students}"><i
-					class="bi bi-people"></i><span>Students</span></a> <a th:href="@{/teacher-communication}"><i
-					class="bi bi-chat-dots"></i><span>Communication</span></a>
+				</span></a>
+			<a th:href="@{/teacher-course}"><i class="bi bi-journal-text"></i><span>Course
+					Management</span></a>
+			<a th:href="@{/teacher-creates-course}" class="active"><i class="bi bi-journal-plus"></i><span>Create
+					Course</span></a>
+			<a th:href="@{/teacher-activity}"><i class="bi bi-pencil-square"></i><span>Genereal Activities</span></a>
+			<a th:href="@{/teacher-students}"><i class="bi bi-people"></i><span>Students</span></a>
+			<a th:href="@{/teacher-communication}"><i class="bi bi-chat-dots"></i><span>Communication</span></a>
 			<a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback
-					& Ratings</span></a> <a th:href="@{/teacher-profile}"><i
-					class="bi bi-gear"></i><span>Profile</span></a> <a th:href="@{/logout}" class="logout"><i
-					class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+					& Ratings</span></a>
+			<a th:href="@{/teacher-profile}"><i class="bi bi-gear"></i><span>Profile</span></a>
+			<a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 		</nav>
 	</aside>
 
@@ -163,43 +163,41 @@
 
 				<!-- FLASH MESSAGES -->
 				<div th:if="${success}" class="alert alert-success">
-					<i class="bi bi-check-circle"></i>
-					<span th:text="${success}"></span>
+					<i class="bi bi-check-circle"></i> <span th:text="${success}"></span>
 				</div>
 
 				<div th:if="${error}" class="alert alert-danger">
-					<i class="bi bi-exclamation-triangle"></i>
-					<span th:text="${error}"></span>
+					<i class="bi bi-exclamation-triangle"></i> <span th:text="${error}"></span>
 				</div>
 				<!-- BASIC INFO -->
 				<div class="card">
 					<h3>Course Details</h3>
 
 					<div class="form-group">
-					<div class="form-group" th:if="${course.courseId == null}">
-						<label>Course Thumbnail</label>
-
-						<div class="thumbnail-upload">
-							<!-- Hidden file input -->
+						<div class="form-group" th:if="${course.courseId == null}">
+							<label>Course Thumbnail</label>
 
 							<div class="thumbnail-upload">
-								<input type="file" id="thumbnailInput" accept="image/*" th:field="*{thumbnailFile}"
-									hidden>
+								<!-- Hidden file input -->
 
-								<div class="thumbnail-preview" id="thumbnailPreview" th:style="${course.thumbnailURL != null}
+								<div class="thumbnail-upload">
+									<input type="file" id="thumbnailInput" accept="image/*" th:field="*{thumbnailFile}"
+										hidden>
+
+									<div class="thumbnail-preview" id="thumbnailPreview" th:style="${course.thumbnailURL != null}
              ? 'background-image:url(' + @{${course.thumbnailURL}} + ')'
              : ''">
 
-									<i class="bi bi-image" th:if="${course.thumbnailURL == null}"></i>
-									<span th:if="${course.thumbnailURL == null}">
-										Upload thumbnail
-									</span>
+										<i class="bi bi-image" th:if="${course.thumbnailURL == null}"></i>
+										<span th:if="${course.thumbnailURL == null}"> Upload
+											thumbnail </span>
+									</div>
 								</div>
 							</div>
-						</div>
 
-						<small> Recommended size: 1280 × 720 (16:9). JPG or PNG. </small>
-					</div>
+							<small> Recommended size: 1280 × 720 (16:9). JPG or PNG.
+							</small>
+						</div>
 					</div>
 
 					<input type="hidden" th:field="*{courseId}">
@@ -215,43 +213,31 @@
 							th:field="*{description}"></textarea>
 
 						<!-- COURSE HIGHLIGHTS -->
-<div class="card">
-  <h3>Course Highlights</h3>
+						<div class="card">
+							<h3>Course Highlights</h3>
 
-  <div id="highlightContainer">
+							<div id="highlightContainer">
 
-    <!-- 1️⃣ Show user-entered highlights if validation failed -->
-    <input th:if="${highlightTexts != null}"
-           th:each="t : ${highlightTexts}"
-           type="text"
-           name="highlightTexts"
-           th:value="${t}"
-           class="highlight-input"/>
+								<!-- 1️⃣ Show user-entered highlights if validation failed -->
+								<input th:if="${highlightTexts != null}" th:each="t : ${highlightTexts}" type="text"
+									name="highlightTexts" th:value="${t}" class="highlight-input" />
 
-    <!-- 2️⃣ Otherwise show saved highlights -->
-    <input th:if="${highlightTexts == null}"
-           th:each="h : ${course.highlights}"
-           type="text"
-           name="highlightTexts"
-           th:value="${h.text}"
-           class="highlight-input"/>
+								<!-- 2️⃣ Otherwise show saved highlights -->
+								<input th:if="${highlightTexts == null}" th:each="h : ${course.highlights}" type="text"
+									name="highlightTexts" th:value="${h.text}" class="highlight-input" />
 
-    <!-- 3️⃣ Empty state -->
-    <input th:if="${highlightTexts == null 
-                   and (course.highlights == null or course.highlights.empty)}"
-           type="text"
-           name="highlightTexts"
-           class="highlight-input"
-           placeholder="e.g. Build REST APIs with Spring Boot"/>
+								<!-- 3️⃣ Empty state -->
+								<input th:if="${highlightTexts == null 
+                   and (course.highlights == null or course.highlights.empty)}" type="text" name="highlightTexts"
+									class="highlight-input" placeholder="e.g. Build REST APIs with Spring Boot" />
 
-  </div>
+							</div>
 
-  <button type="button" class="btn btn-outline" onclick="addHighlight()">
-    + Add Highlight
-  </button>
+							<button type="button" class="btn btn-outline" onclick="addHighlight()">+ Add
+								Highlight</button>
 
-  <small>Maximum 8 highlights</small>
-</div>
+							<small>Maximum 8 highlights</small>
+						</div>
 					</div>
 
 					<div class="form-group">
@@ -285,20 +271,15 @@
 				<button type="submit" name="action" value="draft" class="btn btn-primary"
 					th:if="${course.courseId == null}">
 					Save & Continue</button>
-					
-					<button type="submit"
-        name="action"
-        value="draft"
-        class="btn btn-outline"
-        th:if="${course.courseId != null}">
-     Save Changes
-</button>
+
+				<button type="submit" name="action" value="draft" class="btn btn-outline"
+					th:if="${course.courseId != null}">
+					Save Changes</button>
 			</form>
 			<div th:if="${param.msg != null}">
 
-				<div class="inline-alert success" th:if="${param.msg[0] == 'thumbnail_updated'}">
-					🖼 Thumbnail updated successfully
-				</div>
+				<div class="inline-alert success" th:if="${param.msg[0] == 'thumbnail_updated'}">🖼 Thumbnail
+					updated successfully</div>
 
 			</div>
 			<div class="card thumbnail-card" th:if="${course.courseId != null}">
@@ -309,21 +290,17 @@
 
 					<input type="hidden" name="courseId" th:value="${course.courseId}">
 
-					<label class="thumbnail-preview editable"
-       th:style="${course.thumbnailURL != null}
+					<label class="thumbnail-preview editable" th:style="${course.thumbnailURL != null}
          ? 'background-image:url(' + ${course.thumbnailURL} + ');'
          : ''">
 						<input type="file" name="thumbnailFile" accept="image/*" required hidden>
 
 						<div class="overlay">
-							<i class="bi bi-camera"></i>
-							<span>Change Thumbnail</span>
+							<i class="bi bi-camera"></i> <span>Change Thumbnail</span>
 						</div>
 					</label>
 
-					<button class="btn btn-primary">
-						💾 Save Thumbnail
-					</button>
+					<button class="btn btn-primary">💾 Save Thumbnail</button>
 				</form>
 			</div>
 
@@ -349,21 +326,15 @@
 						<!-- MODULE SUCCESS MESSAGES -->
 						<div th:if="${param.msg != null 
              and param.msg[0] == 'module_added'
-             and openModule == module.moduleId}" class="inline-alert success">
-							✅ Module added
-						</div>
+             and openModule == module.moduleId}" class="inline-alert success">✅ Module added</div>
 
 						<div th:if="${param.msg != null 
              and param.msg[0] == 'module_updated'
-             and openModule == module.moduleId}" class="inline-alert success">
-							✅ Module updated
-						</div>
+             and openModule == module.moduleId}" class="inline-alert success">✅ Module updated</div>
 
 						<div th:if="${param.msg != null 
              and param.msg[0] == 'module_deleted'
-             and openModule == module.moduleId}" class="inline-alert success">
-							🗑 Module deleted
-						</div>
+             and openModule == module.moduleId}" class="inline-alert success">🗑 Module deleted</div>
 						<div class="module-header">
 
 
@@ -376,13 +347,11 @@
 								<div class="module-actions">
 
 									<!-- EDIT -->
-									<form th:action="@{/teacher-creates-course}" method="get" style="display:inline">
-										<input type="hidden" name="courseId" th:value="${course.courseId}">
-										<input type="hidden" name="editModule" th:value="${module.moduleId}">
-										<input type="hidden" name="openModule" th:value="${module.moduleId}">
-										<button type="submit" class="btn btn-outline">
-											Edit
-										</button>
+									<form th:action="@{/teacher-creates-course}" method="get" style="display: inline">
+										<input type="hidden" name="courseId" th:value="${course.courseId}"> <input
+											type="hidden" name="editModule" th:value="${module.moduleId}"> <input
+											type="hidden" name="openModule" th:value="${module.moduleId}">
+										<button type="submit" class="btn btn-outline">Edit</button>
 									</form>
 
 									<!-- ADD LESSON -->
@@ -418,8 +387,7 @@
 									<!-- CANCEL -->
 									<form th:action="@{/teacher-creates-course}" method="get">
 										<input type="hidden" name="courseId" th:value="${course.courseId}">
-										<button type="submit" class="btn btn-outline">
-											Cancel
+										<button type="submit" class="btn btn-outline">Cancel
 										</button>
 									</form>
 									<!-- DELETE MODULE -->
@@ -448,21 +416,18 @@
 								<div th:if="${param.msg != null and openLesson == lesson.lessonId}"
 									class="inline-alert success">
 
-									<span th:switch="${param.msg[0]}">
-										<span th:case="'video_uploaded'">🎥 Video uploaded</span>
-										<span th:case="'video_updated'">♻️ Video updated</span>
-										<span th:case="'notes_uploaded'">📄 Notes uploaded</span>
-										<span th:case="'notes_updated'">♻️ Notes updated</span>
+									<span th:switch="${param.msg[0]}"> <span th:case="'video_uploaded'">🎥 Video
+											uploaded</span> <span th:case="'video_updated'">♻️ Video updated</span>
+										<span th:case="'notes_uploaded'">📄 Notes uploaded</span> <span
+											th:case="'notes_updated'">♻️ Notes updated</span>
 									</span>
 
 								</div>
 								<div th:if="${success}" class="alert alert-success">
-    [[${success}]]
-</div>
+									[[${success}]]</div>
 
-<div th:if="${error}" class="alert alert-danger">
-    [[${error}]]
-</div>
+								<div th:if="${error}" class="alert alert-danger">
+									[[${error}]]</div>
 
 								<!-- UPDATE LESSON -->
 								<form th:action="@{/teacher/lesson/update}" method="post" enctype="multipart/form-data"
@@ -487,14 +452,11 @@
 									<!-- PUSH RIGHT -->
 									<div class="lesson-actions">
 										<button type="submit" class="btn btn-outline"
-											th:formaction="@{/teacher/lesson/update}">
-											Save
-										</button>
+											th:formaction="@{/teacher/lesson/update}">Save</button>
 
 										<button type="submit" class="btn btn-outline btn-danger"
-											th:formaction="@{/teacher/lesson/delete}">
-											🗑 Delete Lesson
-										</button>
+											th:formaction="@{/teacher/lesson/delete}">🗑 Delete
+											Lesson</button>
 									</div>
 								</form>
 
@@ -512,21 +474,18 @@
 										</div>
 
 										<!-- FREE PREVIEW -->
-										<label class="free-preview">
-											<input type="checkbox" name="freePreview"
+										<label class="free-preview"> <input type="checkbox" name="freePreview"
 												th:checked="${lesson.freePreview}">
 											Free Preview
 										</label>
 
 										<!-- UPLOAD BUTTON -->
-										<button type="submit" class="btn btn-outline">
-											Upload Video
-										</button>
+										<button type="submit" class="btn btn-outline">Upload
+											Video</button>
 
 										<!-- EXISTING VIDEO INFO -->
 										<p class="text-muted" th:if="${lesson.contentUrl != null}">
-											Video uploaded ✔
-										</p>
+											Video uploaded ✔</p>
 
 									</form>
 
@@ -537,17 +496,13 @@
 									<form th:action="@{/teacher/lesson/notes}" method="post"
 										enctype="multipart/form-data" class="lesson-inline">
 
-										<input type="hidden" name="lessonId" th:value="${lesson.lessonId}">
+										<input type="hidden" name="lessonId" th:value="${lesson.lessonId}"> <input
+											type="file" name="notesFile" accept="application/pdf" required>
 
-										<input type="file" name="notesFile" accept="application/pdf" required>
-
-										<button class="btn btn-outline">
-											Upload Notes
-										</button>
+										<button class="btn btn-outline">Upload Notes</button>
 
 										<p class="text-muted" th:if="${lesson.contentUrl != null}">
-											Notes uploaded ✔
-										</p>
+											Notes uploaded ✔</p>
 
 									</form>
 								</div>
@@ -612,8 +567,7 @@
 											<button type="submit" class="btn btn-outline btn-danger"
 												th:formaction="@{/teacher/lesson/delete}" formmethod="post"
 												onclick="return confirm('Delete entire lesson?')">
-												🗑 Delete Lesson
-											</button>
+												🗑 Delete Lesson</button>
 										</div>
 									</form>
 
@@ -728,27 +682,27 @@
 	</script>
 </body>
 <script>
-function addHighlight() {
-	  const container = document.getElementById("highlightContainer");
-	  const inputs = container.querySelectorAll("input");
+	function addHighlight() {
+		const container = document.getElementById("highlightContainer");
+		const inputs = container.querySelectorAll("input");
 
-	  if (inputs.length >= 8) return;
+		if (inputs.length >= 8) return;
 
-	  // prevent adding new if last is empty
-	  if (inputs.length > 0 && inputs[inputs.length - 1].value.trim() === "") {
-	    inputs[inputs.length - 1].focus();
-	    return;
-	  }
+		// prevent adding new if last is empty
+		if (inputs.length > 0 && inputs[inputs.length - 1].value.trim() === "") {
+			inputs[inputs.length - 1].focus();
+			return;
+		}
 
-	  const input = document.createElement("input");
-	  input.type = "text";
-	  input.name = "highlightTexts";
-	  input.className = "highlight-input";
-	  input.placeholder = "e.g. Deploy projects to production";
+		const input = document.createElement("input");
+		input.type = "text";
+		input.name = "highlightTexts";
+		input.className = "highlight-input";
+		input.placeholder = "e.g. Deploy projects to production";
 
-	  container.appendChild(input);
+		container.appendChild(input);
 	}
-  
+
 </script>
 
 </html>

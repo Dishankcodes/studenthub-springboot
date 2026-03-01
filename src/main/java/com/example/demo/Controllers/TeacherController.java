@@ -67,12 +67,6 @@ public class TeacherController {
 		return "teacher-dashboard";
 	}
 
-	// ===== EXAMS & QUIZZES =====
-	@GetMapping("/teacher-exams")
-	public String examsAndQuizzes() {
-		return "teacher-exams";
-	}
-
 	// ===== STUDENTS =====
 	@GetMapping("/teacher-students")
 	public String teacherStudents(HttpSession session, Model model) {
