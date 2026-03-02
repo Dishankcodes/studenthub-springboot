@@ -28,6 +28,8 @@ public class InstructorFeedback {
 
     @ManyToOne(optional = false)
     private Student student;
+    
+    
 
     @Column(nullable = false)
     private int rating; // 1–5
@@ -37,6 +39,9 @@ public class InstructorFeedback {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
+   
+    
+    
 	public Integer getId() {
 		return id;
 	}

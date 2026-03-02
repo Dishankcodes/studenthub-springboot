@@ -514,7 +514,9 @@ ${!noLessons and lesson.lessonId == currentLesson.lessonId} ? 'active' :
 			</aside>
 			<!-- MAIN CONTENT -->
 			<main class="course-content">
+			
 				<th:block th:if="${!noLessons}">
+				
 				<div class="content-title" th:text="${currentLesson.title}"></div>
 				<!-- VIDEO -->
 				<div class="video-box" th:if="${currentLesson.type.name() == 'VIDEO'}">
@@ -535,14 +537,37 @@ ${!noLessons and lesson.lessonId == currentLesson.lessonId} ? 'active' :
 				<!-- NOTES -->
 
 				<div class="notes-box" th:if="${currentLesson.type.name() == 'NOTES'}">
+<!-- ===== NO CONTENT AVAILABLE ===== -->
+<div th:if="${currentLesson.contentUrl == null}"
+     style="
+        padding:40px;
+        text-align:center;
+        border-radius:12px;
+        background:#fff7ed;
+        border:1px dashed #f59e0b;
+     ">
 
+    <i class="bi bi-exclamation-circle-fill"
+       style="font-size:42px;color:#f59e0b;"></i>
+
+    <h2 style="margin-top:16px;">
+        Content not available
+    </h2>
+
+    <p style="margin-top:10px;color:#555;">
+        This lesson’s notes have not been uploaded yet.<br>
+        Please check back later.
+    </p>
+</div>
 					<!-- PDF -->
-					<iframe th:if="${#strings.endsWith(currentLesson.contentUrl,'.pdf')}"
+					<iframe th:if="${currentLesson.contentUrl != null 
+        and #strings.endsWith(currentLesson.contentUrl,'.pdf')}"
 						th:src="${currentLesson.contentUrl}" width="100%" height="600px" style="border: none;">
 					</iframe>
 
 					<!-- HTML / TEXT -->
-					<div th:if="${!#strings.endsWith(currentLesson.contentUrl,'.pdf')}"
+					<div th:if="${currentLesson.contentUrl != null 
+        and #strings.endsWith(currentLesson.contentUrl,'.pdf')}"
 						th:utext="${currentLesson.contentUrl}"></div>
 
 					<!-- DOWNLOAD -->
@@ -559,6 +584,7 @@ ${!noLessons and lesson.lessonId == currentLesson.lessonId} ? 'active' :
 						<i class="bi bi-check-circle"></i>
 						Mark lesson as completed
 					</button>
+					
 
 				</div>
 				<div class="quiz-box" th:if="${currentLesson.type.name() == 'QUIZ'}">

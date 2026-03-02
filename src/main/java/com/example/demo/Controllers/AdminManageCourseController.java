@@ -18,6 +18,7 @@ import com.example.demo.enums.CourseStatus;
 import com.example.demo.repository.AdminRepository;
 import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
+import com.example.demo.repository.InstructorFeedbackRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -32,6 +33,9 @@ public class AdminManageCourseController {
 	
 	@Autowired
 	private CourseFeedbackRepository feedbackRepo;
+	
+	@Autowired
+	private InstructorFeedbackRepository instructorFeedbackRepo;
 
 	@GetMapping("/manage-courses")
 	public String admin_courses(HttpSession session, Model model) {
@@ -81,7 +85,7 @@ public class AdminManageCourseController {
 	public String viewCourse(@PathVariable Integer id, Model model) {
 
 	    Course course = courseRepo.findAllWithStructure(id).get(0);
-
+	    
 	    if (course == null) {
 	        return "redirect:/manage-courses";
 	    }
@@ -93,11 +97,24 @@ public class AdminManageCourseController {
 	            .mapToInt(CourseFeedback::getRating)
 	            .average()
 	            .orElse(0.0);
+	    
+	    Integer teacherId = course.getTeacher().getTeacherId();
+	    
+	   
+	    double avgInstructorRating =
+	            instructorFeedbackRepo.getAverageRating(teacherId);
+
+	    Long totalInstructorReviews =
+	            instructorFeedbackRepo.getTotalRatings(teacherId);
+
 
 	    model.addAttribute("course", course);
 	    model.addAttribute("feedbacks", feedbacks);
 	    model.addAttribute("avgRating", avgRating);
 	    model.addAttribute("reviewCount", feedbacks.size());
+	    model.addAttribute("avgInstructorRating", avgInstructorRating);
+	    model.addAttribute("totalInstructorReviews", totalInstructorReviews);
+
 
 	    return "admin-course-view";
 	}

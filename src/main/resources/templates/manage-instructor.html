@@ -201,7 +201,12 @@
 							<td th:text="${teacher.email}"></td>
 
 							<td>
+							</td>
 							<td>
+								<a class="btn btn-sm btn-primary"
+									th:href="@{/admin-instructor-feedback/{id}(id=${teacher.teacherId})}">
+									<i class="bi bi-chat-dots-fill"></i> Feedback
+								</a>
 								<form th:action="@{/admin-teacher/delete/{id}(id=${teacher.teacherId})}" method="post"
 									onsubmit="return confirm('Are you sure you want to delete this instructor?');">
 
@@ -210,7 +215,7 @@
 									</button>
 								</form>
 							</td>
-							
+
 						</tr>
 					</tbody>
 				</table>

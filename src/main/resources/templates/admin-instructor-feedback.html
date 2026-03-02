@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<h2 th:text="${teacher.firstname + ' ' + teacher.lastname}"></h2>
+
+<p>
+  ⭐ <strong th:text="${#numbers.formatDecimal(avgRating,1,1)}"></strong>
+  (<span th:text="${totalRatings}"></span> reviews)
+</p>
+<table class="table table-bordered table-striped mt-3">
+  <thead>
+    <tr>
+      <th>Student</th>
+      <th>Rating</th>
+      <th>Comment</th>
+      <th>Date</th>
+
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr th:each="f : ${feedbacks}">
+      <td th:text="${f.student.fullname}"></td>
+
+      <td>
+        ⭐ <span th:text="${f.rating}"></span>
+      </td>
+
+      <td th:text="${f.comment}"></td>
+
+      <td th:text="${#temporals.format(f.createdAt, 'dd MMM yyyy')}"></td>
+
+      
+
+    
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

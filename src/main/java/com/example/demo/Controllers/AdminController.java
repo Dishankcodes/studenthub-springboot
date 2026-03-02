@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.entity.InstructorFeedback;
 import com.example.demo.entity.NoteCategory;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
@@ -19,6 +20,7 @@ import com.example.demo.entity.TeacherNotes;
 import com.example.demo.enums.NoteStatus;
 import com.example.demo.repository.AdminRepository;
 import com.example.demo.repository.CourseRepository;
+import com.example.demo.repository.InstructorFeedbackRepository;
 import com.example.demo.repository.NoteCategoryRepository;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.repository.TeacherNotesRepository;
@@ -46,6 +48,9 @@ public class AdminController {
 	
 	@Autowired
 	private TeacherNotesRepository teacherNoteRepo;
+	
+	@Autowired
+	private InstructorFeedbackRepository instructorFeedbackRepo;
 
 
 	@GetMapping("/admin-dashboard")
@@ -106,6 +111,39 @@ public class AdminController {
 
 		return "manage-instructor";
 	}
+
+	@GetMapping("/admin-instructor-feedback/{teacherId}")
+	public String viewInstructorFeedback(
+	        @PathVariable Integer teacherId,
+	        Model model,
+	        HttpSession session) {
+
+	    if (session.getAttribute("adminEmail") == null) {
+	        return "redirect:/admin-login";
+	    }
+
+	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+
+	    List<InstructorFeedback> feedbacks =
+	        instructorFeedbackRepo.findByTeacherTeacherId(teacherId);
+
+	    double avgRating =
+	        instructorFeedbackRepo.getAverageRating(teacherId);
+
+	    Long totalRatings =
+	        instructorFeedbackRepo.getTotalRatings(teacherId);
+
+	    model.addAttribute("teacher", teacher);
+	    model.addAttribute("feedbacks", feedbacks);
+	    model.addAttribute("avgRating", avgRating);
+	    model.addAttribute("totalRatings", totalRatings);
+
+	    model.addAttribute("username",
+	        session.getAttribute("adminUsername"));
+
+	    return "admin-instructor-feedback";
+	}
+	
 
 	
 	@PostMapping("/admin-teacher/delete/{teacherId}")

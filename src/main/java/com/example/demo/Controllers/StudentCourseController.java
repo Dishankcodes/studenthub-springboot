@@ -30,6 +30,7 @@ import com.example.demo.enums.LessonType;
 import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.EnrollmentRepository;
+import com.example.demo.repository.InstructorFeedbackRepository;
 import com.example.demo.repository.LessonProgressRepository;
 import com.example.demo.repository.LessonRepository;
 import com.example.demo.repository.QuizQuestionRepository;
@@ -59,7 +60,9 @@ public class StudentCourseController {
 	private StudentRepository studentRepo;
 	
 	@Autowired
-	private CourseFeedbackRepository feedbackRepo;
+	private CourseFeedbackRepository feedbackRepo;
+	@Autowired
+	private InstructorFeedbackRepository instructorFeedbackRepo;
 	
 	@GetMapping("/student-course")
 	public String exploreCourse(Model model) {
@@ -79,9 +82,29 @@ public class StudentCourseController {
 	        reviewCounts.put(courseId, count);
 	    }
 
+	    Map<Integer, Double> instructorAvgRating = new HashMap<>();
+	    Map<Integer, Long> instructorRatingCount = new HashMap<>();
+
+	    for (Course course : courses) {
+	        Integer teacherId = course.getTeacher().getTeacherId();
+
+	        instructorAvgRating.putIfAbsent(
+	            teacherId,
+	            instructorFeedbackRepo.getAverageRating(teacherId)
+	        );
+
+	        instructorRatingCount.putIfAbsent(
+	            teacherId,
+	            instructorFeedbackRepo.getTotalRatings(teacherId)
+	        );
+	    }
+
+	    model.addAttribute("instructorAvgRating", instructorAvgRating);
+	    model.addAttribute("instructorRatingCount", instructorRatingCount);
 	    model.addAttribute("courses", courses);
 	    model.addAttribute("avgRatings", avgRatings);
 	    model.addAttribute("reviewCounts", reviewCounts);
+	    
 
 	    return "student-course";
 	}
@@ -104,6 +127,15 @@ public class StudentCourseController {
 	    }
 
 	    Integer studentId = (Integer) session.getAttribute("studentId");
+	    Integer teacherId = course.getTeacher().getTeacherId();
+
+	    double instructorAvg =
+	            instructorFeedbackRepo.getAverageRating(teacherId);
+
+	    long instructorCount =
+	            instructorFeedbackRepo.getTotalRatings(teacherId);
+
+	   
 
 	    boolean enrolled = false;
 	    boolean courseCompleted = false;
@@ -148,7 +180,8 @@ public class StudentCourseController {
 	            .orElse(0.0);
 
 	    
-
+	    model.addAttribute("instructorAvgRating", instructorAvg);
+	    model.addAttribute("instructorRatingCount", instructorCount);
 	    model.addAttribute("feedbacks", feedbacks);
 	    model.addAttribute("avgRating", avgRating);
 	    model.addAttribute("feedbackGiven", feedbackGiven);
