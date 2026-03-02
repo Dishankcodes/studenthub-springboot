@@ -53,28 +53,6 @@ public class TeacherController {
 	@Autowired
 	private TeacherNotesRepository teacherNoteRepo;
 
-	// ===== DASHBOARD =====
-	@GetMapping("/teacher-dashboard")
-	public String dashboard(Model model, HttpSession session) {
-//		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-//		Integer teacherId = (Integer) session.getAttribute("teacherId");
-
-		Integer teacherId = 1; // remove this when testing done
-
-//		if (loggedIn == null || !loggedIn || teacherId == null) {
-//			return "redirect:/teacher-auth";
-//		}
-
-		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
-		if (teacher == null) {
-			session.invalidate();
-			return "redirect:/teacher-auth";
-		}
-
-		model.addAttribute("teacher", teacher);
-		return "teacher-dashboard";
-	}
-
 	// ===== STUDENTS =====
 	@GetMapping("/teacher-students")
 	public String teacherStudents(HttpSession session, Model model) {

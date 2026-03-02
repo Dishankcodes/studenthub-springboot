@@ -18,6 +18,7 @@ import com.example.demo.entity.CourseFeedback;
 import com.example.demo.entity.InstructorFeedback;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherNotes;
+import com.example.demo.enums.CourseStatus;
 import com.example.demo.repository.CourseCertificateRepository;
 import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
@@ -53,10 +54,10 @@ public class StudentController {
 
 	@Autowired
 	private TeacherRepository teacherRepo;
-	
+
 	@Autowired
 	private TeacherNotesRepository teacherNoteRepo;
-	
+
 	@Autowired
 	private NoteCategoryRepository categoryRepo;
 
@@ -89,6 +90,17 @@ public class StudentController {
 			courseFeedbackMap.put(course.getCourseId(), feedbackGiven);
 		}
 
+		List<Course> recommendedCourses = courseRepo.findByStatus(CourseStatus.PUBLISHED);
+
+		// remove completed courses
+		recommendedCourses.removeIf(course -> completedCourses.contains(course));
+
+		// limit to 6 only
+		if (recommendedCourses.size() > 6) {
+			recommendedCourses = recommendedCourses.subList(0, 6);
+		}
+
+		model.addAttribute("recommendedCourses", recommendedCourses);
 		model.addAttribute("courseFeedbackMap", courseFeedbackMap);
 		model.addAttribute("certificates", certificates);
 		model.addAttribute("completedCourses", completedCourses);
@@ -98,17 +110,15 @@ public class StudentController {
 
 	@GetMapping("/student-stuff")
 	public String student_stuff(@RequestParam(required = false) Integer category,
-	        @RequestParam(required = false) String q,
-	        Model model) {
+			@RequestParam(required = false) String q, Model model) {
 
-	    model.addAttribute("categories", categoryRepo.findByActiveTrue());
+		model.addAttribute("categories", categoryRepo.findByActiveTrue());
 
-	    List<TeacherNotes> notes =
-	        teacherNoteRepo.search(category, q);
+		List<TeacherNotes> notes = teacherNoteRepo.search(category, q);
 
-	    model.addAttribute("notes", notes);
-	    model.addAttribute("selectedCategory", category);
-	    model.addAttribute("q", q);
+		model.addAttribute("notes", notes);
+		model.addAttribute("selectedCategory", category);
+		model.addAttribute("q", q);
 
 		return "student-stuff";
 	}
@@ -242,7 +252,6 @@ public class StudentController {
 
 		feedback.setTeacher(teacherRepo.findById(teacherId).orElseThrow());
 		feedback.setStudent(studentRepo.findById(studentId).orElseThrow());
-		
 
 		instructorFeedbackRepo.save(feedback);
 

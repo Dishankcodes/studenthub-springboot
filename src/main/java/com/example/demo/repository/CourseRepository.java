@@ -23,15 +23,16 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 	boolean existsByTeacherTeacherIdAndTitleAndStatusNot(Integer teacherId, String title, CourseStatus status);
 
 	@Query("""
-		    SELECT DISTINCT c
-		    FROM Course c
-		    LEFT JOIN FETCH c.modules m
-		    LEFT JOIN FETCH m.lessons l
-		    LEFT JOIN FETCH l.quiz
-		    WHERE c.id = :id
-		""")
-	
-		List<Course> findAllWithStructure(@Param("id") Integer id);
+			    SELECT DISTINCT c
+			    FROM Course c
+			    LEFT JOIN FETCH c.modules m
+			    LEFT JOIN FETCH m.lessons l
+			    LEFT JOIN FETCH l.quiz
+			    WHERE c.id = :id
+			""")
+
+	List<Course> findAllWithStructure(@Param("id") Integer id);
+
 	@Query("""
 			SELECT new com.example.demo.dto.AdminCourseSummaryDTO(
 			    c.courseId,
@@ -59,19 +60,42 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 			    c.price
 			""")
 	List<AdminCourseSummaryDTO> fetchAdminCourseSummary();
-	
-	
+
 	@Query("""
-		    SELECT DISTINCT c
-		    FROM Course c
-		    LEFT JOIN FETCH c.modules m
-		    LEFT JOIN FETCH m.lessons l
-		    WHERE c.courseId = :courseId
-		      AND c.status = :status
-		""")
-		Course findPublishedCourseForStudent(
-		    @Param("courseId") Integer courseId,
-		    @Param("status") CourseStatus status
-		);
-	
+			    SELECT DISTINCT c
+			    FROM Course c
+			    LEFT JOIN FETCH c.modules m
+			    LEFT JOIN FETCH m.lessons l
+			    WHERE c.courseId = :courseId
+			      AND c.status = :status
+			""")
+	Course findPublishedCourseForStudent(@Param("courseId") Integer courseId, @Param("status") CourseStatus status);
+
+	long countByTeacherTeacherId(Integer teacherId);
+
+	long countByTeacherTeacherIdAndPriceIsNull(Integer teacherId);
+
+	long countByTeacherTeacherIdAndPriceGreaterThan(Integer teacherId, Double price);
+
+	@Query("""
+			SELECT c.title, COUNT(e), AVG(f.rating)
+			FROM Course c
+			JOIN c.enrollments e
+			LEFT JOIN CourseFeedback f ON f.course = c
+			WHERE c.teacher.teacherId = :teacherId
+			GROUP BY c.courseId, c.title
+			ORDER BY COUNT(e) DESC
+			""")
+	List<Object[]> findTopCoursesByEnrollment(Integer teacherId);
+
+	@Query("""
+			SELECT c.title,
+			       COUNT(e),
+			       COALESCE(SUM(c.price), 0)
+			FROM Course c
+			LEFT JOIN c.enrollments e
+			WHERE c.teacher.teacherId = :teacherId
+			GROUP BY c.courseId, c.title
+			""")
+			List<Object[]> getCourseIncomeStats(Integer teacherId);
 }

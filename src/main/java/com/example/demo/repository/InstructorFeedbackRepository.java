@@ -31,6 +31,7 @@ public interface InstructorFeedbackRepository extends JpaRepository<InstructorFe
 	// Admin sees all
 	List<InstructorFeedback> findAll();
 
-	
+	List<InstructorFeedback>
+	findTop5ByTeacherTeacherIdOrderByCreatedAtDesc(Integer teacherId);
 	
 }

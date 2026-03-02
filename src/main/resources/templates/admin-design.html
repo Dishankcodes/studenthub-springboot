@@ -9,7 +9,7 @@
 	<!-- Google Font -->
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
 		rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
 	<style>
 		* {
 			margin: 0;
@@ -72,6 +72,36 @@
 			font-size: 18px;
 			margin-bottom: 18px;
 		}
+		.preview-text.name {
+	top: 42%;
+	font-size: 30px;
+	font-family: 'Cinzel', serif;
+	letter-spacing: 1.5px;
+	color: #1f2937;
+}
+
+.preview-text.course {
+	top: 56%;
+	font-size: 18px;
+	font-family: 'Playfair Display', serif;
+	color: #374151;
+}
+
+.preview-text.date {
+	top: 66%;
+	font-size: 14px;
+	font-family: 'Poppins', sans-serif;
+	opacity: 0.85;
+}
+.preview-box {
+	position: relative;
+	height: 320px;
+	overflow: hidden;
+	border-radius: 14px;
+	background: #0f1035;
+	box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08),
+	            0 20px 40px rgba(0,0,0,0.45);
+}
 
 		/* ================= FORM ================= */
 		.form-group {
@@ -224,15 +254,52 @@
 			right: 40px;
 			width: 90px;
 		}
+		/* ================= ADMIN HEADER ================= */
+.admin-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 22px 110px;
+	background: #1a1a3d;
+}
+
+.btn-back-dashboard {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 10px 16px;
+	border-radius: 12px;
+	font-size: 14px;
+	font-weight: 500;
+	text-decoration: none;
+	color: #e5e7eb;
+	background: rgba(255, 255, 255, 0.08);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	transition: all 0.25s ease;
+}
+
+.btn-back-dashboard i {
+	font-size: 16px;
+}
+
+.btn-back-dashboard:hover {
+	background: linear-gradient(135deg, #6c63ff, #857dff);
+	color: #fff;
+	transform: translateY(-2px);
+}
 	</style>
 </head>
 
 <body>
 
-	<header>
-		<div class="logo">EduPlatform Admin</div>
-	</header>
+	<header class="admin-header">
+	<div class="logo">EduPlatform Admin</div>
 
+	<a th:href="@{/admin-dashboard}" class="btn-back-dashboard">
+		<i class="bi bi-arrow-left"></i>
+		Dashboard
+	</a>
+</header>
 	<div class="container">
 
 		<div class="page-title">Certificate Design</div>

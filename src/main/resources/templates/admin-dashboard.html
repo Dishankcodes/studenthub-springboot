@@ -125,6 +125,39 @@
 		.activity-card li:last-child {
 			border-bottom: none;
 		}
+
+		/* =======================
+   DASHBOARD ACTION BUTTON
+======================= */
+		.dashboard-actions {
+			display: flex;
+			justify-content: flex-end;
+		}
+
+		.btn-add-category {
+			display: inline-flex;
+			align-items: center;
+			gap: 10px;
+			padding: 12px 20px;
+			border-radius: 14px;
+			font-size: 14px;
+			font-weight: 600;
+			color: #020617;
+			text-decoration: none;
+			background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+			box-shadow: 0 10px 28px rgba(56, 189, 248, 0.35);
+			transition: all 0.25s ease;
+		}
+
+		.btn-add-category i {
+			font-size: 18px;
+		}
+
+		.btn-add-category:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 16px 40px rgba(56, 189, 248, 0.55);
+			background: linear-gradient(135deg, #0ea5e9, #0284c7);
+		}
 	</style>
 </head>
 
@@ -209,9 +242,12 @@
 					<p>Here’s what’s happening today</p>
 				</div>
 
-<a th:href="@{/admin-note-categories}" class="btn-primary">
-    + Add Note Category
-</a>
+				<div class="dashboard-actions mb-4">
+					<a th:href="@{/admin-note-categories}" class="btn-add-category">
+						<i class="bi bi-folder-plus"></i>
+						Add Note Category
+					</a>
+				</div>
 				<div class="row g-4">
 					<div class="col-xl-3 col-md-6">
 						<div class="stat-card"><i class="bi bi-book"></i>

@@ -12,18 +12,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.entity.CourseFeedback;
 import com.example.demo.entity.InstructorFeedback;
 import com.example.demo.entity.NoteCategory;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherNotes;
+import com.example.demo.entity.TeacherProfile;
 import com.example.demo.enums.NoteStatus;
 import com.example.demo.repository.AdminRepository;
+import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.InstructorFeedbackRepository;
 import com.example.demo.repository.NoteCategoryRepository;
 import com.example.demo.repository.StudentRepository;
 import com.example.demo.repository.TeacherNotesRepository;
+import com.example.demo.repository.TeacherProfileRepo;
 import com.example.demo.repository.TeacherRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -35,13 +39,11 @@ public class AdminController {
 	private StudentRepository repo;
 
 	@Autowired
-	TeacherRepository teacherRepo;
+	private TeacherRepository teacherRepo;
 	
 	@Autowired
-	CourseRepository courseRepo;
-	
-	@Autowired
-	private AdminRepository adminRepo;
+    private TeacherProfileRepo teacherProfileRepo;
+
 	
 	@Autowired
 	private NoteCategoryRepository categoryRepo;
@@ -112,8 +114,8 @@ public class AdminController {
 		return "manage-instructor";
 	}
 
-	@GetMapping("/admin-instructor-feedback/{teacherId}")
-	public String viewInstructorFeedback(
+	@GetMapping("/admin-instructor-view/{teacherId}")
+	public String viewInstructorAndFeedback(
 	        @PathVariable Integer teacherId,
 	        Model model,
 	        HttpSession session) {
@@ -123,6 +125,8 @@ public class AdminController {
 	    }
 
 	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+	    TeacherProfile profile =
+	            teacherProfileRepo.findByTeacherTeacherId(teacherId);
 
 	    List<InstructorFeedback> feedbacks =
 	        instructorFeedbackRepo.findByTeacherTeacherId(teacherId);
@@ -134,6 +138,7 @@ public class AdminController {
 	        instructorFeedbackRepo.getTotalRatings(teacherId);
 
 	    model.addAttribute("teacher", teacher);
+	    model.addAttribute("profile", profile);
 	    model.addAttribute("feedbacks", feedbacks);
 	    model.addAttribute("avgRating", avgRating);
 	    model.addAttribute("totalRatings", totalRatings);
@@ -141,7 +146,7 @@ public class AdminController {
 	    model.addAttribute("username",
 	        session.getAttribute("adminUsername"));
 
-	    return "admin-instructor-feedback";
+	    return "admin-instructor-view";
 	}
 	
 
@@ -162,6 +167,8 @@ public class AdminController {
 
 	    return "redirect:/manage-teachers";
 	}
+	
+	
 	@GetMapping("/manage-internships")
 	public String admin_internships() {
 
