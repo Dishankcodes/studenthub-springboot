@@ -249,8 +249,13 @@ public class TeacherController {
 //			return "redirect:/teacher-auth";
 		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
-		model.addAttribute("myAnnouncements",announcementRepo.findByTeacherTeacherIdAndActiveTrueOrderByCreatedAtDesc(teacherId));
-		model.addAttribute("allAnnouncements", announcementRepo.findByActiveTrueOrderByCreatedAtDesc());
+		model.addAttribute("myAnnouncements",
+				announcementRepo.findByTeacherTeacherIdAndActiveTrueOrderByCreatedAtDesc(teacherId));
+		
+		model.addAttribute("adminAnnouncements",
+			    announcementRepo.findByTeacherIsNullAndActiveTrueOrderByCreatedAtDesc());
+		model.addAttribute("allAnnouncements",
+				announcementRepo.findForTeachers());
 		model.addAttribute("categories", categoryRepo.findByActiveTrue());
 		model.addAttribute("notes", teacherNoteRepo.findByTeacherTeacherId(teacherId));
 		model.addAttribute("teacher", teacher);
@@ -258,44 +263,39 @@ public class TeacherController {
 	}
 
 	@PostMapping("/teacher-announcement/create")
-	public String createTeacherAnnouncement(
-	        @RequestParam(required = false) Integer courseId,
-	        @RequestParam String title,
-	        @RequestParam String message,
-	        @RequestParam(required = false) MultipartFile file,
-	        HttpSession session
-	) throws IOException {
+	public String createTeacherAnnouncement(@RequestParam(required = false) Integer courseId,
+			@RequestParam String title, @RequestParam String message,
+			@RequestParam(required = false) MultipartFile file, HttpSession session) throws IOException {
 
-	    Integer teacherId = 1;
-	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+		Integer teacherId = 1;
+		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
-	    
-	    Announcement a = new Announcement();
-	    a.setTitle(title);
-	    a.setMessage(message);
-	    a.setTeacher(teacher);
-	    a.setType(AnnouncementType.GENERAL);
-	    a.setAudience(AnnouncementAudience.STUDENTS);
+		Announcement a = new Announcement();
+		a.setTitle(title);
+		a.setMessage(message);
+		a.setTeacher(teacher);
+		a.setType(AnnouncementType.GENERAL);
+		a.setAudience(AnnouncementAudience.STUDENTS);
 
-	    if (courseId != null) {
-	        Course course = courseRepo.findById(courseId).orElse(null);
-	        a.setCourse(course);
-	    }
-	    if (file != null && !file.isEmpty()) {
+		if (courseId != null) {
+			Course course = courseRepo.findById(courseId).orElse(null);
+			a.setCourse(course);
+		}
+		if (file != null && !file.isEmpty()) {
 
-	        String dir = System.getProperty("user.dir") + "/uploads/announcements/";
-	        Files.createDirectories(Paths.get(dir));
+			String dir = System.getProperty("user.dir") + "/uploads/announcements/";
+			Files.createDirectories(Paths.get(dir));
 
-	        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-	        file.transferTo(new File(dir + fileName));
+			String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+			file.transferTo(new File(dir + fileName));
 
-	        a.setAttachmentUrl("/uploads/announcements/" + fileName);
-	        a.setAttachmentName(file.getOriginalFilename());
-	    }
+			a.setAttachmentUrl("/uploads/announcements/" + fileName);
+			a.setAttachmentName(file.getOriginalFilename());
+		}
 
-	    announcementRepo.save(a);
+		announcementRepo.save(a);
 
-	    return "redirect:/teacher-activity?created";
+		return "redirect:/teacher-activity?created";
 	}
 
 	@GetMapping("/test-teacher-login")

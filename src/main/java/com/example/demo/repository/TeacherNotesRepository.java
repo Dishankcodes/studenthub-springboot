@@ -40,4 +40,10 @@ public interface TeacherNotesRepository extends JpaRepository<TeacherNotes, Inte
 
 	List<TeacherNotes> findByStatus(NoteStatus status);
 
+	@Query("""
+		    SELECT COUNT(n) FROM TeacherNotes n
+		    WHERE n.status = com.example.demo.enums.NoteStatus.APPROVED
+		    AND n.category.active = true
+		""")
+		long countApprovedNotes();
 }

@@ -244,6 +244,7 @@ public class StudentCourseController {
 	public String openCoursePlayer(
 	        @PathVariable Integer courseId,
 	        @RequestParam(required = false) Integer lessonId,
+	        @RequestParam(required = false) Boolean certError,
 	        Model model,
 	        HttpSession session
 	) {
@@ -322,6 +323,10 @@ public class StudentCourseController {
 	        }
 	    }
 
+	    if (Boolean.TRUE.equals(certError)) {
+	        model.addAttribute("certificateError",
+	            "🎓 Certificate is currently not available. Please check later.");
+	    }
 	    model.addAttribute("course", course);
 	    model.addAttribute("currentLesson", currentLesson);
 	    model.addAttribute("noLessons", false);

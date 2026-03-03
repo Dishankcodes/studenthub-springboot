@@ -19,7 +19,6 @@ import com.example.demo.entity.CourseFeedback;
 import com.example.demo.entity.InstructorFeedback;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherNotes;
-import com.example.demo.enums.AnnouncementType;
 import com.example.demo.enums.CourseStatus;
 import com.example.demo.repository.AnnouncementRepository;
 import com.example.demo.repository.CourseCertificateRepository;
@@ -63,7 +62,7 @@ public class StudentController {
 
 	@Autowired
 	private NoteCategoryRepository categoryRepo;
-	
+
 	@Autowired
 	private AnnouncementRepository announcementRepo;
 
@@ -120,21 +119,23 @@ public class StudentController {
 
 		model.addAttribute("categories", categoryRepo.findByActiveTrue());
 
+		// Filtered notes
 		List<TeacherNotes> notes = teacherNoteRepo.search(category, q);
 
-		List<Announcement> announcements =
-		        announcementRepo.findByActiveTrueOrderByPinnedDescCreatedAtDesc();
+		// Check if ANY approved notes exist at all
+		boolean hasAnyNotes = teacherNoteRepo.countApprovedNotes() > 0;
 
-			    model.addAttribute("announcements", announcements);
+		// Announcements
+		List<Announcement> announcements = announcementRepo.findForStudents();
+
 		model.addAttribute("notes", notes);
+		model.addAttribute("hasAnyNotes", hasAnyNotes);
+		model.addAttribute("announcements", announcements);
 		model.addAttribute("selectedCategory", category);
 		model.addAttribute("q", q);
 
 		return "student-stuff";
 	}
-	
-	
-	
 
 	@GetMapping("/student-chat")
 	public String student_chat() {

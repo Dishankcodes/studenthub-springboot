@@ -87,7 +87,7 @@ public class StudentCertificateController {
 		        model.addAttribute("certificateError", certMsg);
 		        session.removeAttribute("certificateError");
 		    }
-		    return "redirect:/student-course-player/" + courseId;
+		    return "redirect:/student-course-player/" + courseId + "?certError=true";
 		}
 
 		/* 4️⃣ Generate PDF */
@@ -152,11 +152,18 @@ public class StudentCertificateController {
 		document.open();
 
 		/* Background */
-		Image bg = Image.getInstance(System.getProperty("user.dir") + template.getBackgroundImage());
-		bg.scaleAbsolute(PageSize.A4.getWidth(), PageSize.A4.getHeight());
-		bg.setAbsolutePosition(0, 0);
-		writer.getDirectContentUnder().addImage(bg);
+		if (template.getBackgroundImage() != null) {
+		    String bgPath = System.getProperty("user.dir") + template.getBackgroundImage();
+		    File bgFile = new File(bgPath);
 
+		    if (bgFile.exists()) {
+		        Image bg = Image.getInstance(bgPath);
+		        bg.scaleAbsolute(PageSize.A4.getWidth(), PageSize.A4.getHeight());
+		        bg.setAbsolutePosition(0, 0);
+		        writer.getDirectContentUnder().addImage(bg);
+		    }
+		}
+		
 		/* Text */
 		PdfContentByte text = writer.getDirectContent();
 		BaseFont bold = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);

@@ -224,26 +224,6 @@ figcaption {
   border-radius: inherit;
 }
 
-.icon {
-  aspect-ratio: 1;
-  block-size: 100%;
-  display: inline-grid;
-  svg {
-    place-self: center;
-    inline-size: var(--svg);
-    block-size: var(--svg);
-    fill: var(--gray--primary);
-  }
-}
-
-.text {
-  pointer-events: none;
-  color: var(--gray--secondary);
-  font-size: 0.875em;
-  font-weight: 500;
-  transition: color 266ms ease-out;
-}
-
 /* Sidebar link hover */
 .sidebar__link:hover {
   background: var(--bg--hover);
@@ -405,6 +385,7 @@ aside:not(:has(:checked))
 .layout {
   display: flex;
   min-height: 100vh;
+  align-items: stretch;
 }
 
 /* ===== SIDEBAR ===== */
@@ -423,8 +404,7 @@ aside:not(:has(:checked))
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
-  transition: margin-left 300ms ease;
+  overflow: hidden;
 }
 
 /* ===== TOPBAR ===== */
@@ -501,29 +481,10 @@ aside:not(:has(:checked))
   color: #3b82f6;
 }
 /* ============================
-   COLLAPSED SIDEBAR HOVER FIX
+COLLAPSED SIDEBAR HOVER FIX
 ============================ */
 
 /* Make collapsed sidebar truly narrow */
-.vertical-sidebar:not(:has(:checked)) nav {
-  width: var(--collapsed);
-}
-
-/* Limit link hover area to icon only */
-.vertical-sidebar:not(:has(:checked)) .sidebar__link {
-  justify-content: center;
-  padding: 0;
-}
-
-/* Icon centered, no extra spacing */
-.vertical-sidebar:not(:has(:checked)) .icon {
-  margin: 0;
-}
-
-/* Hide text cleanly (no layout space) */
-.vertical-sidebar:not(:has(:checked)) .text {
-  display: none;
-}
 
 /* Reduce tooltip distance */
 [data-tooltip]::before {
@@ -533,14 +494,154 @@ aside:not(:has(:checked))
 }
 
 /* Prevent large invisible hover zones */
-.vertical-sidebar:not(:has(:checked)) .sidebar__item {
-  width: var(--collapsed);
+
+/* ===============================
+   STICKY SIDEBAR
+================================ */
+.vertical-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  align-self: flex-start;
+}
+/* =========================================
+   LAYOUT
+========================================= */
+.layout {
   display: flex;
-  justify-content: center;
+  min-height: 100vh;
 }
 
-/* Clean hover background */
-.vertical-sidebar:not(:has(:checked)) .sidebar__link:hover {
-  background: rgba(255, 255, 255, 0.12);
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* =========================================
+   SIDEBAR BASE
+========================================= */
+.vertical-sidebar {
+  width: var(--expanded);
+  transition: width 300ms ease;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  align-self: flex-start;
+}
+
+/* Collapse width */
+.vertical-sidebar:not(:has(#sidebar-toggle:checked)) {
+  width: var(--collapsed);
+}
+
+/* =========================================
+   NAV
+========================================= */
+.vertical-sidebar nav {
+  width: 100%;
+  height: 100%;
+  background: var(--bg--primary);
+  border-radius: var(--brad-outer);
+  padding: var(--frame-space);
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  transition: all 300ms ease;
+}
+
+/* =========================================
+   SIDEBAR LINKS
+========================================= */
+.sidebar__list a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem;
   border-radius: 0.6rem;
+  text-decoration: none;
+  color: #eaeaf0;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.sidebar__list a i {
+  font-size: 1.2rem;
+  color: #9ca3af;
+}
+
+/* Hover */
+.sidebar__list a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.sidebar__list a:hover i {
+  color: #fff;
+}
+
+/* Active */
+.sidebar__list a.active {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+  font-weight: 600;
+}
+
+.sidebar__list a.active i {
+  color: #3b82f6;
+}
+
+/* =========================================
+   COLLAPSED MODE
+========================================= */
+
+/* Hide text + headings */
+.vertical-sidebar:not(:has(#sidebar-toggle:checked)) .sidebar__list a span,
+.vertical-sidebar:not(:has(#sidebar-toggle:checked)) .sidebar__item--heading,
+.vertical-sidebar:not(:has(#sidebar-toggle:checked)) .user-id,
+.vertical-sidebar:not(:has(#sidebar-toggle:checked)) .user-role {
+  display: none;
+}
+
+/* Center icons */
+.vertical-sidebar:not(:has(#sidebar-toggle:checked)) .sidebar__list a {
+  justify-content: center;
+  padding: 0.75rem 0;
+}
+
+.vertical-sidebar:not(:has(#sidebar-toggle:checked)) .sidebar__list a i {
+  margin: 0 auto;
+}
+
+/* Clean hover */
+.vertical-sidebar:not(:has(#sidebar-toggle:checked)) .sidebar__list a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+}
+
+/* =========================================
+   TOPBAR
+========================================= */
+.topbar {
+  height: 64px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #0b0b1f, #14142f);
+  position: sticky;
+  top: 0;
+  z-index: 500;
+}
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
+.home-section {
+  flex: 1;
+  padding: 2rem;
+  background: linear-gradient(135deg, #0b0b1f, #14142f);
+  color: #eaeaf0;
 }

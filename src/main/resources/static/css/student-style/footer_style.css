@@ -155,11 +155,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .footer-social a:hover {
   background: #4da3ff;
   color: #fff;
 }
-

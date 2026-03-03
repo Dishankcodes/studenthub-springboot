@@ -3,6 +3,7 @@ package com.example.demo.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.example.demo.entity.Announcement;
 import com.example.demo.enums.AnnouncementAudience;
@@ -29,4 +30,25 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Inte
     );
 
     List<Announcement> findByActiveTrueOrderByPinnedDescCreatedAtDesc();
+    
+    @Query("""
+    	    SELECT a FROM Announcement a
+    	    WHERE a.active = true
+    	    AND (a.audience = com.example.demo.enums.AnnouncementAudience.STUDENTS
+    	         OR a.audience = com.example.demo.enums.AnnouncementAudience.ALL)
+    	    ORDER BY a.pinned DESC, a.createdAt DESC
+    	""")
+    	List<Announcement> findForStudents();
+
+
+    	@Query("""
+    	    SELECT a FROM Announcement a
+    	    WHERE a.active = true
+    	    AND (a.audience = com.example.demo.enums.AnnouncementAudience.TEACHERS
+    	         OR a.audience = com.example.demo.enums.AnnouncementAudience.ALL)
+    	    ORDER BY a.pinned DESC, a.createdAt DESC
+    	""")
+    	List<Announcement> findForTeachers();
+    	
+    	List<Announcement> findByTeacherIsNullAndActiveTrueOrderByCreatedAtDesc();
 }

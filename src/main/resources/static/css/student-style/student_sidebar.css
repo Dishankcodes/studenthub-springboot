@@ -2,7 +2,7 @@
 
 /* ===== SIDEBAR ===== */
 .sidebar {
- width: 280px;              /* BIGGER sidebar */
+  width: 280px; /* BIGGER sidebar */
   padding-top: 12px;
   background: #ffffff;
   border-right: 1px solid #e0e0e0;
@@ -30,7 +30,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-    font-size: 20px;
+  font-size: 20px;
   font-weight: 700;
   color: #0059ff;
   white-space: nowrap;
@@ -38,7 +38,7 @@
 }
 
 .platform-logo {
- width: 26px;
+  width: 26px;
   height: 26px;
   object-fit: contain;
   opacity: 0.9;
@@ -53,9 +53,9 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 14px 22px;        /* ⬅️ makes it feel BIG */
+  padding: 14px 22px; /* ⬅️ makes it feel BIG */
   font-size: 15.5px;
-  min-height: 48px; 
+  min-height: 48px;
   font-weight: 500;
   color: #0038a8;
   text-decoration: none;
@@ -118,7 +118,7 @@
   padding: 0 20px;
   position: fixed;
   top: 0;
-left: 280px;
+  left: 280px;
   right: 0;
   z-index: 900;
   transition: 0.3s ease;

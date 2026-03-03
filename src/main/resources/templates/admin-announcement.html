@@ -12,6 +12,128 @@
 	<!-- Your Sidebar CSS -->
 	<link th:href="@{/css/admin-css/admin_sidebar.css}" rel="stylesheet">
 </head>
+<style>
+	/* ===============================
+   PAGE SPACING
+================================ */
+	.home-section {
+		padding: 40px;
+	}
+
+	.page-heading {
+		font-size: 28px;
+		font-weight: 600;
+		margin-bottom: 30px;
+	}
+
+	/* ===============================
+   CREATE ANNOUNCEMENT CARD
+================================ */
+	.create-card {
+		background: #ffffff;
+		padding: 25px;
+		border-radius: 16px;
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+		margin-bottom: 40px;
+	}
+
+	.create-card h2 {
+		font-size: 20px;
+		font-weight: 600;
+		margin-bottom: 20px;
+	}
+
+	.create-card input,
+	.create-card textarea,
+	.create-card select {
+		margin-bottom: 15px;
+		border-radius: 10px;
+	}
+
+	.create-card button {
+		border-radius: 10px;
+		padding: 8px 18px;
+	}
+
+	/* ===============================
+   ANNOUNCEMENT CARD
+================================ */
+/* ===============================
+   DARK ANNOUNCEMENT CARD
+================================ */
+.announcement-card {
+    background: #1c1c35;   /* dark card */
+    padding: 20px;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+    margin-bottom: 20px;
+    transition: 0.25s ease;
+    border: 1px solid #2f2f4f;
+    color: #eaeaf0;
+}
+
+.announcement-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.45);
+    border-color: #3b82f6;
+}
+	.announcement-card.pinned {
+    border-left: 4px solid #f59e0b;
+    background: #1f1f40;
+}
+
+	.announcement-meta {
+    font-size: 13px;
+    color: #9ca3af;
+		margin-bottom: 10px;
+	}
+.attachment a {
+    color: #3b82f6;
+    text-decoration: none;
+}
+
+.attachment a:hover {
+    text-decoration: underline;
+}
+	.announcement-actions button {
+		margin-right: 10px;
+		border-radius: 8px;
+		padding: 5px 12px;
+		font-size: 13px;
+	}
+
+	.attachment {
+		margin-top: 10px;
+		font-size: 14px;
+	}
+
+	/* ===============================
+   DARK FORM FIX (Override Bootstrap)
+================================ */
+	.create-card,
+	.create-card .form-control,
+	.create-card .form-select {
+		background: #1c1c35 !important;
+		color: #eaeaf0 !important;
+		border: 1px solid #2f2f4f !important;
+	}
+
+	.create-card .form-control::placeholder {
+		color: #9ca3af !important;
+	}
+
+	.create-card .form-control:focus,
+	.create-card .form-select:focus {
+		background: #22224a !important;
+		color: #ffffff !important;
+		border-color: #3b82f6 !important;
+		box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25) !important;
+	}
+
+	.create-card h2 {
+		color: #ffffff;
+	}
+</style>
 
 <body>
 	<div class="layout">
@@ -57,10 +179,10 @@
 
 						<li class="sidebar__item"><a th:href="@{/manage-internships}">
 								<i class="bi bi-briefcase"></i><span>Internship Management</span></a></li>
-								
-								<li class="sidebar__item"><a th:href="@{/admin-announcement}" class="active">
+
+						<li class="sidebar__item"><a th:href="@{/admin-announcement}" class="active">
 								<i class="bi bi-briefcase"></i><span>Announcements</span></a></li>
-						
+
 						<li class="sidebar__item"><a th:href="@{/admin-design}"><i
 									class="bi bi-layout-text-window"></i><span>Certificate Design</span></a></li>
 
@@ -93,96 +215,109 @@
 
 			<!-- ===== MAIN CONTENT ===== -->
 			<main class="home-section">
-				<h1>Announcement</h1>
-				<p>Welcome, <span th:text="${username}">Admin</span></p>
-				
-				<h2>Create Announcement</h2>
 
-<form action="/admin-announcement/create"
-      method="post"
-      enctype="multipart/form-data">
+				<div class="page-heading">
+					📢 Announcements Management
+				</div>
 
-    <input type="text"
-           name="title"
-           placeholder="Announcement title"
-           required>
+				<!-- ================= CREATE ANNOUNCEMENT ================= -->
+				<div class="create-card">
 
-    <textarea name="message"
-              placeholder="Announcement message"
-              required></textarea>
+					<h2>Create Announcement</h2>
 
-    <select name="type">
-        <option value="GENERAL">General</option>
-        <option value="INTERNSHIP">Internship</option>
-    </select>
+					<form action="/admin-announcement/create" method="post" enctype="multipart/form-data">
 
-    <select name="audience">
-        <option value="STUDENTS">Students</option>
-        <option value="TEACHERS">Teachers</option>
-        <option value="ALL">All</option>
-    </select>
+						<div class="row">
+							<div class="col-md-6">
+								<input type="text" name="title" class="form-control" placeholder="Announcement title"
+									required>
+							</div>
 
-    <input type="file" name="file">
+							<div class="col-md-3">
+								<select name="type" class="form-select">
+									<option value="GENERAL">General</option>
+									<option value="INTERNSHIP">Internship</option>
+								</select>
+							</div>
 
-    <button>Create Announcement</button>
-</form>
+							<div class="col-md-3">
+								<select name="audience" class="form-select">
+									<option value="STUDENTS">Students</option>
+									<option value="TEACHERS">Teachers</option>
+									<option value="ALL">All</option>
+								</select>
+							</div>
+						</div>
 
-<hr>
-<h3>All Announcements</h3>
+						<textarea name="message" class="form-control" placeholder="Write announcement message..."
+							rows="4" required></textarea>
 
-<div th:each="a : ${announcements}"
-     th:if="${a.active}"
-     th:classappend="${a.pinned} ? 'pinned-box' : ''"
-     style="border:1px solid #ddd;
-            padding:15px;
-            margin-bottom:15px;
-            border-radius:8px;">
+						<input type="file" name="file" class="form-control">
 
-    <h4>
-        <span th:if="${a.pinned}">📌 </span>
-        <span th:text="${a.title}"></span>
-    </h4>
+						<button class="btn btn-primary mt-2">
+							<i class="bi bi-send"></i> Publish
+						</button>
 
-    <p th:text="${a.message}"></p>
+					</form>
+				</div>
 
-    <small>
-        Type: <span th:text="${a.type}"></span> |
-        Audience: <span th:text="${a.audience}"></span> |
-        By:
-        <span th:text="${a.teacher != null ?
-                        a.teacher.firstname + ' ' + a.teacher.lastname
-                        : 'Admin'}"></span> |
-        <span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
-    </small>
+				<!-- ================= ALL ANNOUNCEMENTS ================= -->
+				<h4 class="mb-3">All Announcements</h4>
 
-    <!-- Attachment -->
-    <div th:if="${a.attachmentUrl != null}"
-         style="margin-top:10px;">
-        📎
-        <a th:href="${a.attachmentUrl}"
-           target="_blank"
-           th:text="${a.attachmentName}">
-        </a>
-    </div>
+				<div th:if="${#lists.isEmpty(announcements)}" class="alert alert-info">
+					No announcements created yet.
+				</div>
 
-    <!-- Actions -->
-    <div style="margin-top:10px;">
-        <form th:action="@{/admin-announcement/pin/{id}(id=${a.announcementId})}"
-              method="post"
-              style="display:inline;">
-            <button type="submit">
-                <span th:text="${a.pinned ? 'Unpin' : 'Pin'}"></span>
-            </button>
-        </form>
+				<div th:each="a : ${announcements}" th:if="${a.active}"
+					th:class="'announcement-card ' + (${a.pinned} ? 'pinned' : '')">
 
-        <form th:action="@{/admin-announcement/delete/{id}(id=${a.announcementId})}"
-              method="post"
-              style="display:inline;">
-            <button type="submit">Delete</button>
-        </form>
-    </div>
+					<h5>
+						<span th:if="${a.pinned}">📌 </span>
+						<span th:text="${a.title}"></span>
+					</h5>
 
-</div>			</main>
+					<div class="announcement-meta">
+						Type: <strong th:text="${a.type}"></strong> |
+						Audience: <strong th:text="${a.audience}"></strong> |
+						By:
+						<span th:text="${a.teacher != null ?
+                            a.teacher.firstname + ' ' + a.teacher.lastname
+                            : 'Admin'}"></span>
+						|
+						<span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
+					</div>
+
+					<p th:text="${a.message}"></p>
+
+					<!-- Attachment -->
+					<div th:if="${a.attachmentUrl != null}" class="attachment">
+						📎
+						<a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}"></a>
+					</div>
+
+					<!-- Actions -->
+					<div class="announcement-actions mt-3">
+
+						<form th:action="@{/admin-announcement/pin/{id}(id=${a.announcementId})}" method="post"
+							style="display:inline;">
+							<button type="submit" class="btn btn-sm btn-warning">
+								<i class="bi bi-pin-angle"></i>
+								<span th:text="${a.pinned ? 'Unpin' : 'Pin'}"></span>
+							</button>
+						</form>
+
+						<form th:action="@{/admin-announcement/delete/{id}(id=${a.announcementId})}" method="post"
+							style="display:inline;">
+							<button type="submit" class="btn btn-sm btn-danger">
+								<i class="bi bi-trash"></i> Delete
+							</button>
+						</form>
+
+					</div>
+
+				</div>
+
+			</main>
 		</div>
 
 

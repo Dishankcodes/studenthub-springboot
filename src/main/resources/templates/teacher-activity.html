@@ -10,6 +10,7 @@
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 	<link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
+	<link rel="stylesheet" th:href="@{/css/teacher-css/teacher-activity.css}">
 	<style>
 		* {
 			margin: 0;
@@ -55,386 +56,7 @@
 			font-weight: 600;
 		}
 
-		/* ===== Cards ===== */
-		.cards {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-			gap: 20px;
-		}
 
-		.course-card {
-			background: #2a2a4a;
-			color: #fff;
-			padding: 35px;
-			text-align: center;
-			font-weight: 500;
-			border-radius: 10px;
-			transition: all 0.3s ease;
-		}
-
-		.course-card h2 {
-			font-size: 34px;
-			margin-bottom: 10px;
-		}
-
-		.course-card span {
-			font-size: 14px;
-			opacity: 0.9;
-		}
-
-		.course-card:hover {
-			transform: translateY(-6px);
-			background: #f6a623;
-			color: #1f1f2e;
-			box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
-		}
-
-		/* ===== Analytics ===== */
-		.analytics {
-			display: grid;
-			grid-template-columns: 2fr 1fr;
-			gap: 25px;
-		}
-
-		.chart-box,
-		.list-box {
-			background: #2a2a4a;
-			padding: 25px;
-			border-radius: 12px;
-			color: #fff;
-		}
-
-		/* ===== Tables ===== */
-		table {
-			width: 100%;
-			border-collapse: collapse;
-		}
-
-		th,
-		td {
-			padding: 12px;
-			text-align: left;
-		}
-
-		th {
-			COLOR: WHITE;
-		}
-
-		tr:nth-child(even) {
-			background: #24243a;
-		}
-
-		/* ===== Feedback ===== */
-		.feedback {
-			background: #2a2a4a;
-			padding: 25px;
-			border-radius: 12px;
-		}
-
-		.feedback-item {
-			margin-bottom: 15px;
-			border-bottom: 1px solid #3c3c5c;
-			padding-bottom: 10px;
-		}
-
-		.feedback-item:last-child {
-			border-bottom: none;
-		}
-
-		/* ===== Responsive ===== */
-		@media(max-width: 900px) {
-			.analytics {
-				grid-template-columns: 1fr;
-			}
-		}
-
-		.course-summary {
-			text-align: left;
-		}
-
-		.course-summary h3 {
-			font-size: 20px;
-			margin-bottom: 15px;
-		}
-
-		.course-summary p {
-			font-size: 15px;
-			margin: 6px 0;
-			display: flex;
-			justify-content: space-between;
-		}
-
-		.course-summary span {
-			opacity: 0.9;
-		}
-
-		.course-summary hr {
-			margin: 12px 0;
-			border: 0;
-			height: 1px;
-			background: rgba(255, 255, 255, 0.2);
-		}
-
-		.course-summary strong {
-			font-size: 18px;
-		}
-
-		/* ===============================
-   NOTES UPLOAD CARD
-================================ */
-		.notes-upload-card {
-			background: #2a2a4a;
-			padding: 30px;
-			border-radius: 16px;
-			max-width: 600px;
-			margin-top: 20px;
-			box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
-		}
-
-		.notes-upload-card h3 {
-			font-size: 20px;
-			font-weight: 600;
-			margin-bottom: 20px;
-			color: #ffffff;
-		}
-
-		/* ===============================
-   FORM LAYOUT
-================================ */
-		.notes-upload-card form {
-			display: flex;
-			flex-direction: column;
-			gap: 16px;
-		}
-
-		.notes-upload-card input[type="text"],
-		.notes-upload-card textarea,
-		.notes-upload-card select {
-			background: #1f1f35;
-			border: 1px solid #3c3c5c;
-			color: #ffffff;
-			padding: 12px 14px;
-			border-radius: 10px;
-			font-size: 14px;
-		}
-
-		.notes-upload-card textarea {
-			min-height: 90px;
-			resize: vertical;
-		}
-
-		.notes-upload-card input::placeholder,
-		.notes-upload-card textarea::placeholder {
-			color: #9ca3af;
-		}
-
-		.notes-upload-card input:focus,
-		.notes-upload-card textarea:focus,
-		.notes-upload-card select:focus {
-			outline: none;
-			border-color: #f6a623;
-			box-shadow: 0 0 0 3px rgba(246, 166, 35, 0.25);
-		}
-
-		/* ===============================
-   FILE INPUT
-================================ */
-		.notes-upload-card input[type="file"] {
-			background: #1f1f35;
-			color: #9ca3af;
-			padding: 10px;
-			border-radius: 10px;
-			border: 1px dashed #3c3c5c;
-			cursor: pointer;
-		}
-
-		/* ===============================
-   UPLOAD BUTTON
-================================ */
-		.notes-upload-card button {
-			background: #f6a623;
-			color: #1f1f2e;
-			border: none;
-			padding: 12px 18px;
-			border-radius: 12px;
-			font-size: 15px;
-			font-weight: 600;
-			cursor: pointer;
-			display: inline-flex;
-			align-items: center;
-			gap: 8px;
-			width: fit-content;
-		}
-
-		.notes-upload-card button:hover {
-			background: #ffb84d;
-		}
-
-		/* ===============================
-   STATUS BADGES
-================================ */
-		.status-badge {
-			display: inline-block;
-			margin-top: 10px;
-			padding: 6px 12px;
-			border-radius: 999px;
-			font-size: 13px;
-			font-weight: 500;
-		}
-
-		.status-pending {
-			background: rgba(246, 166, 35, 0.2);
-			color: #f6a623;
-		}
-
-		.status-approved {
-			background: rgba(34, 197, 94, 0.2);
-			color: #22c55e;
-		}
-
-		.status-rejected {
-			background: rgba(239, 68, 68, 0.2);
-			color: #ef4444;
-		}
-
-		/* ===============================
-   INFO MESSAGE
-================================ */
-		.info {
-			background: rgba(34, 197, 94, 0.15);
-			color: #22c55e;
-			padding: 14px 18px;
-			border-radius: 12px;
-			margin-bottom: 20px;
-			font-size: 14px;
-		}
-
-		/* ===============================
-   DASHBOARD TWO COLUMN LAYOUT
-================================ */
-		.notes-layout {
-			display: grid;
-			grid-template-columns: 380px 1fr;
-			gap: 30px;
-			align-items: start;
-		}
-
-		@media (max-width: 1100px) {
-			.notes-layout {
-				grid-template-columns: 1fr;
-			}
-		}
-
-		/* ===============================
-   UPLOADED NOTES GRID
-================================ */
-		.uploaded-notes {
-			background: transparent;
-		}
-
-		.uploaded-notes h3 {
-			margin-bottom: 16px;
-			font-size: 22px;
-			font-weight: 600;
-		}
-
-		.notes-grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-			gap: 20px;
-		}
-
-		.note-item {
-			background: #2a2a4a;
-			border-radius: 14px;
-			padding: 20px;
-			box-shadow: 0 12px 30px rgba(0, 0, 0, .25);
-			display: flex;
-			flex-direction: column;
-		}
-
-		.note-item h4 {
-			font-size: 16px;
-			font-weight: 600;
-			margin-bottom: 6px;
-		}
-
-		.note-item p {
-			font-size: 13px;
-			opacity: .85;
-		}
-
-		.note-item .meta {
-			margin-top: auto;
-			font-size: 12px;
-			opacity: .7;
-		}
-
-		.note-actions {
-			display: flex;
-			gap: 10px;
-			margin-top: 12px;
-		}
-
-		.note-actions a {
-			flex: 1;
-			text-align: center;
-			padding: 8px;
-			border-radius: 10px;
-			background: #1f1f35;
-			color: white;
-			text-decoration: none;
-			font-size: 13px;
-		}
-
-		.note-actions a:hover {
-			background: #f6a623;
-			color: #1f1f2e;
-		}
-
-		.announcement-form input,
-		.announcement-form textarea,
-		.announcement-form select {
-			width: 100%;
-			margin-bottom: 10px;
-			padding: 10px;
-			border-radius: 6px;
-			border: 1px solid #ddd;
-		}
-
-		.announcement-form button {
-			padding: 10px 16px;
-			background: #4f46e5;
-			color: white;
-			border: none;
-			border-radius: 6px;
-		}
-
-		.announcement-card {
-			background: white;
-			padding: 16px;
-			margin-bottom: 15px;
-			border-radius: 10px;
-			border: 1px solid #e5e7eb;
-		}
-
-		.announcement-card.pinned {
-			background: #fff8e1;
-			border-left: 4px solid #f6a623;
-		}
-
-		.attachment {
-			margin-top: 8px;
-		}
-
-		.delete-btn {
-			margin-top: 10px;
-			background: #ef4444;
-			color: white;
-			border: none;
-			padding: 6px 12px;
-			border-radius: 6px;
-		}
 	</style>
 </head>
 
@@ -599,79 +221,147 @@
 				</div>
 
 			</div>
-			<h2>📢 Create Announcement</h2>
+			<hr class="section-divider">
 
-			<form action="/teacher-announcement/create" method="post" enctype="multipart/form-data"
-				class="announcement-form">
+			<div class="section-wrapper">
 
-				<select name="courseId">
-					<option value="">General (All Students)</option>
-					<option th:each="c : ${courses}" th:value="${c.courseId}" th:text="${c.title}">
-					</option>
-				</select>
-
-				<input type="text" name="title" placeholder="Announcement title" required>
-
-				<textarea name="message" placeholder="Write your announcement..." required></textarea>
-
-				<input type="file" name="file">
-
-				<button type="submit">Publish</button>
-			</form>
-
-			<hr>
-			<h3>My Announcements</h3>
-
-			<div th:each="a : ${myAnnouncements}" th:if="${a.active}"
-				th:class="${a.pinned ? 'announcement-card pinned' : 'announcement-card'}">
-
-				<div class="announcement-header">
-					<h4>
-						<span th:if="${a.pinned}">📌 </span>
-						<span th:text="${a.title}"></span>
-					</h4>
-
-					<small>
-						<span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
-						•
-						<span th:text="${a.course != null ? a.course.title : 'General'}"></span>
-					</small>
+				<div class="section-title">
+					<i class="bi bi-megaphone-fill"></i>
+					Announcements
 				</div>
 
-				<p th:text="${a.message}"></p>
+				<!-- ================= CREATE ANNOUNCEMENT ================= -->
+				<div class="create-announcement-card">
 
-				<!-- Attachment -->
-				<div th:if="${a.attachmentUrl != null}" class="attachment">
-					📎 <a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}"></a>
-				</div>
+					<h3>Create Announcement</h3>
 
-				<div class="announcement-actions">
-					<form th:action="@{/teacher-announcement/delete/{id}(id=${a.announcementId})}" method="post">
-						<button class="delete-btn">Delete</button>
+					<form action="/teacher-announcement/create" method="post" enctype="multipart/form-data">
+
+						<select name="courseId">
+							<option value="">General (All Students)</option>
+							<option th:each="c : ${courses}" th:value="${c.courseId}" th:text="${c.title}">
+							</option>
+						</select>
+
+						<input type="text" name="title" placeholder="Announcement title" required>
+
+						<textarea name="message" placeholder="Write your announcement..." required></textarea>
+
+						<input type="file" name="file">
+
+						<button type="submit">
+							<i class="bi bi-send"></i> Publish
+						</button>
+
 					</form>
 				</div>
-			</div>
-			<h3>Other Teachers</h3>
 
-			<div th:each="a : ${allAnnouncements}" th:if="${a.teacher != null}" class="announcement-card">
+				<!-- ================= TABS ================= -->
+				<div class="tabs">
+					<button class="tab-btn active" onclick="switchTab('myTab', this)">
+						My Announcements
+					</button>
 
-				<h4>
-					<span th:if="${a.pinned}">📌 </span>
-					<span th:text="${a.title}"></span>
-				</h4>
-
-				<small>
-					By
-					<span th:text="${a.teacher.firstname + ' ' + a.teacher.lastname}"></span>
-					•
-					<span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
-				</small>
-
-				<p th:text="${a.message}"></p>
-
-				<div th:if="${a.attachmentUrl != null}" class="attachment">
-					📎 <a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}"></a>
+					<button class="tab-btn" onclick="switchTab('othersTab', this)">
+						Other Teachers
+					</button>
+					<button class="tab-btn" onclick="switchTab('adminTab', this)">
+						Admin Announcements
+					</button>
 				</div>
+
+				<!-- ================= MY ANNOUNCEMENTS ================= -->
+				<div id="myTab" class="tab-content active">
+
+					<div th:if="${#lists.isEmpty(myAnnouncements)}" class="empty-state" style="margin-top:20px;">
+						<div class="empty-icon">
+							<i class="bi bi-megaphone"></i>
+						</div>
+						<h3>No announcements yet</h3>
+						<p>You haven’t posted anything yet.</p>
+					</div>
+
+					<div th:each="a : ${myAnnouncements}" th:if="${a.active}"
+						th:class="${a.pinned ? 'announcement-card pinned' : 'announcement-card'}">
+
+						<h4>
+							<span th:if="${a.pinned}">📌 </span>
+							<span th:text="${a.title}"></span>
+						</h4>
+
+						<div class="announcement-meta">
+							<span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
+							•
+							<span th:text="${a.course != null ? a.course.title : 'General'}"></span>
+						</div>
+
+						<div class="announcement-message" th:text="${a.message}">
+						</div>
+
+						<div th:if="${a.attachmentUrl != null}" class="attachment">
+							📎
+							<a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}"></a>
+						</div>
+
+					</div>
+				</div>
+
+				<!-- ================= OTHER TEACHERS ================= -->
+				<div id="othersTab" class="tab-content">
+
+					<div th:each="a : ${announcements}" th:if="${a.teacher != null}" class="announcement-card">
+
+						<h4>
+							<span th:if="${a.pinned}">📌 </span>
+							<span th:text="${a.title}"></span>
+						</h4>
+
+						<div class="announcement-meta">
+							By
+							<span th:text="${a.teacher.firstname + ' ' + a.teacher.lastname}"></span>
+							•
+							<span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
+						</div>
+
+						<div class="announcement-message" th:text="${a.message}">
+						</div>
+
+					</div>
+				</div>
+				<!-- ================= ADMIN ANNOUNCEMENTS ================= -->
+				<div id="adminTab" class="tab-content">
+
+					<div th:if="${#lists.isEmpty(adminAnnouncements)}" style="margin-top:20px;" class="info">
+						No admin announcements yet.
+					</div>
+
+					<div th:each="a : ${adminAnnouncements}"
+						th:class="${a.pinned ? 'announcement-card pinned' : 'announcement-card'}">
+
+						<h4>
+							<span th:if="${a.pinned}">📌 </span>
+							<span th:text="${a.title}"></span>
+						</h4>
+
+						<div class="announcement-meta">
+							<strong>Admin</strong>
+							•
+							<span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
+						</div>
+
+						<div class="announcement-message" th:text="${a.message}">
+						</div>
+
+						<div th:if="${a.attachmentUrl != null}" class="attachment">
+							📎
+							<a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}">
+							</a>
+						</div>
+
+					</div>
+
+				</div>
+
 			</div>
 		</div>
 	</main>
@@ -712,6 +402,21 @@
 				statusMsg.style.transform = "translateY(-10px)";
 				setTimeout(() => statusMsg.remove(), 500);
 			}, 30000); // 30 seconds
+		}
+	</script>
+	<script>
+		function switchTab(tabId, btn) {
+
+			document.querySelectorAll(".tab-content")
+				.forEach(tab => tab.classList.remove("active"));
+
+			document.querySelectorAll(".tab-btn")
+				.forEach(button => button.classList.remove("active"));
+
+			document.getElementById(tabId)
+				.classList.add("active");
+
+			btn.classList.add("active");
 		}
 	</script>
 </body>
