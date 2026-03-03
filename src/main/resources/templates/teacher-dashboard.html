@@ -376,7 +376,7 @@
 
 			<div class="feedback">
 				<div class="feedback-item" th:each="fb : ${feedbackList}">
-					<strong th:text="${fb.studentName}">
+					<strong th:text="${fb.student.fullname}">
 						Ankit
 					</strong>:
 					<span th:text="${fb.comment}">

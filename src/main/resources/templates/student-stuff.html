@@ -347,6 +347,39 @@
 				</div>
 			</div>
 		</div>
+		
+<h2>📢 Announcements</h2>
+
+<div th:each="a : ${announcements}"
+     th:if="${a.active}"
+     th:class="${a.pinned ? 'announcement-card pinned' : 'announcement-card'}">
+
+    <h4>
+        <span th:if="${a.pinned}">📌 </span>
+        <span th:text="${a.title}"></span>
+    </h4>
+
+    <small>
+        <span th:text="${a.teacher != null ? 
+                        a.teacher.firstname + ' ' + a.teacher.lastname 
+                        : 'Admin'}"></span>
+        •
+        <span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
+        <span th:if="${a.course != null}">
+            • <span th:text="${a.course.title}"></span>
+        </span>
+    </small>
+
+    <p th:text="${a.message}"></p>
+
+    <!-- Attachment -->
+    <div th:if="${a.attachmentUrl != null}" class="attachment">
+        📎 <a th:href="${a.attachmentUrl}"
+              target="_blank"
+              th:text="${a.attachmentName}"></a>
+    </div>
+
+</div>
 	</div>
 
 

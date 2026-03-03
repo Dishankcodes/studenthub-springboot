@@ -391,6 +391,50 @@
 			background: #f6a623;
 			color: #1f1f2e;
 		}
+
+		.announcement-form input,
+		.announcement-form textarea,
+		.announcement-form select {
+			width: 100%;
+			margin-bottom: 10px;
+			padding: 10px;
+			border-radius: 6px;
+			border: 1px solid #ddd;
+		}
+
+		.announcement-form button {
+			padding: 10px 16px;
+			background: #4f46e5;
+			color: white;
+			border: none;
+			border-radius: 6px;
+		}
+
+		.announcement-card {
+			background: white;
+			padding: 16px;
+			margin-bottom: 15px;
+			border-radius: 10px;
+			border: 1px solid #e5e7eb;
+		}
+
+		.announcement-card.pinned {
+			background: #fff8e1;
+			border-left: 4px solid #f6a623;
+		}
+
+		.attachment {
+			margin-top: 8px;
+		}
+
+		.delete-btn {
+			margin-top: 10px;
+			background: #ef4444;
+			color: white;
+			border: none;
+			padding: 6px 12px;
+			border-radius: 6px;
+		}
 	</style>
 </head>
 
@@ -555,6 +599,80 @@
 				</div>
 
 			</div>
+			<h2>📢 Create Announcement</h2>
+
+			<form action="/teacher-announcement/create" method="post" enctype="multipart/form-data"
+				class="announcement-form">
+
+				<select name="courseId">
+					<option value="">General (All Students)</option>
+					<option th:each="c : ${courses}" th:value="${c.courseId}" th:text="${c.title}">
+					</option>
+				</select>
+
+				<input type="text" name="title" placeholder="Announcement title" required>
+
+				<textarea name="message" placeholder="Write your announcement..." required></textarea>
+
+				<input type="file" name="file">
+
+				<button type="submit">Publish</button>
+			</form>
+
+			<hr>
+			<h3>My Announcements</h3>
+
+			<div th:each="a : ${myAnnouncements}" th:if="${a.active}"
+				th:class="${a.pinned ? 'announcement-card pinned' : 'announcement-card'}">
+
+				<div class="announcement-header">
+					<h4>
+						<span th:if="${a.pinned}">📌 </span>
+						<span th:text="${a.title}"></span>
+					</h4>
+
+					<small>
+						<span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
+						•
+						<span th:text="${a.course != null ? a.course.title : 'General'}"></span>
+					</small>
+				</div>
+
+				<p th:text="${a.message}"></p>
+
+				<!-- Attachment -->
+				<div th:if="${a.attachmentUrl != null}" class="attachment">
+					📎 <a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}"></a>
+				</div>
+
+				<div class="announcement-actions">
+					<form th:action="@{/teacher-announcement/delete/{id}(id=${a.announcementId})}" method="post">
+						<button class="delete-btn">Delete</button>
+					</form>
+				</div>
+			</div>
+			<h3>Other Teachers</h3>
+
+			<div th:each="a : ${allAnnouncements}" th:if="${a.teacher != null}" class="announcement-card">
+
+				<h4>
+					<span th:if="${a.pinned}">📌 </span>
+					<span th:text="${a.title}"></span>
+				</h4>
+
+				<small>
+					By
+					<span th:text="${a.teacher.firstname + ' ' + a.teacher.lastname}"></span>
+					•
+					<span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
+				</small>
+
+				<p th:text="${a.message}"></p>
+
+				<div th:if="${a.attachmentUrl != null}" class="attachment">
+					📎 <a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}"></a>
+				</div>
+			</div>
 		</div>
 	</main>
 	<script>
@@ -585,17 +703,17 @@
 			});
 		}
 	</script>
-<script>
-    const statusMsg = document.getElementById("statusMessage");
+	<script>
+		const statusMsg = document.getElementById("statusMessage");
 
-    if (statusMsg) {
-        setTimeout(() => {
-            statusMsg.style.opacity = "0";
-            statusMsg.style.transform = "translateY(-10px)";
-            setTimeout(() => statusMsg.remove(), 500);
-        }, 30000); // 30 seconds
-    }
-</script>
+		if (statusMsg) {
+			setTimeout(() => {
+				statusMsg.style.opacity = "0";
+				statusMsg.style.transform = "translateY(-10px)";
+				setTimeout(() => statusMsg.remove(), 500);
+			}, 30000); // 30 seconds
+		}
+	</script>
 </body>
 
 </html>

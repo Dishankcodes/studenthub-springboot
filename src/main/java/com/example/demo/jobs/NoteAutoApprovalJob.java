@@ -14,25 +14,23 @@ import com.example.demo.repository.TeacherNotesRepository;
 @Component
 public class NoteAutoApprovalJob {
 
-    @Autowired
-    private TeacherNotesRepository teacherNoteRepo;
+	@Autowired
+	private TeacherNotesRepository teacherNoteRepo;
 
-    // runs every 1 minute
-    @Scheduled(fixedRate = 60000)
-    public void autoApproveNotes() {
+	// runs every 1 minute
+	@Scheduled(fixedRate = 60000)
+	public void autoApproveNotes() {
 
-        LocalDateTime fiveMinutesAgo =
-                LocalDateTime.now().minusMinutes(5);
+		LocalDateTime fiveMinutesAgo = LocalDateTime.now().minusMinutes(5);
 
-        List<TeacherNotes> pendingNotes =
-                teacherNoteRepo.findPendingBefore(fiveMinutesAgo);
+		List<TeacherNotes> pendingNotes = teacherNoteRepo.findPendingBefore(fiveMinutesAgo);
 
-        for (TeacherNotes note : pendingNotes) {
-            note.setStatus(NoteStatus.APPROVED);
-            note.setApproved(true);
-            note.setApprovedAt(LocalDateTime.now());
-        }
+		for (TeacherNotes note : pendingNotes) {
+			note.setStatus(NoteStatus.APPROVED);
+			note.setApproved(true);
+			note.setApprovedAt(LocalDateTime.now());
+		}
 
-        teacherNoteRepo.saveAll(pendingNotes);
-    }
+		teacherNoteRepo.saveAll(pendingNotes);
+	}
 }

@@ -12,15 +12,16 @@ import jakarta.servlet.http.HttpSession;
 @ControllerAdvice
 public class StudentGlobalModel {
 
-    @Autowired
-    private StudentRepository studentRepo;
+	@Autowired
+	private StudentRepository studentRepo;
 
-    @ModelAttribute("loggedStudent")
-    public Student loggedStudent(HttpSession session) {
+	@ModelAttribute("loggedStudent")
+	public Student loggedStudent(HttpSession session) {
 
-        Integer studentId = (Integer) session.getAttribute("studentId");
-        if (studentId == null) return null;
+		Integer studentId = (Integer) session.getAttribute("studentId");
+		if (studentId == null)
+			return null;
 
-        return studentRepo.findById(studentId).orElse(null);
-    }
+		return studentRepo.findById(studentId).orElse(null);
+	}
 }

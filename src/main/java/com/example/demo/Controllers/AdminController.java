@@ -1,6 +1,5 @@
 package com.example.demo.Controllers;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,20 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.demo.entity.CourseFeedback;
 import com.example.demo.entity.InstructorFeedback;
-import com.example.demo.entity.NoteCategory;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
-import com.example.demo.entity.TeacherNotes;
 import com.example.demo.entity.TeacherProfile;
-import com.example.demo.enums.NoteStatus;
-import com.example.demo.repository.AdminRepository;
-import com.example.demo.repository.CourseFeedbackRepository;
-import com.example.demo.repository.CourseRepository;
+import com.example.demo.repository.AnnouncementRepository;
 import com.example.demo.repository.InstructorFeedbackRepository;
 import com.example.demo.repository.NoteCategoryRepository;
 import com.example.demo.repository.StudentRepository;
@@ -40,19 +32,19 @@ public class AdminController {
 
 	@Autowired
 	private TeacherRepository teacherRepo;
-	
-	@Autowired
-    private TeacherProfileRepo teacherProfileRepo;
 
-	
+	@Autowired
+	private TeacherProfileRepo teacherProfileRepo;
+
 	@Autowired
 	private NoteCategoryRepository categoryRepo;
-	
+
 	@Autowired
 	private TeacherNotesRepository teacherNoteRepo;
-	
+
 	@Autowired
 	private InstructorFeedbackRepository instructorFeedbackRepo;
+
 
 
 	@GetMapping("/admin-dashboard")
@@ -80,22 +72,19 @@ public class AdminController {
 
 		return "manage-students";
 	}
-	
+
 	@PostMapping("/admin-student/delete/{studId}")
-	public String deleteStudent(
-	        @PathVariable Integer studId,
-	        RedirectAttributes ra,
-	        HttpSession session) {
+	public String deleteStudent(@PathVariable Integer studId, RedirectAttributes ra, HttpSession session) {
 
-	    if (session.getAttribute("adminEmail") == null) {
-	        return "redirect:/admin-login";
-	    }
+		if (session.getAttribute("adminEmail") == null) {
+			return "redirect:/admin-login";
+		}
 
-	    repo.deleteById(studId); // 🔥 cascades automatically
+		repo.deleteById(studId); // 🔥 cascades automatically
 
-	    ra.addFlashAttribute("success", "✅ Student deleted permanently");
+		ra.addFlashAttribute("success", "✅ Student deleted permanently");
 
-	    return "redirect:/manage-students";
+		return "redirect:/manage-students";
 	}
 
 	@GetMapping("/manage-teachers")
@@ -115,60 +104,45 @@ public class AdminController {
 	}
 
 	@GetMapping("/admin-instructor-view/{teacherId}")
-	public String viewInstructorAndFeedback(
-	        @PathVariable Integer teacherId,
-	        Model model,
-	        HttpSession session) {
+	public String viewInstructorAndFeedback(@PathVariable Integer teacherId, Model model, HttpSession session) {
 
-	    if (session.getAttribute("adminEmail") == null) {
-	        return "redirect:/admin-login";
-	    }
+		if (session.getAttribute("adminEmail") == null) {
+			return "redirect:/admin-login";
+		}
 
-	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
-	    TeacherProfile profile =
-	            teacherProfileRepo.findByTeacherTeacherId(teacherId);
+		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+		TeacherProfile profile = teacherProfileRepo.findByTeacherTeacherId(teacherId);
 
-	    List<InstructorFeedback> feedbacks =
-	        instructorFeedbackRepo.findByTeacherTeacherId(teacherId);
+		List<InstructorFeedback> feedbacks = instructorFeedbackRepo.findByTeacherTeacherId(teacherId);
 
-	    double avgRating =
-	        instructorFeedbackRepo.getAverageRating(teacherId);
+		double avgRating = instructorFeedbackRepo.getAverageRating(teacherId);
 
-	    Long totalRatings =
-	        instructorFeedbackRepo.getTotalRatings(teacherId);
+		Long totalRatings = instructorFeedbackRepo.getTotalRatings(teacherId);
 
-	    model.addAttribute("teacher", teacher);
-	    model.addAttribute("profile", profile);
-	    model.addAttribute("feedbacks", feedbacks);
-	    model.addAttribute("avgRating", avgRating);
-	    model.addAttribute("totalRatings", totalRatings);
+		model.addAttribute("teacher", teacher);
+		model.addAttribute("profile", profile);
+		model.addAttribute("feedbacks", feedbacks);
+		model.addAttribute("avgRating", avgRating);
+		model.addAttribute("totalRatings", totalRatings);
 
-	    model.addAttribute("username",
-	        session.getAttribute("adminUsername"));
+		model.addAttribute("username", session.getAttribute("adminUsername"));
 
-	    return "admin-instructor-view";
+		return "admin-instructor-view";
 	}
-	
 
-	
 	@PostMapping("/admin-teacher/delete/{teacherId}")
-	public String deleteTeacher(
-	        @PathVariable Integer teacherId,
-	        RedirectAttributes ra,
-	        HttpSession session
-	) {
-	    if (session.getAttribute("adminEmail") == null) {
-	        return "redirect:/admin-login";
-	    }
+	public String deleteTeacher(@PathVariable Integer teacherId, RedirectAttributes ra, HttpSession session) {
+		if (session.getAttribute("adminEmail") == null) {
+			return "redirect:/admin-login";
+		}
 
-	    teacherRepo.deleteById(teacherId);
+		teacherRepo.deleteById(teacherId);
 
-	    ra.addFlashAttribute("success", "✅ Instructor deleted successfully");
+		ra.addFlashAttribute("success", "✅ Instructor deleted successfully");
 
-	    return "redirect:/manage-teachers";
+		return "redirect:/manage-teachers";
 	}
-	
-	
+
 	@GetMapping("/manage-internships")
 	public String admin_internships() {
 
@@ -186,81 +160,11 @@ public class AdminController {
 
 		return "admin-settings";
 	}
+
 	
-	@GetMapping("/admin-note-categories")
-	public String noteCategories(Model model) {
-
-	    model.addAttribute("categories", categoryRepo.findAll());
-	    model.addAttribute("pendingNotes",
-	        teacherNoteRepo.findByStatus(NoteStatus.PENDING));
-
-	    return "admin-note-categories";
-	}
-
-	@PostMapping("/admin-note-categories")
-	public String addCategory(
-	        @RequestParam String name,
-	        RedirectAttributes ra
-	) {
-	    String trimmedName = name.trim();
-
-	    if (categoryRepo.existsByNameIgnoreCase(trimmedName)) {
-	        ra.addFlashAttribute("error",
-	            "⚠️ Category '" + trimmedName + "' already exists");
-	        return "redirect:/admin-note-categories";
-	    }
-
-	    NoteCategory c = new NoteCategory();
-	    c.setName(trimmedName);
-	    c.setActive(true);
-
-	    categoryRepo.save(c);
-
-	    ra.addFlashAttribute("success",
-	        "✅ Category '" + trimmedName + "' added successfully");
-
-	    return "redirect:/admin-note-categories";
-	}
-
-	@PostMapping("/admin-note-categories/toggle/{id}")
-	public String toggleCategory(@PathVariable Integer id) {
-	    NoteCategory c = categoryRepo.findById(id).orElseThrow();
-	    c.setActive(!c.isActive());
-	    categoryRepo.save(c);
-	    return "redirect:/admin-note-categories";
-	}
-	
-	@PostMapping("/admin/notes/approve/{id}")
-	public String approveNote(@PathVariable Integer id, RedirectAttributes ra) {
-
-	    TeacherNotes note = teacherNoteRepo.findById(id).orElseThrow();
-	    note.setStatus(NoteStatus.APPROVED);
-	    note.setApproved(true);
-	    note.setApprovedAt(LocalDateTime.now());
-
-	    teacherNoteRepo.save(note);
-	    ra.addFlashAttribute("teacherMsg",
-	            "approved:" + note.getTitle());
-	    return "redirect:/admin-note-categories";
-	}
-	
-	@PostMapping("/admin/notes/reject/{id}")
-	public String rejectNote(@PathVariable Integer id, RedirectAttributes ra) {
-
-	    TeacherNotes note = teacherNoteRepo.findById(id).orElseThrow();
-	    note.setStatus(NoteStatus.REJECTED);
-	    note.setApproved(false);
-
-	    teacherNoteRepo.save(note);
-	    ra.addFlashAttribute("teacherMsg",
-	            "rejected:" + note.getTitle());
-	    return "redirect:/admin-note-categories";
-	}
-
 	@GetMapping("/admin-logout")
 	public String adminLogout(HttpSession session) {
 		session.invalidate();
 		return "redirect:/admin-login";
 	}
-
 }

@@ -12,13 +12,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.entity.Announcement;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseCertificate;
 import com.example.demo.entity.CourseFeedback;
 import com.example.demo.entity.InstructorFeedback;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherNotes;
+import com.example.demo.enums.AnnouncementType;
 import com.example.demo.enums.CourseStatus;
+import com.example.demo.repository.AnnouncementRepository;
 import com.example.demo.repository.CourseCertificateRepository;
 import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
@@ -60,6 +63,9 @@ public class StudentController {
 
 	@Autowired
 	private NoteCategoryRepository categoryRepo;
+	
+	@Autowired
+	private AnnouncementRepository announcementRepo;
 
 	@GetMapping("/student-dashboard")
 	public String student_dashboard() {
@@ -116,12 +122,19 @@ public class StudentController {
 
 		List<TeacherNotes> notes = teacherNoteRepo.search(category, q);
 
+		List<Announcement> announcements =
+		        announcementRepo.findByActiveTrueOrderByPinnedDescCreatedAtDesc();
+
+			    model.addAttribute("announcements", announcements);
 		model.addAttribute("notes", notes);
 		model.addAttribute("selectedCategory", category);
 		model.addAttribute("q", q);
 
 		return "student-stuff";
 	}
+	
+	
+	
 
 	@GetMapping("/student-chat")
 	public String student_chat() {

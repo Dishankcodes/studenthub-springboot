@@ -1,5 +1,7 @@
 package com.example.demo.Controllers;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -17,13 +19,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.entity.Announcement;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseFeedback;
 import com.example.demo.entity.Enrollment;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherProfile;
+import com.example.demo.enums.AnnouncementAudience;
+import com.example.demo.enums.AnnouncementType;
 import com.example.demo.enums.EnrollmentStatus;
+import com.example.demo.repository.AnnouncementRepository;
 import com.example.demo.repository.CourseFeedbackRepository;
+import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.EnrollmentRepository;
 import com.example.demo.repository.NoteCategoryRepository;
 import com.example.demo.repository.TeacherNotesRepository;
@@ -46,12 +53,18 @@ public class TeacherController {
 
 	@Autowired
 	private CourseFeedbackRepository feedbackRepo;
-	
+
 	@Autowired
 	private NoteCategoryRepository categoryRepo;
-	
+
 	@Autowired
 	private TeacherNotesRepository teacherNoteRepo;
+
+	@Autowired
+	private AnnouncementRepository announcementRepo;
+
+	@Autowired
+	private CourseRepository courseRepo;
 
 	// ===== STUDENTS =====
 	@GetMapping("/teacher-students")
@@ -95,10 +108,11 @@ public class TeacherController {
 	@GetMapping("/teacher-feedback")
 	public String teacherFeedback(HttpSession session, Model model) {
 
-		Integer teacherId = (Integer) session.getAttribute("teacherId");
-		if (teacherId == null)
-			return "redirect:/teacher-auth";
+//		Integer teacherId = (Integer) session.getAttribute("teacherId");
+//		if (teacherId == null)
+//			return "redirect:/teacher-auth";
 
+		Integer teacherId = 1;
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {
 			session.invalidate();
@@ -127,14 +141,14 @@ public class TeacherController {
 	@GetMapping("/teacher-profile")
 	public String teacherProfile(HttpSession session, Model model) {
 
-		 Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-		 Integer teacherId = (Integer) session.getAttribute("teacherId");
+//		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+//		Integer teacherId = (Integer) session.getAttribute("teacherId");
 
-		// Integer teacherId = 1; // remove this when testing done
+		Integer teacherId = 1; // remove this when testing done
 
-		if (loggedIn == null || !loggedIn || teacherId == null) {
-			return "redirect:/teacher-auth";
-		}
+//		if (loggedIn == null || !loggedIn || teacherId == null) {
+//			return "redirect:/teacher-auth";
+//		}
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {
@@ -158,13 +172,13 @@ public class TeacherController {
 	@PostMapping("/teacher-profile")
 	public String editTeacherProfile(@ModelAttribute("profile") TeacherProfile teacherProfile, HttpSession session) {
 
-		// Integer teacherId = 1;// demo
-		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-		Integer teacherId = (Integer) session.getAttribute("teacherId");
-
-		if (loggedIn == null || !loggedIn || teacherId == null) {
-			return "redirect:/teacher-auth";
-		}
+		Integer teacherId = 1;// demo
+//		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+//		Integer teacherId = (Integer) session.getAttribute("teacherId");
+//
+//		if (loggedIn == null || !loggedIn || teacherId == null) {
+//			return "redirect:/teacher-auth";
+//		}
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {
@@ -192,11 +206,11 @@ public class TeacherController {
 	@PostMapping("/teacher-profile/upload-image")
 	public String uploadTeacherProfileImage(@RequestParam("image") MultipartFile file, HttpSession session)
 			throws Exception {
-
-		Integer teacherId = (Integer) session.getAttribute("teacherId");
-		if (teacherId == null)
-			return "redirect:/teacher-auth";
-
+//
+//		Integer teacherId = (Integer) session.getAttribute("teacherId");
+//		if (teacherId == null)
+//			return "redirect:/teacher-auth";
+		Integer teacherId = 1;
 		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
 		TeacherProfile profile = teacherProfileRepo.findByTeacherTeacherId(teacherId);
@@ -226,28 +240,70 @@ public class TeacherController {
 		return "redirect:/teacher-auth";
 	}
 
-	
 	@GetMapping("/teacher-activity")
-	public String teacherNotesAndAnnoucments(Model model,HttpSession session) {
+	public String teacherNotesAndAnnoucments(Model model, HttpSession session) {
 
-		Integer teacherId =1;
+		Integer teacherId = 1;
 //		Integer teacherId = (Integer) session.getAttribute("teacherId");
 //		if (teacherId == null)
 //			return "redirect:/teacher-auth";
 		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
+		model.addAttribute("myAnnouncements",announcementRepo.findByTeacherTeacherIdAndActiveTrueOrderByCreatedAtDesc(teacherId));
+		model.addAttribute("allAnnouncements", announcementRepo.findByActiveTrueOrderByCreatedAtDesc());
 		model.addAttribute("categories", categoryRepo.findByActiveTrue());
 		model.addAttribute("notes", teacherNoteRepo.findByTeacherTeacherId(teacherId));
 		model.addAttribute("teacher", teacher);
 		return "teacher-activity";
 	}
-	
+
+	@PostMapping("/teacher-announcement/create")
+	public String createTeacherAnnouncement(
+	        @RequestParam(required = false) Integer courseId,
+	        @RequestParam String title,
+	        @RequestParam String message,
+	        @RequestParam(required = false) MultipartFile file,
+	        HttpSession session
+	) throws IOException {
+
+	    Integer teacherId = 1;
+	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+
+	    
+	    Announcement a = new Announcement();
+	    a.setTitle(title);
+	    a.setMessage(message);
+	    a.setTeacher(teacher);
+	    a.setType(AnnouncementType.GENERAL);
+	    a.setAudience(AnnouncementAudience.STUDENTS);
+
+	    if (courseId != null) {
+	        Course course = courseRepo.findById(courseId).orElse(null);
+	        a.setCourse(course);
+	    }
+	    if (file != null && !file.isEmpty()) {
+
+	        String dir = System.getProperty("user.dir") + "/uploads/announcements/";
+	        Files.createDirectories(Paths.get(dir));
+
+	        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+	        file.transferTo(new File(dir + fileName));
+
+	        a.setAttachmentUrl("/uploads/announcements/" + fileName);
+	        a.setAttachmentName(file.getOriginalFilename());
+	    }
+
+	    announcementRepo.save(a);
+
+	    return "redirect:/teacher-activity?created";
+	}
+
 	@GetMapping("/test-teacher-login")
 	public String testTeacherLogin(HttpSession session) {
 
 		// simulate logged-in teacher (TESTING ONLY)
 		session.setAttribute("TEACHER_LOGGED_IN", true);
-		session.setAttribute("teacherId", 1); // must exist in DB
+		session.setAttribute("teacherId", 2); // must exist in DB
 		session.setAttribute("teacherName", "Test Teacher");
 
 		return "redirect:/teacher-dashboard";

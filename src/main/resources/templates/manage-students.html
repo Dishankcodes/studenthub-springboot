@@ -24,7 +24,7 @@
 		}
 
 		/* Force cells to obey variables */
-		.home-section .table> :not(caption)>*>* {
+		.home-section .table>:not(caption)>*>* {
 			background-color: transparent !important;
 		}
 
@@ -100,7 +100,7 @@
 		/* ================================
    RESPONSIVE FIX
 ================================ */
-		@media (max-width: 768px) {
+		@media (max-width : 768px) {
 			.home-section .table {
 				font-size: 0.8rem;
 			}
@@ -118,9 +118,8 @@
 				<header>
 					<div class="sidebar__toggle-container">
 						<label for="sidebar-toggle" class="nav__toggle" tabindex="0">
-							<span class="toggle--icons">
-								<i class="bi bi-list toggle--open"></i>
-								<i class="bi bi-x-lg toggle--close"></i>
+							<span class="toggle--icons"> <i class="bi bi-list toggle--open"></i> <i
+									class="bi bi-x-lg toggle--close"></i>
 							</span>
 						</label>
 					</div>
@@ -139,64 +138,49 @@
 							<h2 class="sidebar__item--heading">General</h2>
 						</li>
 
-						<li class="sidebar__item">
-							<a th:href="@{/admin-dashboard}">
-								<i class="bi bi-speedometer2"></i>
-								<span>Dashboard</span>
-							</a>
-						</li>
+						<li class="sidebar__item"><a th:href="@{/admin-dashboard}">
+								<i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+							</a></li>
 
-						<li class="sidebar__item">
-							<a th:href="@{/manage-students}" class="active">
-								<i class="bi bi-people"></i>
-								<span>Student Management</span>
-							</a>
-						</li>
+						<li class="sidebar__item"><a th:href="@{/manage-students}" class="active"> <i
+									class="bi bi-people"></i> <span>Student
+									Management</span>
+							</a></li>
 
-						<li class="sidebar__item">
-							<a th:href="@{/manage-teachers}">
-								<i class="bi bi-person-badge"></i>
-								<span>Instructor Management</span>
-							</a>
-						</li>
+						<li class="sidebar__item"><a th:href="@{/manage-teachers}">
+								<i class="bi bi-person-badge"></i> <span>Instructor
+									Management</span>
+							</a></li>
 
-						<li class="sidebar__item">
-							<a th:href="@{/manage-courses}">
-								<i class="bi bi-book"></i>
-								<span>Course Management</span>
-							</a>
-						</li>
+						<li class="sidebar__item"><a th:href="@{/manage-courses}">
+								<i class="bi bi-book"></i> <span>Course Management</span>
+							</a></li>
 
-						<li class="sidebar__item">
-							<a th:href="@{/manage-internships}">
-								<i class="bi bi-briefcase"></i>
-								<span>Internship Management</span>
-							</a>
-						</li>
+						<li class="sidebar__item"><a th:href="@{/manage-internships}">
+								<i class="bi bi-briefcase"></i> <span>Internship
+									Management</span>
+							</a></li>
+
+						<li class="sidebar__item"><a th:href="@{/admin-announcement}">
+								<i class="bi bi-briefcase"></i><span>Announcements</span>
+							</a></li>
+
 
 						<li class="sidebar__item"><a th:href="@{/admin-design}"><i
-									class="bi bi-layout-text-window"></i><span>Certificate Design</span></a></li>
+									class="bi bi-layout-text-window"></i><span>Certificate
+									Design</span></a></li>
 
-						<li class="sidebar__item">
-							<a th:href="@{/admin-feedback}">
-								<i class="bi bi-bar-chart"></i>
-								<span>Feedback</span>
-							</a>
-						</li>
+						<li class="sidebar__item"><a th:href="@{/admin-feedback}">
+								<i class="bi bi-bar-chart"></i> <span>Feedback</span>
+							</a></li>
 
-						<li class="sidebar__item">
-							<a th:href="@{/admin-settings}">
-								<i class="bi bi-gear"></i>
-								<span>Settings</span>
-							</a>
-						</li>
+						<li class="sidebar__item"><a th:href="@{/admin-settings}">
+								<i class="bi bi-gear"></i> <span>Settings</span>
+							</a></li>
 
-						<li class="sidebar__item">
-							<a th:href="@{/admin-homepage}">
-								<i class="bi bi-box-arrow-right"></i>
-								<span>Logout</span>
-							</a>
-						</li>
+						<li class="sidebar__item"><a th:href="@{/admin-homepage}">
+								<i class="bi bi-box-arrow-right"></i> <span>Logout</span>
+							</a></li>
 					</ul>
 				</section>
 			</nav>
@@ -209,8 +193,8 @@
 				<span class="page-title">Student Management</span>
 				<div class="topbar-right">
 					<button class="profile-btn dropdown-toggle" data-bs-toggle="dropdown">
-						<img th:src="@{/images/admin-avatar.png}" alt="Admin" class="avatar">
-						<span th:text="${username}">Admin</span>
+						<img th:src="@{/images/admin-avatar.png}" alt="Admin" class="avatar"> <span
+							th:text="${username}">Admin</span>
 					</button>
 				</div>
 			</header>
@@ -220,7 +204,7 @@
 				<table class="table table-bordered table-striped mt-3">
 					<thead>
 						<tr>
-							<th>Sr. No. </th>
+							<th>Sr. No.</th>
 							<th>Full Name</th>
 							<th>College</th>
 							<th>Email</th>
@@ -242,8 +226,7 @@
 									<input type="hidden" name="studentId" th:value="${student.studid}" />
 
 									<button type="submit" class="btn btn-danger btn-sm">
-										Delete
-									</button>
+										Delete</button>
 								</form>
 							</td>
 						</tr>

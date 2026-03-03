@@ -40,7 +40,7 @@ public class TeacherCourseController {
 	@GetMapping("/teacher-course")
 	public String courseManagement(Model model,HttpSession session) {
 
-		Integer teacherId = 2;
+		Integer teacherId = 1;
 
 		 Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
@@ -106,7 +106,7 @@ public class TeacherCourseController {
 	) throws IOException {
 
 		
-	    Integer teacherId = 2;
+	    Integer teacherId = 1;
 //		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
 //	Integer teacherId = (Integer) session.getAttribute("teacherId");
 //
@@ -231,7 +231,7 @@ public class TeacherCourseController {
 	public String deleteCourse(@PathVariable("id") Integer courseId,
 
 			HttpSession session) {
-		Integer teacherId = 2;
+		Integer teacherId = 1;
 //
 //		 Boolean loggedIn =
 //		            (Boolean) session.getAttribute("TEACHER_LOGGED_IN");

@@ -1,6 +1,5 @@
 package com.example.demo.Controllers;
 
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -33,7 +32,7 @@ public class TeacherUploadController {
 
 	@Autowired
 	private TeacherNotesRepository teacherNoteRepo;
-	
+
 	@Autowired
 	private NoteCategoryRepository categoryRepo;
 
@@ -103,39 +102,33 @@ public class TeacherUploadController {
 	}
 
 	// ===== EXAMS & QUIZZES =====
-	
 
 	@PostMapping("/teacher-notes/upload")
-	public String uploadTeacherNote(
-	        @RequestParam String title,
-	        @RequestParam(required = false) String description,
-	        @RequestParam Integer categoryId,
-	        @RequestParam MultipartFile file
-	) throws IOException {
-		
+	public String uploadTeacherNote(@RequestParam String title, @RequestParam(required = false) String description,
+			@RequestParam Integer categoryId, @RequestParam MultipartFile file) throws IOException {
+
 		// Integer teacherId = (Integer) session.getAttribute("teacherId");
 		Integer teacherId = 1;
-		    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
-		    NoteCategory category = categoryRepo.findById(categoryId).orElseThrow();
+		NoteCategory category = categoryRepo.findById(categoryId).orElseThrow();
 
-		    String dir = System.getProperty("user.dir") + "/uploads/teacher-notes/";
-		    Files.createDirectories(Paths.get(dir));
+		String dir = System.getProperty("user.dir") + "/uploads/teacher-notes/";
+		Files.createDirectories(Paths.get(dir));
 
-		    String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-		    file.transferTo(new File(dir + fileName));
+		String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+		file.transferTo(new File(dir + fileName));
 
-		    TeacherNotes note = new TeacherNotes();
-		    note.setTitle(title);
-		    note.setDescription(description);
-		    note.setTeacher(teacher);
-		    note.setCategory(category);
-		    note.setStatus(NoteStatus.PENDING);
-		    note.setApproved(false);
-		    note.setFileUrl("/uploads/teacher-notes/" + fileName);
+		TeacherNotes note = new TeacherNotes();
+		note.setTitle(title);
+		note.setDescription(description);
+		note.setTeacher(teacher);
+		note.setCategory(category);
+		note.setStatus(NoteStatus.PENDING);
+		note.setApproved(false);
+		note.setFileUrl("/uploads/teacher-notes/" + fileName);
 
-		    teacherNoteRepo.save(note);
-
+		teacherNoteRepo.save(note);
 
 		return "redirect:/teacher-activity?msg=pending";
 	}
