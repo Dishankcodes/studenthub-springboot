@@ -28,6 +28,7 @@ import com.example.demo.entity.TeacherProfile;
 import com.example.demo.enums.AnnouncementAudience;
 import com.example.demo.enums.AnnouncementType;
 import com.example.demo.enums.EnrollmentStatus;
+import com.example.demo.enums.TeacherStatus;
 import com.example.demo.repository.AnnouncementRepository;
 import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
@@ -66,6 +67,14 @@ public class TeacherController {
 	@Autowired
 	private CourseRepository courseRepo;
 
+	private boolean isBlocked(Teacher teacher) {
+	    return teacher.getStatus() == TeacherStatus.BLOCKED;
+	}
+
+	private boolean isSuspended(Teacher teacher) {
+	    return teacher.getStatus() == TeacherStatus.SUSPENDED;
+	}
+	
 	// ===== STUDENTS =====
 	@GetMapping("/teacher-students")
 	public String teacherStudents(HttpSession session, Model model) {
@@ -92,6 +101,18 @@ public class TeacherController {
 
 	@PostMapping("/teacher/enrollment/status/{id}")
 	public String updateEnrollmentStatus(@PathVariable Integer id, @RequestParam EnrollmentStatus status) {
+		
+		Integer teacherId = 1;
+	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+
+	    if (isBlocked(teacher)) {
+	        return "redirect:/teacher-students?error=blocked";
+	    }
+
+	    if (isSuspended(teacher)) {
+	        return "redirect:/teacher-students?error=suspended";
+	    }
+	    
 		Enrollment e = enrollmentRepo.findById(id).orElseThrow();
 		e.setStatus(status);
 		enrollmentRepo.save(e);
@@ -263,41 +284,52 @@ public class TeacherController {
 	}
 
 	@PostMapping("/teacher-announcement/create")
-	public String createTeacherAnnouncement(@RequestParam(required = false) Integer courseId,
-			@RequestParam String title, @RequestParam String message,
-			@RequestParam(required = false) MultipartFile file, HttpSession session) throws IOException {
+	public String createTeacherAnnouncement(
+	        @RequestParam(required = false) Integer courseId,
+	        @RequestParam String title,
+	        @RequestParam String message,
+	        @RequestParam(required = false) MultipartFile file,
+	        HttpSession session) throws IOException {
 
-		Integer teacherId = 1;
-		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+	    Integer teacherId = 1;
+	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
-		Announcement a = new Announcement();
-		a.setTitle(title);
-		a.setMessage(message);
-		a.setTeacher(teacher);
-		a.setType(AnnouncementType.GENERAL);
-		a.setAudience(AnnouncementAudience.STUDENTS);
+	    if (isBlocked(teacher)) {
+	        return "redirect:/teacher-activity?error=blocked";
+	    }
 
-		if (courseId != null) {
-			Course course = courseRepo.findById(courseId).orElse(null);
-			a.setCourse(course);
-		}
-		if (file != null && !file.isEmpty()) {
+	    if (isSuspended(teacher)) {
+	        return "redirect:/teacher-activity?error=suspended";
+	    }
 
-			String dir = System.getProperty("user.dir") + "/uploads/announcements/";
-			Files.createDirectories(Paths.get(dir));
+	    Announcement a = new Announcement();
+	    a.setTitle(title);
+	    a.setMessage(message);
+	    a.setTeacher(teacher);
+	    a.setType(AnnouncementType.GENERAL);
+	    a.setAudience(AnnouncementAudience.STUDENTS);
 
-			String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-			file.transferTo(new File(dir + fileName));
+	    if (courseId != null) {
+	        Course course = courseRepo.findById(courseId).orElse(null);
+	        a.setCourse(course);
+	    }
 
-			a.setAttachmentUrl("/uploads/announcements/" + fileName);
-			a.setAttachmentName(file.getOriginalFilename());
-		}
+	    if (file != null && !file.isEmpty()) {
 
-		announcementRepo.save(a);
+	        String dir = System.getProperty("user.dir") + "/uploads/announcements/";
+	        Files.createDirectories(Paths.get(dir));
 
-		return "redirect:/teacher-activity?created";
+	        String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
+	        file.transferTo(new File(dir + fileName));
+
+	        a.setAttachmentUrl("/uploads/announcements/" + fileName);
+	        a.setAttachmentName(file.getOriginalFilename());
+	    }
+
+	    announcementRepo.save(a);
+
+	    return "redirect:/teacher-activity?created";
 	}
-
 	@GetMapping("/test-teacher-login")
 	public String testTeacherLogin(HttpSession session) {
 

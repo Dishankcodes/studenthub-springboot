@@ -34,10 +34,7 @@ public class TeacherDashboardController {
     @GetMapping("/teacher-dashboard")
     public String teacherDashboard(Model model, HttpSession session) {
 
-        /* =====================================================
-           AUTH CHECK (TEMP HARDCODED FOR TESTING)
-        ====================================================== */
-
+       
         // Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
         // Integer teacherId = (Integer) session.getAttribute("teacherId");
 
@@ -54,10 +51,6 @@ public class TeacherDashboardController {
         }
 
         model.addAttribute("teacher", teacher);
-
-        /* =====================================================
-           PLATFORM OVERVIEW
-        ====================================================== */
 
         long freeCourses =
                 courseRepo.countByTeacherTeacherIdAndPriceIsNull(teacherId);
@@ -76,11 +69,6 @@ public class TeacherDashboardController {
         model.addAttribute("paidCourses", paidCourses);
         model.addAttribute("totalCourses", totalCourses);
         model.addAttribute("totalStudents", totalStudents);
-
-        /* =====================================================
-           TEACHER PERFORMANCE
-        ====================================================== */
-
         model.addAttribute("teacherCourses", totalCourses);
         model.addAttribute("teacherStudents", totalStudents);
 
@@ -92,10 +80,6 @@ public class TeacherDashboardController {
         }
 
         model.addAttribute("totalRevenue", totalRevenue.longValue());
-
-        /* =====================================================
-           MOST ENROLLED COURSE
-        ====================================================== */
 
         List<Object[]> topCourses =
                 courseRepo.findTopCoursesByEnrollment(teacherId);
@@ -118,35 +102,26 @@ public class TeacherDashboardController {
             model.addAttribute("rating", 0);
         }
 
-        /* =====================================================
-           COURSE INCOME TABLE
-        ====================================================== */
 
         List<Object[]> courseIncomeList =
                 courseRepo.getCourseIncomeStats(teacherId);
 
-        model.addAttribute("courseIncomeList", courseIncomeList);
-
-        /* =====================================================
-           RECENT FEEDBACK
-        ====================================================== */
 
         List<InstructorFeedback> feedbackList =
                 instructorFeedbackRepo
                         .findTop5ByTeacherTeacherIdOrderByCreatedAtDesc(
                                 teacherId
                         );
-
-        model.addAttribute("feedbackList", feedbackList);
-
-        /* =====================================================
-           VIEW
-        ====================================================== */
-
+        
         List<Object[]> monthlyStudents =
                 enrollmentRepo.countStudentsGroupedByMonth(teacherId);
-
+ 
+        
+        model.addAttribute("courseIncomeList", courseIncomeList);
+        model.addAttribute("feedbackList", feedbackList);
+        model.addAttribute("teacherStatus", teacher.getStatus());
         model.addAttribute("monthlyStudents", monthlyStudents);
+        
         return "teacher-dashboard";
     }
 }

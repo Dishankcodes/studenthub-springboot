@@ -84,115 +84,115 @@
 			letter-spacing: 0.4px;
 		}
 
-/* ===============================
+		/* ===============================
    DARK TABLE THEME (FINAL)
 ================================ */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #2a2a4a;
-    color: #ffffff;
-    border-radius: 12px;
-    overflow: hidden;
-}
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			background: #2a2a4a;
+			color: #ffffff;
+			border-radius: 12px;
+			overflow: hidden;
+		}
 
-/* ===== TABLE HEADER ===== */
-thead th {
-    background: #1f1f35;
-    color: #ffffff;
-    font-weight: 600;
-    padding: 14px 16px;
-    text-transform: uppercase;
-    font-size: 12.5px;
-    letter-spacing: 0.4px;
-    border-bottom: 1px solid #3c3c5c;
-}
+		/* ===== TABLE HEADER ===== */
+		thead th {
+			background: #1f1f35;
+			color: #ffffff;
+			font-weight: 600;
+			padding: 14px 16px;
+			text-transform: uppercase;
+			font-size: 12.5px;
+			letter-spacing: 0.4px;
+			border-bottom: 1px solid #3c3c5c;
+		}
 
-/* ===== TABLE ROWS ===== */
-tbody tr {
-    transition: background 0.2s ease;
-}
+		/* ===== TABLE ROWS ===== */
+		tbody tr {
+			transition: background 0.2s ease;
+		}
 
-tbody tr:nth-child(even) {
-    background: #24243a;
-}
+		tbody tr:nth-child(even) {
+			background: #24243a;
+		}
 
-tbody tr:hover {
-    background: #f6a623;
-    color: #1f1f2e;
-}
+		tbody tr:hover {
+			background: #f6a623;
+			color: #1f1f2e;
+		}
 
-/* ===== TABLE CELLS ===== */
-td {
-    padding: 14px 16px;
-    vertical-align: middle;
-    color: inherit;
-}
+		/* ===== TABLE CELLS ===== */
+		td {
+			padding: 14px 16px;
+			vertical-align: middle;
+			color: inherit;
+		}
 
-/* Student email */
-td small {
-    color: #c7c7d1;
-}
+		/* Student email */
+		td small {
+			color: #c7c7d1;
+		}
 
-/* Completed date */
-.status-complete {
-    color: #22c55e;
-    font-weight: 600;
-}
+		/* Completed date */
+		.status-complete {
+			color: #22c55e;
+			font-weight: 600;
+		}
 
-/* In progress */
-.status-progress {
-    color: #facc15;
-    font-style: italic;
-}
+		/* In progress */
+		.status-progress {
+			color: #facc15;
+			font-style: italic;
+		}
 
-/* Empty state */
-tbody tr td[colspan] {
-    text-align: center;
-    padding: 30px;
-    font-size: 14px;
-    color: #c7c7d1;
-}
-	
+		/* Empty state */
+		tbody tr td[colspan] {
+			text-align: center;
+			padding: 30px;
+			font-size: 14px;
+			color: #c7c7d1;
+		}
+
 
 		/* ===============================
    DARK DROPDOWN (STATUS)
 ================================ */
-select.form-select {
-    background: #1f1f35;
-    color: #ffffff;
-    border: 1px solid #3c3c5c;
-    padding: 8px 36px 8px 12px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-    background-size: 10px;
-}
+		select.form-select {
+			background: #1f1f35;
+			color: #ffffff;
+			border: 1px solid #3c3c5c;
+			padding: 8px 36px 8px 12px;
+			border-radius: 10px;
+			font-size: 13px;
+			font-weight: 500;
+			cursor: pointer;
+			appearance: none;
+			background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M1.5 5.5l6 6 6-6'/%3E%3C/svg%3E");
+			background-repeat: no-repeat;
+			background-position: right 12px center;
+			background-size: 10px;
+		}
 
-/* Hover */
-select.form-select:hover {
-    border-color: #f6a623;
-}
+		/* Hover */
+		select.form-select:hover {
+			border-color: #f6a623;
+		}
 
-/* Focus */
-select.form-select:focus {
-    outline: none;
-    border-color: #f6a623;
-    box-shadow: 0 0 0 3px rgba(246,166,35,0.25);
-}
+		/* Focus */
+		select.form-select:focus {
+			outline: none;
+			border-color: #f6a623;
+			box-shadow: 0 0 0 3px rgba(246, 166, 35, 0.25);
+		}
 
-/* Dropdown options */
-select.form-select option {
-    background: #1f1f35;
-    color: #ffffff;
-}
+		/* Dropdown options */
+		select.form-select option {
+			background: #1f1f35;
+			color: #ffffff;
+		}
 
-	
+
 		/* ===== RESPONSIVE ===== */
 		@media (max-width: 900px) {
 			table {
@@ -234,6 +234,25 @@ select.form-select option {
 		/* ===== REMOVE EXTRA TOP GAP ===== */
 		.header-divider {
 			margin-bottom: 0;
+		}
+
+		.status-banner {
+			margin: 20px 30px;
+			padding: 14px 18px;
+			border-radius: 8px;
+			font-weight: 500;
+		}
+
+		.status-banner.suspended {
+			background: #fff3cd;
+			color: #856404;
+			border-left: 6px solid #ffc107;
+		}
+
+		.status-banner.blocked {
+			background: #f8d7da;
+			color: #721c24;
+			border-left: 6px solid #dc3545;
 		}
 	</style>
 </head>
@@ -290,6 +309,16 @@ select.form-select option {
 		</header>
 
 		<hr class="header-divider">
+		<!-- ===== TEACHER STATUS MESSAGE ===== -->
+		<div th:if="${teacher.status.name() == 'SUSPENDED'}" class="status-banner suspended">
+			⚠ Your account is suspended by admin.
+			You can view students but cannot change their status.
+		</div>
+
+		<div th:if="${teacher.status.name() == 'BLOCKED'}" class="status-banner blocked">
+			🚫 Your account has been blocked by admin.
+			All actions are disabled.
+		</div>
 		<div class="dashboard full-width">
 
 			<div class="card" style="background:#fff;border-radius:12px;padding:20px">

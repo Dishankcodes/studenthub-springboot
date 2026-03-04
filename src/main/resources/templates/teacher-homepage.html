@@ -2,382 +2,395 @@
 <html lang="en" xmlns:th="www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>EduPlatform | Teacher</title>
+	<meta charset="UTF-8">
+	<title>EduPlatform | Teacher</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-        rel="stylesheet">
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --primary: #f6a623;       /* bright orange */
-            --primary-dark: #d48821;  /* darker orange for hover */
-            --bg: #fffdf8;            /* light cream background */
-            --card-bg: #ffffff;       /* white cards */
-            --text-dark: #333;        /* main text */
-            --text-muted: #666;       /* muted text */
-        }
+	<style>
+		:root {
+			--primary: #f6a623;
+			/* bright orange */
+			--primary-dark: #d48821;
+			/* darker orange for hover */
+			--bg: #fffdf8;
+			/* light cream background */
+			--card-bg: #ffffff;
+			/* white cards */
+			--text-dark: #333;
+			/* main text */
+			--text-muted: #666;
+			/* muted text */
+		}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Poppins', sans-serif;
+		}
 
-        body {
-            background: var(--bg);
-            color: var(--text-dark);
-        }
+		body {
+			background: var(--bg);
+			color: var(--text-dark);
+		}
 
-        /* ================= NAVBAR ================= */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 22px 110px;
-            background: var(--primary);
-        }
+		/* ================= NAVBAR ================= */
+		header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 22px 110px;
+			background: var(--primary);
+		}
 
-        .logo {
-            font-size: 26px;
-            font-weight: 700;
-            color: white;
-        }
+		.logo {
+			font-size: 26px;
+			font-weight: 700;
+			color: white;
+		}
 
-        nav {
-            display: flex;
-            gap: 35px;
-        }
+		nav {
+			display: flex;
+			gap: 35px;
+		}
 
-        nav a {
-            text-decoration: none;
-            color: white;
-            font-weight: 500;
-            position: relative;
-        }
+		nav a {
+			text-decoration: none;
+			color: white;
+			font-weight: 500;
+			position: relative;
+		}
 
-        nav a::after {
-            content: "";
-            position: absolute;
-            width: 0;
-            height: 2px;
-            background: #fff3c4;
-            left: 0;
-            bottom: -6px;
-            transition: 0.3s;
-        }
+		nav a::after {
+			content: "";
+			position: absolute;
+			width: 0;
+			height: 2px;
+			background: #fff3c4;
+			left: 0;
+			bottom: -6px;
+			transition: 0.3s;
+		}
 
-        nav a:hover::after {
-            width: 100%;
-        }
+		nav a:hover::after {
+			width: 100%;
+		}
 
-        .roles {
-            display: flex;
-            gap: 10px;
-        }
+		.roles {
+			display: flex;
+			gap: 10px;
+		}
 
-        .role-btn {
-            padding: 8px 18px;
-            border-radius: 25px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+		.role-btn {
+			padding: 8px 18px;
+			border-radius: 25px;
+			border: none;
+			font-weight: 600;
+			cursor: pointer;
+			transition: 0.3s;
+		}
 
-        .student {
-            background: #fff3c4;
-            color: var(--primary);
-        }
+		.student {
+			background: #fff3c4;
+			color: var(--primary);
+		}
 
-        .teacher {
-            background: white;
-            color: var(--primary);
-        }
+		.teacher {
+			background: white;
+			color: var(--primary);
+		}
 
-        .admin {
-            background: #2f2f55;
-            color: white;
-        }
+		.admin {
+			background: #2f2f55;
+			color: white;
+		}
 
-        .role-btn:hover {
-            transform: translateY(-2px);
-        }
+		.role-btn:hover {
+			transform: translateY(-2px);
+		}
 
-        /* ================= HERO ================= */
-        .hero {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 90px 110px;
-            background: linear-gradient(135deg, #f6a623, #f8b547);
-            border-bottom-left-radius: 160px;
-            border-bottom-right-radius: 160px;
-        }
+		/* ================= HERO ================= */
+		.hero {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 90px 110px;
+			background: linear-gradient(135deg, #f6a623, #f8b547);
+			border-bottom-left-radius: 160px;
+			border-bottom-right-radius: 160px;
+		}
 
-        .hero-text {
-            max-width: 520px;
-            color: white;
-        }
+		.hero-text {
+			max-width: 520px;
+			color: white;
+		}
 
-        .hero-text h1 {
-            font-size: 44px;
-            line-height: 1.3;
-        }
+		.hero-text h1 {
+			font-size: 44px;
+			line-height: 1.3;
+		}
 
-        .hero-text span {
-            color: #fff3c4;
-        }
+		.hero-text span {
+			color: #fff3c4;
+		}
 
-        .hero-text p {
-            margin: 20px 0 30px;
-            opacity: 0.95;
-        }
+		.hero-text p {
+			margin: 20px 0 30px;
+			opacity: 0.95;
+		}
 
-        .hero-buttons {
-            display: flex;
-            gap: 15px;
-        }
+		.hero-buttons {
+			display: flex;
+			gap: 15px;
+		}
 
-        .btn-primary {
-            background: white;
-            color: var(--primary);
-            padding: 14px 30px;
-            border-radius: 30px;
-            border: none;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+		.btn-primary {
+			background: white;
+			color: var(--primary);
+			padding: 14px 30px;
+			border-radius: 30px;
+			border: none;
+			font-weight: 600;
+			cursor: pointer;
+			transition: 0.3s;
+		}
 
-        .btn-primary:hover {
-            background: #fff3c4;
-        }
+		.btn-primary:hover {
+			background: #fff3c4;
+		}
 
-        .hero img {
-            width: 460px;
-        }
+		.hero img {
+			width: 460px;
+		}
 
-        /* ================= INFO ================= */
-        .info {
-            padding: 90px 110px;
-            text-align: center;
-        }
+		/* ================= INFO ================= */
+		.info {
+			padding: 90px 110px;
+			text-align: center;
+		}
 
-        .info h2 {
-            font-size: 34px;
-            margin-bottom: 50px;
-        }
+		.info h2 {
+			font-size: 34px;
+			margin-bottom: 50px;
+		}
 
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
+		.info-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 30px;
+		}
 
-        .info-item {
-            background: var(--card-bg);
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            transition: 0.3s;
-        }
+		.info-item {
+			background: var(--card-bg);
+			padding: 35px;
+			border-radius: 20px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+			transition: 0.3s;
+		}
 
-        .info-item:hover {
-            transform: translateY(-6px);
-        }
+		.info-item:hover {
+			transform: translateY(-6px);
+		}
 
-        .info-item h3 {
-            margin-bottom: 12px;
-            font-size: 20px;
-        }
+		.info-item h3 {
+			margin-bottom: 12px;
+			font-size: 20px;
+		}
 
-        .info-item p {
-            font-size: 15px;
-            color: var(--text-muted);
-        }
+		.info-item p {
+			font-size: 15px;
+			color: var(--text-muted);
+		}
 
-        /* ================= STATS ================= */
-        .stats {
-            display: flex;
-            justify-content: space-between;
-            gap: 30px;
-            padding: 70px 110px;
-        }
+		/* ================= STATS ================= */
+		.stats {
+			display: flex;
+			justify-content: space-between;
+			gap: 30px;
+			padding: 70px 110px;
+		}
 
-        .stat {
-            background: var(--card-bg);
-            padding: 30px 40px;
-            border-radius: 22px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-            flex: 1;
-        }
+		.stat {
+			background: var(--card-bg);
+			padding: 30px 40px;
+			border-radius: 22px;
+			text-align: center;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+			flex: 1;
+		}
 
-        .stat h2 {
-            font-size: 32px;
-            color: var(--primary);
-        }
+		.stat h2 {
+			font-size: 32px;
+			color: var(--primary);
+		}
 
-        .stat p {
-            font-size: 14px;
-            color: var(--text-muted);
-        }
+		.stat p {
+			font-size: 14px;
+			color: var(--text-muted);
+		}
 
-        /* ================= FOOTER ================= */
-    footer {
-      background: #2e3440;
-      padding: 50px 80px 25px;
-      color: #cfd8dc;
-    }
+		/* ================= FOOTER ================= */
+		footer {
+			background: #2e3440;
+			padding: 50px 80px 25px;
+			color: #cfd8dc;
+		}
 
-    .footer-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 40px;
-      margin-bottom: 30px;
-    }
+		.footer-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 40px;
+			margin-bottom: 30px;
+		}
 
-    footer h4 {
-      color: #fff;
-      margin-bottom: 12px;
-    }
+		footer h4 {
+			color: #fff;
+			margin-bottom: 12px;
+		}
 
-    footer p {
-      font-size: 14px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+		footer p {
+			font-size: 14px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
 
-    footer p:hover { color: #f6a623; }
+		footer p:hover {
+			color: #f6a623;
+		}
 
-    .copy {
-      text-align: center;
-      font-size: 13px;
-      opacity: 0.7;
-      border-top: 1px solid #444;
-      padding-top: 15px;
-    }
-        @media (max-width: 768px) {
-            header, .hero, .info, .stats {
-                padding: 40px 20px;
-            }
+		.copy {
+			text-align: center;
+			font-size: 13px;
+			opacity: 0.7;
+			border-top: 1px solid #444;
+			padding-top: 15px;
+		}
 
-            .hero {
-                flex-direction: column;
-                text-align: center;
-            }
+		@media (max-width: 768px) {
 
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
+			header,
+			.hero,
+			.info,
+			.stats {
+				padding: 40px 20px;
+			}
 
-            .stats {
-                flex-direction: column;
-            }
+			.hero {
+				flex-direction: column;
+				text-align: center;
+			}
 
-            .footer-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-        }
-    </style>
+			.info-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.stats {
+				flex-direction: column;
+			}
+
+			.footer-grid {
+				grid-template-columns: 1fr;
+				text-align: center;
+			}
+		}
+	</style>
 </head>
 
 <body>
 
-<header>
-    <div class="logo">EduPlatform</div>
+	<header>
+		<div class="logo">EduPlatform</div>
 
-    <nav>
-        <a th:href="@{/teacher-homepage}">Home</a>
-        <a th:href="@{/teacher_about}">About</a>
-        <a th:href="@{/teacher-privacy}">Privacy</a>
-    </nav>
+		<nav>
+			<a th:href="@{/teacher-homepage}">Home</a>
+			<a th:href="@{/teacher_about}">About</a>
+			<a th:href="@{/teacher-privacy}">Privacy</a>
+		</nav>
 
-    <div class="roles">
-        <button class="role-btn student" th:onclick="|location.href='@{/index}'|">Student</button>
-        <button class="role-btn teacher" th:onclick="|location.href='@{/teacher-auth}'|">Teacher</button>
-        <button class="role-btn admin" th:onclick="|location.href='@{/admin-homepage}'|">Admin</button>
-    </div>
-</header>
+		<div class="roles">
+			<button class="role-btn student" th:onclick="|location.href='@{/index}'|">Student</button>
+			<button class="role-btn teacher" th:onclick="|location.href='@{/teacher-auth}'|">Teacher</button>
+			<button class="role-btn admin" th:onclick="|location.href='@{/admin-homepage}'|">Admin</button>
+		</div>
+	</header>
 
-<section class="hero">
-    <div class="hero-text">
-        <h1>Teach <span>Smarter</span><br>Shape Future Minds</h1>
-        <p>Design impactful courses, guide learners, and track progress — all from one intuitive platform.</p>
+	<section class="hero">
+		<div class="hero-text">
+			<h1>Teach <span>Smarter</span><br>Shape Future Minds</h1>
+			<p>Design impactful courses, guide learners, and track progress — all from one intuitive platform.</p>
 
-        <div class="hero-buttons">
-            <button class="btn-primary" th:onclick="|location.href='@{/teacher-dashboard}'|">Create Course</button>
-            <button class="btn-primary" th:onclick="|location.href='@{/teacher-auth}'|">Sign In</button>
-        </div>
-    </div>
+			<div class="hero-buttons">
+				<button class="btn-primary" th:onclick="|location.href='@{/teacher-dashboard}'|">Create Course</button>
+				<button class="btn-primary" th:onclick="|location.href='@{/teacher-auth}'|">Sign In</button>
+			</div>
+		</div>
 
-    <img th:src="@{/images/tea.png}" alt="Teacher Illustration">
-</section>
+		<img th:src="@{/images/tea.png}" alt="Teacher Illustration">
+	</section>
 
-<section class="info">
-    <h2>Why Educators Love EduPlatform</h2>
+	<section class="info">
+		<h2>Why Educators Love EduPlatform</h2>
 
-    <div class="info-grid">
-        <div class="info-item">
-            <h3>Effortless Course Creation</h3>
-            <p>Build engaging lessons with videos, quizzes, and structured modules.</p>
-        </div>
+		<div class="info-grid">
+			<div class="info-item">
+				<h3>Effortless Course Creation</h3>
+				<p>Build engaging lessons with videos, quizzes, and structured modules.</p>
+			</div>
 
-        <div class="info-item">
-            <h3>Student Progress Insights</h3>
-            <p>Track learning patterns and improve outcomes with real data.</p>
-        </div>
+			<div class="info-item">
+				<h3>Student Progress Insights</h3>
+				<p>Track learning patterns and improve outcomes with real data.</p>
+			</div>
 
-        <div class="info-item">
-            <h3>Verified Certification</h3>
-            <p>Reward learners with certificates that add real value.</p>
-        </div>
-    </div>
-</section>
+			<div class="info-item">
+				<h3>Verified Certification</h3>
+				<p>Reward learners with certificates that add real value.</p>
+			</div>
+		</div>
+	</section>
 
-<section class="stats">
-    <div class="stat">
-        <h2>120+</h2>
-        <p>Courses Created</p>
-    </div>
-    <div class="stat">
-        <h2>8,000+</h2>
-        <p>Active Students</p>
-    </div>
-    <div class="stat">
-        <h2>95%</h2>
-        <p>Positive Feedback</p>
-    </div>
-</section>
+	<section class="stats">
+		<div class="stat">
+			<h2>120+</h2>
+			<p>Courses Created</p>
+		</div>
+		<div class="stat">
+			<h2>8,000+</h2>
+			<p>Active Students</p>
+		</div>
+		<div class="stat">
+			<h2>95%</h2>
+			<p>Positive Feedback</p>
+		</div>
+	</section>
 
-<footer>
-    <div class="footer-grid">
-        <div>
-            <h4>EduPlatform</h4>
-            <p>Empowering educators worldwide.</p>
-        </div>
+	<footer>
+		<div class="footer-grid">
+			<div>
+				<h4>EduPlatform</h4>
+				<p>Empowering educators worldwide.</p>
+			</div>
 
-        <div>
-            <h4>Teacher Panel</h4>
-            <p>Dashboard</p>
-            <p>Create Course</p>
-            <p>Analytics</p>
-        </div>
+			<div>
+				<h4>Teacher Panel</h4>
+				<p>Dashboard</p>
+				<p>Create Course</p>
+				<p>Analytics</p>
+			</div>
 
-        <div>
-            <h4>Support</h4>
-            <p>Help Center</p>
-            <p>Community</p>
-            <p>Policies</p>
-        </div>
-    </div>
+			<div>
+				<h4>Support</h4>
+				<p>Help Center</p>
+				<p>Community</p>
+				<p>Policies</p>
+			</div>
+		</div>
 
-    <p class="copy">© 2025 EduPlatform — Teacher Interface</p>
-</footer>
+		<p class="copy">© 2025 EduPlatform — Teacher Interface</p>
+	</footer>
 
 </body>
+
 </html>

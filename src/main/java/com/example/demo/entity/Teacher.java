@@ -4,9 +4,13 @@ package com.example.demo.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.demo.enums.TeacherStatus;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -36,6 +40,11 @@ public class Teacher {
 
 	private String countryCode;
 
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private TeacherStatus status= TeacherStatus.ACTIVE;
+	
+	
 	@OneToOne(mappedBy = "teacher", cascade = CascadeType.ALL)
 	private TeacherProfile profile;
 
@@ -46,6 +55,7 @@ public class Teacher {
 		return teacherCourse;
 	}
 
+	
 	public void setTeacherCourse(List<Course> teacherCourse) {
 		this.teacherCourse = teacherCourse;
 	}
@@ -114,4 +124,15 @@ public class Teacher {
 		this.password = password;
 	}
 
+
+	public TeacherStatus getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(TeacherStatus status) {
+		this.status = status;
+	}
+
+	
 }

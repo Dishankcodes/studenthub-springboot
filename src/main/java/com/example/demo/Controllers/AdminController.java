@@ -8,12 +8,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.InstructorFeedback;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherProfile;
+import com.example.demo.enums.TeacherStatus;
 import com.example.demo.repository.AnnouncementRepository;
 import com.example.demo.repository.InstructorFeedbackRepository;
 import com.example.demo.repository.NoteCategoryRepository;
@@ -124,24 +126,28 @@ public class AdminController {
 		model.addAttribute("feedbacks", feedbacks);
 		model.addAttribute("avgRating", avgRating);
 		model.addAttribute("totalRatings", totalRatings);
-
 		model.addAttribute("username", session.getAttribute("adminUsername"));
 
 		return "admin-instructor-view";
 	}
 
-	@PostMapping("/admin-teacher/delete/{teacherId}")
-	public String deleteTeacher(@PathVariable Integer teacherId, RedirectAttributes ra, HttpSession session) {
-		if (session.getAttribute("adminEmail") == null) {
-			return "redirect:/admin-login";
-		}
+	
+	@PostMapping("/manage-instructor/status/{id}")
+	public String updateTeacherStatus(@PathVariable Integer id,
+			@RequestParam TeacherStatus status)
+	{
+		 Teacher teacher = teacherRepo.findById(id).orElse(null);
 
-		teacherRepo.deleteById(teacherId);
+		    if (teacher == null) {
+		        return "redirect:/manage-instructor";
+		    }
 
-		ra.addFlashAttribute("success", "✅ Instructor deleted successfully");
+		    teacher.setStatus(status);
+		    teacherRepo.save(teacher);
 
-		return "redirect:/manage-teachers";
+		    return "redirect:/manage-teachers#instructor-" + id;
 	}
+	
 
 	@GetMapping("/manage-internships")
 	public String admin_internships() {

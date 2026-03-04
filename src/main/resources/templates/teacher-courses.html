@@ -2,389 +2,415 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Teacher Courses</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<title>Teacher Courses</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- SIDEBAR CSS (DO NOT TOUCH) -->
-    <link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
+	<!-- SIDEBAR CSS (DO NOT TOUCH) -->
+	<link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
-            background: #f4f6f9;
-            color: #1f1f2e;
-        }
-
-        /* ===== MAIN CONTENT (SAME AS DASHBOARD) ===== */
-        .main-content {
-            margin-left: 260px;
-            padding: 10px 20px;
-            transition: margin-left 0.3s ease;
-        }
-
-        body.sidebar-collapsed .main-content {
-            margin-left: 80px;
-        }
-
-        /* ===== HEADER ===== */
-        .page-title {
-            font-size: 26px;
-            font-weight: 600;
-        }
-
-        /* ===== TOP BAR ===== */
-        .top-bar {
-            display: flex;
-            gap: 16px;
-            flex-wrap: wrap;
-            margin: 25px 0;
-        }
-
-        .search-box {
-            flex: 1;
-            position: relative;
-            min-width: 260px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 10px 14px 10px 36px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-
-        .search-box i {
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #777;
-        }
-
-        select {
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-
-        /* ===== BUTTON ===== */
-        .btn {
-            padding: 10px 18px;
-            border-radius: 8px;
-            background: #1f1f2e;
-            color: #fff;
-            border: none;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-        }
-
-        /* ===== COURSE GRID ===== */
-        .course-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 22px;
-        }
-
-        .course-card {
-            background: #fff;
-            border-radius: 14px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-            transition: 0.3s;
-        }
-
-        .course-card:hover {
-            transform: translateY(-6px);
-        }
-
-        .course-thumb {
-            height: 160px;
-            background: #dfe3eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 42px;
-        }
-
-        .course-body {
-            padding: 18px;
-        }
-
-        .course-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .badge {
-            font-size: 12px;
-            padding: 4px 12px;
-            border-radius: 20px;
-        }
-
-        .published {
-            background: #d1f7e5;
-            color: #0f5132;
-        }
-
-        .draft {
-            background: #fff3cd;
-            color: #664d03;
-        }
-
-        .course-meta {
-            margin: 12px 0;
-            display: flex;
-            justify-content: space-between;
-            color: #666;
-            font-size: 13px;
-        }
-
-        .course-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .course-actions a {
-            flex: 1;
-            padding: 8px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 14px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .edit {
-            background: #1f1f2e;
-            color: #fff;
-        }
-
-        .continue {
-            background: #f6a623;
-            color: #1f1f2e;
-        }
-
-        .analytics {
-            background: #e9ecf3;
-            color: #1f1f2e;
-        }
-
-        .delete {
-            background: #ffe5e5;
-            color: #b02a37;
-        }
-
-        /* ===== MOBILE ===== */
-        @media (max-width: 768px) {
-            .main-content {
-                margin-left: 0;
-                padding: 20px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .course-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .empty-state {
-            display: none;
-        }
-
-        .course-grid:empty+.empty-state {
-            display: block;
-        }
-        .course-actions form {
-		    flex: 1;
-		    margin: 0;
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: 'Poppins', sans-serif;
 		}
-		
+
+		body {
+			background: #f4f6f9;
+			color: #1f1f2e;
+		}
+
+		/* ===== MAIN CONTENT (SAME AS DASHBOARD) ===== */
+		.main-content {
+			margin-left: 260px;
+			padding: 10px 20px;
+			transition: margin-left 0.3s ease;
+		}
+
+		body.sidebar-collapsed .main-content {
+			margin-left: 80px;
+		}
+
+		/* ===== HEADER ===== */
+		.page-title {
+			font-size: 26px;
+			font-weight: 600;
+		}
+
+		/* ===== TOP BAR ===== */
+		.top-bar {
+			display: flex;
+			gap: 16px;
+			flex-wrap: wrap;
+			margin: 25px 0;
+		}
+
+		.search-box {
+			flex: 1;
+			position: relative;
+			min-width: 260px;
+		}
+
+		.search-box input {
+			width: 100%;
+			padding: 10px 14px 10px 36px;
+			border-radius: 8px;
+			border: 1px solid #ccc;
+		}
+
+		.search-box i {
+			position: absolute;
+			left: 12px;
+			top: 50%;
+			transform: translateY(-50%);
+			color: #777;
+		}
+
+		select {
+			padding: 10px 14px;
+			border-radius: 8px;
+			border: 1px solid #ccc;
+		}
+
+		/* ===== BUTTON ===== */
+		.btn {
+			padding: 10px 18px;
+			border-radius: 8px;
+			background: #1f1f2e;
+			color: #fff;
+			border: none;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			cursor: pointer;
+		}
+
+		/* ===== COURSE GRID ===== */
+		.course-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 22px;
+		}
+
+		.course-card {
+			background: #fff;
+			border-radius: 14px;
+			overflow: hidden;
+			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+			transition: 0.3s;
+		}
+
+		.course-card:hover {
+			transform: translateY(-6px);
+		}
+
+		.course-thumb {
+			height: 160px;
+			background: #dfe3eb;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 42px;
+		}
+
+		.course-body {
+			padding: 18px;
+		}
+
+		.course-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.badge {
+			font-size: 12px;
+			padding: 4px 12px;
+			border-radius: 20px;
+		}
+
+		.published {
+			background: #d1f7e5;
+			color: #0f5132;
+		}
+
+		.draft {
+			background: #fff3cd;
+			color: #664d03;
+		}
+
+		.course-meta {
+			margin: 12px 0;
+			display: flex;
+			justify-content: space-between;
+			color: #666;
+			font-size: 13px;
+		}
+
+		.course-actions {
+			display: flex;
+			gap: 10px;
+		}
+
+		.course-actions a {
+			flex: 1;
+			padding: 8px;
+			border-radius: 8px;
+			text-align: center;
+			font-size: 14px;
+			cursor: pointer;
+			text-decoration: none;
+		}
+
+		.edit {
+			background: #1f1f2e;
+			color: #fff;
+		}
+
+		.continue {
+			background: #f6a623;
+			color: #1f1f2e;
+		}
+
+		.analytics {
+			background: #e9ecf3;
+			color: #1f1f2e;
+		}
+
+		.delete {
+			background: #ffe5e5;
+			color: #b02a37;
+		}
+
+		/* ===== MOBILE ===== */
+		@media (max-width: 768px) {
+			.main-content {
+				margin-left: 0;
+				padding: 20px;
+			}
+		}
+
+		@media (max-width: 768px) {
+			.course-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		.empty-state {
+			display: none;
+		}
+
+		.course-grid:empty+.empty-state {
+			display: block;
+		}
+
+		.course-actions form {
+			flex: 1;
+			margin: 0;
+		}
+
 		.course-actions form button {
-		    width: 100%;
-		    padding: 8px;
-		    border-radius: 8px;
-		    font-size: 14px;
-		    cursor: pointer;
-		    border: none;
+			width: 100%;
+			padding: 8px;
+			border-radius: 8px;
+			font-size: 14px;
+			cursor: pointer;
+			border: none;
 		}
-		      
-		 .course-actions .delete {
-		    background: #ffe5e5;
-		    color: #b02a37;
+
+		.course-actions .delete {
+			background: #ffe5e5;
+			color: #b02a37;
 		}
-		        
-    </style>
+
+		.status-banner {
+			margin: 20px 30px;
+			padding: 14px 18px;
+			border-radius: 8px;
+			font-weight: 500;
+		}
+
+		.status-banner.suspended {
+			background: #fff3cd;
+			color: #856404;
+			border-left: 6px solid #ffc107;
+		}
+
+		.status-banner.blocked {
+			background: #f8d7da;
+			color: #721c24;
+			border-left: 6px solid #dc3545;
+		}
+	</style>
 </head>
 
 <body class="sidebar-collapsed">
 
-    <!-- ===== SIDEBAR ===== -->
-    <aside class="sidebar collapsed">
-        <div class="sidebar-logo">
-            <img th:src="@{/images/logo.png}">
-            <span class="logo-text">EduPlatform</span>
-        </div>
+	<!-- ===== SIDEBAR ===== -->
+	<aside class="sidebar collapsed">
+		<div class="sidebar-logo">
+			<img th:src="@{/images/logo.png}">
+			<span class="logo-text">EduPlatform</span>
+		</div>
 
-        <nav class="sidebar-menu">
-            <a th:href="@{/teacher-dashboard}"><i class="bi bi-speedometer2"></i><span> Dashboard </span></a>
-            <a th:href="@{/teacher-course}" class="active"><i class="bi bi-journal-text"></i><span>Course Management</span></a>
-            <a th:href="@{/teacher-creates-course}"><i class="bi bi-journal-plus"></i><span>Create Course</span></a>
-            <a th:href="@{/teacher-activity}"><i class="bi bi-pencil-square"></i><span>Genereal Activities</span></a>
-            <a th:href="@{/teacher-students}"><i class="bi bi-people"></i><span>Students</span></a>
-            <a th:href="@{/teacher-communication}"><i class="bi bi-chat-dots"></i><span >Communication</span></a>
-            <a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback & Ratings</span></a>
-            <a th:href="@{/teacher-profile}"><i class="bi bi-gear"></i><span>Profile</span></a>
-            <a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
-        </nav>
-    </aside>
+		<nav class="sidebar-menu">
+			<a th:href="@{/teacher-dashboard}"><i class="bi bi-speedometer2"></i><span> Dashboard </span></a>
+			<a th:href="@{/teacher-course}" class="active"><i class="bi bi-journal-text"></i><span>Course
+					Management</span></a>
+			<a th:href="@{/teacher-creates-course}"><i class="bi bi-journal-plus"></i><span>Create Course</span></a>
+			<a th:href="@{/teacher-activity}"><i class="bi bi-pencil-square"></i><span>Genereal Activities</span></a>
+			<a th:href="@{/teacher-students}"><i class="bi bi-people"></i><span>Students</span></a>
+			<a th:href="@{/teacher-communication}"><i class="bi bi-chat-dots"></i><span>Communication</span></a>
+			<a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback & Ratings</span></a>
+			<a th:href="@{/teacher-profile}"><i class="bi bi-gear"></i><span>Profile</span></a>
+			<a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+		</nav>
+	</aside>
 
-    <!-- ===== MAIN CONTENT ===== -->
-    <main class="main-content">
+	<!-- ===== MAIN CONTENT ===== -->
+	<main class="main-content">
 
-        <header class="top-header">
-            <div class="header-left">
-                <button class="sidebar-toggle" id="sidebarToggle">
-                    <i class="bi bi-list"></i>
-                </button>
+		<header class="top-header">
+			<div class="header-left">
+				<button class="sidebar-toggle" id="sidebarToggle">
+					<i class="bi bi-list"></i>
+				</button>
 
-                <span class="page-title">Course Management</span>
-            </div>
-            <div class="header-right">
-                <div class="profile-trigger" id="profileToggle">
-                    <span th:text="${teacher.firstname + ' ' + teacher.lastname}">
-                        Dishank
-                    </span>
-                    <div class="avatar">
-                        <i class="bi bi-person-fill"></i>
-                    </div>
-                    <i class="bi bi-caret-down-fill"></i>
-                </div>
-                <div class="profile-dropdown" id="profileDropdown">
-                    <a th:href="@{/teacher-profile}">Profile</a>
-                    <a href="@{/logout}">Logout</a>
-                </div>
-            </div>
-        </header>
+				<span class="page-title">Course Management</span>
+			</div>
+			<div class="header-right">
+				<div class="profile-trigger" id="profileToggle">
+					<span th:text="${teacher.firstname + ' ' + teacher.lastname}">
+						Dishank
+					</span>
+					<div class="avatar">
+						<i class="bi bi-person-fill"></i>
+					</div>
+					<i class="bi bi-caret-down-fill"></i>
+				</div>
+				<div class="profile-dropdown" id="profileDropdown">
+					<a th:href="@{/teacher-profile}">Profile</a>
+					<a href="@{/logout}">Logout</a>
+				</div>
+			</div>
+		</header>
 
-        <hr class="header-divider">
+		<hr class="header-divider">
+		<div th:if="${teacher.status.name() == 'SUSPENDED'}" class="status-banner suspended">
+			⚠ Your account is suspended by admin.
+			Course creation, publishing, announcements and uploads are disabled.
+		</div>
 
-        <!-- SEARCH -->
-        <div class="top-bar">
-            <div class="search-box">
-                <i class="bi bi-search"></i>
-                <input type="text" placeholder="Search courses...">
-            </div>
+		<div th:if="${teacher.status.name() == 'BLOCKED'}" class="status-banner blocked">
+			🚫 Your account has been blocked by admin.
+			All teaching activities are disabled. Please contact admin.
+		</div>
+		<!-- SEARCH -->
+		<div class="top-bar">
+			<div class="search-box">
+				<i class="bi bi-search"></i>
+				<input type="text" placeholder="Search courses...">
+			</div>
 
-            <select>
-                <option>All</option>
-                <option>Published</option>
-                <option>Draft</option>
-            </select>
+			<select>
+				<option>All</option>
+				<option>Published</option>
+				<option>Draft</option>
+			</select>
 
-            <a th:href="@{/teacher-creates-course}" class="btn">
-                <i class="bi bi-plus-lg"></i> Create Course
-            </a>
-        </div>
+			<a th:href="@{/teacher-creates-course}" class="btn">
+				<i class="bi bi-plus-lg"></i> Create Course
+			</a>
+		</div>
 
-        <div class="course-grid">
+		<div class="course-grid">
 
-            <!-- COURSE CARD -->
-            <div class="course-card" th:each="course : ${courses} ">
-                <div class="course-thumb">
-                    <img th:if="${course.thumbnailURL != null}" th:src="${course.thumbnailURL}" 
-                    style="width:100%; height:100%; object-fit:cover;">
-                    <span th:if="${course.thumbnailURL == null}"> 📘 </span>
-                </div>
+			<!-- COURSE CARD -->
+			<div class="course-card" th:each="course : ${courses} ">
+				<div class="course-thumb">
+					<img th:if="${course.thumbnailURL != null}" th:src="${course.thumbnailURL}"
+						style="width:100%; height:100%; object-fit:cover;">
+					<span th:if="${course.thumbnailURL == null}"> 📘 </span>
+				</div>
 
-                <div class="course-body">
-                    <div class="course-header">
-                        <div class="course-title" th:text="${course.title}"> </div>
-                        
-                       <span class="badge"
-      th:classappend="${course.status.name().toLowerCase()}"
-      th:text="${course.status}">
-</span>
-</div>
+				<div class="course-body">
+					<div class="course-header">
+						<div class="course-title" th:text="${course.title}"> </div>
 
-                    <div class="course-meta">
-                        <span><i class="bi bi-people"></i> 620</span>
-                        <span>
-                        <i class="bi bi-currency-rupee"></i>
-                        <span  th:text="${course.type.name() == 'free' ? 'Free' : course.price}"></span>
-                        </span>
-                        
-                        <span th:text="${course.type}"></span>
-                    </div>
+						<span class="badge" th:classappend="${course.status.name().toLowerCase()}"
+							th:text="${course.status}">
+						</span>
+					</div>
 
-                    <div class="course-actions">
-                      <a th:href="@{/teacher-course/edit/{id}(id=${course.courseId})}"
-   th:text="${course.status.name() == 'DRAFT' ? 'Continue' : 'Edit'}"
-   th:class="${course.status.name() == 'DRAFT' ? 'continue' : 'edit'}">
-</a>
-  
-                        <a th:if="${course.status.name() == 'PUBLISHED'}"
-                        class="analytics" >Analytics</a>
-                        
-                        <form th:action="@{/teacher-course/delete/{id}(id=${course.courseId})}" method="post" 
-                        onsubmit="return confirm('Are you sure you want to delete this course?');"> 
-                        <button type="submit" class="delete">Delete </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+					<div class="course-meta">
+						<span><i class="bi bi-people"></i> 620</span>
+						<span>
+							<i class="bi bi-currency-rupee"></i>
+							<span th:text="${course.type.name() == 'free' ? 'Free' : course.price}"></span>
+						</span>
 
-            <!-- DRAFT COURSE -->
+						<span th:text="${course.type}"></span>
+					</div>
 
-        </div>
+					<div class="course-actions">
+						<a th:href="@{/teacher-course/edit/{id}(id=${course.courseId})}"
+							th:text="${course.status.name() == 'DRAFT' ? 'Continue' : 'Edit'}"
+							th:class="${course.status.name() == 'DRAFT' ? 'continue' : 'edit'}">
+						</a>
+
+						<a th:if="${course.status.name() == 'PUBLISHED'}" class="analytics">Analytics</a>
+
+						<form th:action="@{/teacher-course/delete/{id}(id=${course.courseId})}" method="post"
+							onsubmit="return confirm('Are you sure you want to delete this course?');">
+							<button type="submit" class="delete">Delete </button>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<!-- DRAFT COURSE -->
+
+		</div>
 
 
-       
-    <div class="empty-state" th:if="${#lists.isEmpty(courses)}">
 
-        <div class="empty-icon">
-            <i class="bi bi-journal-plus"></i>
-        </div>
+		<div class="empty-state" th:if="${#lists.isEmpty(courses)}">
 
-        <h2>No courses yet</h2>
+			<div class="empty-icon">
+				<i class="bi bi-journal-plus"></i>
+			</div>
 
-        <p>
-            You haven’t created any courses yet.<br>
-            Start by creating your first course and share your knowledge.
-        </p>
+			<h2>No courses yet</h2>
 
-        <a th:href="@{/teacher-creates-course}" class="btn btn-primary">
-            <i class="bi bi-plus-lg"></i> Create Your First Course
-        </a>
+			<p>
+				You haven’t created any courses yet.<br>
+				Start by creating your first course and share your knowledge.
+			</p>
 
-    </div>
+			<a th:href="@{/teacher-creates-course}" class="btn btn-primary">
+				<i class="bi bi-plus-lg"></i> Create Your First Course
+			</a>
 
-    </main>
+		</div>
 
-    <script>
-        const toggleBtn = document.getElementById("sidebarToggle");
-        const sidebar = document.querySelector(".sidebar");
-        const body = document.body;
+	</main>
 
-        toggleBtn.addEventListener("click", () => {
-            sidebar.classList.toggle("collapsed");
-            body.classList.toggle("sidebar-collapsed");
-        });
-    </script>
+	<script>
+		const toggleBtn = document.getElementById("sidebarToggle");
+		const sidebar = document.querySelector(".sidebar");
+		const body = document.body;
+
+		toggleBtn.addEventListener("click", () => {
+			sidebar.classList.toggle("collapsed");
+			body.classList.toggle("sidebar-collapsed");
+		});
+	</script>
 
 </body>
 

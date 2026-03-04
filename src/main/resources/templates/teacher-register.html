@@ -3,573 +3,631 @@
 
 
 <head>
-  <meta charset="UTF-8">
-  <title>EduPlatform Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
+	<title>EduPlatform Login</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Google Font : Poppins -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+	<!-- Google Font : Poppins -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet">
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js">  </script>
-  
- <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js">  </script>
 
-<style>
-:root {
-      --primary: #f6a623;
-      --primary-light: #fff3c4;
-      --dark: #2f2f55;
-      --muted: #555;
-      --bg: #fdfdf8;
-    }
-/* ================= FONT ================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-}
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
 
-body, html {
-  height: 100%;
-}
+	<style>
+		:root {
+			--primary: #f6a623;
+			--primary-light: #fff3c4;
+			--dark: #2f2f55;
+			--muted: #555;
+			--bg: #fdfdf8;
+		}
 
-/* ================= BACKGROUND ================= */
-.container-login {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff3c4; 
-  padding: 15px;
-}
+		/* ================= FONT ================= */
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: "Poppins", sans-serif;
+		}
 
-/* ================= CARD ================= */
-.login-box {
-  background: #fff; /* white card like homepage */
-  border-radius: 22px;
-  width: 900px;
-  display: flex;
-  padding: 120px 100px 40px;
-  justify-content: space-between;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-  transition: 0.3s;
-}
+		body,
+		html {
+			height: 100%;
+		}
 
-.login-box:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 25px 60px rgba(0,0,0,0.12);
-}
+		/* ================= BACKGROUND ================= */
+		.container-login {
+			min-height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #fff3c4;
+			padding: 15px;
+		}
 
-/* ================= IMAGE ================= */
-.login-img {
-  width: 320px;
-}
-.login-img img {
-  width: 100%;
-  border-radius: 12px;
-}
+		/* ================= CARD ================= */
+		.login-box {
+			background: #fff;
+			/* white card like homepage */
+			border-radius: 22px;
+			width: 900px;
+			display: flex;
+			padding: 120px 100px 40px;
+			justify-content: space-between;
+			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+			transition: 0.3s;
+		}
 
-/* ================= FORM ================= */
-.login-form {
-  width: 300px;
-}
+		.login-box:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+		}
 
-.login-title {
-  text-align: center;
-  font-size: 26px;
-  font-weight: 700;
-  margin-bottom: 50px;
-  color: #f6a623; 
-}
+		/* ================= IMAGE ================= */
+		.login-img {
+			width: 320px;
+		}
 
-/* ================= INPUT ================= */
-.input-wrap {
-  position: relative;
-  margin-bottom: 15px;
-}
+		.login-img img {
+			width: 100%;
+			border-radius: 12px;
+		}
 
-.input-wrap input {
-  width: 100%;
-  height: 50px;
-  border-radius: 25px;
-  background: #fff3c4; /* homepage input light accent */
-  padding-left: 60px;
-  font-size: 15px;
-  border: 1px solid #f6a623;
-  color: #333;
-}
+		/* ================= FORM ================= */
+		.login-form {
+			width: 300px;
+		}
 
-.input-wrap i {
-  position: absolute;
-  top: 50%;
-  left: 25px;
-  transform: translateY(-50%);
-  color: #f6a623; /* homepage accent icon color */
-}
+		.login-title {
+			text-align: center;
+			font-size: 26px;
+			font-weight: 700;
+			margin-bottom: 50px;
+			color: #f6a623;
+		}
 
-/* ================= BUTTON ================= */
-.login-btn {
-  width: 100%;
-  height: 50px;
-  border-radius: 25px;
-  background: linear-gradient(135deg, #f6a623, #ffb347); /* homepage gradient */
-  color: #fff;
-  font-weight: 700;
-  font-size: 15px;
-  border: none;
-  transition: 0.3s;
-}
+		/* ================= INPUT ================= */
+		.input-wrap {
+			position: relative;
+			margin-bottom: 15px;
+		}
 
-.login-btn:hover {
-  background: linear-gradient(135deg, #ffb347, #f6a623);
-}
+		.input-wrap input {
+			width: 100%;
+			height: 50px;
+			border-radius: 25px;
+			background: #fff3c4;
+			/* homepage input light accent */
+			padding-left: 60px;
+			font-size: 15px;
+			border: 1px solid #f6a623;
+			color: #333;
+		}
 
-/* ================= LINKS ================= */
-.text-center {
-  text-align: center;
-  margin-top: 15px;
-}
+		.input-wrap i {
+			position: absolute;
+			top: 50%;
+			left: 25px;
+			transform: translateY(-50%);
+			color: #f6a623;
+			/* homepage accent icon color */
+		}
 
-.text-center a {
-  color: #f6a623;
-  font-size: 13px;
-  text-decoration: none;
-  font-weight: 500;
-}
+		/* ================= BUTTON ================= */
+		.login-btn {
+			width: 100%;
+			height: 50px;
+			border-radius: 25px;
+			background: linear-gradient(135deg, #f6a623, #ffb347);
+			/* homepage gradient */
+			color: #fff;
+			font-weight: 700;
+			font-size: 15px;
+			border: none;
+			transition: 0.3s;
+		}
 
-.text-center a:hover {
-  text-decoration: underline;
-}
+		.login-btn:hover {
+			background: linear-gradient(135deg, #ffb347, #f6a623);
+		}
 
-/* ================= VALIDATION ================= */
-.alert-validate::after {
-  content: "\f06a";
-  font-family: FontAwesome;
-  position: absolute;
-  right: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: red;
-}
+		/* ================= LINKS ================= */
+		.text-center {
+			text-align: center;
+			margin-top: 15px;
+		}
 
-/* ================= HOME BUTTON ================= */
-.home-btn {
-    position: fixed;
-    top: 10px;
-    right: 20px;
-    background: #fff;
-    color: #f6a623;
-    padding: 10px 18px;
-    border-radius: 30px;
-    font-weight: 600;
-    font-size: 16px;
-    text-decoration: none;
-    border: 2px solid #f6a623;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: 0.3s ease-in-out;
-}
+		.text-center a {
+			color: #f6a623;
+			font-size: 13px;
+			text-decoration: none;
+			font-weight: 500;
+		}
 
-.home-btn:hover {
-    background: linear-gradient(135deg, #f6a623, #ffb347);
-    color: #fff;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-}
+		.text-center a:hover {
+			text-decoration: underline;
+		}
+
+		/* ================= VALIDATION ================= */
+		.alert-validate::after {
+			content: "\f06a";
+			font-family: FontAwesome;
+			position: absolute;
+			right: 15px;
+			top: 50%;
+			transform: translateY(-50%);
+			color: red;
+		}
+
+		/* ================= HOME BUTTON ================= */
+		.home-btn {
+			position: fixed;
+			top: 10px;
+			right: 20px;
+			background: #fff;
+			color: #f6a623;
+			padding: 10px 18px;
+			border-radius: 30px;
+			font-weight: 600;
+			font-size: 16px;
+			text-decoration: none;
+			border: 2px solid #f6a623;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			transition: 0.3s ease-in-out;
+		}
+
+		.home-btn:hover {
+			background: linear-gradient(135deg, #f6a623, #ffb347);
+			color: #fff;
+			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+		}
 
 
 
-/* ================= FOOTER ================= */
-footer {
-  background: #2e3440;
-  padding: 40px 80px 20px;
-  border-top: 1px solid #eee;
-  font-family: "Poppins", sans-serif;
-  color: #cfd8dc;
-}
+		/* ================= FOOTER ================= */
+		footer {
+			background: #2e3440;
+			padding: 40px 80px 20px;
+			border-top: 1px solid #eee;
+			font-family: "Poppins", sans-serif;
+			color: #cfd8dc;
+		}
 
-.footer-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-  margin-bottom: 30px;
-}
+		.footer-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 40px;
+			margin-bottom: 30px;
+		}
 
-.footer-grid h4 {
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 15px;
-}
+		.footer-grid h4 {
+			font-size: 18px;
+			font-weight: 600;
+			color: #fff;
+			margin-bottom: 15px;
+		}
 
-.footer-grid p {
-  font-size: 14px;
-  color: #cfd8dc;
-  margin-bottom: 8px;
-  cursor: pointer;
-  transition: 0.3s;
-}
+		.footer-grid p {
+			font-size: 14px;
+			color: #cfd8dc;
+			margin-bottom: 8px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
 
-.footer-grid p:hover {
-  color: #f6a623;
-}
+		.footer-grid p:hover {
+			color: #f6a623;
+		}
 
-footer .copy {
-  text-align: center;
-  font-size: 13px;
-  color: #b0bec5;
-  border-top: 1px solid #424857;
-  padding-top: 15px;
-}
+		footer .copy {
+			text-align: center;
+			font-size: 13px;
+			color: #b0bec5;
+			border-top: 1px solid #424857;
+			padding-top: 15px;
+		}
 
-/* ================= FOOTER RESPONSIVE ================= */
-@media (max-width: 768px) {
-  footer {
-    padding: 30px 20px;
-  }
+		/* ================= FOOTER RESPONSIVE ================= */
+		@media (max-width: 768px) {
+			footer {
+				padding: 30px 20px;
+			}
 
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 25px;
-    text-align: center;
-  }
-}
- header {
-      display:flex; justify-content:space-between; align-items:center;
-      padding: 20px 80px;
-      background: var(--primary);
-    }
-    .logo { font-size:26px; font-weight:700; color:white; }
-    nav { display:flex; gap:35px; }
-    nav a { text-decoration:none; color:white; font-weight:500; position:relative; }
-    nav a::after { content:""; position:absolute; width:0; height:2px; background:var(--primary-light); left:0; bottom:-6px; transition:0.3s; }
-    nav a:hover::after { width:100%; }
-    .roles { display:flex; gap:10px; }
-    .role-btn {
-      padding:8px 18px; border-radius:25px; border:none; font-weight:600; cursor:pointer; transition:0.3s;
-    }
-    .student { background:white; color:var(--primary); }
-    .teacher { background:var(--primary-light); color:var(--dark); }
-    .admin { background:#2f2f55; color:white; }
-    .role-btn:hover { transform:translateY(-2px); }
+			.footer-grid {
+				grid-template-columns: 1fr;
+				gap: 25px;
+				text-align: center;
+			}
+		}
 
-/* ================= PHONE INPUT FINAL FIX ================= */
-.phone-group {
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: #fff3c4;
-  border: 1px solid #f6a623;
-  border-radius: 25px;
-  height: 50px;
-  padding-left: 45px; /* space for icon */
-  padding-right: 15px;
-}
+		header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px 80px;
+			background: var(--primary);
+		}
 
-/* Phone Icon */
-.phone-group i {
-  position: absolute;
-  left: 18px;
-  color: #f6a623;
-  font-size: 16px;
-  pointer-events: none;
-}
+		.logo {
+			font-size: 26px;
+			font-weight: 700;
+			color: white;
+		}
 
-/* Country Code */
-.phone-group .country-code {
-  border: none;
-  background: transparent;
-  font-size: 14px;
-  font-weight: 500;
-  color: #333;
-  outline: none;
-  margin-right: 12px;
-  cursor: pointer;
-}
+		nav {
+			display: flex;
+			gap: 35px;
+		}
 
-/* Mobile Number */
-.phone-group input {
-  border: none;
-  background: transparent;
-  height: 100%;
-  font-size: 15px;
-  flex: 1;
-  outline: none;
-  padding-left: 0;
-}
+		nav a {
+			text-decoration: none;
+			color: white;
+			font-weight: 500;
+			position: relative;
+		}
 
-/* Remove inner borders */
-.phone-group select,
-.phone-group input {
-  box-shadow: none;
-}
-/* ================= RESPONSIVE FIXES ================= */
+		nav a::after {
+			content: "";
+			position: absolute;
+			width: 0;
+			height: 2px;
+			background: var(--primary-light);
+			left: 0;
+			bottom: -6px;
+			transition: 0.3s;
+		}
 
-/* ---------- Tablets (<= 992px) ---------- */
-@media (max-width: 992px) {
+		nav a:hover::after {
+			width: 100%;
+		}
 
-  .login-box {
-    width: 100%;
-    padding: 80px 60px 40px;
-  }
+		.roles {
+			display: flex;
+			gap: 10px;
+		}
 
-  header {
-    padding: 15px 40px;
-  }
+		.role-btn {
+			padding: 8px 18px;
+			border-radius: 25px;
+			border: none;
+			font-weight: 600;
+			cursor: pointer;
+			transition: 0.3s;
+		}
 
-  nav {
-    gap: 20px;
-  }
-}
+		.student {
+			background: white;
+			color: var(--primary);
+		}
 
-/* ---------- Mobile (<= 768px) ---------- */
-@media (max-width: 768px) {
+		.teacher {
+			background: var(--primary-light);
+			color: var(--dark);
+		}
 
-  /* Header */
-  header {
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px 20px;
-    text-align: center;
-  }
+		.admin {
+			background: #2f2f55;
+			color: white;
+		}
 
-  nav {
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-  }
+		.role-btn:hover {
+			transform: translateY(-2px);
+		}
 
-  .roles {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
+		/* ================= PHONE INPUT FINAL FIX ================= */
+		.phone-group {
+			position: relative;
+			display: flex;
+			align-items: center;
+			background: #fff3c4;
+			border: 1px solid #f6a623;
+			border-radius: 25px;
+			height: 50px;
+			padding-left: 45px;
+			/* space for icon */
+			padding-right: 15px;
+		}
 
-  /* Card */
-  .container-login {
-    padding: 20px 10px;
-  }
+		/* Phone Icon */
+		.phone-group i {
+			position: absolute;
+			left: 18px;
+			color: #f6a623;
+			font-size: 16px;
+			pointer-events: none;
+		}
 
-  .login-box {
-    width: 100%;
-    padding: 50px 25px 35px;
-    border-radius: 18px;
-  }
+		/* Country Code */
+		.phone-group .country-code {
+			border: none;
+			background: transparent;
+			font-size: 14px;
+			font-weight: 500;
+			color: #333;
+			outline: none;
+			margin-right: 12px;
+			cursor: pointer;
+		}
 
-  .login-title {
-    font-size: 22px;
-    margin-bottom: 35px;
-  }
+		/* Mobile Number */
+		.phone-group input {
+			border: none;
+			background: transparent;
+			height: 100%;
+			font-size: 15px;
+			flex: 1;
+			outline: none;
+			padding-left: 0;
+		}
 
-  /* Inputs */
-  .input-wrap input {
-    height: 48px;
-    font-size: 14px;
-  }
+		/* Remove inner borders */
+		.phone-group select,
+		.phone-group input {
+			box-shadow: none;
+		}
 
-  /* Phone group */
-  .phone-group {
-    height: 48px;
-    padding-left: 42px;
-  }
+		/* ================= RESPONSIVE FIXES ================= */
 
-  .phone-group .country-code {
-    font-size: 13px;
-    margin-right: 8px;
-  }
+		/* ---------- Tablets (<= 992px) ---------- */
+		@media (max-width: 992px) {
 
-  .phone-group input {
-    font-size: 14px;
-  }
+			.login-box {
+				width: 100%;
+				padding: 80px 60px 40px;
+			}
 
-  .phone-group i {
-    left: 16px;
-    font-size: 15px;
-  }
+			header {
+				padding: 15px 40px;
+			}
 
-  /* Button */
-  .login-btn {
-    height: 48px;
-    font-size: 14px;
-  }
+			nav {
+				gap: 20px;
+			}
+		}
 
-  /* Footer */
-  footer {
-    padding: 30px 20px;
-  }
+		/* ---------- Mobile (<= 768px) ---------- */
+		@media (max-width: 768px) {
 
-  .footer-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-    text-align: center;
-  }
-}
+			/* Header */
+			header {
+				flex-direction: column;
+				gap: 15px;
+				padding: 15px 20px;
+				text-align: center;
+			}
 
-/* ---------- Small Phones (<= 480px) ---------- */
-@media (max-width: 480px) {
+			nav {
+				flex-wrap: wrap;
+				justify-content: center;
+				gap: 15px;
+			}
 
-  .login-title {
-    font-size: 20px;
-  }
+			.roles {
+				justify-content: center;
+				flex-wrap: wrap;
+			}
 
-  .input-wrap {
-    margin-bottom: 12px;
-  }
+			/* Card */
+			.container-login {
+				padding: 20px 10px;
+			}
 
-  .phone-group .country-code {
-    max-width: 70px;
-  }
+			.login-box {
+				width: 100%;
+				padding: 50px 25px 35px;
+				border-radius: 18px;
+			}
 
-  nav a {
-    font-size: 14px;
-  }
+			.login-title {
+				font-size: 22px;
+				margin-bottom: 35px;
+			}
 
-  .role-btn {
-    font-size: 13px;
-    padding: 6px 14px;
-  }
-}
+			/* Inputs */
+			.input-wrap input {
+				height: 48px;
+				font-size: 14px;
+			}
 
-</style>
+			/* Phone group */
+			.phone-group {
+				height: 48px;
+				padding-left: 42px;
+			}
+
+			.phone-group .country-code {
+				font-size: 13px;
+				margin-right: 8px;
+			}
+
+			.phone-group input {
+				font-size: 14px;
+			}
+
+			.phone-group i {
+				left: 16px;
+				font-size: 15px;
+			}
+
+			/* Button */
+			.login-btn {
+				height: 48px;
+				font-size: 14px;
+			}
+
+			/* Footer */
+			footer {
+				padding: 30px 20px;
+			}
+
+			.footer-grid {
+				grid-template-columns: 1fr;
+				gap: 20px;
+				text-align: center;
+			}
+		}
+
+		/* ---------- Small Phones (<= 480px) ---------- */
+		@media (max-width: 480px) {
+
+			.login-title {
+				font-size: 20px;
+			}
+
+			.input-wrap {
+				margin-bottom: 12px;
+			}
+
+			.phone-group .country-code {
+				max-width: 70px;
+			}
+
+			nav a {
+				font-size: 14px;
+			}
+
+			.role-btn {
+				font-size: 13px;
+				padding: 6px 14px;
+			}
+		}
+	</style>
 </head>
 
 <body>
- <header>
-    <div class="logo">EduPlatform</div>
-    <nav>
-      <a th:href="@{/teacher-homepage}">Home</a>
-      <a th:href="@{/teacher_about}">About</a>
-      <a th:href="@{/teacher-privacy}">Privacy</a>
-    </nav>
-    <div class="roles">
-      <button class="role-btn student" th:onclick="|location.href='@{index}'|">Student</button>
-      <button class="role-btn teacher" th:onclick="|location.href='@{teacher-auth}'|">Teacher</button>
-      <button class="role-btn admin" th:onclick="|location.href='@{admin-homepage}'|">Admin</button>
-    </div>
-  </header>
-<div class="container-login">
-  <div class="login-box">
-    
-    <div class="login-img js-tilt">
-      <img th:src="@{/images/img-01.png}" alt="login">
-    </div>
-<form th:action="@{/teacher-auth}" 
-      method="post" 
-      th:object="${teacher}"
-      class="login-form validate-form">
+	<header>
+		<div class="logo">EduPlatform</div>
+		<nav>
+			<a th:href="@{/teacher-homepage}">Home</a>
+			<a th:href="@{/teacher_about}">About</a>
+			<a th:href="@{/teacher-privacy}">Privacy</a>
+		</nav>
+		<div class="roles">
+			<button class="role-btn student" th:onclick="|location.href='@{index}'|">Student</button>
+			<button class="role-btn teacher" th:onclick="|location.href='@{teacher-auth}'|">Teacher</button>
+			<button class="role-btn admin" th:onclick="|location.href='@{admin-homepage}'|">Admin</button>
+		</div>
+	</header>
+	<div class="container-login">
+		<div class="login-box">
 
-  <div class="login-title">Teacher Sign Up</div>
-  
-  <!-- ERROR MESSAGE -->
-<div th:if="${error}" 
-     style="background:#ffe6e6; 
+			<div class="login-img js-tilt">
+				<img th:src="@{/images/img-01.png}" alt="login">
+			</div>
+			<form th:action="@{/teacher-auth}" method="post" th:object="${teacher}" class="login-form validate-form">
+
+				<div class="login-title">Teacher Sign Up</div>
+
+				<!-- ERROR MESSAGE -->
+				<div th:if="${error}" style="background:#ffe6e6; 
             color:#b30000; 
             padding:10px 15px; 
             border-radius:8px; 
             margin-bottom:15px;
             font-size:14px;">
-    <i class="fa fa-exclamation-circle"></i>
-    <span th:text="${error}"></span>
-</div>
-  
-
-  <div class="input-wrap validate-input">
-    <input type="text" th:field="*{firstname}" placeholder="Enter First Name" required>
-    <i class="fa fa-user"></i>
-  </div>
-
-  <div class="input-wrap validate-input">
-    <input type="text" th:field="*{lastname}" placeholder="Enter Last Name" required>
-    <i class="fa fa-user-o"></i>
-  </div>
-
-  <div class="input-wrap validate-input phone-group">
-    <select th:field="*{countryCode}" class="country-code" required>
-      <option value="+91">🇮🇳 +91</option>
-      <option value="+1">🇺🇸 +1</option>
-      <option value="+44">🇬🇧 +44</option>
-      <option value="+61">🇦🇺 +61</option>
-      <option value="+81">🇯🇵 +81</option>
-      <option value="+971">🇦🇪 +971</option>
-    </select>
-
-    <input type="tel"
-           th:field="*{phoneno}"
-           placeholder="Enter Mobile Number"
-           maxlength="10"
-           pattern="[0-9]{6,15}"
-           required>
-    <i class="fa fa-phone"></i>
-  </div>
-
-  <div class="input-wrap validate-input">
-    <input type="email" th:field="*{email}" placeholder="Enter Email" required>
-    <i class="fa fa-envelope"></i>
-  </div>
-
-  <div class="input-wrap validate-input">
-    <input type="password" th:field="*{password}" placeholder="Create Password" required>
-    <i class="fa fa-lock"></i>
-  </div>
-
-  <button class="login-btn">Create Account</button>
-
-  <div class="text-center" style="margin-top:20px;">
-    <a th:href="@{teacher-auth}">Already have an account? Sign In</a>
-  </div>
-
-</form>
+					<i class="fa fa-exclamation-circle"></i>
+					<span th:text="${error}"></span>
+				</div>
 
 
-  </div>
-</div>
+				<div class="input-wrap validate-input">
+					<input type="text" th:field="*{firstname}" placeholder="Enter First Name" required>
+					<i class="fa fa-user"></i>
+				</div>
 
-   <footer>
-        <div class="footer-grid">
-            <div>
-                <h4>EduPlatform</h4>
-                <p>Empowering educators worldwide.</p>
-            </div>
+				<div class="input-wrap validate-input">
+					<input type="text" th:field="*{lastname}" placeholder="Enter Last Name" required>
+					<i class="fa fa-user-o"></i>
+				</div>
 
-            <div>
-                <h4>Teacher Panel</h4>
-                <p>Dashboard</p>
-                <p>Create Course</p>
-                <p>Analytics</p>
-            </div>
+				<div class="input-wrap validate-input phone-group">
+					<select th:field="*{countryCode}" class="country-code" required>
+						<option value="+91">🇮🇳 +91</option>
+						<option value="+1">🇺🇸 +1</option>
+						<option value="+44">🇬🇧 +44</option>
+						<option value="+61">🇦🇺 +61</option>
+						<option value="+81">🇯🇵 +81</option>
+						<option value="+971">🇦🇪 +971</option>
+					</select>
 
-            <div>
-                <h4>Support</h4>
-                <p>Help Center</p>
-                <p>Community</p>
-                <p>Policies</p>
-            </div>
-        </div>
+					<input type="tel" th:field="*{phoneno}" placeholder="Enter Mobile Number" maxlength="10"
+						pattern="[0-9]{6,15}" required>
+					<i class="fa fa-phone"></i>
+				</div>
 
-        <p class="copy">© 2025 EduPlatform — Teacher Interface</p>
-    </footer>
-<script>
-$('.js-tilt').tilt({ scale: 1.05 });
+				<div class="input-wrap validate-input">
+					<input type="email" th:field="*{email}" placeholder="Enter Email" required>
+					<i class="fa fa-envelope"></i>
+				</div>
 
-$('.validate-form').on('submit', function () {
-  let valid = true;
-  $('.validate-input input').each(function () {
-    if ($(this).val().trim() === '') {
-      $(this).parent().addClass('alert-validate');
-      valid = false;
-    }
-  });
-  return valid;
-});
+				<div class="input-wrap validate-input">
+					<input type="password" th:field="*{password}" placeholder="Create Password" required>
+					<i class="fa fa-lock"></i>
+				</div>
 
-$('.validate-input input').focus(function () {
-  $(this).parent().removeClass('alert-validate');
-});
-</script>
+				<button class="login-btn">Create Account</button>
+
+				<div class="text-center" style="margin-top:20px;">
+					<a th:href="@{teacher-auth}">Already have an account? Sign In</a>
+				</div>
+
+			</form>
+
+
+		</div>
+	</div>
+
+	<footer>
+		<div class="footer-grid">
+			<div>
+				<h4>EduPlatform</h4>
+				<p>Empowering educators worldwide.</p>
+			</div>
+
+			<div>
+				<h4>Teacher Panel</h4>
+				<p>Dashboard</p>
+				<p>Create Course</p>
+				<p>Analytics</p>
+			</div>
+
+			<div>
+				<h4>Support</h4>
+				<p>Help Center</p>
+				<p>Community</p>
+				<p>Policies</p>
+			</div>
+		</div>
+
+		<p class="copy">© 2025 EduPlatform — Teacher Interface</p>
+	</footer>
+	<script>
+		$('.js-tilt').tilt({ scale: 1.05 });
+
+		$('.validate-form').on('submit', function () {
+			let valid = true;
+			$('.validate-input input').each(function () {
+				if ($(this).val().trim() === '') {
+					$(this).parent().addClass('alert-validate');
+					valid = false;
+				}
+			});
+			return valid;
+		});
+
+		$('.validate-input input').focus(function () {
+			$(this).parent().removeClass('alert-validate');
+		});
+	</script>
 
 </body>
+
 </html>

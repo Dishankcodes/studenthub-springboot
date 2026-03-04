@@ -16,6 +16,7 @@ import com.example.demo.entity.NoteCategory;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherNotes;
 import com.example.demo.enums.NoteStatus;
+import com.example.demo.enums.TeacherStatus;
 import com.example.demo.repository.LessonRepository;
 import com.example.demo.repository.NoteCategoryRepository;
 import com.example.demo.repository.TeacherNotesRepository;
@@ -110,6 +111,14 @@ public class TeacherUploadController {
 		// Integer teacherId = (Integer) session.getAttribute("teacherId");
 		Integer teacherId = 1;
 		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+
+		if (teacher.getStatus() == TeacherStatus.BLOCKED) {
+		    return "redirect:/teacher-activity?error=blocked";
+		}
+
+		if (teacher.getStatus() == TeacherStatus.SUSPENDED) {
+		    return "redirect:/teacher-activity?error=suspended";
+		}
 
 		NoteCategory category = categoryRepo.findById(categoryId).orElseThrow();
 

@@ -45,7 +45,7 @@ public class TeachLoginController {
 		teacherRepo.save(teacher);
 		return "redirect:/teacher-auth";
 
-	}
+	}	
 
 	@PostMapping("/teacher-dashboard")
 	public String loginTeacher(@RequestParam String email, Model model) {

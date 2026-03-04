@@ -177,6 +177,25 @@
 		.course-summary strong {
 			font-size: 18px;
 		}
+
+		.status-banner {
+			margin-bottom: 20px;
+			padding: 16px;
+			border-radius: 8px;
+			font-weight: 500;
+		}
+
+		.status-banner.suspended {
+			background: #fff3cd;
+			color: #856404;
+			border-left: 6px solid #ffc107;
+		}
+
+		.status-banner.blocked {
+			background: #f8d7da;
+			color: #721c24;
+			border-left: 6px solid #dc3545;
+		}
 	</style>
 </head>
 
@@ -236,6 +255,17 @@
 
 		<div class="dashboard">
 
+			<div th:if="${teacherStatus == T(com.example.demo.enums.TeacherStatus).SUSPENDED}"
+				class="status-banner suspended">
+				⚠ Your account is suspended by admin.
+				Some actions like course publishing, announcements and uploads are disabled.
+			</div>
+
+			<div th:if="${teacherStatus == T(com.example.demo.enums.TeacherStatus).BLOCKED}"
+				class="status-banner blocked">
+				🚫 Your account has been blocked by admin.
+				You cannot perform any activity. Please contact support.
+			</div>
 			<!-- PLATFORM OVERVIEW -->
 			<div class="section-title">
 				<i class="bi bi-globe"></i> Platform Overview

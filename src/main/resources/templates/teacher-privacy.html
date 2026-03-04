@@ -1,212 +1,366 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teacher Privacy Policy | EduPlatform</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Teacher Privacy Policy | EduPlatform</title>
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --primary: #f6a623;
-      --primary-light: #fff3c4;
-      --dark: #2f2f55;
-      --muted: #555;
-      --bg: #fdfdf8;
-    }
+	<style>
+		:root {
+			--primary: #f6a623;
+			--primary-light: #fff3c4;
+			--dark: #2f2f55;
+			--muted: #555;
+			--bg: #fdfdf8;
+		}
 
-    * { margin:0; padding:0; box-sizing:border-box; font-family:"Poppins",sans-serif; }
-    body { background: var(--bg); color: var(--dark); line-height:1.7; }
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: "Poppins", sans-serif;
+		}
 
-    /* NAVBAR */
-    header {
-      display:flex; justify-content:space-between; align-items:center;
-      padding: 20px 80px;
-      background: var(--primary);
-    }
-    .logo { font-size:26px; font-weight:700; color:white; }
-    nav { display:flex; gap:35px; }
-    nav a { text-decoration:none; color:white; font-weight:500; position:relative; }
-    nav a::after { content:""; position:absolute; width:0; height:2px; background:var(--primary-light); left:0; bottom:-6px; transition:0.3s; }
-    nav a:hover::after { width:100%; }
-    .roles { display:flex; gap:10px; }
-    .role-btn {
-      padding:8px 18px; border-radius:25px; border:none; font-weight:600; cursor:pointer; transition:0.3s;
-    }
-    .student { background:white; color:var(--primary); }
-    .teacher { background:var(--primary-light); color:var(--dark); }
-    .admin { background:#2f2f55; color:white; }
-    .role-btn:hover { transform:translateY(-2px); }
+		body {
+			background: var(--bg);
+			color: var(--dark);
+			line-height: 1.7;
+		}
 
-    /* HERO */
-    .hero {
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      padding:120px 20px 80px;
-      background: linear-gradient(135deg,#f6a623,#ffb347);
-      border-bottom-left-radius:100px;
-      border-bottom-right-radius:100px;
-      color:white;
-    }
-    .hero h1 { font-size:48px; margin-bottom:15px; }
-    .hero p { font-size:20px; opacity:0.9; }
+		/* NAVBAR */
+		header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px 80px;
+			background: var(--primary);
+		}
 
-    /* MAIN CONTENT CARDS */
-    .content { width:90%; max-width:1000px; margin:60px auto; display:grid; gap:30px; }
-    .card {
-      background:white; padding:30px 25px; border-radius:20px; box-shadow:0 15px 40px rgba(0,0,0,0.08);
-      transition:0.3s;
-    }
-    .card:hover { transform:translateY(-5px); box-shadow:0 25px 60px rgba(0,0,0,0.12); }
-    .card h2 { color: var(--primary); font-size:22px; margin-bottom:12px; }
-    .card p, .card ul li { font-size:16px; color:var(--muted); line-height:1.8; }
-    .card ul { padding-left:20px; }
+		.logo {
+			font-size: 26px;
+			font-weight: 700;
+			color: white;
+		}
 
-    .note {
-      padding:15px 20px; border-left:4px solid var(--primary); background:#fff8e6; border-radius:10px;
-      font-style:italic; font-size:14px; color:var(--muted);
-    }
+		nav {
+			display: flex;
+			gap: 35px;
+		}
 
-    /* FOOTER */
-    footer {
-      background:#2e3440; padding:50px 80px 25px; color:#cfd8dc;
-    }
-    .footer-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:40px; margin-bottom:30px; }
-    footer h4 { color:white; margin-bottom:12px; }
-    footer p { font-size:14px; cursor:pointer; transition:0.3s; }
-    footer p:hover { color: var(--primary); }
-    .copy { text-align:center; font-size:13px; opacity:0.7; border-top:1px solid #444; padding-top:15px; }
+		nav a {
+			text-decoration: none;
+			color: white;
+			font-weight: 500;
+			position: relative;
+		}
 
-    @media(max-width:768px){
-      header { flex-direction:column; gap:12px; padding:15px 20px; }
-      nav { flex-direction:column; gap:12px; }
-      .hero h1 { font-size:32px; }
-      .content { width:95%; margin:40px auto; }
-    }
-  </style>
+		nav a::after {
+			content: "";
+			position: absolute;
+			width: 0;
+			height: 2px;
+			background: var(--primary-light);
+			left: 0;
+			bottom: -6px;
+			transition: 0.3s;
+		}
+
+		nav a:hover::after {
+			width: 100%;
+		}
+
+		.roles {
+			display: flex;
+			gap: 10px;
+		}
+
+		.role-btn {
+			padding: 8px 18px;
+			border-radius: 25px;
+			border: none;
+			font-weight: 600;
+			cursor: pointer;
+			transition: 0.3s;
+		}
+
+		.student {
+			background: white;
+			color: var(--primary);
+		}
+
+		.teacher {
+			background: var(--primary-light);
+			color: var(--dark);
+		}
+
+		.admin {
+			background: #2f2f55;
+			color: white;
+		}
+
+		.role-btn:hover {
+			transform: translateY(-2px);
+		}
+
+		/* HERO */
+		.hero {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
+			padding: 120px 20px 80px;
+			background: linear-gradient(135deg, #f6a623, #ffb347);
+			border-bottom-left-radius: 100px;
+			border-bottom-right-radius: 100px;
+			color: white;
+		}
+
+		.hero h1 {
+			font-size: 48px;
+			margin-bottom: 15px;
+		}
+
+		.hero p {
+			font-size: 20px;
+			opacity: 0.9;
+		}
+
+		/* MAIN CONTENT CARDS */
+		.content {
+			width: 90%;
+			max-width: 1000px;
+			margin: 60px auto;
+			display: grid;
+			gap: 30px;
+		}
+
+		.card {
+			background: white;
+			padding: 30px 25px;
+			border-radius: 20px;
+			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+			transition: 0.3s;
+		}
+
+		.card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+		}
+
+		.card h2 {
+			color: var(--primary);
+			font-size: 22px;
+			margin-bottom: 12px;
+		}
+
+		.card p,
+		.card ul li {
+			font-size: 16px;
+			color: var(--muted);
+			line-height: 1.8;
+		}
+
+		.card ul {
+			padding-left: 20px;
+		}
+
+		.note {
+			padding: 15px 20px;
+			border-left: 4px solid var(--primary);
+			background: #fff8e6;
+			border-radius: 10px;
+			font-style: italic;
+			font-size: 14px;
+			color: var(--muted);
+		}
+
+		/* FOOTER */
+		footer {
+			background: #2e3440;
+			padding: 50px 80px 25px;
+			color: #cfd8dc;
+		}
+
+		.footer-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 40px;
+			margin-bottom: 30px;
+		}
+
+		footer h4 {
+			color: white;
+			margin-bottom: 12px;
+		}
+
+		footer p {
+			font-size: 14px;
+			cursor: pointer;
+			transition: 0.3s;
+		}
+
+		footer p:hover {
+			color: var(--primary);
+		}
+
+		.copy {
+			text-align: center;
+			font-size: 13px;
+			opacity: 0.7;
+			border-top: 1px solid #444;
+			padding-top: 15px;
+		}
+
+		@media(max-width:768px) {
+			header {
+				flex-direction: column;
+				gap: 12px;
+				padding: 15px 20px;
+			}
+
+			nav {
+				flex-direction: column;
+				gap: 12px;
+			}
+
+			.hero h1 {
+				font-size: 32px;
+			}
+
+			.content {
+				width: 95%;
+				margin: 40px auto;
+			}
+		}
+	</style>
 </head>
+
 <body>
 
-  <!-- NAVBAR -->
-  <header>
-    <div class="logo">EduPlatform</div>
-    <nav>
-      <a th:href="@{/teacher-homepage}">Home</a>
-      <a th:href="@{/teacher_about}">About</a>
-      <a th:href="@{/teacher-privacy}">Privacy</a>
-    </nav>
-    <div class="roles">
-      <button class="role-btn student" th:onclick="|location.href='@{index}'|">Student</button>
-      <button class="role-btn teacher" th:onclick="|location.href='@{teacher-auth}'|">Teacher</button>
-      <button class="role-btn admin" th:onclick="|location.href='@{admin-homepage}'|">Admin</button>
-    </div>
-  </header>
+	<!-- NAVBAR -->
+	<header>
+		<div class="logo">EduPlatform</div>
+		<nav>
+			<a th:href="@{/teacher-homepage}">Home</a>
+			<a th:href="@{/teacher_about}">About</a>
+			<a th:href="@{/teacher-privacy}">Privacy</a>
+		</nav>
+		<div class="roles">
+			<button class="role-btn student" th:onclick="|location.href='@{index}'|">Student</button>
+			<button class="role-btn teacher" th:onclick="|location.href='@{teacher-auth}'|">Teacher</button>
+			<button class="role-btn admin" th:onclick="|location.href='@{admin-homepage}'|">Admin</button>
+		</div>
+	</header>
 
-  <!-- HERO -->
-  <section class="hero">
-    <h1>Teacher Privacy Policy</h1>
-    <p>How we collect, use, and protect your information</p>
-  </section>
+	<!-- HERO -->
+	<section class="hero">
+		<h1>Teacher Privacy Policy</h1>
+		<p>How we collect, use, and protect your information</p>
+	</section>
 
-  <!-- MAIN CONTENT AS CARDS -->
-  <div class="content">
-    <div class="card updated">Last updated: January 2026</div>
+	<!-- MAIN CONTENT AS CARDS -->
+	<div class="content">
+		<div class="card updated">Last updated: January 2026</div>
 
-    <div class="card">
-      <p>EduPlatform respects the privacy of all teachers, instructors, and educators. This policy explains how your data is collected, used, and safeguarded.</p>
-    </div>
+		<div class="card">
+			<p>EduPlatform respects the privacy of all teachers, instructors, and educators. This policy explains how
+				your data is collected, used, and safeguarded.</p>
+		</div>
 
-    <div class="card">
-      <h2>1. Information We Collect</h2>
-      <ul>
-        <li>Personal details: Name, Email, Phone (optional)</li>
-        <li>Professional info: Qualifications, Profile, Skills</li>
-        <li>Uploaded content: Videos, Notes, Assignments</li>
-        <li>Payment details: Earnings, Withdrawals (if monetized)</li>
-        <li>Analytics: Engagement, ratings, performance</li>
-        <li>Security & device info: Login logs, IP address</li>
-      </ul>
-    </div>
+		<div class="card">
+			<h2>1. Information We Collect</h2>
+			<ul>
+				<li>Personal details: Name, Email, Phone (optional)</li>
+				<li>Professional info: Qualifications, Profile, Skills</li>
+				<li>Uploaded content: Videos, Notes, Assignments</li>
+				<li>Payment details: Earnings, Withdrawals (if monetized)</li>
+				<li>Analytics: Engagement, ratings, performance</li>
+				<li>Security & device info: Login logs, IP address</li>
+			</ul>
+		</div>
 
-    <div class="card">
-      <h2>2. How We Use Teacher Data</h2>
-      <ul>
-        <li>Manage accounts and course content</li>
-        <li>Display instructor profile to students</li>
-        <li>Track engagement and performance</li>
-        <li>Process course payments if applicable</li>
-        <li>Respond to support & feedback</li>
-      </ul>
-    </div>
+		<div class="card">
+			<h2>2. How We Use Teacher Data</h2>
+			<ul>
+				<li>Manage accounts and course content</li>
+				<li>Display instructor profile to students</li>
+				<li>Track engagement and performance</li>
+				<li>Process course payments if applicable</li>
+				<li>Respond to support & feedback</li>
+			</ul>
+		</div>
 
-    <div class="card">
-      <h2>3. Content Ownership</h2>
-      <p>Teachers retain ownership of their content but grant EduPlatform permission to host, display, and deliver it to students.</p>
-    </div>
+		<div class="card">
+			<h2>3. Content Ownership</h2>
+			<p>Teachers retain ownership of their content but grant EduPlatform permission to host, display, and deliver
+				it to students.</p>
+		</div>
 
-    <div class="card">
-      <h2>4. Data Protection</h2>
-      <ul>
-        <li>Encrypted storage of sensitive info</li>
-        <li>Secure payment and SSL encryption</li>
-        <li>Restricted access to confidential data</li>
-      </ul>
-    </div>
+		<div class="card">
+			<h2>4. Data Protection</h2>
+			<ul>
+				<li>Encrypted storage of sensitive info</li>
+				<li>Secure payment and SSL encryption</li>
+				<li>Restricted access to confidential data</li>
+			</ul>
+		</div>
 
-    <div class="card">
-      <h2>5. Sharing of Information</h2>
-      <p>We <strong>do not</strong> sell teacher data. Sharing occurs only when required for payments, legal compliance, or authorized services.</p>
-    </div>
+		<div class="card">
+			<h2>5. Sharing of Information</h2>
+			<p>We <strong>do not</strong> sell teacher data. Sharing occurs only when required for payments, legal
+				compliance, or authorized services.</p>
+		</div>
 
-    <div class="card">
-      <h2>6. Rights of Teachers</h2>
-      <ul>
-        <li>Request data correction</li>
-        <li>Request account or data deletion</li>
-        <li>Update teaching profile anytime</li>
-      </ul>
-    </div>
+		<div class="card">
+			<h2>6. Rights of Teachers</h2>
+			<ul>
+				<li>Request data correction</li>
+				<li>Request account or data deletion</li>
+				<li>Update teaching profile anytime</li>
+			</ul>
+		</div>
 
-    <div class="card">
-      <h2>7. Policy Updates</h2>
-      <p>Changes will be reflected on this page with the updated revision date.</p>
-    </div>
+		<div class="card">
+			<h2>7. Policy Updates</h2>
+			<p>Changes will be reflected on this page with the updated revision date.</p>
+		</div>
 
-    <div class="card">
-      <h2>8. Contact Support</h2>
-      <p>For privacy concerns: <strong>teacher-support@eduplatform.com</strong></p>
-    </div>
+		<div class="card">
+			<h2>8. Contact Support</h2>
+			<p>For privacy concerns: <strong>teacher-support@eduplatform.com</strong></p>
+		</div>
 
-    <div class="note card">
-      This privacy policy is for demonstration purposes. Legal review recommended before commercial launch.
-    </div>
-  </div>
+		<div class="note card">
+			This privacy policy is for demonstration purposes. Legal review recommended before commercial launch.
+		</div>
+	</div>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-grid">
-      <div>
-        <h4>EduPlatform</h4>
-        <p>Empowering educators worldwide.</p>
-      </div>
-      <div>
-        <h4>Teacher Panel</h4>
-        <p>Dashboard</p>
-        <p>Create Course</p>
-        <p>Analytics</p>
-      </div>
-      <div>
-        <h4>Support</h4>
-        <p>Help Center</p>
-        <p>Community</p>
-        <p>Policies</p>
-      </div>
-    </div>
-    <p class="copy">© 2025 EduPlatform — Teacher Interface</p>
-  </footer>
+	<!-- FOOTER -->
+	<footer>
+		<div class="footer-grid">
+			<div>
+				<h4>EduPlatform</h4>
+				<p>Empowering educators worldwide.</p>
+			</div>
+			<div>
+				<h4>Teacher Panel</h4>
+				<p>Dashboard</p>
+				<p>Create Course</p>
+				<p>Analytics</p>
+			</div>
+			<div>
+				<h4>Support</h4>
+				<p>Help Center</p>
+				<p>Community</p>
+				<p>Policies</p>
+			</div>
+		</div>
+		<p class="copy">© 2025 EduPlatform — Teacher Interface</p>
+	</footer>
 
 </body>
+
 </html>

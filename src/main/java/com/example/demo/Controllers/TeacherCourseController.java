@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseHighlight;
-import com.example.demo.entity.CourseModule;
 import com.example.demo.entity.Teacher;
 import com.example.demo.enums.CourseStatus;
+import com.example.demo.enums.TeacherStatus;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.TeacherRepository;
 
@@ -32,6 +31,8 @@ public class TeacherCourseController {
 	private TeacherRepository teacherRepo;
 	@Autowired
 	private CourseRepository courseRepo;
+	
+
 	
 	private static final String UPLOAD_BASE =
 	        System.getProperty("user.dir") + File.separator + "uploads";
@@ -119,6 +120,18 @@ public class TeacherCourseController {
 //		    session.invalidate();
 //		    return "redirect:/teacher-auth";
 //		}
+		
+		if (teacher.getStatus() == TeacherStatus.BLOCKED) {
+		    model.addAttribute("error", "You are blocked by admin. No activity allowed.");
+		    model.addAttribute("course", formCourse);
+		    return "teacher-creates-course";
+		}
+
+		if (teacher.getStatus() == TeacherStatus.SUSPENDED) {
+		    model.addAttribute("error", "Your account is suspended. You cannot create or edit courses.");
+		    model.addAttribute("course", formCourse);
+		    return "teacher-creates-course";
+		}
 		
 		/* ================= HIGHLIGHT VALIDATION (HERE) ================= */
 
@@ -217,13 +230,25 @@ public class TeacherCourseController {
 	    if ("publish".equals(action)) {
 	        return "redirect:/teacher-course";
 	    }
+	    
 	    model.addAttribute("highlightTexts", highlightTexts);
-
 	    return "redirect:/teacher-creates-course?courseId=" + course.getCourseId();
 	}
 
 	@GetMapping("/teacher-course/edit/{id}")
 	public String editCourse(@PathVariable Integer id) {
+
+	    Integer teacherId = 1;
+	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+
+	    if (teacher.getStatus() == TeacherStatus.BLOCKED) {
+	        return "redirect:/teacher-course?error=blocked";
+	    }
+
+	    if (teacher.getStatus() == TeacherStatus.SUSPENDED) {
+	        return "redirect:/teacher-course?error=suspended";
+	    }
+
 	    return "redirect:/teacher-creates-course?courseId=" + id;
 	}
 
@@ -255,20 +280,31 @@ public class TeacherCourseController {
 	}
 
 	@PostMapping("/teacher-course/status")
-	public String updateCourseStatus(@RequestParam Integer courseId, @RequestParam String action) {
-		Course course = courseRepo.findById(courseId).orElseThrow();
+	public String updateCourseStatus(@RequestParam Integer courseId,
+	                                 @RequestParam String action) {
 
-		if ("publish".equals(action)) {
-			course.setStatus(CourseStatus.PUBLISHED);
-			courseRepo.save(course);
-			return "redirect:/teacher-course";
-		}
+	    Integer teacherId = 1;
+	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
-		// draft or next
-		course.setStatus(CourseStatus.DRAFT);
-		courseRepo.save(course);
+	    if (teacher.getStatus() == TeacherStatus.BLOCKED) {
+	        return "redirect:/teacher-course?error=blocked";
+	    }
 
-		return "redirect:/teacher-creates-course?courseId=" + courseId;
+	    if (teacher.getStatus() == TeacherStatus.SUSPENDED) {
+	        return "redirect:/teacher-course?error=suspended";
+	    }
+
+	    Course course = courseRepo.findById(courseId).orElseThrow();
+
+	    if ("publish".equals(action)) {
+	        course.setStatus(CourseStatus.PUBLISHED);
+	    } else {
+	        course.setStatus(CourseStatus.DRAFT);
+	    }
+
+	    courseRepo.save(course);
+
+	    return "redirect:/teacher-course";
 	}
 	
 	private String saveThumbnail(MultipartFile file, Integer courseId) throws IOException {
