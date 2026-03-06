@@ -375,6 +375,80 @@
 				grid-template-columns: 1fr;
 			}
 		}
+
+		/* COURSE CAROUSEL */
+
+		.courses-wrapper {
+			overflow: hidden;
+			width: 85%;
+			margin: auto;
+		}
+
+		.courses-track {
+			display: flex;
+			gap: 30px;
+			transition: transform 0.8s ease;
+		}
+
+		/* 3 cards per row */
+		.course-card {
+			min-width: calc((100% - 60px)/3);
+		}
+
+		/* tablet */
+		@media(max-width:1000px) {
+			.course-card {
+				min-width: calc((100% - 30px)/2);
+			}
+		}
+
+		/* mobile */
+		@media(max-width:600px) {
+			.course-card {
+				min-width: 100%;
+			}
+		}
+
+		a {
+			text-decoration: none;
+			color: inherit;
+		}
+
+		.course-header {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			gap: 20px;
+		}
+
+		.course-controls {
+			display: flex;
+			gap: 10px;
+		}
+
+		.course-controls button {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			border: none;
+			background: white;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			cursor: pointer;
+			transition: 0.2s;
+		}
+
+		.course-controls button:hover {
+			background: #3366ff;
+			color: white;
+		}
+
+		.course-card {
+			position: relative;
+		}
+
+		.course-card:hover {
+			transform: translateY(-8px) scale(1.02);
+		}
 	</style>
 </head>
 
@@ -434,42 +508,49 @@
 
 	<!-- COURSES -->
 	<section class="courses">
-		<h2>Popular Courses</h2>
+		<div class="course-header">
+			<h2>Popular Courses</h2>
+
+			<div class="course-controls">
+				<button id="prevCourse"><i class="bi bi-chevron-left"></i></button>
+				<button id="nextCourse"><i class="bi bi-chevron-right"></i></button>
+			</div>
+		</div>
+
 		<div class="divider"></div>
-		<div class="courses-container">
-			<div class="course-card">
-				<img src="https://picsum.photos/600?1" alt="">
-				<div class="course-content">
-					<h3>Full Stack Development</h3>
-					<p>HTML, CSS, JS, React & Node</p>
-					<div class="course-footer">
-						<span class="price">₹499</span>
-						<button class="view-btn">View</button>
+		<div class="courses-wrapper">
+
+			<div class="courses-track" id="courseTrack">
+
+				<div class="course-card" th:each="course : ${popularCourses}">
+
+					<img th:src="${course.thumbnailURL != null ? course.thumbnailURL : '/images/course-default.jpg'}">
+
+					<div class="course-content">
+
+						<h3 th:text="${course.title}"></h3>
+
+						<div class="course-footer">
+
+							<span class="price">
+								<span th:if="${course.type.name() == 'FREE'}">Free</span>
+								<span th:if="${course.type.name() != 'FREE'}">
+									₹<span th:text="${course.price}"></span>
+								</span>
+							</span>
+
+							<a class="view-btn" th:href="@{/student-course-details(courseId=${course.courseId})}">
+								View
+							</a>
+
+						</div>
+
 					</div>
+
 				</div>
+
 			</div>
-			<div class="course-card">
-				<img src="https://picsum.photos/600?2" alt="">
-				<div class="course-content">
-					<h3>Java & Spring Boot</h3>
-					<p>Backend mastery from basics</p>
-					<div class="course-footer">
-						<span class="price">₹499</span>
-						<button class="view-btn">View</button>
-					</div>
-				</div>
-			</div>
-			<div class="course-card">
-				<img src="https://picsum.photos/600?3" alt="">
-				<div class="course-content">
-					<h3>UI / UX Design</h3>
-					<p>Design thinking & Figma</p>
-					<div class="course-footer">
-						<span class="price">Free</span>
-						<button class="view-btn">View</button>
-					</div>
-				</div>
-			</div>
+
 		</div>
 	</section>
 
@@ -519,5 +600,86 @@
 		</div>
 	</footer>
 </body>
+<script>
+	const courseTrack = document.getElementById("courseTrack");
+	const prevBtn = document.getElementById("prevCourse");
+	const nextBtn = document.getElementById("nextCourse");
+
+	let courseIndex = 0;
+	let autoSlide;
+
+	function getVisibleCards() {
+		if (window.innerWidth < 600) return 1;
+		if (window.innerWidth < 1000) return 2;
+		return 3;
+	}
+
+	function slideCourses() {
+
+		const cards = courseTrack.children.length;
+		const visible = getVisibleCards();
+		const cardWidth = courseTrack.children[0].offsetWidth + 30;
+
+		if (courseIndex > cards - visible) {
+			courseIndex = 0;
+		}
+
+		if (courseIndex < 0) {
+			courseIndex = cards - visible;
+		}
+
+		courseTrack.style.transform =
+			`translateX(-${courseIndex * cardWidth}px)`;
+
+	}
+
+	function nextSlide() {
+		courseIndex++;
+		slideCourses();
+	}
+
+	function prevSlide() {
+		courseIndex--;
+		slideCourses();
+	}
+
+	nextBtn.onclick = nextSlide;
+	prevBtn.onclick = prevSlide;
+
+	function startAutoSlide() {
+		autoSlide = setInterval(nextSlide, 4000);
+	}
+
+	function stopAutoSlide() {
+		clearInterval(autoSlide);
+	}
+
+	startAutoSlide();
+
+	courseTrack.addEventListener("mouseenter", stopAutoSlide);
+	courseTrack.addEventListener("mouseleave", startAutoSlide);
+
+	/* swipe support */
+
+	let startX = 0;
+
+	courseTrack.addEventListener("touchstart", (e) => {
+		startX = e.touches[0].clientX;
+	});
+
+	courseTrack.addEventListener("touchend", (e) => {
+
+		let endX = e.changedTouches[0].clientX;
+
+		if (startX - endX > 50) {
+			nextSlide();
+		}
+
+		if (endX - startX > 50) {
+			prevSlide();
+		}
+
+	});
+</script>
 
 </html>

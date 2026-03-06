@@ -98,4 +98,14 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 			GROUP BY c.courseId, c.title
 			""")
 			List<Object[]> getCourseIncomeStats(Integer teacherId);
+			
+			@Query("""
+					SELECT c
+					FROM Course c
+					LEFT JOIN Enrollment e ON e.course.courseId = c.courseId
+					WHERE c.status = 'PUBLISHED'
+					GROUP BY c
+					ORDER BY COUNT(e) DESC
+					""")
+					List<Course> findPopularCourses();
 }

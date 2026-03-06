@@ -320,6 +320,11 @@
 				font-size: 16px;
 			}
 		}
+
+		a {
+			text-decoration: none;
+			color: inherit;
+		}
 	</style>
 </head>
 
@@ -352,44 +357,40 @@
 		</div>
 	</section>
 
-	<!-- COURSES GRID -->
 	<section class="courses-container">
-		<div class="course-card">
-			<img src="https://picsum.photos/600?11" alt="Full Stack">
+
+		<div class="course-card" th:each="course : ${courses}">
+
+			<img th:src="${course.thumbnailURL != null ? course.thumbnailURL : '/images/course-default.jpg'}">
+
 			<div class="course-content">
-				<h3>Full Stack Development</h3>
-				<p>HTML, CSS, JavaScript, React</p>
+
+				<h3 th:text="${course.title}"></h3>
+
+				<p th:text="${course.description}"></p>
+
 				<div class="course-footer">
-					<span class="price">₹499</span>
-					<button th:onclick="|window.location.href = '@{/student-course}'|" class="view-btn">View</button>
+
+					<span class="price">
+
+						<span th:if="${course.type.name() == 'FREE'}">Free</span>
+
+						<span th:if="${course.type.name() != 'FREE'}">
+							₹<span th:text="${course.price}"></span>
+						</span>
+
+					</span>
+
+					<a class="view-btn" th:href="@{/student-course-details(courseId=${course.courseId})}">
+						View
+					</a>
+
 				</div>
+
 			</div>
+
 		</div>
 
-		<div class="course-card">
-			<img src="https://picsum.photos/600?12" alt="Java">
-			<div class="course-content">
-				<h3>Java & Spring Boot</h3>
-				<p>Backend APIs & Microservices</p>
-				<div class="course-footer">
-					<span class="price">₹499</span>
-					<button class="view-btn">View</button>
-				</div>
-			</div>
-		</div>
-
-		<div class="course-card">
-			<img src="https://picsum.photos/600?13" alt="UI/UX">
-			<div class="course-content">
-				<h3>UI / UX Design</h3>
-				<p>Figma, Wireframes & Prototyping</p>
-				<div class="course-footer">
-					<span class="price">Free</span>
-					<button class="view-btn">View</button>
-				</div>
-			</div>
-		</div>
-		<!-- Add more courses as needed -->
 	</section>
 
 	<!-- FOOTER -->
