@@ -330,7 +330,6 @@
 							<th>Course</th>
 							<th>Enrolled On</th>
 							<th>Finished On</th>
-							<th>Status</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -361,31 +360,6 @@
 								<span th:if="${e.completedAt == null}" class="status-progress">
 									In Progress
 								</span>
-							</td>
-							<td>
-								<form th:action="@{/teacher/enrollment/status/{id}(id=${e.enrollmentId})}"
-									method="post">
-
-									<select name="status" class="form-select form-select-sm"
-										onchange="this.form.submit()">
-
-										<option value="ACTIVE"
-											th:selected="${e.status == T(com.example.demo.enums.EnrollmentStatus).ACTIVE}">
-											Active
-										</option>
-
-										<option value="SUSPENDED"
-											th:selected="${e.status == T(com.example.demo.enums.EnrollmentStatus).SUSPENDED}">
-											Suspended
-										</option>
-
-										<option value="BLOCKED"
-											th:selected="${e.status == T(com.example.demo.enums.EnrollmentStatus).BLOCKED}">
-											Blocked
-										</option>
-
-									</select>
-								</form>
 							</td>
 							<td>
 								message

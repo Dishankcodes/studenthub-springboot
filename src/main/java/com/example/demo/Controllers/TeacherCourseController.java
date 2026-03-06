@@ -2,7 +2,10 @@ package com.example.demo.Controllers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +22,9 @@ import com.example.demo.entity.CourseHighlight;
 import com.example.demo.entity.Teacher;
 import com.example.demo.enums.CourseStatus;
 import com.example.demo.enums.TeacherStatus;
+import com.example.demo.repository.CourseModuleRepository;
 import com.example.demo.repository.CourseRepository;
+import com.example.demo.repository.LessonProgressRepository;
 import com.example.demo.repository.TeacherRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -32,7 +37,10 @@ public class TeacherCourseController {
 	@Autowired
 	private CourseRepository courseRepo;
 	
-
+	@Autowired
+	private LessonProgressRepository progressRepo;
+	@Autowired
+	private CourseModuleRepository moduleRepo;
 	
 	private static final String UPLOAD_BASE =
 	        System.getProperty("user.dir") + File.separator + "uploads";
@@ -343,6 +351,81 @@ public class TeacherCourseController {
 
 	    return "redirect:/teacher-creates-course?courseId=" + courseId
 	    		+ "&msg-thumbnail_updated";
+	}
+	
+	@GetMapping("/teacher-course/analytics/{id}")
+	public String courseAnalytics(@PathVariable Integer id, Model model) {
+
+	    Course course = courseRepo.findById(id).orElse(null);
+
+	    if (course == null) {
+	        return "redirect:/teacher-course";
+	    }
+
+	    long totalStudents = course.getEnrollments().size();
+
+	    long activeStudents = course.getEnrollments()
+	            .stream()
+	            .filter(e -> e.getStatus().name().equals("ACTIVE"))
+	            .count();
+
+	    long suspendedStudents = course.getEnrollments()
+	            .stream()
+	            .filter(e -> e.getStatus().name().equals("SUSPENDED"))
+	            .count();
+
+	    long moduleCount = moduleRepo.countByCourseCourseId(id);
+
+	    long lessonCount = course.getModules()
+	            .stream()
+	            .mapToLong(m -> m.getLessons().size())
+	            .sum();
+
+	    long quizCount = course.getModules()
+	            .stream()
+	            .flatMap(m -> m.getLessons().stream())
+	            .filter(l -> l.getQuiz() != null)
+	            .count();
+
+	    List<Map<String, Object>> studentProgressList = new ArrayList<>();
+
+	    course.getEnrollments().forEach(enrollment -> {
+
+	        Integer studentId = enrollment.getStudent().getStudid();
+
+	        long completedLessons =
+	                progressRepo.countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(
+	                        studentId,
+	                        course.getCourseId()
+	                );
+
+	        int progress = 0;
+
+	        if (lessonCount > 0) {
+	            progress = (int) ((completedLessons * 100) / lessonCount);
+	        }
+
+	        Map<String, Object> data = new HashMap<>();
+
+	        data.put("student", enrollment.getStudent());
+	        data.put("completed", completedLessons);
+	        data.put("total", lessonCount);
+	        data.put("progress", progress);
+
+	        studentProgressList.add(data);
+	    });
+
+	    model.addAttribute("course", course);
+	    model.addAttribute("totalStudents", totalStudents);
+	    model.addAttribute("activeStudents", activeStudents);
+	    model.addAttribute("suspendedStudents", suspendedStudents);
+	    model.addAttribute("moduleCount", moduleCount);
+	    model.addAttribute("lessonCount", lessonCount);
+	    model.addAttribute("quizCount", quizCount);
+	    model.addAttribute("modules", course.getModules());
+	    model.addAttribute("studentProgressList", studentProgressList);
+
+	    return "course-analytics";
 	}
 	
 }

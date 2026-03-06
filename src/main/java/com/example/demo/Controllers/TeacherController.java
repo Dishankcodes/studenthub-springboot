@@ -93,33 +93,13 @@ public class TeacherController {
 
 		List<Enrollment> enrollments = enrollmentRepo.findByTeacherId(teacherId);
 
-		model.addAttribute("teacher", teacher); // 🔥 THIS WAS MISSING
+		model.addAttribute("teacher", teacher); 
 		model.addAttribute("enrollments", enrollments);
 
 		return "teacher-students";
 	}
 
-	@PostMapping("/teacher/enrollment/status/{id}")
-	public String updateEnrollmentStatus(@PathVariable Integer id, @RequestParam EnrollmentStatus status) {
-		
-		Integer teacherId = 1;
-	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
-
-	    if (isBlocked(teacher)) {
-	        return "redirect:/teacher-students?error=blocked";
-	    }
-
-	    if (isSuspended(teacher)) {
-	        return "redirect:/teacher-students?error=suspended";
-	    }
-	    
-		Enrollment e = enrollmentRepo.findById(id).orElseThrow();
-		e.setStatus(status);
-		enrollmentRepo.save(e);
-
-		return "redirect:/teacher-students";
-	}
-
+	
 	// ===== COMMUNICATION =====
 	@GetMapping("/teacher-communication")
 	public String communicationPage() {
