@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="course_certificate")
+@Table(name = "course_certificate")
 public class CourseCertificate {
 
 	@Id
@@ -20,22 +20,22 @@ public class CourseCertificate {
 	private Integer id;
 
 	@ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
-	
+	@JoinColumn(name = "student_id")
+	private Student student;
+
 	@ManyToOne
 	@JoinColumn(name = "course_id")
 	private Course course;
-	
+
 	@ManyToOne
-	@JoinColumn(name="template_id")
+	@JoinColumn(name = "template_id")
 	private CertificateTemplate template;
-	
-	@Column(unique = true , nullable = false )
+
+	@Column(unique = true, nullable = false)
 	private String certificateNumber;
-	
+
 	private LocalDate issuedAt;
-	
+
 	private String pdfPath;
 
 	public Integer getId() {
@@ -45,7 +45,6 @@ public class CourseCertificate {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
 
 	public Student getStudent() {
 		return student;
@@ -94,6 +93,5 @@ public class CourseCertificate {
 	public void setTemplate(CertificateTemplate template) {
 		this.template = template;
 	}
-	
-	
+
 }

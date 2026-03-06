@@ -51,4 +51,7 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Inte
     	List<Announcement> findForTeachers();
     	
     	List<Announcement> findByTeacherIsNullAndActiveTrueOrderByCreatedAtDesc();
+    	
+    	List<Announcement> findTop5ByActiveTrueOrderByCreatedAtDesc();
+
 }

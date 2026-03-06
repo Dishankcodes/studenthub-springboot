@@ -47,8 +47,6 @@ public class AdminController {
 	@Autowired
 	private InstructorFeedbackRepository instructorFeedbackRepo;
 
-
-
 	@GetMapping("/admin-dashboard")
 	public String admin_dashboard(HttpSession session, Model model) {
 		if (session.getAttribute("adminEmail") == null) {
@@ -131,23 +129,20 @@ public class AdminController {
 		return "admin-instructor-view";
 	}
 
-	
 	@PostMapping("/manage-instructor/status/{id}")
 	public String updateTeacherStatus(@PathVariable Integer id,
-			@RequestParam TeacherStatus status)
-	{
-		 Teacher teacher = teacherRepo.findById(id).orElse(null);
+			@RequestParam TeacherStatus status) {
+		Teacher teacher = teacherRepo.findById(id).orElse(null);
 
-		    if (teacher == null) {
-		        return "redirect:/manage-instructor";
-		    }
+		if (teacher == null) {
+			return "redirect:/manage-instructor";
+		}
 
-		    teacher.setStatus(status);
-		    teacherRepo.save(teacher);
+		teacher.setStatus(status);
+		teacherRepo.save(teacher);
 
-		    return "redirect:/manage-teachers#instructor-" + id;
+		return "redirect:/manage-teachers#instructor-" + id;
 	}
-	
 
 	@GetMapping("/manage-internships")
 	public String admin_internships() {
@@ -167,7 +162,6 @@ public class AdminController {
 		return "admin-settings";
 	}
 
-	
 	@GetMapping("/admin-logout")
 	public String adminLogout(HttpSession session) {
 		session.invalidate();

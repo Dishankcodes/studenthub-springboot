@@ -23,7 +23,7 @@ public class Student {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer studid;
 
-	@NotBlank(message ="Full Name Required")
+	@NotBlank(message = "Full Name Required")
 	private String fullname;
 
 	private String college;
@@ -33,32 +33,24 @@ public class Student {
 
 	private String password;
 
-	
 	@Column(length = 100)
 	private String degree;
 
 	@Column(length = 500)
 	private String interests = "";
-	
-	
+
 	@Column(updatable = false)
 	private LocalDate joinedOn;
 
 	private String profileImage; // image path
-	
-	
-	
-	 // 🔥 Enrollments
-    @OneToMany(mappedBy = "student",
-               cascade = CascadeType.ALL,
-               orphanRemoval = true)
-    private List<Enrollment> enrollments = new ArrayList<>();
 
-    // 🔥 Lesson Progress
-    @OneToMany(mappedBy = "student",
-               cascade = CascadeType.ALL,
-               orphanRemoval = true)
-    private List<LessonProgress> lessonProgressList = new ArrayList<>();
+	// 🔥 Enrollments
+	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Enrollment> enrollments = new ArrayList<>();
+
+	// 🔥 Lesson Progress
+	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<LessonProgress> lessonProgressList = new ArrayList<>();
 
 	public Integer getStudid() {
 		return studid;
@@ -86,10 +78,9 @@ public class Student {
 
 	@PrePersist
 	protected void onCreate() {
-	    this.joinedOn = LocalDate.now();
+		this.joinedOn = LocalDate.now();
 	}
-	
-	
+
 	public LocalDate getJoinedOn() {
 		return joinedOn;
 	}

@@ -46,4 +46,7 @@ public interface TeacherNotesRepository extends JpaRepository<TeacherNotes, Inte
 		    AND n.category.active = true
 		""")
 		long countApprovedNotes();
+	
+	 List<TeacherNotes> findTop5ByApprovedTrueOrderByUploadedAtDesc();
+
 }

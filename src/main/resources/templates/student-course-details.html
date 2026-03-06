@@ -317,7 +317,7 @@
 
 					<p>
 						⭐ <span th:text="${#numbers.formatDecimal(avgRating,1,1)}">0.0</span>
-    • <span th:text="${feedbacks.size()}">0</span> reviews • 1,200 students • By
+						• <span th:text="${feedbacks.size()}">0</span> reviews • 1,200 students • By
 						<span th:text="${course.teacher.firstname + ' ' + course.teacher.lastname}"></span>
 					</p>
 
@@ -374,22 +374,19 @@
 						<i class="bi bi-award-fill"></i>
 						Download Certificate
 					</a>
-					
-					<!-- 💬 GIVE FEEDBACK (ONLY IF ENROLLED) -->
-<a th:if="${enrolled and !feedbackGiven}"
-   th:href="@{/student-feedback/{id}(id=${course.courseId})}"
-   class="btn-secondary"
-   style="display:block;margin-top:10px;">
-    <i class="bi bi-chat-dots-fill"></i>
-    Give Feedback
-</a>
 
-<span th:if="${feedbackGiven}"
-      class="btn-secondary"
-      style="display:block;margin-top:10px;background:#dcfce7;color:#166534;">
-    <i class="bi bi-check-circle-fill"></i>
-    Feedback Submitted
-</span>
+					<!-- 💬 GIVE FEEDBACK (ONLY IF ENROLLED) -->
+					<a th:if="${enrolled and !feedbackGiven}" th:href="@{/student-feedback/{id}(id=${course.courseId})}"
+						class="btn-secondary" style="display:block;margin-top:10px;">
+						<i class="bi bi-chat-dots-fill"></i>
+						Give Feedback
+					</a>
+
+					<span th:if="${feedbackGiven}" class="btn-secondary"
+						style="display:block;margin-top:10px;background:#dcfce7;color:#166534;">
+						<i class="bi bi-check-circle-fill"></i>
+						Feedback Submitted
+					</span>
 
 					<ul style="margin-top:15px;text-align:left;font-size:14px;color:#555">
 						<li th:if="${!enrolled}">
@@ -450,24 +447,22 @@
 
 			<!-- ===== STUDENT FEEDBACK (BOTTOM) ===== -->
 			<div class="reviews">
-    <h3>Student Feedback</h3>
+				<h3>Student Feedback</h3>
 
-    <div th:if="${feedbacks.isEmpty()}"
-         style="color:#6b7280;">
-        No feedback yet. Be the first to review this course!
-    </div>
+				<div th:if="${feedbacks.isEmpty()}" style="color:#6b7280;">
+					No feedback yet. Be the first to review this course!
+				</div>
 
-    <div class="review"
-         th:each="f : ${feedbacks}">
-        <p>
-            <span th:text="${'⭐'.repeat(f.rating)}"></span>
-        </p>
-        <p th:text="${f.comment}"></p>
-        <small>
-            —<span th:text="${f.student.fullname}"></span>
-        </small>
-    </div>
-</div>
+				<div class="review" th:each="f : ${feedbacks}">
+					<p>
+						<span th:text="${'⭐'.repeat(f.rating)}"></span>
+					</p>
+					<p th:text="${f.comment}"></p>
+					<small>
+						—<span th:text="${f.student.fullname}"></span>
+					</small>
+				</div>
+			</div>
 		</div>
 	</div>
 

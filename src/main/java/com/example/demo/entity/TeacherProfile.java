@@ -27,8 +27,7 @@ public class TeacherProfile {
 
 	@Column(length = 255)
 	private String profileImage;
-	
-	
+
 	@OneToOne
 	@JoinColumn(name = "teacher_id", nullable = false, unique = true)
 	private Teacher teacher;
@@ -61,7 +60,6 @@ public class TeacherProfile {
 		return specialist;
 	}
 
-	
 	public String getProfileImage() {
 		return profileImage;
 	}

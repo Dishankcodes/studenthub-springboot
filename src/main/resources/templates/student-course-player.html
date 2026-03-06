@@ -514,32 +514,31 @@ ${!noLessons and lesson.lessonId == currentLesson.lessonId} ? 'active' :
 			</aside>
 			<!-- MAIN CONTENT -->
 			<main class="course-content">
-			
+
 				<th:block th:if="${!noLessons}">
-				
-				<div class="content-title" th:text="${currentLesson.title}"></div>
-				<!-- VIDEO -->
-				<div class="video-box" th:if="${currentLesson.type.name() == 'VIDEO'}">
-					<video controls width="100%" height="100%">
-						<source th:src="${currentLesson.contentUrl}" type="video/mp4">
-					</video>
+
+					<div class="content-title" th:text="${currentLesson.title}"></div>
+					<!-- VIDEO -->
+					<div class="video-box" th:if="${currentLesson.type.name() == 'VIDEO'}">
+						<video controls width="100%" height="100%">
+							<source th:src="${currentLesson.contentUrl}" type="video/mp4">
+						</video>
 
 
 
-					<div class="lesson-actions">
-						<button class="complete-btn completeLessonBtn">
-							<i class="bi bi-check-circle"></i> Mark lesson as completed
-						</button>
+						<div class="lesson-actions">
+							<button class="complete-btn completeLessonBtn">
+								<i class="bi bi-check-circle"></i> Mark lesson as completed
+							</button>
+						</div>
+
 					</div>
 
-				</div>
+					<!-- NOTES -->
 
-				<!-- NOTES -->
-
-				<div class="notes-box" th:if="${currentLesson.type.name() == 'NOTES'}">
-<!-- ===== NO CONTENT AVAILABLE ===== -->
-<div th:if="${currentLesson.contentUrl == null}"
-     style="
+					<div class="notes-box" th:if="${currentLesson.type.name() == 'NOTES'}">
+						<!-- ===== NO CONTENT AVAILABLE ===== -->
+						<div th:if="${currentLesson.contentUrl == null}" style="
         padding:40px;
         text-align:center;
         border-radius:12px;
@@ -547,120 +546,115 @@ ${!noLessons and lesson.lessonId == currentLesson.lessonId} ? 'active' :
         border:1px dashed #f59e0b;
      ">
 
-    <i class="bi bi-exclamation-circle-fill"
-       style="font-size:42px;color:#f59e0b;"></i>
+							<i class="bi bi-exclamation-circle-fill" style="font-size:42px;color:#f59e0b;"></i>
 
-    <h2 style="margin-top:16px;">
-        Content not available
-    </h2>
+							<h2 style="margin-top:16px;">
+								Content not available
+							</h2>
 
-    <p style="margin-top:10px;color:#555;">
-        This lesson’s notes have not been uploaded yet.<br>
-        Please check back later.
-    </p>
-</div>
-					<!-- PDF -->
-					<iframe th:if="${currentLesson.contentUrl != null 
-        and #strings.endsWith(currentLesson.contentUrl,'.pdf')}"
-						th:src="${currentLesson.contentUrl}" width="100%" height="600px" style="border: none;">
-					</iframe>
-
-					<!-- HTML / TEXT -->
-					<div th:if="${currentLesson.contentUrl != null 
-        and #strings.endsWith(currentLesson.contentUrl,'.pdf')}"
-						th:utext="${currentLesson.contentUrl}"></div>
-
-					<!-- DOWNLOAD -->
-
-				</div>
-				<div class="notes-actions" th:if="${currentLesson.type.name() == 'NOTES'}">
-
-					<a th:href="${currentLesson.contentUrl}" target="_blank" class="download-notes-btn">
-						<i class="bi bi-download"></i>
-						Download Notes
-					</a>
-
-					<button class="complete-btn completeLessonBtn">
-						<i class="bi bi-check-circle"></i>
-						Mark lesson as completed
-					</button>
-					
-
-				</div>
-				<div class="quiz-box" th:if="${currentLesson.type.name() == 'QUIZ'}">
-
-					<h3>Quiz</h3>
-
-					<form th:action="@{/student/quiz/submit}" method="post">
-
-						<input type="hidden" name="lessonId" th:value="${currentLesson.lessonId}" />
-
-						<div th:each="q, i : ${questions}" class="quiz-question">
-
-							<strong th:text="|${i.count}. ${q.questionText}|"></strong>
-
-							<label>
-								<input type="radio" th:name="|q_${q.questionId}|" value="A">
-								<span th:text="${q.optionA}"></span>
-							</label>
-
-							<label>
-								<input type="radio" th:name="|q_${q.questionId}|" value="B">
-								<span th:text="${q.optionB}"></span>
-							</label>
-
-							<label>
-								<input type="radio" th:name="|q_${q.questionId}|" value="C">
-								<span th:text="${q.optionC}"></span>
-							</label>
-
-							<label>
-								<input type="radio" th:name="|q_${q.questionId}|" value="D">
-								<span th:text="${q.optionD}"></span>
-							</label>
-
+							<p style="margin-top:10px;color:#555;">
+								This lesson’s notes have not been uploaded yet.<br>
+								Please check back later.
+							</p>
 						</div>
+						<!-- PDF -->
+						<iframe th:if="${currentLesson.contentUrl != null 
+        and #strings.endsWith(currentLesson.contentUrl,'.pdf')}" th:src="${currentLesson.contentUrl}" width="100%"
+							height="600px" style="border: none;">
+						</iframe>
 
-						<button type="submit" class="enroll-btn" style="margin-top:20px;">
-							Submit Quiz
+						<!-- HTML / TEXT -->
+						<div th:if="${currentLesson.contentUrl != null 
+        and #strings.endsWith(currentLesson.contentUrl,'.pdf')}" th:utext="${currentLesson.contentUrl}"></div>
+
+						<!-- DOWNLOAD -->
+
+					</div>
+					<div class="notes-actions" th:if="${currentLesson.type.name() == 'NOTES'}">
+
+						<a th:href="${currentLesson.contentUrl}" target="_blank" class="download-notes-btn">
+							<i class="bi bi-download"></i>
+							Download Notes
+						</a>
+
+						<button class="complete-btn completeLessonBtn">
+							<i class="bi bi-check-circle"></i>
+							Mark lesson as completed
 						</button>
-					</form>
 
 
-				</div>
+					</div>
+					<div class="quiz-box" th:if="${currentLesson.type.name() == 'QUIZ'}">
+
+						<h3>Quiz</h3>
+
+						<form th:action="@{/student/quiz/submit}" method="post">
+
+							<input type="hidden" name="lessonId" th:value="${currentLesson.lessonId}" />
+
+							<div th:each="q, i : ${questions}" class="quiz-question">
+
+								<strong th:text="|${i.count}. ${q.questionText}|"></strong>
+
+								<label>
+									<input type="radio" th:name="|q_${q.questionId}|" value="A">
+									<span th:text="${q.optionA}"></span>
+								</label>
+
+								<label>
+									<input type="radio" th:name="|q_${q.questionId}|" value="B">
+									<span th:text="${q.optionB}"></span>
+								</label>
+
+								<label>
+									<input type="radio" th:name="|q_${q.questionId}|" value="C">
+									<span th:text="${q.optionC}"></span>
+								</label>
+
+								<label>
+									<input type="radio" th:name="|q_${q.questionId}|" value="D">
+									<span th:text="${q.optionD}"></span>
+								</label>
+
+							</div>
+
+							<button type="submit" class="enroll-btn" style="margin-top:20px;">
+								Submit Quiz
+							</button>
+						</form>
+
+
+					</div>
 				</th:block>
-				
-				
-				 <!-- ===== EMPTY COURSE STATE ===== -->
-    <th:block th:if="${noLessons}">
-        <div style="
+
+
+				<!-- ===== EMPTY COURSE STATE ===== -->
+				<th:block th:if="${noLessons}">
+					<div style="
             padding:40px;
             text-align:center;
             background:#ffffff;
             border-radius:12px;
             border:1px dashed #ddd;
         ">
-            <i class="bi bi-info-circle-fill"
-               style="font-size:42px;color:#f59e0b;"></i>
+						<i class="bi bi-info-circle-fill" style="font-size:42px;color:#f59e0b;"></i>
 
-            <h2 style="margin-top:16px;">
-                Lessons not available yet
-            </h2>
+						<h2 style="margin-top:16px;">
+							Lessons not available yet
+						</h2>
 
-            <p style="margin-top:10px;color:#555;">
-                This course does not have any lessons added yet.<br>
-                Please wait for the instructor to publish content.
-            </p>
+						<p style="margin-top:10px;color:#555;">
+							This course does not have any lessons added yet.<br>
+							Please wait for the instructor to publish content.
+						</p>
 
-            <div style="margin-top:24px;">
-                <a th:href="@{/student-course}"
-                   class="enroll-btn"
-                   style="text-decoration:none;">
-                    Explore Other Courses
-                </a>
-            </div>
-        </div>
-    </th:block>
+						<div style="margin-top:24px;">
+							<a th:href="@{/student-course}" class="enroll-btn" style="text-decoration:none;">
+								Explore Other Courses
+							</a>
+						</div>
+					</div>
+				</th:block>
 			</main>
 
 		</div>
@@ -684,14 +678,14 @@ ${!noLessons and lesson.lessonId == currentLesson.lessonId} ? 'active' :
 		});
 	</script>
 	<script th:if="${!noLessons}">
-    document.querySelectorAll(".completeLessonBtn").forEach(btn => {
-        btn.addEventListener("click", () => {
-            fetch("/student/lesson/complete?lessonId=[[${currentLesson.lessonId}]]", {
-                method: "POST"
-            }).then(() => location.reload());
-        });
-    });
-</script>
+		document.querySelectorAll(".completeLessonBtn").forEach(btn => {
+			btn.addEventListener("click", () => {
+				fetch("/student/lesson/complete?lessonId=[[${currentLesson.lessonId}]]", {
+					method: "POST"
+				}).then(() => location.reload());
+			});
+		});
+	</script>
 	<script>
 		setTimeout(() => {
 			const msg = document.querySelector('[data-cert-msg]');

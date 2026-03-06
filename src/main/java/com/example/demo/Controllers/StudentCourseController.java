@@ -43,373 +43,313 @@ public class StudentCourseController {
 
 	@Autowired
 	private CourseRepository courseRepo;
-	
+
 	@Autowired
 	private EnrollmentRepository enrollmentRepo;
-	
+
 	@Autowired
 	private LessonProgressRepository lessonProgressRepo;
-	
+
 	@Autowired
 	private LessonRepository lessonRepo;
-	
+
 	@Autowired
 	private QuizQuestionRepository quizQuestionRepo;
-	
+
 	@Autowired
 	private StudentRepository studentRepo;
-	
+
 	@Autowired
-	private CourseFeedbackRepository feedbackRepo;
+	private CourseFeedbackRepository feedbackRepo;
+
 	@Autowired
 	private InstructorFeedbackRepository instructorFeedbackRepo;
-	
-	@GetMapping("/student-course")
-	public String exploreCourse(Model model) {
 
-	    List<Course> courses = courseRepo.findByStatus(CourseStatus.PUBLISHED);
+	@GetMapping("/student-course")
+	public String exploreCourse(Model model,HttpSession session) {
+		 Integer studentId = (Integer) session.getAttribute("studentId");
+
+
+		List<Course> courses = courseRepo.findByStatus(CourseStatus.PUBLISHED);
+
+		if (studentId != null) {
+
+	        // get completed course ids
+	        List<Integer> completedCourseIds =
+	                enrollmentRepo.findCompletedCourses(studentId);
+
+	        // remove completed courses
+	        courses = courses.stream()
+	                .filter(c -> !completedCourseIds.contains(c.getCourseId()))
+	                .toList();
+	    }
 
 	    Map<Integer, Double> avgRatings = new HashMap<>();
 	    Map<Integer, Long> reviewCounts = new HashMap<>();
 
-	    for (Course course : courses) {
-	        Integer courseId = course.getCourseId();
 
-	        double avg = feedbackRepo.findAverageRating(courseId);
-	        long count = feedbackRepo.countByCourseCourseId(courseId);
+		for (Course course : courses) {
+			Integer courseId = course.getCourseId();
 
-	        avgRatings.put(courseId, avg);
-	        reviewCounts.put(courseId, count);
-	    }
+			double avg = feedbackRepo.findAverageRating(courseId);
+			long count = feedbackRepo.countByCourseCourseId(courseId);
 
-	    Map<Integer, Double> instructorAvgRating = new HashMap<>();
-	    Map<Integer, Long> instructorRatingCount = new HashMap<>();
+			avgRatings.put(courseId, avg);
+			reviewCounts.put(courseId, count);
+		}
 
-	    for (Course course : courses) {
-	        Integer teacherId = course.getTeacher().getTeacherId();
+		Map<Integer, Double> instructorAvgRating = new HashMap<>();
+		Map<Integer, Long> instructorRatingCount = new HashMap<>();
 
-	        instructorAvgRating.putIfAbsent(
-	            teacherId,
-	            instructorFeedbackRepo.getAverageRating(teacherId)
-	        );
+		for (Course course : courses) {
+			Integer teacherId = course.getTeacher().getTeacherId();
 
-	        instructorRatingCount.putIfAbsent(
-	            teacherId,
-	            instructorFeedbackRepo.getTotalRatings(teacherId)
-	        );
-	    }
+			instructorAvgRating.putIfAbsent(teacherId, instructorFeedbackRepo.getAverageRating(teacherId));
 
-	    model.addAttribute("instructorAvgRating", instructorAvgRating);
-	    model.addAttribute("instructorRatingCount", instructorRatingCount);
-	    model.addAttribute("courses", courses);
-	    model.addAttribute("avgRatings", avgRatings);
-	    model.addAttribute("reviewCounts", reviewCounts);
-	    
+			instructorRatingCount.putIfAbsent(teacherId, instructorFeedbackRepo.getTotalRatings(teacherId));
+		}
 
-	    return "student-course";
+		model.addAttribute("instructorAvgRating", instructorAvgRating);
+		model.addAttribute("instructorRatingCount", instructorRatingCount);
+		model.addAttribute("courses", courses);
+		model.addAttribute("avgRatings", avgRatings);
+		model.addAttribute("reviewCounts", reviewCounts);
+
+		return "student-course";
 	}
-	
-	
-	
+
 	@GetMapping("/student-course-details")
-	public String viewCourse(
-	        @RequestParam Integer courseId,
-	        Model model,
-	        HttpSession session
-	) {
-	    Course course = courseRepo.findPublishedCourseForStudent(
-	            courseId,
-	            CourseStatus.PUBLISHED
-	    );
+	public String viewCourse(@RequestParam Integer courseId, Model model, HttpSession session) {
+		Course course = courseRepo.findPublishedCourseForStudent(courseId, CourseStatus.PUBLISHED);
 
-	    if (course == null) {
-	        return "redirect:/student-course";
-	    }
+		if (course == null) {
+			return "redirect:/student-course";
+		}
 
-	    Integer studentId = (Integer) session.getAttribute("studentId");
-	    Integer teacherId = course.getTeacher().getTeacherId();
+		Integer studentId = (Integer) session.getAttribute("studentId");
+		Integer teacherId = course.getTeacher().getTeacherId();
 
-	    double instructorAvg =
-	            instructorFeedbackRepo.getAverageRating(teacherId);
+		double instructorAvg = instructorFeedbackRepo.getAverageRating(teacherId);
 
-	    long instructorCount =
-	            instructorFeedbackRepo.getTotalRatings(teacherId);
+		long instructorCount = instructorFeedbackRepo.getTotalRatings(teacherId);
 
-	   
+		boolean enrolled = false;
+		boolean courseCompleted = false;
+		boolean feedbackGiven = false;
 
-	    boolean enrolled = false;
-	    boolean courseCompleted = false;
-	    boolean feedbackGiven = false;
+		if (studentId != null) {
+			feedbackGiven = feedbackRepo.existsByCourseCourseIdAndStudentStudid(course.getCourseId(), studentId);
+		}
 
-	    if (studentId != null) {
-	        feedbackGiven = feedbackRepo
-	            .existsByCourseCourseIdAndStudentStudid(course.getCourseId(), studentId);
-	    }
+		if (studentId != null) {
+			enrolled = enrollmentRepo.existsByStudentStudidAndCourseCourseId(studentId, courseId);
 
+			if (enrolled) {
+				long completedLessons = lessonProgressRepo
+						.countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(studentId, courseId);
 
-	    if (studentId != null) {
-	        enrolled = enrollmentRepo
-	                .existsByStudentStudidAndCourseCourseId(studentId, courseId);
+				long totalLessons = course.getModules().stream().mapToLong(m -> m.getLessons().size()).sum();
 
-	        if (enrolled) {
-	            long completedLessons =
-	                    lessonProgressRepo
-	                            .countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(
-	                                    studentId, courseId);
+				courseCompleted = totalLessons > 0 && completedLessons == totalLessons;
+			}
+		}
 
-	            long totalLessons = course.getModules().stream()
-	                    .mapToLong(m -> m.getLessons().size())
-	                    .sum();
+		Lesson previewLesson = course.getModules().stream().flatMap(m -> m.getLessons().stream())
+				.filter(Lesson::isFreePreview).findFirst().orElse(null);
 
-	            courseCompleted = totalLessons > 0 && completedLessons == totalLessons;
-	        }
-	    }
+		List<CourseFeedback> feedbacks = feedbackRepo.findByCourseCourseId(courseId);
 
-	    Lesson previewLesson = course.getModules().stream()
-	            .flatMap(m -> m.getLessons().stream())
-	            .filter(Lesson::isFreePreview)
-	            .findFirst()
-	            .orElse(null);
-	    
-	    List<CourseFeedback> feedbacks =
-	            feedbackRepo.findByCourseCourseId(courseId);
+		double avgRating = feedbacks.stream().mapToInt(CourseFeedback::getRating).average().orElse(0.0);
 
-	    double avgRating = feedbacks.stream()
-	            .mapToInt(CourseFeedback::getRating)
-	            .average()
-	            .orElse(0.0);
+		model.addAttribute("instructorAvgRating", instructorAvg);
+		model.addAttribute("instructorRatingCount", instructorCount);
+		model.addAttribute("feedbacks", feedbacks);
+		model.addAttribute("avgRating", avgRating);
+		model.addAttribute("feedbackGiven", feedbackGiven);
+		model.addAttribute("course", course);
+		model.addAttribute("previewLesson", previewLesson);
+		model.addAttribute("enrolled", enrolled);
+		model.addAttribute("courseCompleted", courseCompleted);
 
-	    
-	    model.addAttribute("instructorAvgRating", instructorAvg);
-	    model.addAttribute("instructorRatingCount", instructorCount);
-	    model.addAttribute("feedbacks", feedbacks);
-	    model.addAttribute("avgRating", avgRating);
-	    model.addAttribute("feedbackGiven", feedbackGiven);
-	    model.addAttribute("course", course);
-	    model.addAttribute("previewLesson", previewLesson);
-	    model.addAttribute("enrolled", enrolled);
-	    model.addAttribute("courseCompleted", courseCompleted);
-
-	    return "student-course-details";
+		return "student-course-details";
 	}
-	
-	
+
 	@PostMapping("/student-enroll")
-	public String confirmEnrollment(
-	        @RequestParam Integer courseId,
-	        RedirectAttributes ra,
-	        HttpSession session
-			) {
-			    Integer studentId = (Integer) session.getAttribute("studentId");
+	public String confirmEnrollment(@RequestParam Integer courseId, RedirectAttributes ra, HttpSession session) {
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-			    if (studentId == null) {
-			        return "redirect:/student-login";
-			    }
+		if (studentId == null) {
+			return "redirect:/student-login";
+		}
 
-			    Student student = studentRepo.findById(studentId).orElseThrow();
+		Student student = studentRepo.findById(studentId).orElseThrow();
 
-			    Optional<Enrollment> existingOpt =
-			            enrollmentRepo.findByStudentStudidAndCourseCourseId(studentId, courseId);
+		Optional<Enrollment> existingOpt = enrollmentRepo.findByStudentStudidAndCourseCourseId(studentId, courseId);
 
-			    if (existingOpt.isPresent()) {
-			        Enrollment existing = existingOpt.get();
+		if (existingOpt.isPresent()) {
+			Enrollment existing = existingOpt.get();
 
-			        if (existing.getStatus() == EnrollmentStatus.SUSPENDED) {
-			            ra.addFlashAttribute("error", "Your enrollment is suspended");
-			            return "redirect:/student-course-details?courseId=" + courseId;
-			        }
+			if (existing.getStatus() == EnrollmentStatus.SUSPENDED) {
+				ra.addFlashAttribute("error", "Your enrollment is suspended");
+				return "redirect:/student-course-details?courseId=" + courseId;
+			}
 
-			        if (existing.getStatus() == EnrollmentStatus.BLOCKED) {
-			            ra.addFlashAttribute("error", "You are blocked from this course");
-			            return "redirect:/student-course-details?courseId=" + courseId;
-			        }
-			    }
-	    boolean enrolled =
-	            enrollmentRepo.existsByStudentStudidAndCourseCourseId(studentId, courseId);
+			if (existing.getStatus() == EnrollmentStatus.BLOCKED) {
+				ra.addFlashAttribute("error", "You are blocked from this course");
+				return "redirect:/student-course-details?courseId=" + courseId;
+			}
+		}
+		boolean enrolled = enrollmentRepo.existsByStudentStudidAndCourseCourseId(studentId, courseId);
 
-	    if (!enrolled) {
-	        Enrollment e = new Enrollment();
-	        e.setStudent(student);
-	        e.setCourse(courseRepo.findById(courseId).orElseThrow());
-	        enrollmentRepo.save(e);
-	    }
+		if (!enrolled) {
+			Enrollment e = new Enrollment();
+			e.setStudent(student);
+			e.setCourse(courseRepo.findById(courseId).orElseThrow());
+			enrollmentRepo.save(e);
+		}
 
-	    ra.addFlashAttribute("success", "Enrolled successfully!");
+		ra.addFlashAttribute("success", "Enrolled successfully!");
 
-	    // ✅ ALWAYS GO TO LEARNING PAGE
-	    return "redirect:/student-course-player/" + courseId;
+		// ✅ ALWAYS GO TO LEARNING PAGE
+		return "redirect:/student-course-player/" + courseId;
 	}
-	
+
 	@GetMapping("/student-course-player/{courseId}")
-	public String openCoursePlayer(
-	        @PathVariable Integer courseId,
-	        @RequestParam(required = false) Integer lessonId,
-	        @RequestParam(required = false) Boolean certError,
-	        Model model,
-	        HttpSession session
-	) {
-	    Integer studentId = (Integer) session.getAttribute("studentId");
-	    if (studentId == null) {
-	        return "redirect:/student-login";
-	    }
+	public String openCoursePlayer(@PathVariable Integer courseId, @RequestParam(required = false) Integer lessonId,
+			@RequestParam(required = false) Boolean certError, Model model, HttpSession session) {
+		Integer studentId = (Integer) session.getAttribute("studentId");
+		if (studentId == null) {
+			return "redirect:/student-login";
+		}
 
-	    // 🔒 enrollment check
-	    boolean enrolled =
-	            enrollmentRepo.existsByStudentStudidAndCourseCourseId(studentId, courseId);
+		// 🔒 enrollment check
+		boolean enrolled = enrollmentRepo.existsByStudentStudidAndCourseCourseId(studentId, courseId);
 
-	    if (!enrolled) {
-	        return "redirect:/student-course-details?courseId=" + courseId;
-	    }
+		if (!enrolled) {
+			return "redirect:/student-course-details?courseId=" + courseId;
+		}
 
-	    Course course = courseRepo.findById(courseId).orElseThrow();
+		Course course = courseRepo.findById(courseId).orElseThrow();
 
-	    // 🔍 resolve current lesson
-	    Lesson currentLesson =
-	            (lessonId != null)
-	                ? course.getModules().stream()
-	                    .flatMap(m -> m.getLessons().stream())
-	                    .filter(l -> l.getLessonId().equals(lessonId))
-	                    .findFirst()
-	                    .orElse(null)
-	                : course.getModules().stream()
-	                    .flatMap(m -> m.getLessons().stream())
-	                    .findFirst()
-	                    .orElse(null);
+		// 🔍 resolve current lesson
+		Lesson currentLesson = (lessonId != null)
+				? course.getModules().stream().flatMap(m -> m.getLessons().stream())
+						.filter(l -> l.getLessonId().equals(lessonId)).findFirst().orElse(null)
+				: course.getModules().stream().flatMap(m -> m.getLessons().stream()).findFirst().orElse(null);
 
-	    // 🔴 EMPTY COURSE (no lessons at all)
-	    if (currentLesson == null) {
-	        model.addAttribute("course", course);
-	        model.addAttribute("noLessons", true);
-	        model.addAttribute("progressPercent", 0);
-	        model.addAttribute("completedLessonIds", List.of());
-	        model.addAttribute("courseCompleted", false);
-	        return "student-course-player";
-	    }
+		// 🔴 EMPTY COURSE (no lessons at all)
+		if (currentLesson == null) {
+			model.addAttribute("course", course);
+			model.addAttribute("noLessons", true);
+			model.addAttribute("progressPercent", 0);
+			model.addAttribute("completedLessonIds", List.of());
+			model.addAttribute("courseCompleted", false);
+			return "student-course-player";
+		}
 
-	    // 📊 progress calculation
-	    long completedLessons =
-	            lessonProgressRepo
-	                .countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(
-	                        studentId, courseId);
+		// 📊 progress calculation
+		long completedLessons = lessonProgressRepo
+				.countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(studentId, courseId);
 
-	    long totalLessons = course.getModules().stream()
-	            .mapToLong(m -> m.getLessons().size())
-	            .sum();
+		long totalLessons = course.getModules().stream().mapToLong(m -> m.getLessons().size()).sum();
 
-	    int progressPercent =
-	            totalLessons == 0 ? 0 :
-	            (int) ((completedLessons * 100) / totalLessons);
+		int progressPercent = totalLessons == 0 ? 0 : (int) ((completedLessons * 100) / totalLessons);
 
-	    List<Integer> completedLessonIds =
-	            lessonProgressRepo.findCompletedLessonIds(studentId, courseId);
+		List<Integer> completedLessonIds = lessonProgressRepo.findCompletedLessonIds(studentId, courseId);
 
-	    // 🧠 quiz questions
-	    if (currentLesson.getType() == LessonType.QUIZ) {
-	        model.addAttribute(
-	                "questions",
-	                quizQuestionRepo.findByQuiz(currentLesson.getQuiz())
-	        );
-	    }
-	    
-	    if (totalLessons > 0 && completedLessons == totalLessons) {
+		// 🧠 quiz questions
+		if (currentLesson.getType() == LessonType.QUIZ) {
+			model.addAttribute("questions", quizQuestionRepo.findByQuiz(currentLesson.getQuiz()));
+		}
 
-	        Enrollment enrollment =
-	            enrollmentRepo.findByStudentStudidAndCourseCourseId(studentId, courseId)
-	                .orElse(null);
+		if (totalLessons > 0 && completedLessons == totalLessons) {
 
-	        if (enrollment != null && enrollment.getCompletedAt() == null) {
-	            enrollment.setCompletedAt(LocalDateTime.now());
-	            enrollmentRepo.save(enrollment);
-	        }
-	    }
+			Enrollment enrollment = enrollmentRepo.findByStudentStudidAndCourseCourseId(studentId, courseId)
+					.orElse(null);
 
-	    if (Boolean.TRUE.equals(certError)) {
-	        model.addAttribute("certificateError",
-	            "🎓 Certificate is currently not available. Please check later.");
-	    }
-	    model.addAttribute("course", course);
-	    model.addAttribute("currentLesson", currentLesson);
-	    model.addAttribute("noLessons", false);
-	    model.addAttribute("progressPercent", progressPercent);
-	    model.addAttribute("completedLessonIds", completedLessonIds);
-	    model.addAttribute("courseCompleted", progressPercent == 100);
+			if (enrollment != null && enrollment.getCompletedAt() == null) {
+				enrollment.setCompletedAt(LocalDateTime.now());
+				enrollmentRepo.save(enrollment);
+			}
+		}
 
-	    return "student-course-player";
+		if (Boolean.TRUE.equals(certError)) {
+			model.addAttribute("certificateError", "🎓 Certificate is currently not available. Please check later.");
+		}
+		model.addAttribute("course", course);
+		model.addAttribute("currentLesson", currentLesson);
+		model.addAttribute("noLessons", false);
+		model.addAttribute("progressPercent", progressPercent);
+		model.addAttribute("completedLessonIds", completedLessonIds);
+		model.addAttribute("courseCompleted", progressPercent == 100);
+
+		return "student-course-player";
 	}
+
 	@PostMapping("/student/lesson/complete")
 	@ResponseBody
-	public String completeLesson(
-	        @RequestParam Integer lessonId,
-	        HttpSession session
-			) {
-			    Integer studentId = (Integer) session.getAttribute("studentId");
+	public String completeLesson(@RequestParam Integer lessonId, HttpSession session) {
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-			    if (studentId == null) {
-			        return "redirect:/student-login";
-			    }
-			    Student student = studentRepo.findById(studentId).orElseThrow();
+		if (studentId == null) {
+			return "redirect:/student-login";
+		}
+		Student student = studentRepo.findById(studentId).orElseThrow();
 
-	    if (!lessonProgressRepo
-	            .existsByStudentStudidAndLessonLessonId(studentId, lessonId)) {
+		if (!lessonProgressRepo.existsByStudentStudidAndLessonLessonId(studentId, lessonId)) {
 
-	        LessonProgress lp = new LessonProgress();
-	        lp.setStudent(student);
-	        lp.setLesson(lessonRepo.findById(lessonId).orElseThrow());
-	        lp.setCompleted(true);
-	        lp.setCompletedAt(LocalDateTime.now());
+			LessonProgress lp = new LessonProgress();
+			lp.setStudent(student);
+			lp.setLesson(lessonRepo.findById(lessonId).orElseThrow());
+			lp.setCompleted(true);
+			lp.setCompletedAt(LocalDateTime.now());
 
-	        lessonProgressRepo.save(lp);
-	    }
+			lessonProgressRepo.save(lp);
+		}
 
-	    return "ok";
+		return "ok";
 	}
-	
+
 	@PostMapping("/student/quiz/submit")
-	public String submitQuiz(
-	        @RequestParam Integer lessonId,
-	        @RequestParam Map<String, String> answers,
-	        HttpSession session
-			) {
-			    Integer studentId = (Integer) session.getAttribute("studentId");
+	public String submitQuiz(@RequestParam Integer lessonId, @RequestParam Map<String, String> answers,
+			HttpSession session) {
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-			    if (studentId == null) {
-			        return "redirect:/student-login";
-			    }
+		if (studentId == null) {
+			return "redirect:/student-login";
+		}
 
-			    Student student = studentRepo.findById(studentId).orElseThrow();
-			 
-	    Lesson lesson = lessonRepo.findById(lessonId).orElseThrow();
-	    Quiz quiz = lesson.getQuiz();
+		Student student = studentRepo.findById(studentId).orElseThrow();
 
-	    int score = 0;
+		Lesson lesson = lessonRepo.findById(lessonId).orElseThrow();
+		Quiz quiz = lesson.getQuiz();
 
-	    List<QuizQuestion> questions =
-	            quizQuestionRepo.findByQuiz(quiz);
+		int score = 0;
 
-	    for (QuizQuestion q : questions) {
-	        String given = answers.get("q_" + q.getQuestionId());
-	        if (q.getCorrectOption().equals(given)) {
-	            score++;
-	        }
-	    }
+		List<QuizQuestion> questions = quizQuestionRepo.findByQuiz(quiz);
 
-	    // 🔥 Save progress
-	    if (!lessonProgressRepo
-        .existsByStudentStudidAndLessonLessonId(studentId, lesson.getLessonId())) {
+		for (QuizQuestion q : questions) {
+			String given = answers.get("q_" + q.getQuestionId());
+			if (q.getCorrectOption().equals(given)) {
+				score++;
+			}
+		}
 
-    LessonProgress lp = new LessonProgress();
-    lp.setStudent(student);
-    lp.setLesson(lesson);
-    lp.setCompleted(true);
-    lp.setCompletedAt(LocalDateTime.now());
+		// 🔥 Save progress
+		if (!lessonProgressRepo.existsByStudentStudidAndLessonLessonId(studentId, lesson.getLessonId())) {
 
-    lessonProgressRepo.save(lp);
+			LessonProgress lp = new LessonProgress();
+			lp.setStudent(student);
+			lp.setLesson(lesson);
+			lp.setCompleted(true);
+			lp.setCompletedAt(LocalDateTime.now());
+
+			lessonProgressRepo.save(lp);
+		}
+
+		// 🔁 Redirect back to course
+		return "redirect:/student-course-player/" + lesson.getModule().getCourse().getCourseId() + "?lessonId="
+				+ lessonId;
+	}
+
 }
-
-	    // 🔁 Redirect back to course
-	    return "redirect:/student-course-player/" +
-	           lesson.getModule().getCourse().getCourseId() +
-	           "?lessonId=" + lessonId;
-	}
-	
-	}

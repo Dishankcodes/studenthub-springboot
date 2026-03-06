@@ -13,19 +13,19 @@
 	<!-- Admin Sidebar CSS -->
 	<link th:href="@{/css/admin-css/admin_sidebar.css}" rel="stylesheet">
 	<style>
+		body {
+			font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+		}
+
 		/* =======================
    BASE
 ======================= */
 		.dashboard {
-			padding: 36px;
-			max-width: 1400px;
-			margin: 0 auto;
+			padding: 36px 42px;
+			width: 100%;
 			color: #e5e7eb;
 		}
 
-		/* =======================
-   HEADER
-======================= */
 		.feedback-header {
 			display: flex;
 			justify-content: space-between;
@@ -35,7 +35,7 @@
 		}
 
 		.feedback-header h2 {
-			font-size: 1.7rem;
+			font-size: 1.9rem;
 			font-weight: 600;
 			color: #f9fafb;
 		}
@@ -106,42 +106,48 @@
 		}
 
 		/* =======================
-   TABLE (CLEAN DARK)
+   TABLE (ADMIN DARK)
 ======================= */
+
 		.table {
-			margin-top: 14px;
-			margin-bottom: 0;
+			width: 100%;
+			margin-top: 18px;
+			border-collapse: separate;
+			border-spacing: 0;
 			color: #e5e7eb;
-			border-collapse: collapse;
+			font-size: 14px;
+		}
+
+		.table thead {
+			background: rgba(255, 255, 255, 0.05);
 		}
 
 		.table thead th {
-			background: rgba(255, 255, 255, 0.04);
 			color: #9ca3af;
-			font-size: 12.5px;
 			font-weight: 600;
-			text-transform: uppercase;
+			font-size: 13px;
 			letter-spacing: 0.4px;
+			text-transform: uppercase;
 			border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 			padding: 14px 16px;
 		}
 
 		.table tbody tr {
-			border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 			transition: background 0.2s ease;
 		}
 
 		.table tbody tr:hover {
-			background: rgba(56, 189, 248, 0.08);
+			background: rgba(59, 130, 246, 0.08);
 		}
 
 		.table td {
 			padding: 14px 16px;
-			font-size: 14px;
+			color: #d1d5db;
 			vertical-align: middle;
 		}
 
-		/* Rating column */
+		/* rating column */
 		.table td:nth-child(2) {
 			font-weight: 600;
 			color: #facc15;
@@ -191,6 +197,60 @@
 				flex-direction: column;
 				align-items: flex-start;
 			}
+		}
+
+		.rating-card {
+			margin-bottom: 28px;
+		}
+
+		.activity-card h5 {
+			font-size: 1.1rem;
+			margin-bottom: 16px;
+		}
+
+		/* =======================
+   FORCE DARK TABLE
+======================= */
+
+		.activity-card table {
+			background: transparent !important;
+			color: #e5e7eb;
+		}
+
+		.activity-card thead {
+			background: rgba(255, 255, 255, 0.05) !important;
+		}
+
+		.activity-card thead th {
+			background: transparent !important;
+			color: #9ca3af !important;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+		}
+
+		.activity-card tbody {
+			background: transparent !important;
+		}
+
+		.activity-card tbody tr {
+			background: transparent !important;
+		}
+
+		.activity-card tbody td {
+			color: #d1d5db !important;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		/* =======================
+   REMOVE BOOTSTRAP WHITE TABLE
+======================= */
+
+		.activity-card .table> :not(caption)>*>* {
+			background-color: transparent !important;
+		}
+
+		/* optional: slightly darker hover */
+		.activity-card .table tbody tr:hover>* {
+			background-color: rgba(59, 130, 246, 0.08) !important;
 		}
 	</style>
 </head>
@@ -289,7 +349,7 @@
 				<div class="activity-card">
 					<h5>Student Reviews</h5>
 
-					<table class="table table-hover mt-3">
+					<table class="table mt-3">
 						<thead>
 							<tr>
 								<th>Student</th>

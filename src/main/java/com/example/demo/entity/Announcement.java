@@ -15,43 +15,43 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-
 @Entity
 @Table(name = "announcement")
 public class Announcement {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer announcementId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer announcementId;
 
-    private String title;
+	private String title;
 
-    @Column(length = 3000)
-    private String message;
+	@Column(length = 3000)
+	private String message;
 
-    @Enumerated(EnumType.STRING)
-    private AnnouncementType type;
-    
-    @Enumerated(EnumType.STRING)
-    private AnnouncementAudience audience;
+	@Enumerated(EnumType.STRING)
+	private AnnouncementType type;
 
-    // Nullable → only for COURSE announcements
-    @ManyToOne
-    private Course course;
+	@Enumerated(EnumType.STRING)
+	private AnnouncementAudience audience;
 
-    // Nullable → present if teacher created
-    @ManyToOne
-    private Teacher teacher;
+	// Nullable → only for COURSE announcements
+	@ManyToOne
+	private Course course;
 
-    // Admin announcements → teacher = null
-    private boolean active = true;
+	// Nullable → present if teacher created
+	@ManyToOne
+	private Teacher teacher;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+	// Admin announcements → teacher = null
+	private boolean active = true;
 
-    private String attachmentUrl;
-    private String attachmentName;
-    
-    private boolean pinned = false;
+	private LocalDateTime createdAt = LocalDateTime.now();
+
+	private String attachmentUrl;
+	private String attachmentName;
+
+	private boolean pinned = false;
+
 	public Integer getAnnouncementId() {
 		return announcementId;
 	}
@@ -147,9 +147,5 @@ public class Announcement {
 	public void setPinned(boolean pinned) {
 		this.pinned = pinned;
 	}
-    
-    
-    
-    
-    
+
 }

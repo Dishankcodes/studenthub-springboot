@@ -46,4 +46,14 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
 			ORDER BY MONTH(e.enrolledAt)
 			""")
 			List<Object[]> countStudentsGroupedByMonth(Integer teacherId);
+
+			List<Enrollment> findByStudentStudid(Integer studid);
+
+			@Query("""
+					SELECT e.course.courseId
+					FROM Enrollment e
+					WHERE e.student.studid = :studentId
+					AND e.completedAt IS NOT NULL
+					""")
+					List<Integer> findCompletedCourses(Integer studentId);
 }

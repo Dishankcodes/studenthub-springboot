@@ -1,4 +1,5 @@
 package com.example.demo.Controllers;
+
 import java.io.IOException;
 import java.time.LocalDate;
 
@@ -16,88 +17,85 @@ import com.example.demo.repository.CertificateTemplateRepository;
 @Controller
 public class AdminDesignController {
 
-    private final CertificateTemplateRepository templateRepo;
+	private final CertificateTemplateRepository templateRepo;
 
-    AdminDesignController(CertificateTemplateRepository templateRepo) {
-        this.templateRepo = templateRepo;
-    }
-    private static final String UPLOAD_BASE =
-            System.getProperty("user.dir") + java.io.File.separator + "uploads";
+	AdminDesignController(CertificateTemplateRepository templateRepo) {
+		this.templateRepo = templateRepo;
+	}
 
-    private String saveFile(MultipartFile file, String folderName) throws IOException {
+	private static final String UPLOAD_BASE = System.getProperty("user.dir") + java.io.File.separator + "uploads";
 
-        if (file == null || file.isEmpty()) {
-            return null;
-        }
+	private String saveFile(MultipartFile file, String folderName) throws IOException {
 
-        String folderPath = UPLOAD_BASE + java.io.File.separator + folderName;
+		if (file == null || file.isEmpty()) {
+			return null;
+		}
 
-        java.io.File dir = new java.io.File(folderPath);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+		String folderPath = UPLOAD_BASE + java.io.File.separator + folderName;
 
-        String fileName = System.currentTimeMillis()
-                + "_" + file.getOriginalFilename();
+		java.io.File dir = new java.io.File(folderPath);
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
 
-        java.io.File destination = new java.io.File(dir, fileName);
-        file.transferTo(destination);
+		String fileName = System.currentTimeMillis()
+				+ "_" + file.getOriginalFilename();
 
-        // store relative path in DB
-        return "/uploads/" + folderName + "/" + fileName;
-    }
+		java.io.File destination = new java.io.File(dir, fileName);
+		file.transferTo(destination);
+
+		// store relative path in DB
+		return "/uploads/" + folderName + "/" + fileName;
+	}
 
 	@GetMapping("/admin-design")
 	public String designTemplate(Model model) {
-		
+
 		model.addAttribute("templates", templateRepo.findAll());
 		return "admin-design";
 	}
-	
+
 	@PostMapping("/certificate-template/save")
 	public String saveTemplate(@RequestParam String name,
-		        @RequestParam MultipartFile backgroundImage,
-		        @RequestParam(required = false) MultipartFile signatureImage,
-		        @RequestParam String fontFamily,
-		        @RequestParam String fontColor,
-			Model model)throws IOException {
-		
-		
+			@RequestParam MultipartFile backgroundImage,
+			@RequestParam(required = false) MultipartFile signatureImage,
+			@RequestParam String fontFamily,
+			@RequestParam String fontColor,
+			Model model) throws IOException {
+
 		CertificateTemplate template = new CertificateTemplate();
 		template.setName(name);
-		
+
 		template.setBackgroundImage(
 				saveFile(backgroundImage, "certificate-templates"));
-		
-		 if (!signatureImage.isEmpty()) {
-		        template.setSignatureImage(
-		            saveFile(signatureImage, "cert-sign")
-		        );
-		    }
 
-		    template.setFontFamily(fontFamily);
-		    template.setFontColor(fontColor);
-		    template.setCreatedAt(LocalDate.now());
-		    template.setActive(false);
+		if (!signatureImage.isEmpty()) {
+			template.setSignatureImage(
+					saveFile(signatureImage, "cert-sign"));
+		}
+
+		template.setFontFamily(fontFamily);
+		template.setFontColor(fontColor);
+		template.setCreatedAt(LocalDate.now());
+		template.setActive(false);
 		templateRepo.save(template);
 		return "redirect:/admin-design";
 	}
-	
+
 	@PostMapping("/certificate-template/activate/{id}")
 	public String activateTemplate(@PathVariable Integer id) {
 
-	    templateRepo.findByActiveTrue()
-	        .ifPresent(t -> {
-	            t.setActive(false);
-	            templateRepo.save(t);
-	        });
+		templateRepo.findByActiveTrue()
+				.ifPresent(t -> {
+					t.setActive(false);
+					templateRepo.save(t);
+				});
 
-	    CertificateTemplate newActive =
-	        templateRepo.findById(id).orElseThrow();
+		CertificateTemplate newActive = templateRepo.findById(id).orElseThrow();
 
-	    newActive.setActive(true);
-	    templateRepo.save(newActive);
+		newActive.setActive(true);
+		templateRepo.save(newActive);
 
-	    return "redirect:/admin-design";
+		return "redirect:/admin-design";
 	}
 }

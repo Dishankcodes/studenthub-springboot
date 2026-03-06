@@ -11,6 +11,16 @@ import com.example.demo.entity.LessonProgress;
 public interface LessonProgressRepository
 extends JpaRepository<LessonProgress, Integer> {
 
+	@Query("""
+		    SELECT COUNT(lp)
+		    FROM LessonProgress lp
+		    WHERE lp.student.studid = :studentId
+		    AND lp.completed = true
+		    AND lp.completedAt IS NOT NULL
+		    GROUP BY FUNCTION('DAYOFWEEK', lp.completedAt)
+		""")
+		List<Long> getWeeklyActivity(Integer studentId);
+	 
 	boolean existsByStudentStudidAndLessonLessonId(
 		    Integer studentId,
 		    Integer lessonId
@@ -31,4 +41,6 @@ extends JpaRepository<LessonProgress, Integer> {
         @Param("studentId") Integer studentId,
         @Param("courseId") Integer courseId
     );
+		
+		
 }

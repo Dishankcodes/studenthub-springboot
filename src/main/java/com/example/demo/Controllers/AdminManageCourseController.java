@@ -30,10 +30,10 @@ public class AdminManageCourseController {
 
 	@Autowired
 	private CourseRepository courseRepo;
-	
+
 	@Autowired
 	private CourseFeedbackRepository feedbackRepo;
-	
+
 	@Autowired
 	private InstructorFeedbackRepository instructorFeedbackRepo;
 
@@ -44,10 +44,10 @@ public class AdminManageCourseController {
 
 		Admin admin = adminRepo.findById(adminId).orElse(null);
 
-//		
-//		if (session.getAttribute("adminEmail") == null) {
-//			return "redirect:/admin-login";
-//		}
+		//
+		// if (session.getAttribute("adminEmail") == null) {
+		// return "redirect:/admin-login";
+		// }
 
 		List<AdminCourseSummaryDTO> courses = courseRepo.fetchAdminCourseSummary();
 
@@ -84,38 +84,29 @@ public class AdminManageCourseController {
 	@GetMapping("/admin-course/view/{id}")
 	public String viewCourse(@PathVariable Integer id, Model model) {
 
-	    Course course = courseRepo.findAllWithStructure(id).get(0);
-	    
-	    if (course == null) {
-	        return "redirect:/manage-courses";
-	    }
+		Course course = courseRepo.findAllWithStructure(id).get(0);
 
-	    List<CourseFeedback> feedbacks =
-	            feedbackRepo.findByCourseCourseId(id);
+		if (course == null) {
+			return "redirect:/manage-courses";
+		}
 
-	    double avgRating = feedbacks.stream()
-	            .mapToInt(CourseFeedback::getRating)
-	            .average()
-	            .orElse(0.0);
-	    
-	    Integer teacherId = course.getTeacher().getTeacherId();
-	    
-	   
-	    double avgInstructorRating =
-	            instructorFeedbackRepo.getAverageRating(teacherId);
+		List<CourseFeedback> feedbacks = feedbackRepo.findByCourseCourseId(id);
 
-	    Long totalInstructorReviews =
-	            instructorFeedbackRepo.getTotalRatings(teacherId);
+		double avgRating = feedbacks.stream().mapToInt(CourseFeedback::getRating).average().orElse(0.0);
 
+		Integer teacherId = course.getTeacher().getTeacherId();
 
-	    model.addAttribute("course", course);
-	    model.addAttribute("feedbacks", feedbacks);
-	    model.addAttribute("avgRating", avgRating);
-	    model.addAttribute("reviewCount", feedbacks.size());
-	    model.addAttribute("avgInstructorRating", avgInstructorRating);
-	    model.addAttribute("totalInstructorReviews", totalInstructorReviews);
+		double avgInstructorRating = instructorFeedbackRepo.getAverageRating(teacherId);
 
+		Long totalInstructorReviews = instructorFeedbackRepo.getTotalRatings(teacherId);
 
-	    return "admin-course-view";
+		model.addAttribute("course", course);
+		model.addAttribute("feedbacks", feedbacks);
+		model.addAttribute("avgRating", avgRating);
+		model.addAttribute("reviewCount", feedbacks.size());
+		model.addAttribute("avgInstructorRating", avgInstructorRating);
+		model.addAttribute("totalInstructorReviews", totalInstructorReviews);
+
+		return "admin-course-view";
 	}
 }

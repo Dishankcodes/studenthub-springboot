@@ -148,6 +148,59 @@
 			color: #fee2e2;
 			transform: translateY(-1px);
 		}
+
+		/* ================================
+STATUS SELECT (ADMIN THEME)
+================================ */
+
+		.status-select {
+			background: rgba(255, 255, 255, 0.06);
+			color: #e5e7eb;
+			border: 1px solid rgba(255, 255, 255, 0.15);
+			border-radius: 6px;
+			font-size: 0.8rem;
+			padding: 4px 8px;
+			outline: none;
+		}
+
+		.status-select option {
+			background: #0f172a;
+			color: #e5e7eb;
+		}
+
+		.status-select:focus {
+			border-color: rgba(59, 130, 246, 0.6);
+			box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+		}
+
+		.status-select {
+			min-width: 110px;
+		}
+
+		/* Feedback button */
+		.home-section .btn-feedback {
+			background: rgba(59, 130, 246, 0.15);
+			color: #93c5fd;
+			border: 1px solid rgba(59, 130, 246, 0.4);
+			font-size: 0.75rem;
+			padding: 0.35rem 0.65rem;
+			border-radius: 0.45rem;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			transition: all 0.2s ease;
+
+			text-decoration: none;
+			/* FIX underline */
+		}
+
+		.home-section .btn-feedback:hover {
+			background: rgba(59, 130, 246, 0.25);
+			color: #e0f2fe;
+			transform: translateY(-1px);
+			text-decoration: none;
+			/* ensure no underline */
+		}
 	</style>
 </head>
 
@@ -196,10 +249,10 @@
 						<li class="sidebar__item"><a th:href="@{/manage-internships}">
 								<i class="bi bi-briefcase"></i><span>Internship Management</span></a></li>
 
-<li class="sidebar__item"><a th:href="@{/admin-announcement}">
+						<li class="sidebar__item"><a th:href="@{/admin-announcement}">
 								<i class="bi bi-briefcase"></i><span>Announcements</span></a></li>
-						
-						
+
+
 						<li class="sidebar__item"><a th:href="@{/admin-design}"><i
 									class="bi bi-layout-text-window"></i><span>Certificate Design</span></a></li>
 
@@ -253,36 +306,32 @@
 
 							<td>
 
-<form th:action="@{/manage-instructor/status/{id}(id=${teacher.teacherId})}"
-      method="post"
-      class="d-flex gap-1 align-items-center">
+								<form th:action="@{/manage-instructor/status/{id}(id=${teacher.teacherId})}"
+									method="post" class="d-flex gap-1 align-items-center">
 
-<select name="status" class="status-select">
+									<select name="status" class="status-select">
 
-<option value="ACTIVE"
-th:selected="${teacher.status.name() == 'ACTIVE'}">
-Active
-</option>
+										<option value="ACTIVE" th:selected="${teacher.status.name() == 'ACTIVE'}">
+											Active
+										</option>
 
-<option value="SUSPENDED"
-th:selected="${teacher.status.name() == 'SUSPENDED'}">
-Suspended
-</option>
+										<option value="SUSPENDED" th:selected="${teacher.status.name() == 'SUSPENDED'}">
+											Suspended
+										</option>
 
-<option value="BLOCKED"
-th:selected="${teacher.status.name() == 'BLOCKED'}">
-Blocked
-</option>
+										<option value="BLOCKED" th:selected="${teacher.status.name() == 'BLOCKED'}">
+											Blocked
+										</option>
 
-</select>
+									</select>
 
-<button class="btn btn-success btn-sm">
-<i class="bi bi-check"></i>
-</button>
+									<button class="btn btn-success btn-sm">
+										<i class="bi bi-check"></i>
+									</button>
 
-</form>
+								</form>
 
-</td>
+							</td>
 							<td>
 								<div class="action-group">
 
@@ -292,7 +341,7 @@ Blocked
 										View
 									</a>
 
-	
+
 
 								</div>
 							</td>
