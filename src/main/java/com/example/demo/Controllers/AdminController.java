@@ -16,7 +16,6 @@ import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherProfile;
 import com.example.demo.enums.TeacherStatus;
-import com.example.demo.repository.AnnouncementRepository;
 import com.example.demo.repository.InstructorFeedbackRepository;
 import com.example.demo.repository.NoteCategoryRepository;
 import com.example.demo.repository.StudentRepository;
