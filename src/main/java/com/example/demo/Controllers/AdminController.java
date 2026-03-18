@@ -38,12 +38,6 @@ public class AdminController {
 	private TeacherProfileRepo teacherProfileRepo;
 
 	@Autowired
-	private NoteCategoryRepository categoryRepo;
-
-	@Autowired
-	private TeacherNotesRepository teacherNoteRepo;
-
-	@Autowired
 	private InstructorFeedbackRepository instructorFeedbackRepo;
 
 	@GetMapping("/admin-dashboard")
@@ -143,11 +137,6 @@ public class AdminController {
 		return "redirect:/manage-teachers#instructor-" + id;
 	}
 
-	@GetMapping("/manage-internships")
-	public String admin_internships() {
-
-		return "manage-internships";
-	}
 
 	@GetMapping("/admin-feedback")
 	public String admin_feedback() {
