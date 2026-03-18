@@ -160,23 +160,30 @@
 
             <!-- HEADER -->
             <div class="detail-header">
-                <h1>Java Backend Intern</h1>
-                <p class="company">TechNova Pvt Ltd</p>
+                <h1 th:text="${internship.title}"></h1>
+                <p class="company">EduPlatform</p>
 
                 <div class="meta">
-                    <span><i class="bi bi-geo-alt"></i> Remote</span>
-                    <span><i class="bi bi-currency-rupee"></i> ₹5000/month</span>
-                    <span><i class="bi bi-clock"></i> 3 Months</span>
+                    <span>
+                        <i class="bi bi-geo-alt"></i>
+                        <span th:text="${internship.location}"></span>
+                    </span>
+
+                    <span>
+                        <i class="bi bi-currency-rupee"></i>
+                        ₹<span th:text="${internship.stipend}"></span>/month
+                    </span>
+
+                    <span>
+                        <i class="bi bi-clock"></i>
+                        <span th:text="${internship.duration}"></span>
+                    </span>
                 </div>
             </div>
-
             <!-- DESCRIPTION -->
             <div class="detail-section">
                 <h3>About the Internship</h3>
-                <p>
-                    You will work on backend systems using Java and Spring Boot.
-                    Build APIs, optimize performance, and collaborate with frontend team.
-                </p>
+                <p th:text="${internship.description}"></p>
             </div>
 
             <!-- RESPONSIBILITIES -->
@@ -192,18 +199,41 @@
             <!-- SKILLS -->
             <div class="detail-section">
                 <h3>Required Skills</h3>
+
                 <div class="skills">
-                    <span>Java</span>
-                    <span>Spring Boot</span>
-                    <span>SQL</span>
+                    <span th:each="skill : ${#strings.arraySplit(internship.skills, ',')}" th:text="${skill}">
+                    </span>
                 </div>
             </div>
 
-            <!-- ACTION -->
-            <div class="apply-box">
-                <button class="apply-btn">Apply Now 🚀</button>
-            </div>
+            <div class="detail-section" th:if="${internship.requiredCourse != null}">
+                <h3>Eligibility</h3>
 
+                <p>
+                    You must complete:
+                    <strong th:text="${internship.requiredCourse.title}"></strong>
+                </p>
+
+                <a th:href="@{'/student-course-details?courseId=' + ${internship.requiredCourse.courseId}}"
+                    class="btn btn-warning mt-2">
+                    Go to Course
+                </a>
+            </div>
+            <div class="apply-box">
+
+                <!-- SUCCESS -->
+                <div th:if="${success}" class="alert alert-success" th:text="${success}"></div>
+
+                <!-- ERROR -->
+                <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+                <form th:action="@{/student/apply}" method="post">
+                    <input type="hidden" name="internshipId" th:value="${internship.id}">
+
+                    <button class="apply-btn">Apply Now 🚀</button>
+                </form>
+
+            </div>
         </div>
 
     </div>

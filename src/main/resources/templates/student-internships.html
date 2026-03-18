@@ -11,8 +11,8 @@
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <!-- <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet"> -->
-    <link href="student-sidebar.css" rel="stylesheet">
+    <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+
 
     <style>
         * {
@@ -271,7 +271,7 @@
             <h2 class="section-title">🔥 Recommended for You</h2>
             <div class="internship-grid">
 
-                <!-- CARD 1 -->
+                <!-- CARD 1
                 <div class="intern-card highlight">
                     <div class="match">85% Match</div>
                     <h3>Java Backend Intern</h3>
@@ -292,86 +292,60 @@
                         <button class="apply">Apply</button>
                         <i class="bi bi-bookmark"></i>
                     </div>
+                </div> -->
+
+
+                <h2 class="section-title">All Internships</h2>
+
+                <div class="internship-grid">
+
+                    <div class="intern-card" th:each="i : ${internships}">
+
+                        <h3 th:text="${i.title}"></h3>
+                        <p class="company">EduPlatform</p>
+
+                        <div class="meta">
+                            <span>
+                                <i class="bi bi-geo-alt"></i>
+                                <span th:text="${i.location}"></span>
+                            </span>
+
+                            <span>
+                                <i class="bi bi-currency-rupee"></i>
+                                ₹<span th:text="${i.stipend}"></span>
+                            </span>
+
+                            <span>
+                                <i class="bi bi-clock"></i>
+                                <span th:text="${i.duration}"></span>
+                            </span>
+                        </div>
+
+                        <!-- SKILLS -->
+                        <div class="skills">
+                            <span th:each="skill : ${#strings.arraySplit(i.skills, ',')}" th:text="${skill}">
+                            </span>
+                        </div>
+
+                        <!-- ELIGIBILITY TAG -->
+                        <div th:if="${i.requiredCourse != null}" style="margin-top:8px;">
+                            <small style="color:#f59e0b;">
+                                Requires: <span th:text="${i.requiredCourse.title}"></span>
+                            </small>
+                        </div>
+
+                        <!-- ACTIONS -->
+                        <div class="actions">
+
+                            <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
+                                See Details
+                            </a>
+
+                        </div>
+
+                    </div>
+
                 </div>
-
-                <!-- CARD 2 -->
-                <div class="intern-card highlight">
-                    <div class="match">75% Match</div>
-                    <h3>Frontend Developer Intern</h3>
-                    <p class="company">PixelCraft</p>
-
-                    <div class="meta">
-                        <span><i class="bi bi-geo-alt"></i> Ahmedabad</span>
-                        <span><i class="bi bi-currency-rupee"></i> 4000</span>
-                        <span><i class="bi bi-clock"></i> 2 Months</span>
-                    </div>
-
-                    <div class="skills">
-                        <span>HTML</span>
-                        <span>CSS</span>
-                        <span>JS</span>
-                    </div>
-
-                    <div class="actions">
-                        <button class="apply">Apply</button>
-                        <a href="/student-internship-detail?id=1" class="details-btn">See Details</a>
-
-                        <i class="bi bi-bookmark"></i>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- ALL INTERNSHIPS -->
-            <h2 class="section-title">All Internships</h2>
-            <div class="internship-grid">
-
-                <!-- CARD 3 -->
-                <div class="intern-card">
-                    <h3>Data Analyst Intern</h3>
-                    <p class="company">Insight Corp</p>
-
-                    <div class="meta">
-                        <span><i class="bi bi-geo-alt"></i> Remote</span>
-                        <span><i class="bi bi-currency-rupee"></i> 6000</span>
-                        <span><i class="bi bi-clock"></i> 6 Months</span>
-                    </div>
-
-                    <div class="skills">
-                        <span>Python</span>
-                        <span>SQL</span>
-                    </div>
-
-                    <div class="actions">
-                        <button class="apply">Apply</button>
-                        <i class="bi bi-bookmark"></i>
-                    </div>
-                </div>
-
-                <!-- CARD 4 -->
-                <div class="intern-card">
-                    <h3>UI/UX Designer Intern</h3>
-                    <p class="company">DesignHub</p>
-
-                    <div class="meta">
-                        <span><i class="bi bi-geo-alt"></i> Remote</span>
-                        <span><i class="bi bi-currency-rupee"></i> 4500</span>
-                        <span><i class="bi bi-clock"></i> 3 Months</span>
-                    </div>
-
-                    <div class="skills">
-                        <span>Figma</span>
-                        <span>UI Design</span>
-                    </div>
-
-                    <div class="actions">
-                        <button class="apply">Apply</button>
-                        <a href="/student-internship-detail?id=1" class="details-btn">See Details</a>
-
-                        <i class="bi bi-bookmark"></i>
-                    </div>
-                </div>
-
             </div>
 
         </div>
@@ -396,5 +370,3 @@
     </script>
 
 </body>
-
-</html>
