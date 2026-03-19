@@ -2,6 +2,7 @@ package com.example.demo.entity;
 
 import com.example.demo.enums.ApplicationStatus;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -15,7 +16,7 @@ import jakarta.persistence.Table;
 @Table(name = "InternshipApplication")
 public class InternshipApplication {
 
-	@Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -27,8 +28,17 @@ public class InternshipApplication {
 
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status;
-    
-    
+
+    // 🔥 SNAPSHOT DATA (IMPORTANT)
+    private String fullName;
+    private String email;
+    private String phone;
+
+    private String resumeUrl;
+
+    @Column(length = 1000)
+    private String coverLetter;
+
 	public Integer getId() {
 		return id;
 	}
@@ -61,8 +71,45 @@ public class InternshipApplication {
 		this.status = status;
 	}
 
+	public String getFullName() {
+		return fullName;
+	}
 
-    
-    
-    
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getResumeUrl() {
+		return resumeUrl;
+	}
+
+	public void setResumeUrl(String resumeUrl) {
+		this.resumeUrl = resumeUrl;
+	}
+
+	public String getCoverLetter() {
+		return coverLetter;
+	}
+
+	public void setCoverLetter(String coverLetter) {
+		this.coverLetter = coverLetter;
+	}
+
+    	
 }

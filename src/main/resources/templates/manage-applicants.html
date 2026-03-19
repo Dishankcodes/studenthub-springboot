@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <style>
+        :root {
+            --expanded: 16.875rem;
+            --collapsed: 3.25rem;
+            --bg-primary: linear-gradient(135deg, #0b0b1f, #14142f);
+            --bg-content: #1a1a3d;
+            --accent: #6366f1;
+            --text-light: #eaeaf0;
+            --text-muted: #9ca3af;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        /* PAGE */
+        body {
+            background: var(--bg-primary);
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* CONTAINER */
+        .applicants-container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* TITLE */
+        h1 {
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        /* CARD */
+        .applicant-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.25s ease;
+        }
+
+        .applicant-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.25);
+        }
+
+        /* LEFT */
+        .info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .info img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* NAME */
+        .info h3 {
+            margin-bottom: 4px;
+        }
+
+        /* TEXT */
+        .info p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* STATUS BADGE */
+        .status {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .status.pending {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .status.accepted {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .status.rejected {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        /* ACTIONS */
+        .actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* BUTTON BASE */
+        .btn {
+            border: none;
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* BUTTON VARIANTS */
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-light);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn-info {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-success {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        /* HOVER EFFECT */
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* NO RESUME TEXT */
+        .actions span {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+    <main class="home-section">
+
+        <div class="applicants-container">
+
+            <h1 th:text="'Applicants - ' + ${internship.title}"></h1>
+
+            <div th:if="${#lists.isEmpty(applications)}" class="alert alert-info">
+                No applicants yet 🚀
+            </div>
+
+            <div class="applicant-list">
+
+                <div class="applicant-card" th:each="app : ${applications}">
+
+                    <!-- LEFT -->
+                    <div class="info">
+
+                        <img th:src="${app.student.profileImage != null 
+                        ? app.student.profileImage 
+                        : '/images/default.jpg'}">
+
+                        <div>
+                            <h3 th:text="${app.student.fullname}"></h3>
+
+                            <p>
+                                Skills:
+                                <span th:text="${app.student.interests}"></span>
+                            </p>
+
+                            <!-- STATUS -->
+                            <span class="status" th:classappend="${app.status.name().toLowerCase()}"
+                                th:text="${app.status}">
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT -->
+                    <div class="actions">
+
+                        <a th:href="@{'/admin-view-student?id=' + ${app.student.studid}}" class="btn btn-secondary">
+                            <i class="bi bi-person"></i> Profile
+                        </a>
+
+                        <a th:href="${app.resumeUrl}" target="_blank" class="btn btn-info">
+                            <i class="bi bi-eye"></i> Open
+                        </a>
+
+                        <a th:href="${app.resumeUrl}" download class="btn btn-primary">
+                            <i class="bi bi-download"></i> Download
+                        </a>
+
+                        <button name="action" value="accept" class="btn btn-success">
+                            <i class="bi bi-check-circle"></i> Accept
+                        </button>
+
+                        <button name="action" value="reject" class="btn btn-danger">
+                            <i class="bi bi-x-circle"></i> Reject
+                        </button>
+
+                    </div>
+
+                    <!-- NO RESUME -->
+                    <div th:if="${app.resumeUrl == null}">
+                        <span style="font-size:12px; color:#aaa;">No Resume</span>
+                    </div>
+                    <!-- ACCEPT / REJECT -->
+                    <div th:if="${app.status.name() == 'PENDING'}">
+
+                        <form th:action="@{/admin/application/update}" method="post">
+                            <input type="hidden" name="appId" th:value="${app.id}">
+                            <input type="hidden" name="internshipId" th:value="${internship.id}">
+
+                            <button name="action" value="accept" class="btn btn-success btn-sm">
+                                Accept
+                            </button>
+
+                            <button name="action" value="reject" class="btn btn-danger btn-sm">
+                                Reject
+                            </button>
+                        </form>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+    </main>
+</body>
+
+</html>

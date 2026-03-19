@@ -1,9 +1,25 @@
 package com.example.demo.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import com.example.demo.entity.InternshipApplication;
 
 public interface ApplicationRepository extends JpaRepository<InternshipApplication, Integer> {
 
-    boolean existsByStudentStudidAndInternshipId(Integer studentId, Integer internshipId);
+	boolean existsByStudent_StudidAndInternship_Id(Integer studentId, Integer internshipId);
+    @Query("""
+    	    SELECT a FROM InternshipApplication a
+    	    WHERE a.student.studid = :studentId
+    	    AND a.internship.id = :internshipId
+    	""")
+    	Optional<InternshipApplication> findApplication(Integer studentId, Integer internshipId);
+    
+    
+    List<InternshipApplication> findByInternshipId(Integer internshipId);
+	List<InternshipApplication> findByStudentStudid(Integer studentId);
+
 }
