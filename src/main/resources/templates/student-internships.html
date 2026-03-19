@@ -247,6 +247,22 @@
             border: 2px solid #22c55e;
             box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
         }
+
+        .highlight {
+            border: 2px solid #22c55e;
+            box-shadow: 0 0 25px rgba(34, 197, 94, 0.5);
+            animation: glow 1.5s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+            }
+
+            to {
+                box-shadow: 0 0 30px rgba(34, 197, 94, 0.7);
+            }
+        }
     </style>
 </head>
 
@@ -309,6 +325,12 @@
     <div class="main">
         <div class="internship-page">
 
+            <div th:if="${#lists.contains(appMap.values().![status.name()], 'ACCEPTED')}"
+                style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:20px;border-radius:15px;margin-bottom:20px;">
+
+                🎉 Congratulations! You are selected for an internship!
+
+            </div>
             <!-- SEARCH + FILTER -->
             <div class="search-bar">
                 <input type="text" placeholder="Search internships (Java, Web, Data Science...)">
@@ -358,8 +380,14 @@
             <div class="internship-grid">
 
                 <div class="intern-card"
-                    th:classappend="${appMap[i.id] != null and appMap[i.id].status.name() == 'ACCEPTED'} ? 'highlight'"
+                    th:classappend="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'} ? 'highlight'"
                     th:each="i : ${internships}">
+
+
+                    <div
+                        th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'}">
+                        SELECTED 🎉
+                    </div>
 
                     <h3 th:text="${i.title}"></h3>
                     <p class="company">EduPlatform</p>
@@ -402,21 +430,23 @@
                         <div th:if="${appMap[i.id] != null}">
 
                             <!-- ACCEPTED -->
-                            <div th:if="${appMap[i.id].status.name() == 'ACCEPTED'}">
-
+                            <div
+                                th:if="${appMap[i.id] != null and 
+                                    appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'}">
                                 <span style="color:green; font-weight:600;">🎉 Selected</span>
 
                                 <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
-                                    View Offer →
+                                    Offer Letter 📄 →
                                 </a>
 
                             </div>
 
                             <!-- PENDING -->
-                            <div th:if="${appMap[i.id].status.name() == 'PENDING'}">
-
-                                <span style="color:orange;">⏳ Pending</span>
-
+                            <div
+                                th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'PENDING'}">
+                                <div style="font-size:12px;">
+                                    📝 Applied → 🔍 Reviewing → ⏳ Pending
+                                </div>
                                 <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
                                     Track →
                                 </a>
@@ -424,8 +454,8 @@
                             </div>
 
                             <!-- REJECTED -->
-                            <div th:if="${appMap[i.id].status.name() == 'REJECTED'}">
-
+                            <div
+                                th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'REJECTED'}">
                                 <span style="color:red;">❌ Rejected</span>
 
                             </div>
@@ -446,7 +476,7 @@
         </div>
 
     </div>
-   
+
 
 
     <!-- ===== SCRIPT ===== -->

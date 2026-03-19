@@ -42,31 +42,33 @@ public class StudentInternshipController {
 
 	
 	@GetMapping("/student-internships")
-	public String studentInternships(Model model) {
+	public String studentInternships(Model model, HttpSession session) {
 
-	    Integer studentId = 1;
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-	    List<Internships> internships = internshipRepo.findAll();
+		if (studentId == null) {
+			return "redirect:/student-login";
+		}
 
-	    List<InternshipApplication> applications =
-	            applicationRepo.findByStudentStudid(studentId);
+		List<Internships> internships = internshipRepo.findAll();
 
-	    // 🔥 Map: internshipId → application
-	    Map<Integer, InternshipApplication> appMap = new HashMap<>();
+		// ✅ FIXED METHOD HERE
+		List<InternshipApplication> applications = applicationRepo.findByStudent_Studid(studentId);
 
-	    for (InternshipApplication app : applications) {
-	        appMap.put(app.getInternship().getId(), app);
-	    }
+		Map<Integer, InternshipApplication> appMap = new HashMap<>();
 
-	    model.addAttribute("internships", internships);
-	    model.addAttribute("appMap", appMap);
+		for (InternshipApplication app : applications) {
+			appMap.put(app.getInternship().getId(), app);
+		}
 
-	    return "student-internships";
+		model.addAttribute("internships", internships);
+		model.addAttribute("appMap", appMap);
+
+		return "student-internships";
 	}
 
 	@GetMapping("/student-internship-detail")
-	public String internshipDetail(@RequestParam Integer id, Model model,
-			HttpSession session) {
+	public String internshipDetail(@RequestParam Integer id, Model model, HttpSession session) {
 
 		Integer studentId = (Integer) session.getAttribute("studentId");
 
@@ -75,45 +77,37 @@ public class StudentInternshipController {
 
 		Internships internship = internshipRepo.findById(id).orElse(null);
 
-		
-		boolean alreadyApplied = false;
+		InternshipApplication application = null;
 
 		if (studentId != null) {
-		    alreadyApplied =
-		        applicationRepo.existsByStudent_StudidAndInternship_Id(studentId, id);
+			application = applicationRepo.findByStudent_StudidAndInternship_Id(studentId, id).orElse(null);
 		}
 
-		model.addAttribute("alreadyApplied", alreadyApplied);
-		model.addAttribute("internship", internship);
 		
+		model.addAttribute("internship", internship);
+		model.addAttribute("application", application);
 
 		return "student-internship-detail";
 	}
 
 	@PostMapping("/student/apply")
-	public String applyInternship(
-	        @RequestParam Integer internshipId,
-	        @RequestParam String fullName,
-	        @RequestParam String email,
-	        @RequestParam String phone,
-	        @RequestParam(required = false) String coverLetter,
-	        @RequestParam(required = false) MultipartFile resume,
-	        RedirectAttributes redirectAttributes,
-	        HttpSession session   // ✅ ADD THIS
-	) throws Exception {
-		
+	public String applyInternship(@RequestParam Integer internshipId, @RequestParam String fullName,
+			@RequestParam String email, @RequestParam String phone, @RequestParam(required = false) String coverLetter,
+			@RequestParam(required = false) MultipartFile resume, RedirectAttributes redirectAttributes,
+			HttpSession session) throws Exception {
+
 		Integer studentId = (Integer) session.getAttribute("studentId");
-		
-		if(studentId == null) {
+
+		if (studentId == null) {
 			return "redirect:/student-login";
 		}
 
 		Internships internship = internshipRepo.findById(internshipId).orElse(null);
-		
+
 		Student student = studentRepo.findById(studentId).orElse(null);
 
 		// already applied
-		if (applicationRepo. existsByStudent_StudidAndInternship_Id(studentId, internshipId)) {
+		if (applicationRepo.existsByStudent_StudidAndInternship_Id(studentId, internshipId)) {
 			redirectAttributes.addFlashAttribute("error", "Already applied.");
 			return "redirect:/student-internship-detail?id=" + internshipId;
 		}
@@ -143,20 +137,20 @@ public class StudentInternshipController {
 		if (resume != null && !resume.isEmpty()) {
 
 			String basePath = System.getProperty("user.dir") + "/uploads/resumes/" + studentId;
-			
-			
-		    File dir = new File(basePath);
-		    if (!dir.exists()) {
-		        dir.mkdirs();
-		    }
 
-		    String fileName = System.currentTimeMillis() + "_" + resume.getOriginalFilename();
+			File dir = new File(basePath);
+			if (!dir.exists()) {
+				dir.mkdirs();
+			}
 
-		    File destination = new File(dir, fileName);
-		    resume.transferTo(destination);
+			String fileName = System.currentTimeMillis() + "_" + resume.getOriginalFilename();
 
-		    app.setResumeUrl("/uploads/resumes/" + studentId + "/" + fileName);
+			File destination = new File(dir, fileName);
+			resume.transferTo(destination);
+
+			app.setResumeUrl("/uploads/resumes/" + studentId + "/" + fileName);
 		}
+
 		applicationRepo.save(app);
 
 		redirectAttributes.addFlashAttribute("success", "Applied Successfully 🚀");
