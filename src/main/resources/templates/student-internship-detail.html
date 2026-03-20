@@ -217,12 +217,13 @@
     <div class="main">
 
         <div class="detail-container">
-
+           
             <!-- HEADER -->
+            
             <div class="detail-header">
                 <h1 th:text="${internship.title}"></h1>
                 <p class="company">EduPlatform</p>
-
+                <p th:if="${app != null}" th:text="${app.status}"></p>
                 <div class="meta">
                     <span>
                         <i class="bi bi-geo-alt"></i>
@@ -240,15 +241,22 @@
                     </span>
                 </div>
             </div>
-            <div th:if="${application != null and application.status.name() == 'ACCEPTED'}" style="background:linear-gradient(135deg,#22c55e,#16a34a);
-            color:white;
-            padding:15px;
-            border-radius:12px;
-            margin-bottom:15px;
-            text-align:center;
-            font-weight:600;">
+            <div th:if="${app != null}" style="margin-bottom:15px;">
 
-                🎉 Congratulations! You are selected for this internship
+                <div th:if="${app.status != null and app.status.name() == 'ACCEPTED'}"
+                    style="background:#22c55e;color:white;padding:15px;border-radius:12px;text-align:center;">
+                    🎉 Congratulations! You are selected!
+                </div>
+
+                <div th:if="${app.status != null and app.status.name() == 'PENDING'}"
+                    style="background:#f59e0b;color:white;padding:15px;border-radius:12px;text-align:center;">
+                    ⏳ Your application is under review
+                </div>
+
+                <div th:if="${app.status != null and app.status.name() == 'REJECTED'}"
+                    style="background:#ef4444;color:white;padding:15px;border-radius:12px;text-align:center;">
+                    ❌ Application rejected
+                </div>
 
             </div>
             <!-- DESCRIPTION -->
@@ -293,40 +301,44 @@
             <div class="apply-box">
 
                 <!-- NOT APPLIED -->
-                <button th:if="${application == null or application.id == null}" class="apply-btn" id="openApplyModal">
-                    Apply Now 🚀
-                </button>
-
-                <!-- PENDING -->
-                <button
-                    th:if="${application != null and application.id != null and application.status.name() == 'PENDING'}"
-                    class="apply-btn" disabled style="opacity:0.6;">
-                    Application Submitted ⏳
-                </button>
-
-                <!-- ACCEPTED -->
-                <div
-                    th:if="${application != null and application.id != null and application.status.name() == 'ACCEPTED'}">
-
-                    <button class="apply-btn" style="background:#22c55e;">
-                        🎉 Selected
+                <div th:if="${app == null}">
+                    <button class="apply-btn" onclick="openModal()">
+                        Apply Now 🚀
                     </button>
-
-                    <br><br>
-
-                    <a th:href="@{'/student/offer-letter?appId=' + ${application.id}}" class="apply-btn"
-                        style="background:#0ea5e9;">
-                        📄 Download Offer Letter
-                    </a>
-
                 </div>
 
-                <!-- REJECTED -->
-                <button
-                    th:if="${application != null and application.id != null and application.status.name() == 'REJECTED'}"
-                    class="apply-btn" style="background:#ef4444;">
-                    Application Rejected ❌
-                </button>
+                <!-- APPLIED -->
+                <div th:if="${app != null}">
+
+                    <!-- PENDING -->
+                    <button th:if="${app.status != null and app.status.name() == 'PENDING'}" class="apply-btn" disabled
+                        style="opacity:0.6;">
+                        ⏳ Under Review
+                    </button>
+
+                    <!-- ACCEPTED -->
+                    <div th:if="${app.status != null and app.status.name() == 'ACCEPTED'}">
+
+                        <button class="apply-btn" style="background:#22c55e;">
+                            🎉 Selected
+                        </button>
+
+                        <br><br>
+
+                        <a th:href="@{'/student/offer-letter?appId=' + ${app.id}}" class="apply-btn"
+                            style="background:#0ea5e9;">
+                            📄 Download Offer Letter
+                        </a>
+
+                    </div>
+
+                    <!-- REJECTED -->
+                    <button th:if="${app.status != null and app.status.name() == 'REJECTED'}" class="apply-btn"
+                        style="background:#ef4444;">
+                        ❌ Rejected
+                    </button>
+
+                </div>
 
             </div>
             <div id="applyModal" class="modal">
@@ -384,7 +396,11 @@
 
     </div>
 
-
+    <script>
+        function openModal() {
+            document.getElementById("applyModal").style.display = "block";
+        }
+    </script>
     <!-- ===== SCRIPT ===== -->
     <script>
         const sidebar = document.getElementById("sidebar");
@@ -415,11 +431,6 @@
     </script>
     <script>
         const modal = document.getElementById("applyModal");
-
-        // OPEN
-        document.getElementById("openApplyModal")?.addEventListener("click", () => {
-            modal.style.display = "block";
-        });
 
         // CLOSE
         document.getElementById("closeModal").onclick = () => {

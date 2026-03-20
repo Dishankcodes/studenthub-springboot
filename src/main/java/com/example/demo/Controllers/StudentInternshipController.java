@@ -52,7 +52,7 @@ public class StudentInternshipController {
 
 		List<Internships> internships = internshipRepo.findAll();
 
-		// ✅ FIXED METHOD HERE
+		
 		List<InternshipApplication> applications = applicationRepo.findByStudent_Studid(studentId);
 
 		Map<Integer, InternshipApplication> appMap = new HashMap<>();
@@ -70,26 +70,30 @@ public class StudentInternshipController {
 	@GetMapping("/student-internship-detail")
 	public String internshipDetail(@RequestParam Integer id, Model model, HttpSession session) {
 
-		Integer studentId = (Integer) session.getAttribute("studentId");
+	    Integer studentId = (Integer) session.getAttribute("studentId");
 
-		if (studentId == null)
-			return "redirect:/student-login";
+	    if (studentId == null)
+	        return "redirect:/student-login";
 
-		Internships internship = internshipRepo.findById(id).orElse(null);
+	    Internships internship = internshipRepo.findById(id).orElse(null);
 
-		InternshipApplication application = null;
+	    InternshipApplication application = applicationRepo
+	            .findByStudent_StudidAndInternship_Id(studentId, id)
+	            .orElse(null);
 
-		if (studentId != null) {
-			application = applicationRepo.findByStudent_StudidAndInternship_Id(studentId, id).orElse(null);
-		}
+	    // ✅ SAFE DEBUG
+	    if (application != null) {
+	        System.out.println("STATUS: " + application.getStatus());
+	    } else {
+	        System.out.println("NO APPLICATION");
+	    }
 
-		
-		model.addAttribute("internship", internship);
-		model.addAttribute("application", application);
+	    model.addAttribute("internship", internship);
+	    model.addAttribute("app", application);
 
-		return "student-internship-detail";
+	    return "student-internship-detail";
 	}
-
+	
 	@PostMapping("/student/apply")
 	public String applyInternship(@RequestParam Integer internshipId, @RequestParam String fullName,
 			@RequestParam String email, @RequestParam String phone, @RequestParam(required = false) String coverLetter,

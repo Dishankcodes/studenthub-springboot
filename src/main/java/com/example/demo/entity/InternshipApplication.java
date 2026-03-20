@@ -9,6 +9,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -21,9 +22,11 @@ public class InternshipApplication {
     private Integer id;
 
     @ManyToOne
+    @JoinColumn(name = "student_studid")   
     private Student student;
 
     @ManyToOne
+    @JoinColumn(name = "internship_id")    
     private Internships internship;
 
     @Enumerated(EnumType.STRING)
