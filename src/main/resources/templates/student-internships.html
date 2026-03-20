@@ -263,6 +263,44 @@
                 box-shadow: 0 0 30px rgba(34, 197, 94, 0.7);
             }
         }
+
+        .empty-state {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 60vh;
+        }
+
+        .empty-card {
+            text-align: center;
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            max-width: 400px;
+        }
+
+        .empty-card h2 {
+            margin-top: 15px;
+            font-size: 22px;
+            color: #111827;
+        }
+
+        .empty-card p {
+            margin: 10px 0 20px;
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .explore-btn {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
+            display: inline-block;
+        }
     </style>
 </head>
 
@@ -346,7 +384,24 @@
                     <option>Ahmedabad</option>
                 </select>
             </div>
+            <div th:if="${#lists.isEmpty(internships)}" class="empty-state">
 
+                <div class="empty-card">
+                    <i class="bi bi-briefcase" style="font-size:50px;color:#6366f1;"></i>
+
+                    <h2>No Internships Available</h2>
+
+                    <p>
+                        Currently there are no internships posted for this role.<br>
+                        Please check back later or explore courses to improve your chances 🚀
+                    </p>
+
+                    <a th:href="@{/student-course}" class="explore-btn">
+                        Explore Courses →
+                    </a>
+                </div>
+
+            </div>
             <!-- RECOMMENDED -->
             <!-- <h2 class="section-title">🔥 Recommended for You</h2>
             <div class="internship-grid"> -->
@@ -374,104 +429,105 @@
                     </div>
                 </div> -->
 
+            <div th:if="${!#lists.isEmpty(internships)}">
+                <h2 class="section-title">All Internships</h2>
 
-            <h2 class="section-title">All Internships</h2>
+                <div class="internship-grid">
 
-            <div class="internship-grid">
-
-                <div class="intern-card"
-                    th:classappend="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'} ? 'highlight'"
-                    th:each="i : ${internships}">
+                    <div class="intern-card"
+                        th:classappend="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'} ? 'highlight'"
+                        th:each="i : ${internships}">
 
 
-                    <div
-                        th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'}">
-                        SELECTED 🎉
-                    </div>
+                        <div
+                            th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'}">
+                            SELECTED 🎉
+                        </div>
 
-                    <h3 th:text="${i.title}"></h3>
-                    <p class="company">EduPlatform</p>
+                        <h3 th:text="${i.title}"></h3>
+                        <p class="company">EduPlatform</p>
 
-                    <div class="meta">
-                        <span>
-                            <i class="bi bi-geo-alt"></i>
-                            <span th:text="${i.location}"></span>
-                        </span>
+                        <div class="meta">
+                            <span>
+                                <i class="bi bi-geo-alt"></i>
+                                <span th:text="${i.location}"></span>
+                            </span>
 
-                        <span th:if="${i.stipend != null}">
-                            ₹<span th:text="${i.stipend}"></span>
-                        </span>
-                        <span th:if="${i.stipend == null}">
-                            Unpaid
-                        </span>
-                        <span>
-                            <i class="bi bi-clock"></i>
-                            <span th:text="${i.duration}"></span>
-                        </span>
-                    </div>
+                            <span th:if="${i.stipend != null}">
+                                ₹<span th:text="${i.stipend}"></span>
+                            </span>
+                            <span th:if="${i.stipend == null}">
+                                Unpaid
+                            </span>
+                            <span>
+                                <i class="bi bi-clock"></i>
+                                <span th:text="${i.duration}"></span>
+                            </span>
+                        </div>
 
-                    <!-- SKILLS -->
-                    <div class="skills">
-                        <span th:each="skill : ${#strings.arraySplit(i.skills, ',')}" th:text="${skill}">
-                        </span>
-                    </div>
+                        <!-- SKILLS -->
+                        <div class="skills">
+                            <span th:each="skill : ${#strings.arraySplit(i.skills, ',')}" th:text="${skill}">
+                            </span>
+                        </div>
 
-                    <!-- ELIGIBILITY TAG -->
-                    <div th:if="${i.requiredCourse != null}" style="margin-top:8px;">
-                        <small style="color:#f59e0b;">
-                            Requires: <span th:text="${i.requiredCourse.title}"></span>
-                        </small>
-                    </div>
+                        <!-- ELIGIBILITY TAG -->
+                        <div th:if="${i.requiredCourse != null}" style="margin-top:8px;">
+                            <small style="color:#f59e0b;">
+                                Requires: <span th:text="${i.requiredCourse.title}"></span>
+                            </small>
+                        </div>
 
-                    <!-- ACTIONS -->
-                    <div class="actions">
+                        <!-- ACTIONS -->
+                        <div class="actions">
 
-                        <!-- 🔥 IF APPLIED -->
-                        <div th:if="${appMap[i.id] != null}">
+                            <!-- 🔥 IF APPLIED -->
+                            <div th:if="${appMap[i.id] != null}">
 
-                            <!-- ACCEPTED -->
-                            <div
-                                th:if="${appMap[i.id] != null and 
+                                <!-- ACCEPTED -->
+                                <div
+                                    th:if="${appMap[i.id] != null and 
                                     appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'}">
-                                <span style="color:green; font-weight:600;">🎉 Selected</span>
+                                    <span style="color:green; font-weight:600;">🎉 Selected</span>
 
-                                <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
-                                    Offer Letter 📄 →
-                                </a>
+                                    <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
+                                        Offer Letter 📄 →
+                                    </a>
 
-                            </div>
-
-                            <!-- PENDING -->
-                            <div
-                                th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'PENDING'}">
-                                <div style="font-size:12px;">
-                                    📝 Applied → 🔍 Reviewing → ⏳ Pending
                                 </div>
+
+                                <!-- PENDING -->
+                                <div
+                                    th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'PENDING'}">
+                                    <div style="font-size:12px;">
+                                        📝 Applied → 🔍 Reviewing → ⏳ Pending
+                                    </div>
+                                    <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
+                                        Track →
+                                    </a>
+
+                                </div>
+
+                                <!-- REJECTED -->
+                                <div
+                                    th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'REJECTED'}">
+                                    <span style="color:red;">❌ Rejected</span>
+
+                                </div>
+
+                            </div>
+
+                            <!-- 🚀 NOT APPLIED -->
+                            <div th:if="${appMap[i.id] == null}">
                                 <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
-                                    Track →
+                                    See Details →
                                 </a>
-
-                            </div>
-
-                            <!-- REJECTED -->
-                            <div
-                                th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'REJECTED'}">
-                                <span style="color:red;">❌ Rejected</span>
-
                             </div>
 
                         </div>
-
-                        <!-- 🚀 NOT APPLIED -->
-                        <div th:if="${appMap[i.id] == null}">
-                            <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
-                                See Details →
-                            </a>
-                        </div>
-
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
 

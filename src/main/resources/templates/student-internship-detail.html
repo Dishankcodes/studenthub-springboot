@@ -217,9 +217,9 @@
     <div class="main">
 
         <div class="detail-container">
-           
+
             <!-- HEADER -->
-            
+
             <div class="detail-header">
                 <h1 th:text="${internship.title}"></h1>
                 <p class="company">EduPlatform</p>
@@ -391,32 +391,30 @@
 
                 </div>
             </div>
-            
-            <div th:if="${application?.status?.name() == 'ACCEPTED'}">
 
-    <!-- NO TEST -->
-    <div th:if="${testAttempt == null}">
-        <a th:href="@{'/student/test/start?internshipId=' + ${internship.id}}"
-           class="apply-btn">
-            🧪 Start Assessment
-        </a>
-    </div>
+            <div th:if="${app != null and app.status.name() == 'ACCEPTED'}">
 
-    <!-- FAILED -->
-    <div th:if="${testAttempt != null and !testAttempt.passed}">
-        ❌ You did not pass the test
-    </div>
+                <!-- NOT ATTEMPTED -->
+                <div th:if="${testAttempt == null}">
+                    <a th:href="@{'/student/test/start?internshipId=' + ${internship.id}}" class="apply-btn">
+                        🧪 Give Test
+                    </a>
+                </div>
 
-    <!-- PASSED -->
-    <div th:if="${testAttempt != null and testAttempt.passed}">
-        ✅ Test Cleared
-    </div>
+                <!-- FAILED -->
+                <div th:if="${testAttempt != null and !testAttempt.passed}">
+                    ❌ You did not pass the test
+                </div>
 
-</div>
+                <!-- PASSED -->
+                <div th:if="${testAttempt != null and testAttempt.passed}">
+                    ✅ Test Cleared 🎉
+                </div>
+
+            </div>
         </div>
     </div>
 
-    </div>
 
     <script>
         function openModal() {

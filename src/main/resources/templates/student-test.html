@@ -1,51 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Internship Test</title>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0b0b1f, #14142f);
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-back {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .btn-submit {
+            background: linear-gradient(135deg,#6366f1,#8b5cf6);
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .option {
+            display: block;
+            margin-top: 8px;
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.08);
+            cursor: pointer;
+        }
+
+        .option:hover {
+            background: rgba(99,102,241,0.3);
+        }
+    </style>
 </head>
+
 <body>
 
-<form th:action="@{/student/test/submit}" method="post">
+<div class="container">
 
-    <input type="hidden" name="internshipId" th:value="${internshipId}">
+    <!-- HEADER -->
+    <div class="header">
+        <a th:href="@{'/student-internship-detail?id=' + ${internshipId}}" class="btn btn-back">
+            ⬅ Back
+        </a>
 
-    <div th:each="q, i : ${questions}" class="question-card">
-
-        <h3>
-            <span th:text="${i.index + 1}"></span>.
-            <span th:text="${q.questionText}"></span>
-        </h3>
-
-        <label>
-            <input type="radio" th:name="${'q_' + q.questionId}" value="A"> 
-            <span th:text="${q.optionA}"></span>
-        </label><br>
-
-        <label>
-            <input type="radio" th:name="${'q_' + q.questionId}" value="B"> 
-            <span th:text="${q.optionB}"></span>
-        </label><br>
-
-        <label>
-            <input type="radio" th:name="${'q_' + q.questionId}" value="C"> 
-            <span th:text="${q.optionC}"></span>
-        </label><br>
-
-        <label>
-            <input type="radio" th:name="${'q_' + q.questionId}" value="D"> 
-            <span th:text="${q.optionD}"></span>
-        </label>
-
+        <h2>Internship Test</h2>
     </div>
 
-    <br>
+    <form th:action="@{/student/test/submit}" method="post">
 
-    <button type="submit" class="apply-btn">
-        Submit Test 🚀
-    </button>
+        <input type="hidden" name="internshipId" th:value="${internshipId}">
 
-</form>
+        <div th:each="q, i : ${questions}" class="card">
+
+            <h3>
+                <span th:text="${i.index + 1}"></span>.
+                <span th:text="${q.questionText}"></span>
+            </h3>
+
+            <label class="option">
+                <input type="radio" th:name="${'q_' + q.questionId}" value="A">
+                <span th:text="${q.optionA}"></span>
+            </label>
+
+            <label class="option">
+                <input type="radio" th:name="${'q_' + q.questionId}" value="B">
+                <span th:text="${q.optionB}"></span>
+            </label>
+
+            <label class="option">
+                <input type="radio" th:name="${'q_' + q.questionId}" value="C">
+                <span th:text="${q.optionC}"></span>
+            </label>
+
+            <label class="option">
+                <input type="radio" th:name="${'q_' + q.questionId}" value="D">
+                <span th:text="${q.optionD}"></span>
+            </label>
+
+        </div>
+
+        <button type="submit" class="btn btn-submit">
+            🚀 Submit Test
+        </button>
+
+    </form>
+
+</div>
 
 </body>
 </html>

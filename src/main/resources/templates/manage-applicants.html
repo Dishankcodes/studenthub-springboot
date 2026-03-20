@@ -172,6 +172,95 @@
             font-size: 12px;
             color: var(--text-muted);
         }
+
+        /* HEADER */
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* HOME BUTTON */
+        .btn-home {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 8px 14px;
+            border-radius: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .btn-home:hover {
+            background: #6366f1;
+        }
+
+        /* CREATE TEST BUTTON */
+        .btn-test-header {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .btn-test-header:hover {
+            transform: scale(1.05);
+        }
+
+        /* ACTION FORM */
+        .action-form {
+            display: flex;
+            gap: 6px;
+        }
+
+        /* FINAL STATUS */
+        .final {
+            font-size: 12px;
+            padding: 5px 10px;
+            border-radius: 999px;
+        }
+
+        .final.accepted {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .final.rejected {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        /* FLASH MESSAGE */
+        .flash {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .flash.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .flash.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        /* NO RESUME */
+        .no-resume {
+            font-size: 12px;
+            color: #aaa;
+        }
     </style>
 </head>
 
@@ -180,12 +269,27 @@
 
         <div class="applicants-container">
 
-            <h1 th:text="'Applicants - ' + ${internship.title}"></h1>
+            <div class="header-row">
+
+                <div class="header-left">
+                    <a href="/manage-internships" class="btn-home">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+
+                    <h1 th:text="'Applicants - ' + ${internship.title}"></h1>
+                </div>
+
+                <a th:href="@{'/admin/internship/test?internshipId=' + ${internship.id}}" class="btn-test-header">
+                    🧪 Create Test
+                </a>
+
+            </div>
 
             <div th:if="${#lists.isEmpty(applications)}" class="alert alert-info">
                 No applicants yet 🚀
             </div>
-
+            <div th:if="${msg}" class="flash success" th:text="${msg}"></div>
+            <div th:if="${error}" class="flash error" th:text="${error}"></div>
             <div class="applicant-list">
 
                 <div class="applicant-card" th:each="app : ${applications}">
@@ -216,46 +320,46 @@
                     <div class="actions">
 
                         <a th:href="@{'/admin-view-student?id=' + ${app.student.studid}}" class="btn btn-secondary">
-                            <i class="bi bi-person"></i> Profile
+                            👤 Profile
                         </a>
 
-                        <a th:href="${app.resumeUrl}" target="_blank" class="btn btn-info">
-                            <i class="bi bi-eye"></i> Open
+                        <a th:if="${app.resumeUrl != null}" th:href="${app.resumeUrl}" target="_blank"
+                            class="btn btn-info">
+                            👁 View
                         </a>
 
-                        <a th:href="${app.resumeUrl}" download class="btn btn-primary">
-                            <i class="bi bi-download"></i> Download
+                        <a th:if="${app.resumeUrl != null}" th:href="${app.resumeUrl}" download class="btn btn-primary">
+                            ⬇ Download
                         </a>
 
-                        <button name="action" value="accept" class="btn btn-success">
-                            <i class="bi bi-check-circle"></i> Accept
-                        </button>
+                        <span th:if="${app.resumeUrl == null}" class="no-resume">
+                            No Resume
+                        </span>
 
-                        <button name="action" value="reject" class="btn btn-danger">
-                            <i class="bi bi-x-circle"></i> Reject
-                        </button>
+                        <!-- ACCEPT / REJECT -->
+                        <form th:if="${app.status.name() == 'PENDING'}" th:action="@{/admin/application/update}"
+                            method="post" class="action-form">
 
-                    </div>
-
-                    <!-- NO RESUME -->
-                    <div th:if="${app.resumeUrl == null}">
-                        <span style="font-size:12px; color:#aaa;">No Resume</span>
-                    </div>
-                    <!-- ACCEPT / REJECT -->
-                    <div th:if="${app.status.name() == 'PENDING'}">
-
-                        <form th:action="@{/admin/application/update}" method="post">
                             <input type="hidden" name="appId" th:value="${app.id}">
                             <input type="hidden" name="internshipId" th:value="${internship.id}">
 
-                            <button name="action" value="accept" class="btn btn-success btn-sm">
-                                Accept
+                            <button name="action" value="accept" class="btn btn-success">
+                                ✔ Accept
                             </button>
 
-                            <button name="action" value="reject" class="btn btn-danger btn-sm">
-                                Reject
+                            <button name="action" value="reject" class="btn btn-danger">
+                                ✖ Reject
                             </button>
                         </form>
+
+                        <!-- FINAL STATUS -->
+                        <span th:if="${app.status.name() == 'ACCEPTED'}" class="final accepted">
+                            🎉 Accepted
+                        </span>
+
+                        <span th:if="${app.status.name() == 'REJECTED'}" class="final rejected">
+                            ❌ Rejected
+                        </span>
 
                     </div>
 

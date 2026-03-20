@@ -24,26 +24,26 @@ public class QuizQuestion {
 	private Integer questionId;
 
 	@ManyToOne
-	@JoinColumn(name = "quiz_id", nullable = false)
+	@JoinColumn(name = "quiz_id", nullable = true)
 	private Quiz quiz;
 
 	private String questionText;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String optionA;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String optionB;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String optionC;
 
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private String optionD;
 
-	@Column(nullable = false)
-	private String correctOption; // A, B, C, D
-
+	@Column(nullable = true)
+	private String correctOption;
+	
 	@Column(nullable = false)
 	private Integer marks;
 
