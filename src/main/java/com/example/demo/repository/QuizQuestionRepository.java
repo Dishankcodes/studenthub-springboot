@@ -15,4 +15,8 @@ public interface QuizQuestionRepository extends JpaRepository<QuizQuestion, Inte
 	long countByQuizQuizId(Integer quizId);
 
 	 List<QuizQuestion> findByQuiz(Quiz quiz);
+	 
+	 List<QuizQuestion> findByInternshipId(Integer internshipId);
+
+	 List<QuizQuestion> findByCourseCourseId(Integer courseId);
 }

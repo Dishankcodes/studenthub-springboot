@@ -12,6 +12,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.example.demo.entity.Lesson;
 import com.example.demo.entity.Quiz;
 import com.example.demo.entity.QuizQuestion;
+import com.example.demo.enums.QuestionFormat;
+import com.example.demo.enums.QuizQuestionType;
 import com.example.demo.repository.LessonRepository;
 import com.example.demo.repository.QuizQuestionRepository;
 import com.example.demo.repository.QuizRepository;
@@ -55,7 +57,9 @@ public class QuizController {
         q.setCorrectOption("");
         q.setMarks(1);
         q.setPosition((int) questionRepo.countByQuizQuizId(quiz.getQuizId()) + 1);
-
+        q.setType(QuizQuestionType.COURSE);
+        q.setQuestionFormat(QuestionFormat.MCQ);
+        q.setCourse(lesson.getModule().getCourse());
         questionRepo.save(q);
 
         ra.addFlashAttribute("success", "Question added");
@@ -91,11 +95,16 @@ public class QuizController {
             q.setOptionC(optionCs.get(i));
             q.setOptionD(optionDs.get(i));
             q.setCorrectOption(correctOptions.get(i));
+            if (q.getType() == null) {
+                q.setType(QuizQuestionType.COURSE);
+            }
+            
             questionRepo.save(q);
         }
 
         Lesson lesson = lessonRepo.findById(lessonId).orElseThrow();
         ra.addFlashAttribute("success", "Quiz saved successfully");
+        
         
         return "redirect:/teacher-creates-course?courseId="
         + lesson.getModule().getCourse().getCourseId()

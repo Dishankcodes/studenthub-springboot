@@ -32,7 +32,7 @@ public class InternshipApplication {
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status;
 
-    // 🔥 SNAPSHOT DATA (IMPORTANT)
+   
     private String fullName;
     private String email;
     private String phone;

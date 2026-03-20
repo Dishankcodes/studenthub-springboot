@@ -15,12 +15,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.InternshipApplication;
+import com.example.demo.entity.InternshipTestAttempt;
 import com.example.demo.entity.Internships;
+import com.example.demo.entity.QuizQuestion;
 import com.example.demo.entity.Student;
 import com.example.demo.enums.ApplicationStatus;
 import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.EnrollmentRepository;
 import com.example.demo.repository.InternshipRepository;
+import com.example.demo.repository.InternshipTestAttemptRepository;
+import com.example.demo.repository.QuizQuestionRepository;
 import com.example.demo.repository.StudentRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -39,6 +43,12 @@ public class StudentInternshipController {
 
 	@Autowired
 	private EnrollmentRepository enrollmentRepo;
+	
+	@Autowired
+	private QuizQuestionRepository questionRepo;
+	
+	@Autowired
+	private InternshipTestAttemptRepository attemptRepo;
 
 	
 	@GetMapping("/student-internships")
@@ -88,6 +98,11 @@ public class StudentInternshipController {
 	        System.out.println("NO APPLICATION");
 	    }
 
+	    InternshipTestAttempt attempt =
+	    	    attemptRepo.findByStudentStudidAndInternshipId(
+	    	        student.getStudid(), internshipId);
+
+	    	model.addAttribute("testAttempt", attempt);
 	    model.addAttribute("internship", internship);
 	    model.addAttribute("app", application);
 
@@ -160,5 +175,78 @@ public class StudentInternshipController {
 		redirectAttributes.addFlashAttribute("success", "Applied Successfully 🚀");
 
 		return "redirect:/student-internship-detail?id=" + internshipId;
+	}
+	
+	@GetMapping("/student/test/start")
+	public String startTest(@RequestParam Integer internshipId, Model model,
+	                        HttpSession session) {
+
+		Integer studentId = (Integer) session.getAttribute("studentId");
+
+		if (studentId == null) {
+			return "redirect:/student-login";
+		}
+
+
+	    List<QuizQuestion> questions =
+	            questionRepo.findByInternshipId(internshipId);
+
+	    model.addAttribute("questions", questions);
+	    model.addAttribute("internshipId", internshipId);
+
+	    return "student-test";
+	}
+	
+	@PostMapping("/student/test/submit")
+	public String submitTest(@RequestParam Integer internshipId,
+	                         @RequestParam Map<String, String> answers,
+	                         HttpSession session,
+	                         RedirectAttributes ra) {
+
+	    Student student = (Student) session.getAttribute("loggedStudent");
+
+	    List<QuizQuestion> questions =
+	            questionRepo.findByInternshipId(internshipId);
+
+	    int score = 0;
+	    int total = 0;
+
+	    for (QuizQuestion q : questions) {
+
+	        total += q.getMarks();
+
+	        String key = "q_" + q.getQuestionId();
+	        String studentAnswer = answers.get(key);
+
+	        if (studentAnswer != null &&
+	            studentAnswer.equals(q.getCorrectOption())) {
+
+	            score += q.getMarks();
+	        }
+	    }
+
+	    boolean passed = score >= (total * 0.4); // 40% pass
+
+	    InternshipTestAttempt attempt =
+	            attemptRepo.findByStudentStudidAndInternshipId(
+	                    student.getStudid(), internshipId);
+
+	    if (attempt == null) {
+	        attempt = new InternshipTestAttempt();
+	        attempt.setStudent(student);
+	        attempt.setInternship(new Internships(internshipId));
+	    }
+
+	    attempt.setScore(score);
+	    attempt.setTotalMarks(total);
+	    attempt.setPassed(passed);
+	    attempt.setSubmitted(true);
+
+	    attemptRepo.save(attempt);
+
+	    ra.addFlashAttribute("msg",
+	            passed ? "Test Passed 🎉" : "Test Failed ❌");
+
+	    return "redirect:/student-internship-detail?id=" + internshipId;
 	}
 }

@@ -36,6 +36,7 @@ public class Internships {
     @ManyToOne
     private Admin admin;
 
+	
 	public Integer getId() {
 		return id;
 	}

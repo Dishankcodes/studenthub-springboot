@@ -1,7 +1,13 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.QuestionFormat;
+import com.example.demo.enums.QuizQuestionType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumeratedValue;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,7 +27,6 @@ public class QuizQuestion {
 	@JoinColumn(name = "quiz_id", nullable = false)
 	private Quiz quiz;
 
-	
 	private String questionText;
 
 	@Column(nullable = false)
@@ -44,6 +49,20 @@ public class QuizQuestion {
 
 	@Column(nullable = false)
 	private Integer position;
+
+	@Enumerated(EnumType.STRING)
+	private QuestionFormat questionFormat; 
+	
+	@Enumerated(EnumType.STRING)
+	private QuizQuestionType type;
+	
+	@ManyToOne
+	@JoinColumn(name = "course_id")
+	private Course course; // for teacher
+
+	@ManyToOne
+	@JoinColumn(name = "internship_id")
+	private Internships internship;
 
 	public Integer getQuestionId() {
 		return questionId;
@@ -123,6 +142,38 @@ public class QuizQuestion {
 
 	public void setPosition(Integer position) {
 		this.position = position;
+	}
+
+	public QuestionFormat getQuestionFormat() {
+		return questionFormat;
+	}
+
+	public void setQuestionFormat(QuestionFormat questionFormat) {
+		this.questionFormat = questionFormat;
+	}
+
+	public QuizQuestionType getType() {
+		return type;
+	}
+
+	public void setType(QuizQuestionType type) {
+		this.type = type;
+	}
+
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
+
+	public Internships getInternship() {
+		return internship;
+	}
+
+	public void setInternship(Internships internship) {
+		this.internship = internship;
 	}
 
 }

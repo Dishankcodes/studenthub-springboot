@@ -391,6 +391,28 @@
 
                 </div>
             </div>
+            
+            <div th:if="${application?.status?.name() == 'ACCEPTED'}">
+
+    <!-- NO TEST -->
+    <div th:if="${testAttempt == null}">
+        <a th:href="@{'/student/test/start?internshipId=' + ${internship.id}}"
+           class="apply-btn">
+            🧪 Start Assessment
+        </a>
+    </div>
+
+    <!-- FAILED -->
+    <div th:if="${testAttempt != null and !testAttempt.passed}">
+        ❌ You did not pass the test
+    </div>
+
+    <!-- PASSED -->
+    <div th:if="${testAttempt != null and testAttempt.passed}">
+        ✅ Test Cleared
+    </div>
+
+</div>
         </div>
     </div>
 

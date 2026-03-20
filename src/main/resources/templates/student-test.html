@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<form th:action="@{/student/test/submit}" method="post">
+
+    <input type="hidden" name="internshipId" th:value="${internshipId}">
+
+    <div th:each="q, i : ${questions}" class="question-card">
+
+        <h3>
+            <span th:text="${i.index + 1}"></span>.
+            <span th:text="${q.questionText}"></span>
+        </h3>
+
+        <label>
+            <input type="radio" th:name="${'q_' + q.questionId}" value="A"> 
+            <span th:text="${q.optionA}"></span>
+        </label><br>
+
+        <label>
+            <input type="radio" th:name="${'q_' + q.questionId}" value="B"> 
+            <span th:text="${q.optionB}"></span>
+        </label><br>
+
+        <label>
+            <input type="radio" th:name="${'q_' + q.questionId}" value="C"> 
+            <span th:text="${q.optionC}"></span>
+        </label><br>
+
+        <label>
+            <input type="radio" th:name="${'q_' + q.questionId}" value="D"> 
+            <span th:text="${q.optionD}"></span>
+        </label>
+
+    </div>
+
+    <br>
+
+    <button type="submit" class="apply-btn">
+        Submit Test 🚀
+    </button>
+
+</form>
+
+</body>
+</html>
