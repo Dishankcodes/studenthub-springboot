@@ -30,6 +30,17 @@ public class InternshipTestAttempt {
 
 	    private double percentage;
 	    
+	    private Integer applicationId;
+	    
+	    
+		public Integer getApplicationId() {
+			return applicationId;
+		}
+
+		public void setApplicationId(Integer applicationId) {
+			this.applicationId = applicationId;
+		}
+
 		public double getPercentage() {
 			return percentage;
 		}

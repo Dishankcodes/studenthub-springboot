@@ -52,7 +52,11 @@ public class AdminDesignController {
 	@GetMapping("/admin-design")
 	public String designTemplate(Model model) {
 
-		model.addAttribute("templates", templateRepo.findAll());
+		model.addAttribute("courseTemplates",
+			    templateRepo.findByType(CertificateType.COURSE));
+
+			model.addAttribute("internshipTemplates",
+			    templateRepo.findByType(CertificateType.INTERNSHIP));
 		return "admin-design";
 	}
 
@@ -88,17 +92,17 @@ public class AdminDesignController {
 	@PostMapping("/certificate-template/activate/{id}")
 	public String activateTemplate(@PathVariable Integer id) {
 
-		templateRepo.findByActiveTrue()
-				.ifPresent(t -> {
-					t.setActive(false);
-					templateRepo.save(t);
-				});
+	    CertificateTemplate selected = templateRepo.findById(id).orElseThrow();
 
-		CertificateTemplate newActive = templateRepo.findById(id).orElseThrow();
+	    // deactivate only SAME TYPE templates
+	    templateRepo.findByType(selected.getType())
+	        .forEach(t -> {
+	            t.setActive(false);
+	            templateRepo.save(t);
+	        });
 
-		newActive.setActive(true);
-		templateRepo.save(newActive);
+	    selected.setActive(true);
+	    templateRepo.save(selected);
 
-		return "redirect:/admin-design";
-	}
-}
+	    return "redirect:/admin-design";
+	}}

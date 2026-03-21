@@ -1,36 +1,193 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <title>Test Results</title>
+
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #0b0b1f, #14142f);
+            --bg-content: #1a1a3d;
+            --accent: #6366f1;
+            --text-light: #eaeaf0;
+            --text-muted: #9ca3af;
+            --success: #22c55e;
+            --danger: #ef4444;
+        }
+
+        /* PAGE */
+        body {
+            background: var(--bg-primary);
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* CONTAINER */
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        /* BUTTONS */
+        .btn {
+            border: none;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-success {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-light);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* CARD */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(14px);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* LEFT */
+        .left h3 {
+            margin-bottom: 5px;
+        }
+
+        .left p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* STATUS */
+        .status-pass {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .status-fail {
+            color: var(--danger);
+            font-weight: 600;
+        }
+
+        /* ACTIONS */
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+    </style>
+
 </head>
+
 <body>
-<div class="container">
 
-    <h2>🧪 Test Results</h2>
+    <div class="container">
 
-    <div th:each="a : ${attempts}" class="card">
+        <!-- HEADER -->
+        <div class="header">
 
-        <h3 th:text="${a.student.fullname}"></h3>
+            <h2>🧪 Test Results</h2>
 
-        <p>Score: <b th:text="${a.score}"></b></p>
-        <p>Percentage: <b th:text="${a.percentage} + '%'"></b></p>
+            <div style="display:flex; gap:10px;">
 
-        <span th:if="${a.passed}" style="color:green;">PASSED</span>
-        <span th:if="${!a.passed}" style="color:red;">FAILED</span>
+                <a th:href="@{'/manage-applicants?internshipId=' + ${internshipId}}" class="btn btn-secondary">
+                    ⬅ Applicants
+                </a>
 
-        <form action="/admin-test-result/update" method="post">
+                <a th:href="@{'/admin-final-selection?internshipId=' + ${internshipId}}" class="btn btn-primary">
+                    🎯 Final Selection
+                </a>
 
-            <input type="hidden" name="attemptId" th:value="${a.id}">
-            <input type="hidden" name="internshipId" th:value="${internshipId}">
+            </div>
 
-            <button name="action" value="pass">✅ Pass</button>
-            <button name="action" value="fail">❌ Fail</button>
+        </div>
 
-        </form>
+        <!-- EMPTY -->
+        <div th:if="${#lists.isEmpty(attempts)}">
+            No test attempts yet 🚀
+        </div>
+
+        <!-- CARDS -->
+        <div th:each="a : ${attempts}" class="card" th:if="${a.student != null}">
+
+            <!-- LEFT -->
+            <div class="left">
+                <h3 th:text="${a.student.fullname}"></h3>
+
+                <p>
+                    Score: <b th:text="${a.score}"></b> |
+                    <span th:text="${a.percentage} + '%'"></span>
+                </p>
+
+                <span th:if="${a.passed}" class="status-pass">PASSED</span>
+                <span th:if="${!a.passed}" class="status-fail">FAILED</span>
+            </div>
+
+            <!-- RIGHT -->
+            <div class="actions">
+
+                <form action="/admin-test-result/update" method="post">
+                    <input type="hidden" name="attemptId" th:value="${a.id}">
+                    <input type="hidden" name="internshipId" th:value="${internshipId}">
+
+                    <button class="btn btn-success" name="action" value="pass">
+                        ✅ Pass
+                    </button>
+
+                    <button class="btn btn-danger" name="action" value="fail">
+                        ❌ Fail
+                    </button>
+                </form>
+
+            </div>
+            <form action="/admin/allow-reattempt" method="post">
+                <input type="hidden" name="appId" th:value="${a.student.studid}">
+                <button>🔁 Allow Reattempt</button>
+            </form>
+        </div>
 
     </div>
 
-</div>
 </body>
+
 </html>

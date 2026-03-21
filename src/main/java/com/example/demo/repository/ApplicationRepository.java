@@ -27,5 +27,6 @@ public interface ApplicationRepository extends JpaRepository<InternshipApplicati
     Optional<InternshipApplication> findByStudent_StudidAndInternship_Id(Integer studentId, Integer internshipId);
     
     List<InternshipApplication> findByInternship_IdAndStatus(Integer internshipId, ApplicationStatus status);
+    
 
 }

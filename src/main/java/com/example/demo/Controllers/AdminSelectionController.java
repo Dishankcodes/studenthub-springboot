@@ -1,5 +1,6 @@
 package com.example.demo.Controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,83 +12,101 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.CertificateTemplate;
 import com.example.demo.entity.InternshipApplication;
+import com.example.demo.entity.InternshipCertificate;
 import com.example.demo.enums.ApplicationStatus;
+import com.example.demo.enums.CertificateType;
 import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.CertificateTemplateRepository;
+import com.example.demo.repository.InternshipCertificateRepository;
 
 @Controller
 public class AdminSelectionController {
 
-
 	@Autowired
 	private ApplicationRepository applicationRepo;
-	
+
+	@Autowired
+	private InternshipCertificateRepository internshipCertRepo;
+
 	@Autowired
 	private CertificateTemplateRepository templateRepo;
-	
-	
-	@GetMapping("/admin/final-selection")
+	@GetMapping("/admin-final-selection")
 	public String finalSelection(@RequestParam Integer internshipId, Model model) {
 
-	    List<InternshipApplication> app =
-	        applicationRepo.findByInternship_IdAndStatus(
-	            internshipId,
-	            ApplicationStatus.PASSED
-	        );
+		List<InternshipApplication> app = applicationRepo.findByInternship_IdAndStatus(internshipId,
+				ApplicationStatus.PASSED);
 
-	    model.addAttribute("app", app);
-	    model.addAttribute("internshipId", internshipId);
+		model.addAttribute("templates", templateRepo.findByType(CertificateType.INTERNSHIP));
+		model.addAttribute("applications", app);
+		model.addAttribute("internshipId", internshipId);
 
-	    return "admin-final-selection";
+		return "admin-final-selection";
 	}
-	
+
 	@PostMapping("/admin/select-student")
 	public String selectStudent(@RequestParam Integer appId) {
 
-	    InternshipApplication app = applicationRepo.findById(appId).orElse(null);
+		InternshipApplication app = applicationRepo.findById(appId).orElse(null);
 
-	    if (app != null) {
-	        app.setStatus(ApplicationStatus.SELECTED);
-	        applicationRepo.save(app);
-	    }
+		if (app != null) {
+			app.setStatus(ApplicationStatus.SELECTED);
+			applicationRepo.save(app);
+		}
 
-	    return "redirect:/admin-final-selection?internshipId=" + app.getInternship().getId();
+		return "redirect:/admin-final-selection?internshipId=" + app.getInternship().getId();
 	}
-	
+
 	@PostMapping("/admin/give-badge")
-	public String giveBadge(@RequestParam Integer appId) {
+	public String giveBadge(@RequestParam Integer appId, @RequestParam String badgeTitle) {
+
+		InternshipApplication app = applicationRepo.findById(appId).orElse(null);
+
+		if (app != null) {
+			app.setBadgeGiven(true);
+			app.setBadgeTitle(badgeTitle);
+
+			applicationRepo.save(app);
+		}
+
+		return "redirect:/admin-final-selection?internshipId=" + app.getInternship().getId();
+	}
+
+	@PostMapping("/admin/give-certificate")
+	public String giveCertificate(@RequestParam Integer appId,
+	                              @RequestParam Integer templateId) {
 
 	    InternshipApplication app = applicationRepo.findById(appId).orElse(null);
 
-	    if (app != null) {
-	        app.setBadgeGiven(true);
-	        applicationRepo.save(app);
+	    if (app == null) {
+	        return "redirect:/admin-final-selection";
 	    }
+
+	    CertificateTemplate template = templateRepo.findById(templateId).orElse(null);
+
+	    if (template == null) {
+	        return "redirect:/admin-final-selection";
+	    }
+
+	    // ✅ CREATE CERTIFICATE ENTRY
+	    InternshipCertificate cert = new InternshipCertificate();
+	    cert.setStudent(app.getStudent());
+	    cert.setInternship(app.getInternship());
+	    cert.setTemplate(template);
+	    cert.setIssuedAt(LocalDate.now());
+
+	    cert.setCertificateNumber("INT-" + System.currentTimeMillis());
+
+	    // TODO: generate PDF and set path
+	    cert.setPdfPath("/certificates/internship/sample.pdf");
+
+	    internshipCertRepo.save(cert);
+
+	    // ✅ UPDATE APPLICATION
+	    app.setCertificateGenerated(true);
+	    app.setCertificateTemplateId(templateId);
+	    app.setStatus(ApplicationStatus.COMPLETED);
+
+	    applicationRepo.save(app);
 
 	    return "redirect:/admin-final-selection?internshipId=" + app.getInternship().getId();
-	}
-	
-
-	@PostMapping("/admin/generate-internship-certificate")
-	public String generateCertificate(@RequestParam Integer appId) {
-
-	    InternshipApplication app = applicationRepo.findById(appId).orElse(null);
-
-	    if (app != null) {
-
-	        CertificateTemplate template =
-	            templateRepo.findByActiveTrue().orElse(null);
-
-	        if (template != null && template.getType().name().equals("INTERNSHIP")) {
-
-	            // 🔥 Just mark generated (PDF logic you already have)
-	            app.setCertificateGenerated(true);
-	            app.setStatus(ApplicationStatus.COMPLETED);
-
-	            applicationRepo.save(app);
-	        }
-	    }
-
-	    return "redirect:/admin/final-selection?internshipId=" + app.getInternship().getId();
-	}
-}
+	}}

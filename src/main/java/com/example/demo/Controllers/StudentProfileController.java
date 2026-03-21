@@ -15,7 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.entity.InternshipApplication;
 import com.example.demo.entity.Student;
+import com.example.demo.enums.ApplicationStatus;
+import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.StudentRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -27,6 +30,10 @@ public class StudentProfileController {
 	private StudentRepository studentRepo;
 
 	private static final String UPLOAD_BASE = System.getProperty("user.dir") + File.separator + "uploads";
+	
+	@Autowired
+	private ApplicationRepository applicationRepo;
+	
 
 	@GetMapping("/student-profile")
 	public String studentProfile(HttpSession session, Model model, @RequestParam(required = false) Boolean edit) {
@@ -37,6 +44,10 @@ public class StudentProfileController {
 
 		Student student = studentRepo.findById(studentId).orElseThrow();
 
+		List<InternshipApplication> completedInternships = applicationRepo.findByStudent_Studid(studentId).stream()
+				.filter(app -> app.getStatus() == ApplicationStatus.COMPLETED).toList();
+
+		model.addAttribute("completedInternships", completedInternships);
 		model.addAttribute("student", student);
 		model.addAttribute("editMode", edit != null && edit);
 

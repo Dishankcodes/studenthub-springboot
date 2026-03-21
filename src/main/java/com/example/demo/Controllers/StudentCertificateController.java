@@ -15,6 +15,7 @@ import com.example.demo.entity.CertificateTemplate;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseCertificate;
 import com.example.demo.entity.Student;
+import com.example.demo.enums.CertificateType;
 import com.example.demo.repository.CertificateTemplateRepository;
 import com.example.demo.repository.CourseCertificateRepository;
 import com.example.demo.repository.CourseRepository;
@@ -46,7 +47,8 @@ public class StudentCertificateController {
 	private StudentRepository studentRepo;
 
 	@GetMapping("/student/certificate/{courseId}")
-	public String generateCertificate(@PathVariable Integer courseId, HttpSession session,Model model) throws Exception {
+	public String generateCertificate(@PathVariable Integer courseId, HttpSession session, Model model)
+			throws Exception {
 
 		Integer studentId = (Integer) session.getAttribute("studentId");
 		if (studentId == null) {
@@ -75,19 +77,18 @@ public class StudentCertificateController {
 		}
 
 		/* 3️⃣ Active template */
-		CertificateTemplate template = templateRepo.findByActiveTrue().orElse(null);
+		CertificateTemplate template = templateRepo.findAll().stream()
+				.filter(t -> t.isActive() && t.getType() == CertificateType.COURSE).findFirst().orElse(null);
 
 		if (template == null) {
-		    session.setAttribute(
-		        "certificateError",
-		        "Certificate is not available right now. Please contact admin or try again later."
-		    );
-		    String certMsg = (String) session.getAttribute("certificateError");
-		    if (certMsg != null) {
-		        model.addAttribute("certificateError", certMsg);
-		        session.removeAttribute("certificateError");
-		    }
-		    return "redirect:/student-course-player/" + courseId + "?certError=true";
+			session.setAttribute("certificateError",
+					"Certificate is not available right now. Please contact admin or try again later.");
+			String certMsg = (String) session.getAttribute("certificateError");
+			if (certMsg != null) {
+				model.addAttribute("certificateError", certMsg);
+				session.removeAttribute("certificateError");
+			}
+			return "redirect:/student-course-player/" + courseId + "?certError=true";
 		}
 
 		/* 4️⃣ Generate PDF */
@@ -153,17 +154,17 @@ public class StudentCertificateController {
 
 		/* Background */
 		if (template.getBackgroundImage() != null) {
-		    String bgPath = System.getProperty("user.dir") + template.getBackgroundImage();
-		    File bgFile = new File(bgPath);
+			String bgPath = System.getProperty("user.dir") + template.getBackgroundImage();
+			File bgFile = new File(bgPath);
 
-		    if (bgFile.exists()) {
-		        Image bg = Image.getInstance(bgPath);
-		        bg.scaleAbsolute(PageSize.A4.getWidth(), PageSize.A4.getHeight());
-		        bg.setAbsolutePosition(0, 0);
-		        writer.getDirectContentUnder().addImage(bg);
-		    }
+			if (bgFile.exists()) {
+				Image bg = Image.getInstance(bgPath);
+				bg.scaleAbsolute(PageSize.A4.getWidth(), PageSize.A4.getHeight());
+				bg.setAbsolutePosition(0, 0);
+				writer.getDirectContentUnder().addImage(bg);
+			}
 		}
-		
+
 		/* Text */
 		PdfContentByte text = writer.getDirectContent();
 		BaseFont bold = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
@@ -201,4 +202,5 @@ public class StudentCertificateController {
 		return "/uploads/certificates/student-" + student.getStudid() + "/course-" + course.getCourseId()
 				+ "/certificate.pdf";
 	}
+
 }

@@ -321,5 +321,20 @@ public class AdminInternshipTestController {
         return "redirect:/admin-test-results?internshipId=" + internshipId;
     }
     
-   
+    @PostMapping("/admin/allow-reattempt")
+    public String allowReattempt(@RequestParam Integer appId,
+                                 @RequestParam Integer internshipId) {
+
+        InternshipApplication app =
+            applicationRepo.findByStudent_StudidAndInternship_Id(appId, internshipId)
+            .orElse(null);
+
+        if (app != null) {
+            app.setAllowReattempt(true);
+            app.setStatus(ApplicationStatus.ACCEPTED);
+            applicationRepo.save(app);
+        }
+
+        return "redirect:/admin-test-results?internshipId=" + internshipId;
+    }
 }

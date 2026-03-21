@@ -347,7 +347,15 @@
                         <i class="bi bi-x-circle"></i>
                         Unfortunately, your application was not selected. Keep trying 💪
                     </div>
+                    
+<div th:if="${app.status.name() == 'REJECTED'}">
 
+    <form action="/student/reapply" method="post">
+        <input type="hidden" name="internshipId" th:value="${internship.id}">
+        <button class="apply-btn">🔁 Reapply</button>
+    </form>
+
+</div>
                 </div>
             </div>
 
@@ -436,6 +444,17 @@
                 </div>
 
             </div>
+            <div th:if="${app.allowReattempt}">
+
+    <button onclick="startTestConfirm(this)" 
+            th:data-id="${internship.id}"
+            class="apply-btn">
+
+        🔁 Reattempt Test
+
+    </button>
+
+</div>
 
         </div>
     </div>

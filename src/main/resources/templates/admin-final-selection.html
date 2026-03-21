@@ -1,43 +1,234 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>Final Selection</title>
+
+	<style>
+		:root {
+			--bg-primary: linear-gradient(135deg, #0b0b1f, #14142f);
+			--bg-content: #1a1a3d;
+			--accent: #6366f1;
+			--text-light: #eaeaf0;
+			--text-muted: #9ca3af;
+			--success: #22c55e;
+			--danger: #ef4444;
+			--warning: #f59e0b;
+		}
+
+		/* PAGE */
+		body {
+			background: var(--bg-primary);
+			color: var(--text-light);
+			font-family: 'Poppins', sans-serif;
+		}
+
+		/* CONTAINER */
+		.container {
+			max-width: 1100px;
+			margin: auto;
+			padding: 20px;
+		}
+
+		/* HEADER */
+		.header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 20px;
+		}
+
+		/* BUTTONS */
+		.btn {
+			border: none;
+			padding: 8px 14px;
+			border-radius: 10px;
+			font-size: 13px;
+			cursor: pointer;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+		}
+
+		.btn-primary {
+			background: var(--accent);
+			color: #fff;
+		}
+
+		.btn-success {
+			background: rgba(34, 197, 94, 0.2);
+			color: var(--success);
+		}
+
+		.btn-danger {
+			background: rgba(239, 68, 68, 0.2);
+			color: var(--danger);
+		}
+
+		.btn-secondary {
+			background: rgba(255, 255, 255, 0.08);
+			color: var(--text-light);
+		}
+
+		.btn:hover {
+			transform: translateY(-2px);
+		}
+
+		/* CARD */
+		.card {
+			background: rgba(255, 255, 255, 0.05);
+			backdrop-filter: blur(14px);
+			border-radius: 16px;
+			padding: 18px;
+			margin-bottom: 15px;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		/* LEFT */
+		.left h3 {
+			margin-bottom: 4px;
+		}
+
+		.left p {
+			font-size: 13px;
+			color: var(--text-muted);
+		}
+
+		/* STATUS */
+		.status {
+			font-size: 12px;
+			padding: 4px 10px;
+			border-radius: 999px;
+		}
+
+		.status.passed {
+			background: rgba(34, 197, 94, 0.2);
+			color: #22c55e;
+		}
+
+		.status.selected {
+			background: rgba(99, 102, 241, 0.2);
+			color: #6366f1;
+		}
+
+		.status.completed {
+			background: rgba(245, 158, 11, 0.2);
+			color: #f59e0b;
+		}
+
+		/* ACTIONS */
+		.actions {
+			display: flex;
+			flex-direction: column;
+			gap: 8px;
+		}
+
+		/* TEMPLATE PREVIEW */
+		.template-box {
+			display: flex;
+			gap: 10px;
+			margin-top: 8px;
+		}
+
+		.template-box img {
+			width: 90px;
+			height: 60px;
+			border-radius: 8px;
+		}
+	</style>
+
 </head>
+
 <body>
-<div class="container">
 
-    <h2>🎯 Final Selection</h2>
+	<div class="container">
 
-    <div th:each="app : ${applications}" class="card">
+		<!-- HEADER -->
+		<div class="header">
+			<h2>🎯 Final Selection</h2>
 
-        <h3 th:text="${app.student.fullname}"></h3>
-        <p th:text="${app.student.email}"></p>
+			<div style="display:flex; gap:10px;">
+				<a th:href="@{'/admin-test-results?internshipId=' + ${internshipId}}" class="btn btn-secondary">📊 Test
+					Results</a>
 
-        <p>Status: <b th:text="${app.status}"></b></p>
+				<a th:href="@{'/admin-applicants?internshipId=' + ${internshipId}}" class="btn btn-secondary">⬅
+					Applicants</a>
+			</div>
+		</div>
 
-        <!-- SELECT -->
-        <form action="/admin/select-student" method="post">
-            <input type="hidden" name="appId" th:value="${app.id}">
-            <button>✅ Select</button>
-        </form>
+		<!-- EMPTY -->
+		<div th:if="${#lists.isEmpty(applications)}">
+			No students passed yet 🚀
+		</div>
 
-        <!-- BADGE -->
-        <form action="/admin/give-badge" method="post">
-            <input type="hidden" name="appId" th:value="${app.id}">
-            <button th:if="${!app.badgeGiven}">🏆 Give Badge</button>
-            <span th:if="${app.badgeGiven}">🏆 Badge Given</span>
-        </form>
+		<!-- CARDS -->
+		<div th:each="app : ${applications}" class="card">
 
-        <!-- CERTIFICATE -->
-        <form action="/admin/generate-internship-certificate" method="post">
-            <input type="hidden" name="appId" th:value="${app.id}">
-            <button th:if="${!app.certificateGenerated}">📄 Generate Certificate</button>
-            <span th:if="${app.certificateGenerated}">✅ Certificate Generated</span>
-        </form>
+			<!-- LEFT -->
+			<div class="left">
+				<h3 th:text="${app.student.fullname}"></h3>
+				<p th:text="${app.student.email}"></p>
 
-    </div>
+				<span class="status" th:classappend="${app.status.name().toLowerCase()}" th:text="${app.status}">
+				</span>
 
-</div>
+				<!-- Badge -->
+				<div th:if="${app.badgeGiven}">
+					🏆 <span th:text="${app.badgeTitle}"></span>
+				</div>
+			</div>
+
+			<!-- RIGHT -->
+			<div class="actions">
+
+				<!-- SELECT -->
+				<form action="/admin/select-student" method="post" th:if="${app.status.name() != 'SELECTED'}">
+					<input type="hidden" name="appId" th:value="${app.id}">
+					<button class="btn btn-primary">✅ Select</button>
+				</form>
+
+				<!-- BADGE -->
+				<form action="/admin/give-badge" method="post" th:if="${!app.badgeGiven}">
+					<input type="hidden" name="appId" th:value="${app.id}">
+
+					<select name="badgeTitle">
+						<option value="Intern">Intern</option>
+						<option value="Top Intern">Top Intern</option>
+						<option value="Best Performer">Best Performer</option>
+					</select>
+
+					<button class="btn btn-success">🏆 Give Badge</button>
+				</form>
+
+				<!-- CERTIFICATE -->
+				<div th:if="${!app.certificateGenerated}" th:each="t : ${templates}" class="template-box">
+
+					<img th:src="@{${t.backgroundImage}}">
+
+					<form action="/admin/give-certificate" method="post">
+						<input type="hidden" name="appId" th:value="${app.id}">
+						<input type="hidden" name="templateId" th:value="${t.id}">
+						<button class="btn btn-success">📄 Generate</button>
+					</form>
+
+				</div>
+
+				<!-- COMPLETED -->
+				<span th:if="${app.certificateGenerated}" class="status completed">
+					🎓 Completed
+				</span>
+
+			</div>
+
+		</div>
+
+	</div>
+
 </body>
+
 </html>

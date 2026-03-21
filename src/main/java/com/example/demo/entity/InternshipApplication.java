@@ -17,36 +17,63 @@ import jakarta.persistence.Table;
 @Table(name = "internship_application")
 public class InternshipApplication {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "student_studid")   
-    private Student student;
+	@ManyToOne
+	@JoinColumn(name = "student_studid")
+	private Student student;
 
-    @ManyToOne
-    @JoinColumn(name = "internship_id")    
-    private Internships internship;
+	@ManyToOne
+	@JoinColumn(name = "internship_id")
+	private Internships internship;
 
-    @Enumerated(EnumType.STRING)
-    private ApplicationStatus status;
+	@Enumerated(EnumType.STRING)
+	private ApplicationStatus status;
 
-   
-    private String fullName;
-    private String email;
-    private String phone;
+	private String fullName;
+	private String email;
+	private String phone;
 
-    private String resumeUrl;
+	private String resumeUrl;
 
-    @Column(length = 1000)
-    private String coverLetter;
+	@Column(length = 1000)
+	private String coverLetter;
 
-    private boolean badgeGiven;
-    
-    private boolean certificateGenerated;
-    
-    
+	private boolean badgeGiven;
+
+	private boolean certificateGenerated;
+	private Integer certificateTemplateId;
+
+	private String badgeTitle;
+
+	private boolean allowReattempt;
+
+	public boolean isAllowReattempt() {
+		return allowReattempt;
+	}
+
+	public void setAllowReattempt(boolean allowReattempt) {
+		this.allowReattempt = allowReattempt;
+	}
+
+	public String getBadgeTitle() {
+		return badgeTitle;
+	}
+
+	public void setBadgeTitle(String badgeTitle) {
+		this.badgeTitle = badgeTitle;
+	}
+
+	public Integer getCertificateTemplateId() {
+		return certificateTemplateId;
+	}
+
+	public void setCertificateTemplateId(Integer certificateTemplateId) {
+		this.certificateTemplateId = certificateTemplateId;
+	}
+
 	public boolean isBadgeGiven() {
 		return badgeGiven;
 	}
@@ -135,5 +162,4 @@ public class InternshipApplication {
 		this.coverLetter = coverLetter;
 	}
 
-    	
 }

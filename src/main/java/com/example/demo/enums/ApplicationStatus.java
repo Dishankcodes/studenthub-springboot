@@ -8,5 +8,6 @@ public enum ApplicationStatus {
     TEST_COMPLETED,
     PASSED,
     SELECTED,
-    COMPLETED
+    COMPLETED,
+    FAILED
 }
