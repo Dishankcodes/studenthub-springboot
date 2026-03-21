@@ -12,23 +12,23 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class CourseFeedback {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer feedbackId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer feedbackId;
 
-    @ManyToOne
-    private Course course;
+	@ManyToOne
+	private Course course;
 
-    @ManyToOne
-    private Student student;
+	@ManyToOne
+	private Student student;
 
-    @Column(nullable = false)
-    private int rating; // 1–5
+	@Column(nullable = false)
+	private int rating; // 1–5
 
-    @Column(length = 1000)
-    private String comment;
+	@Column(length = 1000)
+	private String comment;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+	private LocalDateTime createdAt = LocalDateTime.now();
 
 	public Integer getFeedbackId() {
 		return feedbackId;
@@ -77,8 +77,5 @@ public class CourseFeedback {
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
-    
-    
-    
-    
+
 }

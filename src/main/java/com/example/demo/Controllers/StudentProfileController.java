@@ -30,10 +30,9 @@ public class StudentProfileController {
 	private StudentRepository studentRepo;
 
 	private static final String UPLOAD_BASE = System.getProperty("user.dir") + File.separator + "uploads";
-	
+
 	@Autowired
 	private ApplicationRepository applicationRepo;
-	
 
 	@GetMapping("/student-profile")
 	public String studentProfile(HttpSession session, Model model, @RequestParam(required = false) Boolean edit) {

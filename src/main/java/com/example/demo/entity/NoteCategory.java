@@ -11,38 +11,37 @@ import jakarta.persistence.Table;
 @Table(name = "note_category")
 public class NoteCategory {
 
-	 	@Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Integer categoryId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer categoryId;
 
-	    @Column(unique = true, nullable = false)
-	    private String name; // Java, UI/UX, Python
+	@Column(unique = true, nullable = false)
+	private String name; // Java, UI/UX, Python
 
-	    private boolean active = true;
+	private boolean active = true;
 
-		public Integer getCategoryId() {
-			return categoryId;
-		}
+	public Integer getCategoryId() {
+		return categoryId;
+	}
 
-		public void setCategoryId(Integer categoryId) {
-			this.categoryId = categoryId;
-		}
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
 
-		public String getName() {
-			return name;
-		}
+	public String getName() {
+		return name;
+	}
 
-		public void setName(String name) {
-			this.name = name;
-		}
+	public void setName(String name) {
+		this.name = name;
+	}
 
-		public boolean isActive() {
-			return active;
-		}
+	public boolean isActive() {
+		return active;
+	}
 
-		public void setActive(boolean active) {
-			this.active = active;
-		}
-	    
-	    
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
 }

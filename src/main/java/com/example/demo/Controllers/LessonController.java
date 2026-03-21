@@ -18,113 +18,92 @@ import com.example.demo.repository.QuizRepository;
 @Controller
 public class LessonController {
 
-    @Autowired
-    private LessonRepository lessonRepo;
+	@Autowired
+	private LessonRepository lessonRepo;
 
-    @Autowired
-    private CourseModuleRepository moduleRepo;
-    
-    @Autowired
-    private QuizRepository quizRepo;
+	@Autowired
+	private CourseModuleRepository moduleRepo;
 
-    /* ===============================
-       ADD LESSON
-       =============================== */
-    @PostMapping("/teacher/lesson/add")
-    public String addLesson(
-            @RequestParam Integer moduleId,
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) LessonType type,
-            RedirectAttributes ra
-    ) {
-        CourseModule module = moduleRepo.findById(moduleId).orElseThrow();
+	@Autowired
+	private QuizRepository quizRepo;
 
-        Lesson lesson = new Lesson();
-        lesson.setModule(module);
-        lesson.setTitle(title != null ? title : "");
-        lesson.setType(type != null ? type : LessonType.VIDEO);
-        lesson.setFreePreview(false);
+	/*
+	 * =============================== ADD LESSON ===============================
+	 */
+	@PostMapping("/teacher/lesson/add")
+	public String addLesson(@RequestParam Integer moduleId, @RequestParam(required = false) String title,
+			@RequestParam(required = false) LessonType type, RedirectAttributes ra) {
+		CourseModule module = moduleRepo.findById(moduleId).orElseThrow();
 
-        int position = (int) lessonRepo.countByModuleModuleId(moduleId) + 1;
-        lesson.setPosition(position);
+		Lesson lesson = new Lesson();
+		lesson.setModule(module);
+		lesson.setTitle(title != null ? title : "");
+		lesson.setType(type != null ? type : LessonType.VIDEO);
+		lesson.setFreePreview(false);
 
-        lessonRepo.save(lesson);
+		int position = (int) lessonRepo.countByModuleModuleId(moduleId) + 1;
+		lesson.setPosition(position);
 
-        // ✅ CREATE QUIZ IF TYPE = QUIZ
-        if (lesson.getType() == LessonType.QUIZ) {
-            Quiz quiz = new Quiz();
-            quiz.setLesson(lesson);
-            quiz.setTimeLimit(10); // default
-            quizRepo.save(quiz);
-        }
-        
-        ra.addFlashAttribute("success", "Lesson added");
-        
-        return "redirect:/teacher-creates-course?courseId="
-        + module.getCourse().getCourseId()
-        + "&openModule=" + module.getModuleId()
-        + "#module-" + module.getModuleId();    }
+		lessonRepo.save(lesson);
 
+		// ✅ CREATE QUIZ IF TYPE = QUIZ
+		if (lesson.getType() == LessonType.QUIZ) {
+			Quiz quiz = new Quiz();
+			quiz.setLesson(lesson);
+			quiz.setTimeLimit(10); // default
+			quizRepo.save(quiz);
+		}
 
+		ra.addFlashAttribute("success", "Lesson added");
 
-    /* ===============================
-       UPDATE LESSON TITLE
-       =============================== */
-    @PostMapping("/teacher/lesson/update")
-    public String updateLesson(
-            @RequestParam Integer lessonId,
-            @RequestParam String title,
-            @RequestParam(required = false) LessonType type,
-            RedirectAttributes ra
-    ) {
-        Lesson lesson = lessonRepo.findById(lessonId).orElseThrow();
+		return "redirect:/teacher-creates-course?courseId=" + module.getCourse().getCourseId() + "&openModule="
+				+ module.getModuleId() + "#module-" + module.getModuleId();
+	}
 
-        lesson.setTitle(title);
+	/*
+	 * =============================== UPDATE LESSON TITLE
+	 * ===============================
+	 */
+	@PostMapping("/teacher/lesson/update")
+	public String updateLesson(@RequestParam Integer lessonId, @RequestParam String title,
+			@RequestParam(required = false) LessonType type, RedirectAttributes ra) {
+		Lesson lesson = lessonRepo.findById(lessonId).orElseThrow();
 
-        if (type != null) {
-            lesson.setType(type);
-        }
+		lesson.setTitle(title);
 
-      
+		if (type != null) {
+			lesson.setType(type);
+		}
 
-        lessonRepo.save(lesson);
+		lessonRepo.save(lesson);
 
-        ra.addFlashAttribute("success", "Lesson updated");
-        
-        return "redirect:/teacher-creates-course?courseId="
-        + lesson.getModule().getCourse().getCourseId()
-        + "&openModule=" + lesson.getModule().getModuleId()
-        + "&openLesson=" + lesson.getLessonId()
-        + "#lesson-" + lesson.getLessonId();
-        
-    }
+		ra.addFlashAttribute("success", "Lesson updated");
 
+		return "redirect:/teacher-creates-course?courseId=" + lesson.getModule().getCourse().getCourseId()
+				+ "&openModule=" + lesson.getModule().getModuleId() + "&openLesson=" + lesson.getLessonId() + "#lesson-"
+				+ lesson.getLessonId();
 
-    /* ===============================
-       DELETE LESSON
-       =============================== */
-    @PostMapping("/teacher/lesson/delete")
-    public String deleteLesson(
-            @RequestParam Integer lessonId,
-            RedirectAttributes ra) {
+	}
 
-        Lesson lesson = lessonRepo.findById(lessonId).orElseThrow();
+	/*
+	 * =============================== DELETE LESSON ===============================
+	 */
+	@PostMapping("/teacher/lesson/delete")
+	public String deleteLesson(@RequestParam Integer lessonId, RedirectAttributes ra) {
 
-        Integer courseId = lesson.getModule().getCourse().getCourseId();
-        Integer moduleId = lesson.getModule().getModuleId(); // capture BEFORE delete
+		Lesson lesson = lessonRepo.findById(lessonId).orElseThrow();
 
-        try {
-            lessonRepo.delete(lesson);
-            ra.addFlashAttribute("success", "✅ Lesson deleted successfully");
-        } catch (DataIntegrityViolationException e) {
-            ra.addFlashAttribute(
-                "error",
-                "❌ Cannot delete lesson. Students have already started this lesson."
-            );
-        }
+		Integer courseId = lesson.getModule().getCourse().getCourseId();
+		Integer moduleId = lesson.getModule().getModuleId(); // capture BEFORE delete
 
-        return "redirect:/teacher-creates-course?courseId="
-                + courseId
-                + "&openModule=" + moduleId
-                + "#module-" + moduleId;
-    }}
+		try {
+			lessonRepo.delete(lesson);
+			ra.addFlashAttribute("success", "✅ Lesson deleted successfully");
+		} catch (DataIntegrityViolationException e) {
+			ra.addFlashAttribute("error", "❌ Cannot delete lesson. Students have already started this lesson.");
+		}
+
+		return "redirect:/teacher-creates-course?courseId=" + courseId + "&openModule=" + moduleId + "#module-"
+				+ moduleId;
+	}
+}

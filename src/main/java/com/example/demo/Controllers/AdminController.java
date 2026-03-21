@@ -123,8 +123,7 @@ public class AdminController {
 	}
 
 	@PostMapping("/manage-instructor/status/{id}")
-	public String updateTeacherStatus(@PathVariable Integer id,
-			@RequestParam TeacherStatus status) {
+	public String updateTeacherStatus(@PathVariable Integer id, @RequestParam TeacherStatus status) {
 		Teacher teacher = teacherRepo.findById(id).orElse(null);
 
 		if (teacher == null) {
@@ -136,7 +135,6 @@ public class AdminController {
 
 		return "redirect:/manage-teachers#instructor-" + id;
 	}
-
 
 	@GetMapping("/admin-feedback")
 	public String admin_feedback() {

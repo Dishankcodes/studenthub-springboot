@@ -42,20 +42,18 @@ public class Teacher {
 
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
-	private TeacherStatus status= TeacherStatus.ACTIVE;
-	
-	
+	private TeacherStatus status = TeacherStatus.ACTIVE;
+
 	@OneToOne(mappedBy = "teacher", cascade = CascadeType.ALL)
 	private TeacherProfile profile;
 
-	@OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL,orphanRemoval = true)
+	@OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<Course> teacherCourse = new ArrayList<>();
 
 	public List<Course> getTeacherCourse() {
 		return teacherCourse;
 	}
 
-	
 	public void setTeacherCourse(List<Course> teacherCourse) {
 		this.teacherCourse = teacherCourse;
 	}
@@ -124,15 +122,12 @@ public class Teacher {
 		this.password = password;
 	}
 
-
 	public TeacherStatus getStatus() {
 		return status;
 	}
-
 
 	public void setStatus(TeacherStatus status) {
 		this.status = status;
 	}
 
-	
 }

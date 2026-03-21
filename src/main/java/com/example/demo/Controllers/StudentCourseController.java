@@ -66,27 +66,22 @@ public class StudentCourseController {
 	private InstructorFeedbackRepository instructorFeedbackRepo;
 
 	@GetMapping("/student-course")
-	public String exploreCourse(Model model,HttpSession session) {
-		 Integer studentId = (Integer) session.getAttribute("studentId");
-
+	public String exploreCourse(Model model, HttpSession session) {
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
 		List<Course> courses = courseRepo.findByStatus(CourseStatus.PUBLISHED);
 
 		if (studentId != null) {
 
-	        // get completed course ids
-	        List<Integer> completedCourseIds =
-	                enrollmentRepo.findCompletedCourses(studentId);
+			// get completed course ids
+			List<Integer> completedCourseIds = enrollmentRepo.findCompletedCourses(studentId);
 
-	        // remove completed courses
-	        courses = courses.stream()
-	                .filter(c -> !completedCourseIds.contains(c.getCourseId()))
-	                .toList();
-	    }
+			// remove completed courses
+			courses = courses.stream().filter(c -> !completedCourseIds.contains(c.getCourseId())).toList();
+		}
 
-	    Map<Integer, Double> avgRatings = new HashMap<>();
-	    Map<Integer, Long> reviewCounts = new HashMap<>();
-
+		Map<Integer, Double> avgRatings = new HashMap<>();
+		Map<Integer, Long> reviewCounts = new HashMap<>();
 
 		for (Course course : courses) {
 			Integer courseId = course.getCourseId();

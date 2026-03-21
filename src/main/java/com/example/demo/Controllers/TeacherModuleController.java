@@ -36,18 +36,13 @@ public class TeacherModuleController {
 		moduleRepo.save(module);
 
 		ra.addFlashAttribute("success", "Module added successfully");
-		return "redirect:/teacher-creates-course?courseId=" 
-		+ courseId
-		+ "&openModule=" + module.getModuleId()
-		+ "&msg=module_added"
-		+ "#module-" + module.getModuleId();
+		return "redirect:/teacher-creates-course?courseId=" + courseId + "&openModule=" + module.getModuleId()
+				+ "&msg=module_added" + "#module-" + module.getModuleId();
 	}
 
 	// ✅ UPDATE MODULE
 	@PostMapping("/teacher/module/update")
-	public String updateModule(@RequestParam Integer moduleId,
-			@RequestParam String title,
-			RedirectAttributes ra) {
+	public String updateModule(@RequestParam Integer moduleId, @RequestParam String title, RedirectAttributes ra) {
 		CourseModule module = moduleRepo.findById(moduleId).orElse(null);
 		if (module == null) {
 			return "redirect:/teacher-course";
@@ -63,8 +58,7 @@ public class TeacherModuleController {
 
 	// ✅ DELETE MODULE
 	@PostMapping("/teacher/module/delete")
-	public String deleteModule(@RequestParam Integer moduleId,
-			RedirectAttributes ra) {
+	public String deleteModule(@RequestParam Integer moduleId, RedirectAttributes ra) {
 		CourseModule module = moduleRepo.findById(moduleId).orElse(null);
 		if (module == null) {
 			return "redirect:/teacher-course";
@@ -74,9 +68,7 @@ public class TeacherModuleController {
 		moduleRepo.delete(module);
 
 		ra.addFlashAttribute("success", "Module deleted");
-		
-		return "redirect:/teacher-creates-course?courseId="
-	     + courseId
-	     + "&msg=module_deleted";
+
+		return "redirect:/teacher-creates-course?courseId=" + courseId + "&msg=module_deleted";
 	}
 }

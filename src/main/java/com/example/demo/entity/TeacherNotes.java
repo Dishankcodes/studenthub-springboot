@@ -70,10 +70,10 @@ public class TeacherNotes {
 
 	@PrePersist
 	public void onCreate() {
-	    this.uploadedAt = LocalDateTime.now();
-	    if (this.status == null) {
-	        this.status = NoteStatus.PENDING;
-	    }
+		this.uploadedAt = LocalDateTime.now();
+		if (this.status == null) {
+			this.status = NoteStatus.PENDING;
+		}
 	}
 
 	public String getDescription() {

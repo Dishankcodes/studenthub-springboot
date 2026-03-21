@@ -13,30 +13,29 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="certificate_template")
+@Table(name = "certificate_template")
 
 public class CertificateTemplate {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
+
 	private String name;
-	
+
 	private String backgroundImage;
-	
+
 	private String signatureImage;
-	
+
 	private String fontFamily;
-	
+
 	private String fontColor;
-	
+
 	private boolean active;
-	
+
 	@Enumerated(EnumType.STRING)
 	private CertificateType type;
-	
-	
+
 	private LocalDate createdAt;
 
 	public Integer getId() {
@@ -62,8 +61,6 @@ public class CertificateTemplate {
 	public void setBackgroundImage(String backgroundImage) {
 		this.backgroundImage = backgroundImage;
 	}
-
-	
 
 	public CertificateType getType() {
 		return type;
@@ -112,6 +109,5 @@ public class CertificateTemplate {
 	public void setCreatedAt(LocalDate createdAt) {
 		this.createdAt = createdAt;
 	}
-	
-	
+
 }

@@ -36,16 +36,16 @@ public class AdminInternshipController {
 
 	@Autowired
 	private AdminRepository adminRepo;
-	
+
 	@Autowired
 	private ApplicationRepository applicationRepo;
 
 	@Autowired
 	private StudentRepository studentRepo;
-	
-	 @Autowired
-	 private EmailService emailService;
-	
+
+	@Autowired
+	private EmailService emailService;
+
 	@GetMapping("/manage-internships")
 	public String manageInternships(Model model, HttpSession session) {
 
@@ -105,71 +105,76 @@ public class AdminInternshipController {
 
 		return "redirect:/admin-post-internships";
 	}
-	
-	
+
 	@GetMapping("/admin-applicants")
 	public String viewApplicants(@RequestParam Integer id, Model model) {
 
-	    Internships internship = internshipRepo.findById(id).orElse(null);
+		Internships internship = internshipRepo.findById(id).orElse(null);
 
-	    List<InternshipApplication> applications =
-	            applicationRepo.findByInternshipId(id); 
+		List<InternshipApplication> applications = applicationRepo.findByInternshipId(id);
 
-	    model.addAttribute("internship", internship);
-	    model.addAttribute("applications", applications);
+		model.addAttribute("internship", internship);
+		model.addAttribute("applications", applications);
 
-	    return "manage-applicants";
+		return "manage-applicants";
 	}
-	
+
 	@GetMapping("/admin-view-student")
-	public String viewStudent(@RequestParam Integer id, Model model) {
+	public String viewStudent(@RequestParam Integer id, @RequestParam Integer internshipId, Model model) {
 
-	    Student student = studentRepo.findById(id).orElse(null);
+		InternshipApplication app = applicationRepo.findByStudent_StudidAndInternship_Id(id, internshipId).orElse(null);
 
-	    model.addAttribute("student", student);
+		if (app == null) {
+			model.addAttribute("error", "Application not found");
+			return "admin-student-profile";
+		}
 
-	    return "admin-student-profile";
+		model.addAttribute("app", app);
+		model.addAttribute("student", app.getStudent());
+		model.addAttribute("internship", app.getInternship());
+
+		return "admin-student-profile";
 	}
-	
-	 @PostMapping("/admin/application/update")
-	    public String updateApplication(
-	            @RequestParam Integer appId,
-	            @RequestParam String action,
-	            @RequestParam Integer internshipId
-	    ) {
 
-	        InternshipApplication app =
-	                applicationRepo.findById(appId).orElse(null);
+	@PostMapping("/admin/application/update")
+	public String updateApplication(@RequestParam Integer appId, @RequestParam String action,
+			@RequestParam Integer internshipId) {
 
-	        if (app == null) {
-	            return "redirect:/manage-internships";
-	        }
+		InternshipApplication app = applicationRepo.findById(appId).orElse(null);
 
-	        if ("accept".equals(action)) {
+		if (app == null) {
+			return "redirect:/manage-internships";
+		}
 
-	            app.setStatus(ApplicationStatus.ACCEPTED);
+		Internships i = app.getInternship();
 
-	            // 🔥 SEND OFFER EMAIL
-	            emailService.sendOfferLetter(
-	                    app.getEmail(),         // snapshot email
-	                    app.getFullName(),
-	                    app.getInternship().getTitle()
-	            );
+		// ✅ NULL SAFE VALUES
+		String title = (i != null && i.getTitle() != null) ? i.getTitle() : "N/A";
+		String role = (i != null && i.getRole() != null) ? i.getRole() : "N/A";
+		String type = (i != null && i.getType() != null) ? i.getType() : "N/A";
+		String location = (i != null && i.getLocation() != null) ? i.getLocation() : "N/A";
+		Integer stipend = (i != null && i.getStipend() != null) ? i.getStipend() : 0;
+		String duration = (i != null && i.getDuration() != null) ? i.getDuration() : "N/A";
+		LocalDate startDate = (i != null && i.getStartDate() != null) ? i.getStartDate() : LocalDate.now();
 
-	        } else if ("reject".equals(action)) {
+		if ("accept".equals(action)) {
 
-	            app.setStatus(ApplicationStatus.REJECTED);
+			app.setStatus(ApplicationStatus.ACCEPTED);
 
-	            // 🔥 SEND REJECTION EMAIL
-	            emailService.sendRejectionMail(
-	                    app.getEmail(),
-	                    app.getFullName(),
-	                    app.getInternship().getTitle()
-	            );
-	        }
+			// 🔥 SEND OFFER EMAIL
+			emailService.sendOfferLetter(app.getEmail(), app.getFullName(), title, role, type, location, stipend,
+					duration, startDate);
 
-	        applicationRepo.save(app);
+		} else if ("reject".equals(action)) {
 
-	        return "redirect:/admin-applicants?id=" + internshipId;
-	    }
+			app.setStatus(ApplicationStatus.REJECTED);
+
+			// 🔥 SEND REJECTION EMAIL
+			emailService.sendRejectionMail(app.getEmail(), app.getFullName(), title, role, type);
+		}
+
+		applicationRepo.save(app);
+
+		return "redirect:/admin-applicants?id=" + internshipId;
+	}
 }

@@ -43,19 +43,14 @@ public class Course {
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("position ASC")
 	private Set<CourseModule> modules = new LinkedHashSet<>();
-	
+
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderColumn(name = "position")
 	private List<CourseHighlight> highlights = new ArrayList<>();
 
-	
-	@OneToMany(
-		    mappedBy = "course",
-		    cascade = CascadeType.ALL,
-		    orphanRemoval = true
-		)
-		private List<Enrollment> enrollments;
-	
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Enrollment> enrollments;
+
 	@Column(nullable = false)
 	private String title;
 
@@ -176,9 +171,9 @@ public class Course {
 	}
 
 	public List<CourseHighlight> getHighlights() {
-	    return highlights;
+		return highlights;
 	}
-	
+
 	public void setHighlights(List<CourseHighlight> highlights) {
 		this.highlights = highlights;
 	}

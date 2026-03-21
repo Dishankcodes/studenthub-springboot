@@ -58,43 +58,47 @@
 	/* ===============================
    ANNOUNCEMENT CARD
 ================================ */
-/* ===============================
+	/* ===============================
    DARK ANNOUNCEMENT CARD
 ================================ */
-.announcement-card {
-    background: #1c1c35;   /* dark card */
-    padding: 20px;
-    border-radius: 14px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
-    margin-bottom: 20px;
-    transition: 0.25s ease;
-    border: 1px solid #2f2f4f;
-    color: #eaeaf0;
-}
+	.announcement-card {
+		background: #1c1c35;
+		/* dark card */
+		padding: 20px;
+		border-radius: 14px;
+		box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+		margin-bottom: 20px;
+		transition: 0.25s ease;
+		border: 1px solid #2f2f4f;
+		color: #eaeaf0;
+	}
 
-.announcement-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.45);
-    border-color: #3b82f6;
-}
+	.announcement-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 18px 35px rgba(0, 0, 0, 0.45);
+		border-color: #3b82f6;
+	}
+
 	.announcement-card.pinned {
-    border-left: 4px solid #f59e0b;
-    background: #1f1f40;
-}
+		border-left: 4px solid #f59e0b;
+		background: #1f1f40;
+	}
 
 	.announcement-meta {
-    font-size: 13px;
-    color: #9ca3af;
+		font-size: 13px;
+		color: #9ca3af;
 		margin-bottom: 10px;
 	}
-.attachment a {
-    color: #3b82f6;
-    text-decoration: none;
-}
 
-.attachment a:hover {
-    text-decoration: underline;
-}
+	.attachment a {
+		color: #3b82f6;
+		text-decoration: none;
+	}
+
+	.attachment a:hover {
+		text-decoration: underline;
+	}
+
 	.announcement-actions button {
 		margin-right: 10px;
 		border-radius: 8px;
@@ -177,12 +181,12 @@
 						<li class="sidebar__item"><a th:href="@{/manage-courses}">
 								<i class="bi bi-book"></i><span>Course Management</span></a></li>
 
-		               <li class="sidebar__item"><a th:href="@{/manage-internships}">
-                                <i class="bi bi-kanban"></i><span>Internship Management</span></a></li>
+						<li class="sidebar__item"><a th:href="@{/manage-internships}">
+								<i class="bi bi-kanban"></i><span>Internship Management</span></a></li>
 
-                        <li class="sidebar__item"><a th:href="@{/admin-post-internships}">
-                                <i class="bi bi-plus-circle"></i><span>Post Internships </span></a></li>
-                         		
+						<li class="sidebar__item"><a th:href="@{/admin-post-internships}">
+								<i class="bi bi-plus-circle"></i><span>Post Internships </span></a></li>
+
 						<li class="sidebar__item"><a th:href="@{/admin-announcement}" class="active">
 								<i class="bi bi-briefcase"></i><span>Announcements</span></a></li>
 

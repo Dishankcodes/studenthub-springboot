@@ -6,9 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.entity.Quiz;
 
-public interface QuizRepository extends JpaRepository<Quiz, Integer>{
+public interface QuizRepository extends JpaRepository<Quiz, Integer> {
 
-	
 	Quiz findByLessonLessonId(Integer lessonId);
 
 }

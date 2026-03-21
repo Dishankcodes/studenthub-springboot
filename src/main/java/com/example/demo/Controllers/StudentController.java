@@ -83,39 +83,27 @@ public class StudentController {
 		// ===== ENROLLMENTS =====
 		List<Enrollment> enrollments = enrollmentRepo.findByStudentStudid(studentId);
 
-		List<Course> enrolledCourses =
-				enrollments.stream()
-				.map(Enrollment::getCourse)
-				.toList();
+		List<Course> enrolledCourses = enrollments.stream().map(Enrollment::getCourse).toList();
 
-		List<Course> completedCourses =
-				enrollments.stream()
-				.filter(e -> e.getCompletedAt() != null)
-				.map(Enrollment::getCourse)
-				.toList();
+		List<Course> completedCourses = enrollments.stream().filter(e -> e.getCompletedAt() != null)
+				.map(Enrollment::getCourse).toList();
 
 		// ===== IN PROGRESS COURSES =====
-		List<Course> inProgressCourses =
-				enrollments.stream()
-				.filter(e -> e.getCompletedAt() == null)
-				.map(Enrollment::getCourse)
-				.toList();
+		List<Course> inProgressCourses = enrollments.stream().filter(e -> e.getCompletedAt() == null)
+				.map(Enrollment::getCourse).toList();
 
 		if (inProgressCourses.size() > 4) {
 			inProgressCourses = inProgressCourses.subList(0, 4);
 		}
 
 		// ===== CERTIFICATES =====
-		List<CourseCertificate> certificates =
-				certificateRepo.findByStudentStudid(studentId);
+		List<CourseCertificate> certificates = certificateRepo.findByStudentStudid(studentId);
 
 		// ===== ANNOUNCEMENTS =====
-		List<Announcement> announcements =
-				announcementRepo.findTop5ByActiveTrueOrderByCreatedAtDesc();
+		List<Announcement> announcements = announcementRepo.findTop5ByActiveTrueOrderByCreatedAtDesc();
 
 		// ===== CLASSROOM NOTES =====
-		List<TeacherNotes> notes =
-				teacherNoteRepo.findTop5ByApprovedTrueOrderByUploadedAtDesc();
+		List<TeacherNotes> notes = teacherNoteRepo.findTop5ByApprovedTrueOrderByUploadedAtDesc();
 
 		// ===== DASHBOARD COUNTS =====
 		int enrolledCount = enrolledCourses.size();
@@ -124,11 +112,10 @@ public class StudentController {
 		int inProgressCount = inProgressCourses.size();
 
 		// ===== WEEKLY ACTIVITY =====
-		List<Long> weeklyActivity =
-				lessonProgressRepo.getWeeklyActivity(studentId);
+		List<Long> weeklyActivity = lessonProgressRepo.getWeeklyActivity(studentId);
 
 		if (weeklyActivity == null || weeklyActivity.size() != 7) {
-			weeklyActivity = List.of(0L,0L,0L,0L,0L,0L,0L);
+			weeklyActivity = List.of(0L, 0L, 0L, 0L, 0L, 0L, 0L);
 		}
 
 		// ===== MODEL =====
@@ -156,38 +143,29 @@ public class StudentController {
 			return "redirect:/student-login";
 		}
 
-		List<Enrollment> enrollments =
-				enrollmentRepo.findByStudentStudid(studentId);
+		List<Enrollment> enrollments = enrollmentRepo.findByStudentStudid(studentId);
 
-		List<Course> completedCourses =
-				enrollments.stream()
-				.filter(e -> e.getCompletedAt() != null)
-				.map(Enrollment::getCourse)
-				.toList();
+		List<Course> completedCourses = enrollments.stream().filter(e -> e.getCompletedAt() != null)
+				.map(Enrollment::getCourse).toList();
 
-		List<CourseCertificate> certificates =
-				certificateRepo.findByStudentStudid(studentId);
+		List<CourseCertificate> certificates = certificateRepo.findByStudentStudid(studentId);
 
-		Map<Integer,Boolean> courseFeedbackMap = new HashMap<>();
+		Map<Integer, Boolean> courseFeedbackMap = new HashMap<>();
 
 		for (Course course : completedCourses) {
 
-			boolean feedbackGiven =
-					feedbackRepo.existsByCourseCourseIdAndStudentStudid(
-							course.getCourseId(),
-							studentId
-					);
+			boolean feedbackGiven = feedbackRepo.existsByCourseCourseIdAndStudentStudid(course.getCourseId(),
+					studentId);
 
 			courseFeedbackMap.put(course.getCourseId(), feedbackGiven);
 		}
 
-		List<Course> recommendedCourses =
-				courseRepo.findByStatus(CourseStatus.PUBLISHED);
+		List<Course> recommendedCourses = courseRepo.findByStatus(CourseStatus.PUBLISHED);
 
 		recommendedCourses.removeIf(course -> completedCourses.contains(course));
 
 		if (recommendedCourses.size() > 6) {
-			recommendedCourses = recommendedCourses.subList(0,6);
+			recommendedCourses = recommendedCourses.subList(0, 6);
 		}
 
 		model.addAttribute("recommendedCourses", recommendedCourses);
@@ -199,21 +177,16 @@ public class StudentController {
 	}
 
 	@GetMapping("/student-stuff")
-	public String student_stuff(
-			@RequestParam(required = false) Integer category,
-			@RequestParam(required = false) String q,
-			Model model
-	) {
+	public String student_stuff(@RequestParam(required = false) Integer category,
+			@RequestParam(required = false) String q, Model model) {
 
 		model.addAttribute("categories", categoryRepo.findByActiveTrue());
 
 		List<TeacherNotes> notes = teacherNoteRepo.search(category, q);
 
-		boolean hasAnyNotes =
-				teacherNoteRepo.countApprovedNotes() > 0;
+		boolean hasAnyNotes = teacherNoteRepo.countApprovedNotes() > 0;
 
-		List<Announcement> announcements =
-				announcementRepo.findForStudents();
+		List<Announcement> announcements = announcementRepo.findForStudents();
 
 		model.addAttribute("notes", notes);
 		model.addAttribute("hasAnyNotes", hasAnyNotes);
@@ -229,7 +202,6 @@ public class StudentController {
 		return "student-chat";
 	}
 
-
 	@GetMapping("/student-notification")
 	public String student_notifi() {
 		return "student-notification";
@@ -243,51 +215,35 @@ public class StudentController {
 		if (studentId == null)
 			return "redirect:/student-login";
 
-		List<Enrollment> enrollments =
-				enrollmentRepo.findByStudentStudid(studentId);
+		List<Enrollment> enrollments = enrollmentRepo.findByStudentStudid(studentId);
 
-		List<Course> completedCourses =
-				enrollments.stream()
-				.filter(e -> e.getCompletedAt() != null)
-				.map(Enrollment::getCourse)
-				.toList();
+		List<Course> completedCourses = enrollments.stream().filter(e -> e.getCompletedAt() != null)
+				.map(Enrollment::getCourse).toList();
 
-		List<Teacher> completedTeachers =
-				enrollments.stream()
-				.filter(e -> e.getCompletedAt() != null)
-				.map(e -> e.getCourse().getTeacher())
-				.distinct()
-				.toList();
+		List<Teacher> completedTeachers = enrollments.stream().filter(e -> e.getCompletedAt() != null)
+				.map(e -> e.getCourse().getTeacher()).distinct().toList();
 
-		model.addAttribute("feedbackMode","LIST");
-		model.addAttribute("completedTeachers",completedTeachers);
-		model.addAttribute("completedCourses",completedCourses);
-		model.addAttribute("courseSelected",false);
-		model.addAttribute("courseFeedbackSubmitted",false);
-		model.addAttribute("canRateInstructor",false);
-		model.addAttribute("instructorFeedbackGiven",false);
-		model.addAttribute("teacher",null);
+		model.addAttribute("feedbackMode", "LIST");
+		model.addAttribute("completedTeachers", completedTeachers);
+		model.addAttribute("completedCourses", completedCourses);
+		model.addAttribute("courseSelected", false);
+		model.addAttribute("courseFeedbackSubmitted", false);
+		model.addAttribute("canRateInstructor", false);
+		model.addAttribute("instructorFeedbackGiven", false);
+		model.addAttribute("teacher", null);
 
 		return "student-feedback";
 	}
 
 	@GetMapping("/student-feedback/{courseId}")
-	public String feedbackPage(
-			@PathVariable Integer courseId,
-			HttpSession session,
-			Model model
-	) {
+	public String feedbackPage(@PathVariable Integer courseId, HttpSession session, Model model) {
 
 		Integer studentId = (Integer) session.getAttribute("studentId");
 
 		if (studentId == null)
 			return "redirect:/student-login";
 
-		boolean enrolled =
-				enrollmentRepo.existsByStudentStudidAndCourseCourseId(
-						studentId,
-						courseId
-				);
+		boolean enrolled = enrollmentRepo.existsByStudentStudidAndCourseCourseId(studentId, courseId);
 
 		if (!enrolled)
 			return "redirect:/student-course-details?courseId=" + courseId;
@@ -296,48 +252,33 @@ public class StudentController {
 
 		Teacher teacher = course.getTeacher();
 
-		boolean courseFeedbackGiven =
-				feedbackRepo.existsByCourseCourseIdAndStudentStudid(
-						courseId,
-						studentId
-				);
+		boolean courseFeedbackGiven = feedbackRepo.existsByCourseCourseIdAndStudentStudid(courseId, studentId);
 
-		boolean canRateInstructor =
-				canRateInstructor(studentId, teacher.getTeacherId());
+		boolean canRateInstructor = canRateInstructor(studentId, teacher.getTeacherId());
 
-		boolean instructorFeedbackGiven =
-				instructorFeedbackRepo.existsByTeacherTeacherIdAndStudentStudid(
-						teacher.getTeacherId(),
-						studentId
-				);
+		boolean instructorFeedbackGiven = instructorFeedbackRepo
+				.existsByTeacherTeacherIdAndStudentStudid(teacher.getTeacherId(), studentId);
 
-		model.addAttribute("feedbackMode","DIRECT");
-		model.addAttribute("course",course);
-		model.addAttribute("teacher",teacher);
-		model.addAttribute("courseSelected",true);
-		model.addAttribute("courseFeedbackSubmitted",courseFeedbackGiven);
-		model.addAttribute("canRateInstructor",canRateInstructor);
-		model.addAttribute("instructorFeedbackGiven",instructorFeedbackGiven);
+		model.addAttribute("feedbackMode", "DIRECT");
+		model.addAttribute("course", course);
+		model.addAttribute("teacher", teacher);
+		model.addAttribute("courseSelected", true);
+		model.addAttribute("courseFeedbackSubmitted", courseFeedbackGiven);
+		model.addAttribute("canRateInstructor", canRateInstructor);
+		model.addAttribute("instructorFeedbackGiven", instructorFeedbackGiven);
 
 		return "student-feedback";
 	}
 
 	@PostMapping("/student-feedback/{courseId}")
-	public String submitFeedback(
-			@PathVariable Integer courseId,
-			CourseFeedback feedback,
-			HttpSession session
-	) {
+	public String submitFeedback(@PathVariable Integer courseId, CourseFeedback feedback, HttpSession session) {
 
 		Integer studentId = (Integer) session.getAttribute("studentId");
 
 		if (studentId == null)
 			return "redirect:/student-login";
 
-		if (feedbackRepo.existsByCourseCourseIdAndStudentStudid(
-				courseId,
-				studentId
-		)) {
+		if (feedbackRepo.existsByCourseCourseIdAndStudentStudid(courseId, studentId)) {
 			return "redirect:/student-feedback/" + courseId;
 		}
 
@@ -351,11 +292,7 @@ public class StudentController {
 	}
 
 	@GetMapping("/student-feedback/instructor/{teacherId}")
-	public String instructorFeedbackPage(
-			@PathVariable Integer teacherId,
-			HttpSession session,
-			Model model
-	) {
+	public String instructorFeedbackPage(@PathVariable Integer teacherId, HttpSession session, Model model) {
 
 		Integer studentId = (Integer) session.getAttribute("studentId");
 
@@ -364,40 +301,30 @@ public class StudentController {
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
-		boolean canRateInstructor =
-				canRateInstructor(studentId, teacherId);
+		boolean canRateInstructor = canRateInstructor(studentId, teacherId);
 
-		boolean instructorFeedbackGiven =
-				instructorFeedbackRepo.existsByTeacherTeacherIdAndStudentStudid(
-						teacherId,
-						studentId
-				);
+		boolean instructorFeedbackGiven = instructorFeedbackRepo.existsByTeacherTeacherIdAndStudentStudid(teacherId,
+				studentId);
 
-		model.addAttribute("feedbackMode","DIRECT");
-		model.addAttribute("teacher",teacher);
-		model.addAttribute("canRateInstructor",canRateInstructor);
-		model.addAttribute("instructorFeedbackGiven",instructorFeedbackGiven);
-		model.addAttribute("courseSelected",false);
+		model.addAttribute("feedbackMode", "DIRECT");
+		model.addAttribute("teacher", teacher);
+		model.addAttribute("canRateInstructor", canRateInstructor);
+		model.addAttribute("instructorFeedbackGiven", instructorFeedbackGiven);
+		model.addAttribute("courseSelected", false);
 
 		return "student-feedback";
 	}
 
 	@PostMapping("/student-feedback/instructor/{teacherId}")
-	public String submitInstructorFeedback(
-			@PathVariable Integer teacherId,
-			InstructorFeedback feedback,
-			HttpSession session
-	) {
+	public String submitInstructorFeedback(@PathVariable Integer teacherId, InstructorFeedback feedback,
+			HttpSession session) {
 
 		Integer studentId = (Integer) session.getAttribute("studentId");
 
 		if (studentId == null)
 			return "redirect:/student-login";
 
-		if (instructorFeedbackRepo.existsByTeacherTeacherIdAndStudentStudid(
-				teacherId,
-				studentId
-		)) {
+		if (instructorFeedbackRepo.existsByTeacherTeacherIdAndStudentStudid(teacherId, studentId)) {
 			return "redirect:/student-feedback";
 		}
 
@@ -412,16 +339,9 @@ public class StudentController {
 
 	private boolean canRateInstructor(Integer studentId, Integer teacherId) {
 
-		List<Enrollment> enrollments =
-				enrollmentRepo.findByStudentStudid(studentId);
+		List<Enrollment> enrollments = enrollmentRepo.findByStudentStudid(studentId);
 
-		return enrollments.stream()
-				.filter(e -> e.getCompletedAt() != null)
-				.anyMatch(e ->
-						e.getCourse()
-								.getTeacher()
-								.getTeacherId()
-								.equals(teacherId)
-				);
+		return enrollments.stream().filter(e -> e.getCompletedAt() != null)
+				.anyMatch(e -> e.getCourse().getTeacher().getTeacherId().equals(teacherId));
 	}
 }

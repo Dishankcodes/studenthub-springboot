@@ -29,28 +29,21 @@ public class LoginController {
 	}
 
 	@PostMapping("/admin-dashboard")
-	public String loginAdmin(
-			@ModelAttribute("admin") Admin admin,
-			HttpSession session, 
-			Model model
-			) {
-		
+	public String loginAdmin(@ModelAttribute("admin") Admin admin, HttpSession session, Model model) {
+
 		Optional<Admin> opt = adminrepo.findByEmail(admin.getEmail());
 
-		if (opt.isEmpty() 
-				|| !admin.getUsername().equals(opt.get().getUsername()) 
+		if (opt.isEmpty() || !admin.getUsername().equals(opt.get().getUsername())
 				|| !admin.getPassword().equals(opt.get().getPassword())) {
-			
+
 			model.addAttribute("error", "Admin not found or Invalid Password ");
 			return "admin-login";
 		}
-			
+
 		session.setAttribute("adminEmail", opt.get().getEmail());
 		session.setAttribute("adminUsername", opt.get().getUsername());
 
 		return "redirect:/admin-dashboard";
 	}
-	
-	
 
 }

@@ -31,10 +31,9 @@ public class Quiz {
 	@Column(nullable = false)
 	private Integer timeLimit;
 
-	@OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "quiz", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy("position ASC")
 	private List<QuizQuestion> questions = new ArrayList<>();
-
 
 	public Integer getQuizId() {
 		return quizId;
@@ -67,6 +66,5 @@ public class Quiz {
 	public void setQuestions(List<QuizQuestion> questions) {
 		this.questions = questions;
 	}
-	
 
 }

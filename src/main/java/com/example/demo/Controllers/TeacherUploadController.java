@@ -113,11 +113,11 @@ public class TeacherUploadController {
 		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
 		if (teacher.getStatus() == TeacherStatus.BLOCKED) {
-		    return "redirect:/teacher-activity?error=blocked";
+			return "redirect:/teacher-activity?error=blocked";
 		}
 
 		if (teacher.getStatus() == TeacherStatus.SUSPENDED) {
-		    return "redirect:/teacher-activity?error=suspended";
+			return "redirect:/teacher-activity?error=suspended";
 		}
 
 		NoteCategory category = categoryRepo.findById(categoryId).orElseThrow();

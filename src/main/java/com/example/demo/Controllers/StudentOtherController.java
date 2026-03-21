@@ -23,71 +23,60 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class StudentOtherController {
 
-	
 	@Autowired
 	private ApplicationRepository applicationRepo;
-	
+
 	@Autowired
 	private InternshipCertificateRepository internshipCertRepo;
-	
+
 	@GetMapping("/student/next-step")
-	public String nextStep(@RequestParam Integer internshipId,
-	                       HttpSession session,
-	                       Model model) {
+	public String nextStep(@RequestParam Integer internshipId, HttpSession session, Model model) {
 
-	    Integer studentId = (Integer) session.getAttribute("studentId");
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-	    InternshipApplication app =
-	        applicationRepo.findByStudent_StudidAndInternship_Id(studentId, internshipId)
-	        .orElse(null);
+		InternshipApplication app = applicationRepo.findByStudent_StudidAndInternship_Id(studentId, internshipId)
+				.orElse(null);
 
-	    model.addAttribute("app", app);
+		model.addAttribute("app", app);
 
-	    return "student-next-step";
+		return "student-next-step";
 	}
 
 	@PostMapping("/student/reapply")
-	public String reapply(@RequestParam Integer internshipId,
-	                      HttpSession session) {
+	public String reapply(@RequestParam Integer internshipId, HttpSession session) {
 
-	    Integer studentId = (Integer) session.getAttribute("studentId");
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-	    InternshipApplication app =
-	        applicationRepo.findByStudent_StudidAndInternship_Id(studentId, internshipId)
-	        .orElse(null);
+		InternshipApplication app = applicationRepo.findByStudent_StudidAndInternship_Id(studentId, internshipId)
+				.orElse(null);
 
-	    if (app != null) {
-	        app.setStatus(ApplicationStatus.PENDING);
-	        app.setAllowReattempt(false);
-	        applicationRepo.save(app);
-	    }
+		if (app != null) {
+			app.setStatus(ApplicationStatus.PENDING);
+			app.setAllowReattempt(false);
+			applicationRepo.save(app);
+		}
 
-	    return "redirect:/student-internship-detail?id=" + internshipId;
+		return "redirect:/student-internship-detail?id=" + internshipId;
 	}
-	
-	
-	
-	
+
 	@GetMapping("/student/internship/certificate/{internshipId}")
-	public void downloadInternshipCertificate(@PathVariable Integer internshipId,
-	                                          HttpSession session,
-	                                          HttpServletResponse response) throws Exception {
+	public void downloadInternshipCertificate(@PathVariable Integer internshipId, HttpSession session,
+			HttpServletResponse response) throws Exception {
 
-	    Integer studentId = (Integer) session.getAttribute("studentId");
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-	    InternshipCertificate cert =
-	        internshipCertRepo
-	        .findByStudentStudidAndInternshipId(studentId, internshipId)
-	        .orElse(null);
+		InternshipCertificate cert = internshipCertRepo.findByStudentStudidAndInternshipId(studentId, internshipId)
+				.orElse(null);
 
-	    if (cert == null) return;
+		if (cert == null)
+			return;
 
-	    File file = new File(System.getProperty("user.dir") + cert.getPdfPath());
+		File file = new File(System.getProperty("user.dir") + cert.getPdfPath());
 
-	    response.setContentType("application/pdf");
-	    response.setHeader("Content-Disposition", "attachment; filename=internship-certificate.pdf");
+		response.setContentType("application/pdf");
+		response.setHeader("Content-Disposition", "attachment; filename=internship-certificate.pdf");
 
-	    Files.copy(file.toPath(), response.getOutputStream());
-	    response.getOutputStream().flush();
+		Files.copy(file.toPath(), response.getOutputStream());
+		response.getOutputStream().flush();
 	}
 }

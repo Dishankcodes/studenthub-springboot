@@ -31,11 +31,8 @@ public class Enrollment {
 	private Course course;
 
 	private LocalDateTime enrolledAt = LocalDateTime.now();
-	
-	
+
 	private LocalDateTime completedAt;
-	
-	
 
 	@Enumerated(EnumType.STRING)
 	private EnrollmentStatus status = EnrollmentStatus.ACTIVE;
@@ -87,7 +84,5 @@ public class Enrollment {
 	public void setCompletedAt(LocalDateTime completedAt) {
 		this.completedAt = completedAt;
 	}
-	
-	
 
 }

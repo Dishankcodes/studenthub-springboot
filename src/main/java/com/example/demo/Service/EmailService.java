@@ -1,5 +1,7 @@
 package com.example.demo.Service;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -8,52 +10,122 @@ import org.springframework.stereotype.Service;
 @Service
 public class EmailService {
 
-	@Autowired
-	private JavaMailSender mailSender;
+    @Autowired
+    private JavaMailSender mailSender;
 
-	public void sendOtp(String toEmail, String otp) {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo(toEmail);
-		message.setSubject("EduPlatform - Login OTP Verification");
-		message.setText("Your OTP is: " + otp + "\nValid for 5 minutes.");
+    // ================= OTP =================
+    public void sendOtp(String toEmail, String otp) {
 
-		mailSender.send(message);
-	}
+        SimpleMailMessage message = new SimpleMailMessage();
 
-	public void sendOfferLetter(String toEmail, String name, String internshipTitle) {
+        message.setTo(toEmail);
+        message.setSubject("🔐 EduPlatform OTP Verification");
 
-	    SimpleMailMessage message = new SimpleMailMessage();
+        message.setText(
+                "Dear User,\n\n" +
 
-	    message.setTo(toEmail);
-	    message.setSubject("🎉 Congratulations! Internship Offer Letter");
+                "Your One-Time Password (OTP) for login verification is:\n\n" +
 
-	    message.setText(
-	        "Dear " + name + ",\n\n" +
-	        "We are pleased to inform you that you have been SELECTED for the internship:\n\n" +
-	        internshipTitle + "\n\n" +
-	        "Please login to EduPlatform to check further details.\n\n" +
-	        "Best Regards,\nEduPlatform Team"
-	    );
+                "🔑 OTP: " + otp + "\n\n" +
 
-	    mailSender.send(message);
-	}
-	
-	public void sendRejectionMail(String toEmail, String name, String internshipTitle) {
+                "⏳ This OTP is valid for 5 minutes.\n\n" +
 
-	    SimpleMailMessage message = new SimpleMailMessage();
+                "If you did not request this, please ignore this email.\n\n" +
 
-	    message.setTo(toEmail);
-	    message.setSubject("Internship Application Update");
+                "Best Regards,\nEduPlatform Team"
+        );
 
-	    message.setText(
-	        "Dear " + name + ",\n\n" +
-	        "Thank you for applying for the internship:\n" +
-	        internshipTitle + "\n\n" +
-	        "We regret to inform you that your application was not selected.\n\n" +
-	        "We encourage you to apply again in future.\n\n" +
-	        "Best Regards,\nEduPlatform Team"
-	    );
+        mailSender.send(message);
+    }
 
-	    mailSender.send(message);
-	}
+    // ================= OFFER EMAIL =================
+    public void sendOfferLetter(String toEmail, String name,
+                                String title, String role, String type,
+                                String location, Integer stipend,
+                                String duration, LocalDate startDate) {
+
+        // ✅ SAFETY (DOUBLE CHECK)
+        title = safe(title);
+        role = safe(role);
+        type = safe(type);
+        location = safe(location);
+        duration = safe(duration);
+        stipend = (stipend != null) ? stipend : 0;
+        startDate = (startDate != null) ? startDate : LocalDate.now();
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(toEmail);
+        message.setSubject("🎉 Offer Letter | " + title + " Internship");
+
+        message.setText(
+                "Dear " + name + ",\n\n" +
+
+                "Congratulations! 🎉\n" +
+                "We are delighted to offer you an internship opportunity at EduPlatform.\n\n" +
+
+                "📌 Internship Details:\n" +
+                "-----------------------------------\n" +
+                "Title      : " + title + "\n" +
+                "Role       : " + role + "\n" +
+                "Type       : " + type + "\n" +
+                "Location   : " + location + "\n" +
+                "Stipend    : ₹" + stipend + " per month\n" +
+                "Duration   : " + duration + "\n" +
+                "Start Date : " + startDate + "\n" +
+                "-----------------------------------\n\n" +
+
+                "You have been selected based on your performance and profile.\n\n" +
+
+                "👉 Please login to your EduPlatform account to view your offer letter and next steps.\n\n" +
+
+                "We look forward to having you on our team!\n\n" +
+
+                "Best Regards,\nEduPlatform Team\n"
+        );
+
+        mailSender.send(message);
+    }
+
+    // ================= REJECTION EMAIL =================
+    public void sendRejectionMail(String toEmail, String name,
+                                 String title, String role, String type) {
+
+        title = safe(title);
+        role = safe(role);
+        type = safe(type);
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(toEmail);
+        message.setSubject("Application Update | " + title + " Internship");
+
+        message.setText(
+                "Dear " + name + ",\n\n" +
+
+                "Thank you for applying for the following internship at EduPlatform:\n\n" +
+
+                "📌 Internship Details:\n" +
+                "-----------------------------------\n" +
+                "Title : " + title + "\n" +
+                "Role  : " + role + "\n" +
+                "Type  : " + type + "\n" +
+                "-----------------------------------\n\n" +
+
+                "After careful consideration, we regret to inform you that your application was not selected at this time.\n\n" +
+
+                "We truly appreciate your interest and encourage you to apply again for future opportunities.\n\n" +
+
+                "Wishing you all the best in your journey ahead! 💼\n\n" +
+
+                "Best Regards,\nEduPlatform Team\n"
+        );
+
+        mailSender.send(message);
+    }
+
+    // ================= HELPER =================
+    private String safe(String value) {
+        return (value != null && !value.isEmpty()) ? value : "N/A";
+    }
 }

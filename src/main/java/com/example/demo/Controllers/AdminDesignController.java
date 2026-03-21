@@ -39,8 +39,7 @@ public class AdminDesignController {
 			dir.mkdirs();
 		}
 
-		String fileName = System.currentTimeMillis()
-				+ "_" + file.getOriginalFilename();
+		String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 
 		java.io.File destination = new java.io.File(dir, fileName);
 		file.transferTo(destination);
@@ -52,39 +51,31 @@ public class AdminDesignController {
 	@GetMapping("/admin-design")
 	public String designTemplate(Model model) {
 
-		model.addAttribute("courseTemplates",
-			    templateRepo.findByType(CertificateType.COURSE));
+		model.addAttribute("courseTemplates", templateRepo.findByType(CertificateType.COURSE));
 
-			model.addAttribute("internshipTemplates",
-			    templateRepo.findByType(CertificateType.INTERNSHIP));
+		model.addAttribute("internshipTemplates", templateRepo.findByType(CertificateType.INTERNSHIP));
 		return "admin-design";
 	}
 
 	@PostMapping("/certificate-template/save")
-	public String saveTemplate(@RequestParam String name,
-			@RequestParam MultipartFile backgroundImage,
-			@RequestParam(required = false) MultipartFile signatureImage,
-			@RequestParam String fontFamily,
-			@RequestParam String fontColor,
-			@RequestParam CertificateType type,
-			Model model) throws IOException {
+	public String saveTemplate(@RequestParam String name, @RequestParam MultipartFile backgroundImage,
+			@RequestParam(required = false) MultipartFile signatureImage, @RequestParam String fontFamily,
+			@RequestParam String fontColor, @RequestParam CertificateType type, Model model) throws IOException {
 
 		CertificateTemplate template = new CertificateTemplate();
 		template.setName(name);
 		template.setType(type);
-		template.setBackgroundImage(
-				saveFile(backgroundImage, "certificate-templates"));
+		template.setBackgroundImage(saveFile(backgroundImage, "certificate-templates"));
 
 		if (!signatureImage.isEmpty()) {
-			template.setSignatureImage(
-					saveFile(signatureImage, "cert-sign"));
+			template.setSignatureImage(saveFile(signatureImage, "cert-sign"));
 		}
 
 		template.setFontFamily(fontFamily);
 		template.setFontColor(fontColor);
 		template.setCreatedAt(LocalDate.now());
 		template.setActive(false);
-		
+
 		templateRepo.save(template);
 		return "redirect:/admin-design";
 	}
@@ -92,17 +83,17 @@ public class AdminDesignController {
 	@PostMapping("/certificate-template/activate/{id}")
 	public String activateTemplate(@PathVariable Integer id) {
 
-	    CertificateTemplate selected = templateRepo.findById(id).orElseThrow();
+		CertificateTemplate selected = templateRepo.findById(id).orElseThrow();
 
-	    // deactivate only SAME TYPE templates
-	    templateRepo.findByType(selected.getType())
-	        .forEach(t -> {
-	            t.setActive(false);
-	            templateRepo.save(t);
-	        });
+		// deactivate only SAME TYPE templates
+		templateRepo.findByType(selected.getType()).forEach(t -> {
+			t.setActive(false);
+			templateRepo.save(t);
+		});
 
-	    selected.setActive(true);
-	    templateRepo.save(selected);
+		selected.setActive(true);
+		templateRepo.save(selected);
 
-	    return "redirect:/admin-design";
-	}}
+		return "redirect:/admin-design";
+	}
+}

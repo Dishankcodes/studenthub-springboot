@@ -8,39 +8,29 @@ import org.springframework.data.repository.query.Param;
 
 import com.example.demo.entity.LessonProgress;
 
-public interface LessonProgressRepository
-extends JpaRepository<LessonProgress, Integer> {
+public interface LessonProgressRepository extends JpaRepository<LessonProgress, Integer> {
 
 	@Query("""
-		    SELECT COUNT(lp)
-		    FROM LessonProgress lp
-		    WHERE lp.student.studid = :studentId
-		    AND lp.completed = true
-		    AND lp.completedAt IS NOT NULL
-		    GROUP BY FUNCTION('DAYOFWEEK', lp.completedAt)
-		""")
-		List<Long> getWeeklyActivity(Integer studentId);
-	 
-	boolean existsByStudentStudidAndLessonLessonId(
-		    Integer studentId,
-		    Integer lessonId
-		);
+			    SELECT COUNT(lp)
+			    FROM LessonProgress lp
+			    WHERE lp.student.studid = :studentId
+			    AND lp.completed = true
+			    AND lp.completedAt IS NOT NULL
+			    GROUP BY FUNCTION('DAYOFWEEK', lp.completedAt)
+			""")
+	List<Long> getWeeklyActivity(Integer studentId);
 
-		long countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(
-		    Integer studentId,
-		    Integer courseId
-		);
-		@Query("""
+	boolean existsByStudentStudidAndLessonLessonId(Integer studentId, Integer lessonId);
+
+	long countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(Integer studentId, Integer courseId);
+
+	@Query("""
 			    select lp.lesson.lessonId
 			    from LessonProgress lp
 			    where lp.student.studid = :studentId
 			      and lp.completed = true
 			      and lp.lesson.module.course.courseId = :courseId
 			""")
-		List<Integer> findCompletedLessonIds(
-        @Param("studentId") Integer studentId,
-        @Param("courseId") Integer courseId
-    );
-		
-		
+	List<Integer> findCompletedLessonIds(@Param("studentId") Integer studentId, @Param("courseId") Integer courseId);
+
 }

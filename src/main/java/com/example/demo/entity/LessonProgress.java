@@ -14,21 +14,21 @@ import jakarta.persistence.Table;
 @Table(name = "lessonProgress")
 public class LessonProgress {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "student_id")
-    private Student student;
+	@ManyToOne
+	@JoinColumn(name = "student_id")
+	private Student student;
 
-    @ManyToOne
-    @JoinColumn(name = "lesson_lesson_id", nullable = false)
-    private Lesson lesson;
+	@ManyToOne
+	@JoinColumn(name = "lesson_lesson_id", nullable = false)
+	private Lesson lesson;
 
-    private boolean completed;
+	private boolean completed;
 
-    private LocalDateTime completedAt;
+	private LocalDateTime completedAt;
 
 	public Integer getId() {
 		return id;
@@ -37,8 +37,6 @@ public class LessonProgress {
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
-	
 
 	public Student getStudent() {
 		return student;
@@ -71,6 +69,5 @@ public class LessonProgress {
 	public void setCompletedAt(LocalDateTime completedAt) {
 		this.completedAt = completedAt;
 	}
-    
-    
+
 }

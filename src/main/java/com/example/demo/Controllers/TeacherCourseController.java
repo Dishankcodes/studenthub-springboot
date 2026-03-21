@@ -36,22 +36,21 @@ public class TeacherCourseController {
 	private TeacherRepository teacherRepo;
 	@Autowired
 	private CourseRepository courseRepo;
-	
+
 	@Autowired
 	private LessonProgressRepository progressRepo;
 	@Autowired
 	private CourseModuleRepository moduleRepo;
-	
-	private static final String UPLOAD_BASE =
-	        System.getProperty("user.dir") + File.separator + "uploads";
+
+	private static final String UPLOAD_BASE = System.getProperty("user.dir") + File.separator + "uploads";
 
 	// ===== COURSE MANAGEMENT =====
 	@GetMapping("/teacher-course")
-	public String courseManagement(Model model,HttpSession session) {
+	public String courseManagement(Model model, HttpSession session) {
 
 		Integer teacherId = 1;
 
-		 Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
 //		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
 //		Integer teacherId = (Integer) session.getAttribute("teacherId");
@@ -65,7 +64,7 @@ public class TeacherCourseController {
 //		    session.invalidate();
 //		    return "redirect:/teacher-auth";
 //		}
-		
+
 		// ✅ ONLY fetch NON-DELETED courses
 		List<Course> courses = courseRepo.findByTeacherTeacherIdAndStatusNot(teacherId, CourseStatus.DELETED);
 
@@ -75,47 +74,38 @@ public class TeacherCourseController {
 	}
 
 	@GetMapping("/teacher-creates-course")
-	public String createOrEditCourse(
-	        @RequestParam(required = false) Integer courseId,
-	        @RequestParam(required = false) Integer editModule,
-	        @RequestParam(required = false) Integer openModule,
-	        @RequestParam(required = false) Integer openLesson,
-	        @RequestParam(required = false) Integer openQuiz,
-	        Model model
-	) {
+	public String createOrEditCourse(@RequestParam(required = false) Integer courseId,
+			@RequestParam(required = false) Integer editModule, @RequestParam(required = false) Integer openModule,
+			@RequestParam(required = false) Integer openLesson, @RequestParam(required = false) Integer openQuiz,
+			Model model) {
 
-	    Course course;
+		Course course;
 
-	    if (courseId != null) {
-	        course = courseRepo.findById(courseId).orElse(null);
-	        if (course == null) {
-	            return "redirect:/teacher-course";
-	        }
-	    } else {
-	        course = new Course();
-	    }
+		if (courseId != null) {
+			course = courseRepo.findById(courseId).orElse(null);
+			if (course == null) {
+				return "redirect:/teacher-course";
+			}
+		} else {
+			course = new Course();
+		}
 
-	    model.addAttribute("course", course);
-	    model.addAttribute("editModule", editModule);
-	    model.addAttribute("openModule", openModule);
-	    model.addAttribute("openLesson", openLesson);
-	    model.addAttribute("openQuiz", openQuiz);
+		model.addAttribute("course", course);
+		model.addAttribute("editModule", editModule);
+		model.addAttribute("openModule", openModule);
+		model.addAttribute("openLesson", openLesson);
+		model.addAttribute("openQuiz", openQuiz);
 
-	    return "teacher-creates-course";
+		return "teacher-creates-course";
 	}
 
 	@PostMapping("/teacher-creates-course")
-	public String saveCourse(
-	        @ModelAttribute Course formCourse,
-	        @RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnail,
-	        @RequestParam String action,
-	        @RequestParam(required = false) List<String> highlightTexts,
-	        Model model,
-	        HttpSession session
-	) throws IOException {
+	public String saveCourse(@ModelAttribute Course formCourse,
+			@RequestParam(value = "thumbnailFile", required = false) MultipartFile thumbnail,
+			@RequestParam String action, @RequestParam(required = false) List<String> highlightTexts, Model model,
+			HttpSession session) throws IOException {
 
-		
-	    Integer teacherId = 1;
+		Integer teacherId = 1;
 //		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
 //	Integer teacherId = (Integer) session.getAttribute("teacherId");
 //
@@ -128,136 +118,126 @@ public class TeacherCourseController {
 //		    session.invalidate();
 //		    return "redirect:/teacher-auth";
 //		}
-		
+
 		if (teacher.getStatus() == TeacherStatus.BLOCKED) {
-		    model.addAttribute("error", "You are blocked by admin. No activity allowed.");
-		    model.addAttribute("course", formCourse);
-		    return "teacher-creates-course";
+			model.addAttribute("error", "You are blocked by admin. No activity allowed.");
+			model.addAttribute("course", formCourse);
+			return "teacher-creates-course";
 		}
 
 		if (teacher.getStatus() == TeacherStatus.SUSPENDED) {
-		    model.addAttribute("error", "Your account is suspended. You cannot create or edit courses.");
-		    model.addAttribute("course", formCourse);
-		    return "teacher-creates-course";
+			model.addAttribute("error", "Your account is suspended. You cannot create or edit courses.");
+			model.addAttribute("course", formCourse);
+			return "teacher-creates-course";
 		}
-		
+
 		/* ================= HIGHLIGHT VALIDATION (HERE) ================= */
 
-	    if (highlightTexts != null) {
+		if (highlightTexts != null) {
 
-	        // remove empty entries first
-	        highlightTexts.removeIf(
-	            t -> t == null || t.trim().isEmpty()
-	        );
+			// remove empty entries first
+			highlightTexts.removeIf(t -> t == null || t.trim().isEmpty());
 
-	        if (highlightTexts.size() > 8) {
-	            model.addAttribute("error", "Maximum 8 highlights allowed.");
-	            model.addAttribute("course", formCourse); // keep form data
-	            return "teacher-creates-course";
-	        }
-	    }
+			if (highlightTexts.size() > 8) {
+				model.addAttribute("error", "Maximum 8 highlights allowed.");
+				model.addAttribute("course", formCourse); // keep form data
+				return "teacher-creates-course";
+			}
+		}
 
-	    Course course;
+		Course course;
 
-	    /* ================= CREATE vs UPDATE ================= */
+		/* ================= CREATE vs UPDATE ================= */
 
-	    if (formCourse.getCourseId() != null) {
-	        // UPDATE
-	        course = courseRepo.findById(formCourse.getCourseId()).orElseThrow();
+		if (formCourse.getCourseId() != null) {
+			// UPDATE
+			course = courseRepo.findById(formCourse.getCourseId()).orElseThrow();
 
-	        course.setTitle(formCourse.getTitle());
-	        course.setDescription(formCourse.getDescription());
-	        course.setLevel(formCourse.getLevel());
-	        course.setType(formCourse.getType());
-	        course.setPrice(formCourse.getPrice());
+			course.setTitle(formCourse.getTitle());
+			course.setDescription(formCourse.getDescription());
+			course.setLevel(formCourse.getLevel());
+			course.setType(formCourse.getType());
+			course.setPrice(formCourse.getPrice());
 
-	    } else {
-	        // CREATE
-	        boolean exists = courseRepo
-	                .existsByTeacherTeacherIdAndTitleAndStatusNot(
-	                        teacherId,
-	                        formCourse.getTitle(),
-	                        CourseStatus.DELETED
-	                );
+		} else {
+			// CREATE
+			boolean exists = courseRepo.existsByTeacherTeacherIdAndTitleAndStatusNot(teacherId, formCourse.getTitle(),
+					CourseStatus.DELETED);
 
-	        if (exists) {
-	            model.addAttribute("course", formCourse);
-	            model.addAttribute("error", "You already created a course with this title.");
-	            return "teacher-creates-course";
-	        }
+			if (exists) {
+				model.addAttribute("course", formCourse);
+				model.addAttribute("error", "You already created a course with this title.");
+				return "teacher-creates-course";
+			}
 
-	        course = new Course();
-	        course.setTeacher(teacher);
-	        course.setTitle(formCourse.getTitle());
-	        course.setDescription(formCourse.getDescription());
-	        course.setLevel(formCourse.getLevel());
-	        course.setType(formCourse.getType());
-	        course.setPrice(formCourse.getPrice());
-	    }
+			course = new Course();
+			course.setTeacher(teacher);
+			course.setTitle(formCourse.getTitle());
+			course.setDescription(formCourse.getDescription());
+			course.setLevel(formCourse.getLevel());
+			course.setType(formCourse.getType());
+			course.setPrice(formCourse.getPrice());
+		}
 
-	    /* ================= STATUS ================= */
+		/* ================= STATUS ================= */
 
-	    course.setStatus(
-	            "publish".equals(action)
-	                    ? CourseStatus.PUBLISHED
-	                    : CourseStatus.DRAFT
-	    );
+		course.setStatus("publish".equals(action) ? CourseStatus.PUBLISHED : CourseStatus.DRAFT);
 
-	    /* ================= SAVE COURSE FIRST (NO HIGHLIGHTS) ================= */
+		/* ================= SAVE COURSE FIRST (NO HIGHLIGHTS) ================= */
 
-	    course = courseRepo.save(course); // 🔥 ID guaranteed here
+		course = courseRepo.save(course); // 🔥 ID guaranteed here
 
-	    /* ================= THUMBNAIL ================= */
+		/* ================= THUMBNAIL ================= */
 
-	    if (thumbnail != null && !thumbnail.isEmpty()) {
-	        String path = saveThumbnail(thumbnail, course.getCourseId());
-	        course.setThumbnailURL(path);
-	    }
+		if (thumbnail != null && !thumbnail.isEmpty()) {
+			String path = saveThumbnail(thumbnail, course.getCourseId());
+			course.setThumbnailURL(path);
+		}
 
-	    /* ================= HIGHLIGHTS (SAFE & FINAL) ================= */
+		/* ================= HIGHLIGHTS (SAFE & FINAL) ================= */
 
-	    course.getHighlights().clear(); // orphanRemoval = true
+		course.getHighlights().clear(); // orphanRemoval = true
 
-	    if (highlightTexts != null) {
-	        for (String text : highlightTexts) {
-	            if (text != null && !text.trim().isEmpty()) {
-	                CourseHighlight h = new CourseHighlight();
-	                h.setCourse(course);           // 🔥 NEVER NULL
-	                h.setText(text.trim());
-	                course.getHighlights().add(h);
-	            }
-	        }
-	    }
+		if (highlightTexts != null) {
+			for (String text : highlightTexts) {
+				if (text != null && !text.trim().isEmpty()) {
+					CourseHighlight h = new CourseHighlight();
+					h.setCourse(course); // 🔥 NEVER NULL
+					h.setText(text.trim());
+					course.getHighlights().add(h);
+				}
+			}
+		}
 
-	    /* ================= FINAL SAVE ================= */
+		/* ================= FINAL SAVE ================= */
 
-	    courseRepo.save(course);
+		courseRepo.save(course);
 
-	    /* ================= REDIRECT ================= */
+		/* ================= REDIRECT ================= */
 
-	    if ("publish".equals(action)) {
-	        return "redirect:/teacher-course";
-	    }
-	    
-	    model.addAttribute("highlightTexts", highlightTexts);
-	    return "redirect:/teacher-creates-course?courseId=" + course.getCourseId();
+		if ("publish".equals(action)) {
+			return "redirect:/teacher-course";
+		}
+
+		model.addAttribute("highlightTexts", highlightTexts);
+		return "redirect:/teacher-creates-course?courseId=" + course.getCourseId();
 	}
 
 	@GetMapping("/teacher-course/edit/{id}")
 	public String editCourse(@PathVariable Integer id) {
 
-	    Integer teacherId = 1;
-	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+		Integer teacherId = 1;
+		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
-	    if (teacher.getStatus() == TeacherStatus.BLOCKED) {
-	        return "redirect:/teacher-course?error=blocked";
-	    }
+		if (teacher.getStatus() == TeacherStatus.BLOCKED) {
+			return "redirect:/teacher-course?error=blocked";
+		}
 
-	    if (teacher.getStatus() == TeacherStatus.SUSPENDED) {
-	        return "redirect:/teacher-course?error=suspended";
-	    }
+		if (teacher.getStatus() == TeacherStatus.SUSPENDED) {
+			return "redirect:/teacher-course?error=suspended";
+		}
 
-	    return "redirect:/teacher-creates-course?courseId=" + id;
+		return "redirect:/teacher-creates-course?courseId=" + id;
 	}
 
 	@PostMapping("/teacher-course/delete/{id}")
@@ -274,7 +254,7 @@ public class TeacherCourseController {
 //		    if (loggedIn == null || !loggedIn || teacherId == null) {
 //		        return "redirect:/teacher-auth";
 //		    }
-		    
+
 		Course course = courseRepo.findById(courseId).orElse(null);
 
 		if (course != null && course.getTeacher().getTeacherId().equals(teacherId)) {
@@ -288,144 +268,123 @@ public class TeacherCourseController {
 	}
 
 	@PostMapping("/teacher-course/status")
-	public String updateCourseStatus(@RequestParam Integer courseId,
-	                                 @RequestParam String action) {
+	public String updateCourseStatus(@RequestParam Integer courseId, @RequestParam String action) {
 
-	    Integer teacherId = 1;
-	    Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+		Integer teacherId = 1;
+		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
-	    if (teacher.getStatus() == TeacherStatus.BLOCKED) {
-	        return "redirect:/teacher-course?error=blocked";
-	    }
+		if (teacher.getStatus() == TeacherStatus.BLOCKED) {
+			return "redirect:/teacher-course?error=blocked";
+		}
 
-	    if (teacher.getStatus() == TeacherStatus.SUSPENDED) {
-	        return "redirect:/teacher-course?error=suspended";
-	    }
+		if (teacher.getStatus() == TeacherStatus.SUSPENDED) {
+			return "redirect:/teacher-course?error=suspended";
+		}
 
-	    Course course = courseRepo.findById(courseId).orElseThrow();
+		Course course = courseRepo.findById(courseId).orElseThrow();
 
-	    if ("publish".equals(action)) {
-	        course.setStatus(CourseStatus.PUBLISHED);
-	    } else {
-	        course.setStatus(CourseStatus.DRAFT);
-	    }
+		if ("publish".equals(action)) {
+			course.setStatus(CourseStatus.PUBLISHED);
+		} else {
+			course.setStatus(CourseStatus.DRAFT);
+		}
 
-	    courseRepo.save(course);
+		courseRepo.save(course);
 
-	    return "redirect:/teacher-course";
+		return "redirect:/teacher-course";
 	}
-	
+
 	private String saveThumbnail(MultipartFile file, Integer courseId) throws IOException {
 
-	    String folderPath = UPLOAD_BASE
-	            + File.separator + "course-thumbnails"
-	            + File.separator + courseId;
+		String folderPath = UPLOAD_BASE + File.separator + "course-thumbnails" + File.separator + courseId;
 
-	    File dir = new File(folderPath);
-	    if (!dir.exists()) {
-	        dir.mkdirs();   // this WILL create full path
-	    }
+		File dir = new File(folderPath);
+		if (!dir.exists()) {
+			dir.mkdirs(); // this WILL create full path
+		}
 
-	    String fileName = System.currentTimeMillis()
-	            + "_" + file.getOriginalFilename();
+		String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 
-	    File destination = new File(dir, fileName);
+		File destination = new File(dir, fileName);
 
-	    file.transferTo(destination);
+		file.transferTo(destination);
 
-	    // what we store in DB (relative URL)
-	    return "/uploads/course-thumbnails/" + courseId + "/" + fileName;
+		// what we store in DB (relative URL)
+		return "/uploads/course-thumbnails/" + courseId + "/" + fileName;
 	}
-	
-	
+
 	@PostMapping("/teacher-course/thumbnail")
-	public String updateThumbnail(
-	        @RequestParam Integer courseId,
-	        @RequestParam MultipartFile thumbnailFile
-	) throws IOException {
+	public String updateThumbnail(@RequestParam Integer courseId, @RequestParam MultipartFile thumbnailFile)
+			throws IOException {
 
-	    Course course = courseRepo.findById(courseId).orElseThrow();
-	    String path = saveThumbnail(thumbnailFile, courseId);
-	    course.setThumbnailURL(path);
-	    courseRepo.save(course);
+		Course course = courseRepo.findById(courseId).orElseThrow();
+		String path = saveThumbnail(thumbnailFile, courseId);
+		course.setThumbnailURL(path);
+		courseRepo.save(course);
 
-	    return "redirect:/teacher-creates-course?courseId=" + courseId
-	    		+ "&msg-thumbnail_updated";
+		return "redirect:/teacher-creates-course?courseId=" + courseId + "&msg-thumbnail_updated";
 	}
-	
+
 	@GetMapping("/teacher-course/analytics/{id}")
 	public String courseAnalytics(@PathVariable Integer id, Model model) {
 
-	    Course course = courseRepo.findById(id).orElse(null);
+		Course course = courseRepo.findById(id).orElse(null);
 
-	    if (course == null) {
-	        return "redirect:/teacher-course";
-	    }
+		if (course == null) {
+			return "redirect:/teacher-course";
+		}
 
-	    long totalStudents = course.getEnrollments().size();
+		long totalStudents = course.getEnrollments().size();
 
-	    long activeStudents = course.getEnrollments()
-	            .stream()
-	            .filter(e -> e.getStatus().name().equals("ACTIVE"))
-	            .count();
+		long activeStudents = course.getEnrollments().stream().filter(e -> e.getStatus().name().equals("ACTIVE"))
+				.count();
 
-	    long suspendedStudents = course.getEnrollments()
-	            .stream()
-	            .filter(e -> e.getStatus().name().equals("SUSPENDED"))
-	            .count();
+		long suspendedStudents = course.getEnrollments().stream().filter(e -> e.getStatus().name().equals("SUSPENDED"))
+				.count();
 
-	    long moduleCount = moduleRepo.countByCourseCourseId(id);
+		long moduleCount = moduleRepo.countByCourseCourseId(id);
 
-	    long lessonCount = course.getModules()
-	            .stream()
-	            .mapToLong(m -> m.getLessons().size())
-	            .sum();
+		long lessonCount = course.getModules().stream().mapToLong(m -> m.getLessons().size()).sum();
 
-	    long quizCount = course.getModules()
-	            .stream()
-	            .flatMap(m -> m.getLessons().stream())
-	            .filter(l -> l.getQuiz() != null)
-	            .count();
+		long quizCount = course.getModules().stream().flatMap(m -> m.getLessons().stream())
+				.filter(l -> l.getQuiz() != null).count();
 
-	    List<Map<String, Object>> studentProgressList = new ArrayList<>();
+		List<Map<String, Object>> studentProgressList = new ArrayList<>();
 
-	    course.getEnrollments().forEach(enrollment -> {
+		course.getEnrollments().forEach(enrollment -> {
 
-	        Integer studentId = enrollment.getStudent().getStudid();
+			Integer studentId = enrollment.getStudent().getStudid();
 
-	        long completedLessons =
-	                progressRepo.countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(
-	                        studentId,
-	                        course.getCourseId()
-	                );
+			long completedLessons = progressRepo
+					.countByStudentStudidAndLessonModuleCourseCourseIdAndCompletedTrue(studentId, course.getCourseId());
 
-	        int progress = 0;
+			int progress = 0;
 
-	        if (lessonCount > 0) {
-	            progress = (int) ((completedLessons * 100) / lessonCount);
-	        }
+			if (lessonCount > 0) {
+				progress = (int) ((completedLessons * 100) / lessonCount);
+			}
 
-	        Map<String, Object> data = new HashMap<>();
+			Map<String, Object> data = new HashMap<>();
 
-	        data.put("student", enrollment.getStudent());
-	        data.put("completed", completedLessons);
-	        data.put("total", lessonCount);
-	        data.put("progress", progress);
+			data.put("student", enrollment.getStudent());
+			data.put("completed", completedLessons);
+			data.put("total", lessonCount);
+			data.put("progress", progress);
 
-	        studentProgressList.add(data);
-	    });
+			studentProgressList.add(data);
+		});
 
-	    model.addAttribute("course", course);
-	    model.addAttribute("totalStudents", totalStudents);
-	    model.addAttribute("activeStudents", activeStudents);
-	    model.addAttribute("suspendedStudents", suspendedStudents);
-	    model.addAttribute("moduleCount", moduleCount);
-	    model.addAttribute("lessonCount", lessonCount);
-	    model.addAttribute("quizCount", quizCount);
-	    model.addAttribute("modules", course.getModules());
-	    model.addAttribute("studentProgressList", studentProgressList);
+		model.addAttribute("course", course);
+		model.addAttribute("totalStudents", totalStudents);
+		model.addAttribute("activeStudents", activeStudents);
+		model.addAttribute("suspendedStudents", suspendedStudents);
+		model.addAttribute("moduleCount", moduleCount);
+		model.addAttribute("lessonCount", lessonCount);
+		model.addAttribute("quizCount", quizCount);
+		model.addAttribute("modules", course.getModules());
+		model.addAttribute("studentProgressList", studentProgressList);
 
-	    return "course-analytics";
+		return "course-analytics";
 	}
-	
+
 }

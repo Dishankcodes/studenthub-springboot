@@ -12,36 +12,27 @@ import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 
 @Entity
-@Table(
-    uniqueConstraints = @UniqueConstraint(
-        columnNames = {"teacher_id", "student_id"}
-    )
-)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "teacher_id", "student_id" }))
 public class InstructorFeedback {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @ManyToOne(optional = false)
-    private Teacher teacher;
+	@ManyToOne(optional = false)
+	private Teacher teacher;
 
-    @ManyToOne(optional = false)
-    private Student student;
-    
-    
+	@ManyToOne(optional = false)
+	private Student student;
 
-    @Column(nullable = false)
-    private int rating; // 1–5
+	@Column(nullable = false)
+	private int rating; // 1–5
 
-    @Column(length = 1000)
-    private String comment;
+	@Column(length = 1000)
+	private String comment;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+	private LocalDateTime createdAt = LocalDateTime.now();
 
-   
-    
-    
 	public Integer getId() {
 		return id;
 	}
@@ -89,6 +80,5 @@ public class InstructorFeedback {
 	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
-
 
 }

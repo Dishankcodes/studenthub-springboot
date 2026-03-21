@@ -8,6 +8,7 @@ import com.example.demo.entity.InternshipTestAttempt;
 
 public interface InternshipTestAttemptRepository extends JpaRepository<InternshipTestAttempt, Integer> {
 
-InternshipTestAttempt findByStudentStudidAndInternshipId(Integer studentId, Integer internshipId);
-List<InternshipTestAttempt> findByInternship_Id(Integer internshipId);
+	InternshipTestAttempt findByStudentStudidAndInternshipId(Integer studentId, Integer internshipId);
+
+	List<InternshipTestAttempt> findByInternship_Id(Integer internshipId);
 }

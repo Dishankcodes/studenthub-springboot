@@ -20,18 +20,17 @@ public interface InstructorFeedbackRepository extends JpaRepository<InstructorFe
 			WHERE f.teacher.teacherId = :teacherId
 			""")
 	double getAverageRating(Integer teacherId);
-	
+
 	@Query("""
-	        SELECT COUNT(f)
-	        FROM InstructorFeedback f
-	        WHERE f.teacher.teacherId = :teacherId
-	    """)
-	    Long getTotalRatings(@Param("teacherId") Integer teacherId);
-	
+			    SELECT COUNT(f)
+			    FROM InstructorFeedback f
+			    WHERE f.teacher.teacherId = :teacherId
+			""")
+	Long getTotalRatings(@Param("teacherId") Integer teacherId);
+
 	// Admin sees all
 	List<InstructorFeedback> findAll();
 
-	List<InstructorFeedback>
-	findTop5ByTeacherTeacherIdOrderByCreatedAtDesc(Integer teacherId);
-	
+	List<InstructorFeedback> findTop5ByTeacherTeacherIdOrderByCreatedAtDesc(Integer teacherId);
+
 }

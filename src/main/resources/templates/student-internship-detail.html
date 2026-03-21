@@ -2,507 +2,523 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Dashboard | EduPlatform</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Student Dashboard | EduPlatform</title>
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+	<!-- Bootstrap Icons -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+	<link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+		}
 
-        body {
-            background: #f4f7ff;
-        }
+		body {
+			background: #f4f7ff;
+		}
 
-        .main {
-            margin-left: 240px;
-            margin-top: 56px;
-            padding: 20px;
-            transition: 0.3s ease;
-        }
+		.main {
+			margin-left: 240px;
+			margin-top: 56px;
+			padding: 20px;
+			transition: 0.3s ease;
+		}
 
-        .detail-container {
-            max-width: 900px;
-            margin: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+		.detail-container {
+			max-width: 900px;
+			margin: auto;
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
 
-        /* HEADER */
-        .detail-header {
-            background: #fff;
-            padding: 25px;
-            border-radius: 15px;
-        }
+		/* HEADER */
+		.detail-header {
+			background: #fff;
+			padding: 25px;
+			border-radius: 15px;
+		}
 
-        .detail-header h1 {
-            font-size: 26px;
-        }
+		.detail-header h1 {
+			font-size: 26px;
+		}
 
-        .company {
-            color: #666;
-            margin-bottom: 10px;
-        }
+		.company {
+			color: #666;
+			margin-bottom: 10px;
+		}
 
-        /* META */
-        .meta {
-            display: flex;
-            gap: 20px;
-            font-size: 14px;
-        }
+		/* META */
+		.meta {
+			display: flex;
+			gap: 20px;
+			font-size: 14px;
+		}
 
-        /* SECTIONS */
-        .detail-section {
-            background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-        }
+		/* SECTIONS */
+		.detail-section {
+			background: #fff;
+			padding: 20px;
+			border-radius: 15px;
+		}
 
-        .detail-section h3 {
-            margin-bottom: 10px;
-        }
+		.detail-section h3 {
+			margin-bottom: 10px;
+		}
 
-        /* SKILLS */
-        .skills span {
-            background: #eee;
-            padding: 6px 12px;
-            border-radius: 10px;
-            margin-right: 5px;
-        }
+		/* SKILLS */
+		.skills span {
+			background: #eee;
+			padding: 6px 12px;
+			border-radius: 10px;
+			margin-right: 5px;
+		}
 
-        /* APPLY BOX */
-        .apply-box {
-            text-align: right;
-        }
+		/* APPLY BOX */
+		.apply-box {
+			text-align: right;
+		}
 
-        .apply-btn {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            color: #fff;
-            font-weight: bold;
-            cursor: pointer;
-        }
+		.apply-btn {
+			background: linear-gradient(135deg, #6366f1, #8b5cf6);
+			border: none;
+			padding: 12px 25px;
+			border-radius: 10px;
+			color: #fff;
+			font-weight: bold;
+			cursor: pointer;
+		}
 
-        .import-btn {
-            background: #0ea5e9;
-            color: #fff;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
+		.import-btn {
+			background: #0ea5e9;
+			color: #fff;
+			border: none;
+			padding: 8px 12px;
+			border-radius: 8px;
+			margin-bottom: 10px;
+			cursor: pointer;
+		}
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-        }
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 999;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+		}
 
-        .modal-content {
-            background: #fff;
-            margin: 5% auto;
-            padding: 20px;
-            width: 400px;
-            border-radius: 12px;
-            animation: fadeIn 0.3s ease;
-        }
+		.modal-content {
+			background: #fff;
+			margin: 5% auto;
+			padding: 20px;
+			width: 400px;
+			border-radius: 12px;
+			animation: fadeIn 0.3s ease;
+		}
 
-        @keyframes fadeIn {
-            from {
-                transform: translateY(-20px);
-                opacity: 0;
-            }
+		@keyframes fadeIn {
+			from {
+				transform: translateY(-20px);
+				opacity: 0;
+			}
 
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
+			to {
+				transform: translateY(0);
+				opacity: 1;
+			}
+		}
 
-        .close-btn {
-            float: right;
-            font-size: 20px;
-            cursor: pointer;
-        }
+		.close-btn {
+			float: right;
+			font-size: 20px;
+			cursor: pointer;
+		}
 
-        .form-group {
-            margin-bottom: 15px;
-        }
+		.form-group {
+			margin-bottom: 15px;
+		}
 
-        .form-group input,
-        textarea {
-            width: 100%;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-        }
+		.form-group input,
+		textarea {
+			width: 100%;
+			padding: 8px;
+			border-radius: 8px;
+			border: 1px solid #ddd;
+		}
 
-        .alert {
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 14px;
-        }
+		.alert {
+			padding: 14px;
+			border-radius: 12px;
+			font-size: 14px;
+		}
 
-        .success {
-            background: #dcfce7;
-            color: #166534;
-        }
+		.success {
+			background: #dcfce7;
+			color: #166534;
+		}
 
-        .error {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-    </style>
+		.error {
+			background: #fee2e2;
+			color: #991b1b;
+		}
+	</style>
 </head>
 
 <body>
 
-    <!-- ===== SIDEBAR ===== -->
-    <div class="sidebar collapsed" id="sidebar">
-        <button class="toggle-btn" id="toggle">
-            <i class="bi bi-chevron-right"></i>
-        </button>
+	<!-- ===== SIDEBAR ===== -->
+	<div class="sidebar collapsed" id="sidebar">
+		<button class="toggle-btn" id="toggle">
+			<i class="bi bi-chevron-right"></i>
+		</button>
 
-        <div class="sidebar-brand">
-            <a href="/student-dashboard">
-                <img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
-            </a>
-            <h2 class="platform-name">
-                EduPlatform
-            </h2>
-        </div>
+		<div class="sidebar-brand">
+			<a href="/student-dashboard">
+				<img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
+			</a>
+			<h2 class="platform-name">
+				EduPlatform
+			</h2>
+		</div>
 
-        <a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-        <a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
-        <a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
-        <a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
-        <a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
-        <a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
-        <a th:href="@{/student-internships}" class="active"><i class="bi bi-briefcase"></i><span>Internships</span></a>
-        <a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-        <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+		<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+		<a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
+		<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
+		<a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
+		<a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
+		<a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
+		<a th:href="@{/student-internships}" class="active"><i class="bi bi-briefcase"></i><span>Internships</span></a>
+		<a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+		<a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
-    </div>
+	</div>
 
-    <!-- ===== TOPBAR ===== -->
-    <div class="student-topbar">
-        <span class="page-title">Internships</span>
-        <div class="topbar-right">
-            <div class="notif">
-                <a th:href="@{/student-notification}">
-                    <i class="bi bi-bell"></i>
-                    <span class="dot"></span> </a>
-            </div>
+	<!-- ===== TOPBAR ===== -->
+	<div class="student-topbar">
+		<span class="page-title">Internships</span>
+		<div class="topbar-right">
+			<div class="notif">
+				<a th:href="@{/student-notification}">
+					<i class="bi bi-bell"></i>
+					<span class="dot"></span> </a>
+			</div>
 
-            <div class="profile">
-                <a th:href="@{/student-profile}" class="profile-link">
+			<div class="profile">
+				<a th:href="@{/student-profile}" class="profile-link">
 
-                    <img th:src="${loggedStudent != null and loggedStudent.profileImage != null
+					<img th:src="${loggedStudent != null and loggedStudent.profileImage != null
                 ? loggedStudent.profileImage
                 : '/images/default.jpg'}" alt="Profile">
 
-                    <span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
-                        Student
-                    </span>
-
-                </a>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="main">
-
-        <div class="detail-container">
-
-            <!-- GLOBAL MESSAGES -->
-            <div th:if="${success}" class="alert success" th:text="${success}"></div>
-            <div th:if="${error}" class="alert error" th:text="${error}"></div>
-            <div th:if="${msg}" class="alert" style="background:#eef2ff;color:#3730a3;" th:text="${msg}"></div>
-
-            <!-- HEADER -->
-            <div class="detail-header">
-                <h1 th:text="${internship.title}"></h1>
-                <p class="company">EduPlatform</p>
-
-                <div class="meta">
-                    <span>
-                        <i class="bi bi-geo-alt"></i>
-                        <span th:text="${internship.location}"></span>
-                    </span>
-
-                    <span>
-                        <i class="bi bi-currency-rupee"></i>
-                        ₹<span th:text="${internship.stipend}"></span>/month
-                    </span>
-
-                    <span>
-                        <i class="bi bi-clock"></i>
-                        <span th:text="${internship.duration}"></span>
-                    </span>
-                </div>
-            </div>
-
-            <!-- DESCRIPTION -->
-            <div class="detail-section">
-                <h3>About the Internship</h3>
-                <p th:text="${internship.description}"></p>
-            </div>
-
-            <!-- RESPONSIBILITIES -->
-            <div class="detail-section">
-                <h3>Responsibilities</h3>
-                <ul>
-                    <li>Develop REST APIs</li>
-                    <li>Work with databases</li>
-                    <li>Fix bugs and optimize code</li>
-                </ul>
-            </div>
-
-            <!-- SKILLS -->
-            <div class="detail-section">
-                <h3>Required Skills</h3>
-                <div class="skills">
-                    <span th:each="skill : ${#strings.arraySplit(internship.skills, ',')}" th:text="${skill}"></span>
-                </div>
-            </div>
-
-            <!-- ELIGIBILITY -->
-            <div class="detail-section" th:if="${internship.requiredCourse != null}">
-                <h3>Eligibility</h3>
-
-                <p>
-                    You must complete:
-                    <strong th:text="${internship.requiredCourse.title}"></strong>
-                </p>
-
-                <a th:href="@{'/student-course-details?courseId=' + ${internship.requiredCourse.courseId}}"
-                    class="apply-btn">
-                    Go to Course
-                </a>
-            </div>
-
-            <!-- APPLY SECTION -->
-            <div class="apply-box">
-
-                <!-- NOT APPLIED -->
-                <div th:if="${app == null}">
-
-                    <div class="alert" style="background:#eef2ff;color:#3730a3;">
-                        <i class="bi bi-info-circle"></i>
-                        You can apply for this internship. Make sure your profile is complete.
-                    </div>
-
-                    <button class="apply-btn" onclick="openModal()">
-                        <i class="bi bi-send"></i> Apply Now
-                    </button>
-                </div>
-
-                <!-- APPLIED -->
-                <div th:if="${app != null}">
-
-                    <!-- PENDING -->
-                    <div th:if="${app.status.name() == 'PENDING'}" class="alert"
-                        style="background:#fef3c7;color:#92400e;">
-                        <i class="bi bi-hourglass-split"></i>
-                        Your application is under review. Please wait for updates.
-                    </div>
-
-                    <!-- ACCEPTED -->
-                    <div th:if="${app.status.name() == 'ACCEPTED'}">
-
-                        <div class="alert success">
-                            <i class="bi bi-check-circle"></i>
-                            Congratulations! You have been shortlisted 🎉
-                        </div>
-
-                        <a th:href="@{'/student/offer-letter?appId=' + ${app.id}}" class="apply-btn"
-                            style="background:#0ea5e9;">
-                            <i class="bi bi-file-earmark-text"></i> Download Offer Letter
-                        </a>
-
-                    </div>
-
-                    <!-- REJECTED -->
-                    <div th:if="${app.status.name() == 'REJECTED'}" class="alert error">
-                        <i class="bi bi-x-circle"></i>
-                        Unfortunately, your application was not selected. Keep trying 💪
-                    </div>
-                    
-<div th:if="${app.status.name() == 'REJECTED'}">
-
-    <form action="/student/reapply" method="post">
-        <input type="hidden" name="internshipId" th:value="${internship.id}">
-        <button class="apply-btn">🔁 Reapply</button>
-    </form>
-
-</div>
-                </div>
-            </div>
-
-            <!-- APPLY MODAL -->
-            <div id="applyModal" class="modal">
-                <div class="modal-content">
+					<span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
+						Student
+					</span>
+
+				</a>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="main">
+
+		<div class="detail-container">
+
+			<!-- GLOBAL MESSAGES -->
+			<div th:if="${success}" class="alert success" th:text="${success}"></div>
+			<div th:if="${error}" class="alert error" th:text="${error}"></div>
+			<div th:if="${msg}" class="alert" style="background:#eef2ff;color:#3730a3;" th:text="${msg}"></div>
+
+			<!-- HEADER -->
+			<div class="detail-header">
+				<h1 th:text="${internship.title}"></h1>
+				<p class="company">EduPlatform</p>
+
+				<div class="meta">
+					<span>
+						<i class="bi bi-geo-alt"></i>
+						<span th:text="${internship.location}"></span>
+					</span>
+
+					<span>
+						<i class="bi bi-currency-rupee"></i>
+						₹<span th:text="${internship.stipend}"></span>/month
+					</span>
+
+					<span>
+						<i class="bi bi-clock"></i>
+						<span th:text="${internship.duration}"></span>
+					</span>
+				</div>
+			</div>
+
+			<!-- DESCRIPTION -->
+			<div class="detail-section">
+				<h3>About the Internship</h3>
+				<p th:text="${internship.description}"></p>
+			</div>
+
+			<!-- RESPONSIBILITIES -->
+			<div class="detail-section">
+				<h3>Responsibilities</h3>
+				<ul>
+					<li>Develop REST APIs</li>
+					<li>Work with databases</li>
+					<li>Fix bugs and optimize code</li>
+				</ul>
+			</div>
+
+			<!-- SKILLS -->
+			<div class="detail-section">
+				<h3>Required Skills</h3>
+				<div class="skills">
+					<span th:each="skill : ${#strings.arraySplit(internship.skills, ',')}" th:text="${skill}"></span>
+				</div>
+			</div>
+
+			<!-- ELIGIBILITY -->
+			<div class="detail-section" th:if="${internship.requiredCourse != null}">
+				<h3>Eligibility</h3>
+
+				<p>
+					You must complete:
+					<strong th:text="${internship.requiredCourse.title}"></strong>
+				</p>
+
+				<a th:href="@{'/student-course-details?courseId=' + ${internship.requiredCourse.courseId}}"
+					class="apply-btn">
+					Go to Course
+				</a>
+			</div>
+
+			<!-- APPLY SECTION -->
+			<div class="apply-box">
+
+				<!-- NOT APPLIED -->
+				<div th:if="${app == null}">
+
+					<div class="alert" style="background:#eef2ff;color:#3730a3;">
+						<i class="bi bi-info-circle"></i>
+						You can apply for this internship. Make sure your profile is complete.
+					</div>
+
+					<button id="openApplyModal" type="button" class="apply-btn">
+						<i class="bi bi-send"></i> Apply Now
+					</button>
+				</div>
+
+				<!-- APPLIED -->
+				<div th:if="${app != null}">
+
+					<!-- PENDING -->
+					<div th:if="${app.status.name() == 'PENDING'}" class="alert"
+						style="background:#fef3c7;color:#92400e;">
+						<i class="bi bi-hourglass-split"></i>
+						Your application is under review. Please wait for updates.
+					</div>
+
+					<!-- ACCEPTED -->
+					<div th:if="${app.status.name() == 'ACCEPTED'}">
+
+						<div class="alert success">
+							<i class="bi bi-check-circle"></i>
+							Congratulations! You have been shortlisted 🎉
+						</div>
+
+						<a th:href="@{'/student/offer-letter?appId=' + ${app.id}}" class="apply-btn"
+							style="background:#0ea5e9;">
+							<i class="bi bi-file-earmark-text"></i> Download Offer Letter
+						</a>
+
+					</div>
+
+					<!-- REJECTED -->
+					<div th:if="${app.status.name() == 'REJECTED'}" class="alert error">
+						<i class="bi bi-x-circle"></i>
+						Unfortunately, your application was not selected. Keep trying 💪
+					</div>
+
+					<div th:if="${app.status.name() == 'REJECTED'}">
+
+						<form action="/student/reapply" method="post">
+							<input type="hidden" name="internshipId" th:value="${internship.id}">
+							<button class="apply-btn">🔁 Reapply</button>
+						</form>
 
-                    <span class="close-btn" id="closeModal">&times;</span>
+					</div>
+				</div>
+			</div>
 
-                    <h2>Apply for Internship</h2>
+			<!-- APPLY MODAL -->
+			<div id="applyModal" class="modal">
+				<div class="modal-content">
 
-                    <p style="font-size:13px;color:#555;margin-bottom:10px;">
-                        <i class="bi bi-info-circle"></i>
-                        Make sure your profile is complete. Resume is recommended.
-                    </p>
+					<span class="close-btn" id="closeModal">&times;</span>
 
-                    <button type="button" class="import-btn" onclick="importProfile()">
-                        Import from Profile
-                    </button>
+					<h2>Apply for Internship</h2>
 
-                    <form th:action="@{/student/apply}" method="post" enctype="multipart/form-data">
+					<p style="font-size:13px;color:#555;margin-bottom:10px;">
+						<i class="bi bi-info-circle"></i>
+						Make sure your profile is complete. Resume is recommended.
+					</p>
 
-                        <input type="hidden" name="internshipId" th:value="${internship.id}">
+					<button type="button" class="import-btn" onclick="importProfile()">
+						Import from Profile
+					</button>
 
-                        <div class="form-group">
-                            <label>Full Name</label>
-                            <input type="text" id="fullName" name="fullName" required>
-                        </div>
+					<form th:action="@{/student/apply}" method="post" enctype="multipart/form-data">
 
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
+						<input type="hidden" name="internshipId" th:value="${internship.id}">
 
-                        <div class="form-group">
-                            <label>Phone</label>
-                            <input type="text" id="phone" name="phone">
-                        </div>
+						<div class="form-group">
+							<label>Full Name</label>
+							<input type="text" id="fullName" name="fullName" required>
+						</div>
 
-                        <div class="form-group">
-                            <label>Upload Resume</label>
-                            <input type="file" name="resume">
-                        </div>
+						<div class="form-group">
+							<label>Email</label>
+							<input type="email" id="email" name="email" required>
+						</div>
 
-                        <div class="form-group">
-                            <label>Cover Letter</label>
-                            <textarea name="coverLetter"></textarea>
-                        </div>
+						<div class="form-group">
+							<label>Phone</label>
+							<input type="text" id="phone" name="phone">
+						</div>
 
-                        <button type="submit" class="apply-btn">Submit</button>
-                    </form>
+						<div class="form-group">
+							<label>Upload Resume</label>
+							<input type="file" name="resume">
+						</div>
 
-                </div>
-            </div>
+						<div class="form-group">
+							<label>Cover Letter</label>
+							<textarea name="coverLetter"></textarea>
+						</div>
 
-            <!-- TEST SECTION -->
-            <div th:if="${app != null and app.status.name() == 'ACCEPTED'}">
+						<button type="submit" class="apply-btn">Submit</button>
+					</form>
 
-                <!-- NOT ATTEMPTED -->
-                <div th:if="${testAttempt == null}">
-                    <button onclick="startTestConfirm(this)" th:data-id="${internship.id}" class="apply-btn">
-                        <i class="bi bi-play-circle"></i> Start Assessment
-                    </button>
-                </div>
+				</div>
+			</div>
 
-                <!-- FAILED -->
-                <div th:if="${testAttempt != null and !testAttempt.passed}" class="alert error">
-                    <i class="bi bi-x-octagon"></i>
-                    You did not pass the assessment.<br>
-                    You may contact the company for further clarification.
-                </div>
+			<!-- TEST SECTION -->
+			<div th:if="${app != null and app.status.name() == 'ACCEPTED'}">
 
-                <!-- PASSED -->
-                <div th:if="${testAttempt != null and testAttempt.passed}">
+				<!-- NOT ATTEMPTED -->
+				<div th:if="${testAttempt == null}">
+					<button onclick="startTestConfirm(this)" th:data-id="${internship.id}" class="apply-btn">
+						<i class="bi bi-play-circle"></i> Start Assessment
+					</button>
+				</div>
 
-                    <a th:href="@{'/student/next-step?internshipId=' + ${internship.id}}" class="apply-btn"
-                        style="margin-bottom:10px;">
-                        <i class="bi bi-arrow-right-circle"></i> View Next Steps
-                    </a>
+				<!-- FAILED -->
+				<div th:if="${testAttempt != null and !testAttempt.passed}" class="alert error">
+					<i class="bi bi-x-octagon"></i>
+					You did not pass the assessment.<br>
+					You may contact the company for further clarification.
+				</div>
 
-                    <div class="alert success">
-                        <i class="bi bi-trophy"></i>
-                        Congratulations! You have cleared the test 🎉
-                    </div>
+				<!-- PASSED -->
+				<div th:if="${testAttempt != null and testAttempt.passed}">
 
-                </div>
+					<a th:href="@{'/student/next-step?internshipId=' + ${internship.id}}" class="apply-btn"
+						style="margin-bottom:10px;">
+						<i class="bi bi-arrow-right-circle"></i> View Next Steps
+					</a>
 
-            </div>
-            <div th:if="${app.allowReattempt}">
+					<div class="alert success">
+						<i class="bi bi-trophy"></i>
+						Congratulations! You have cleared the test 🎉
+					</div>
 
-    <button onclick="startTestConfirm(this)" 
-            th:data-id="${internship.id}"
-            class="apply-btn">
+				</div>
 
-        🔁 Reattempt Test
+			</div>
+			<div th:if="${app != null and app.allowReattempt}">
+				<button onclick="startTestConfirm(this)" th:data-id="${internship.id}" class="apply-btn">
 
-    </button>
+					🔁 Reattempt Test
 
-</div>
+				</button>
 
-        </div>
-    </div>
+			</div>
 
+		</div>
+	</div>
 
 
 
 
-    <script>
-        function openModal() {
-            document.getElementById("applyModal").style.display = "block";
-        }
 
-        function importProfile() {
-            document.getElementById("fullName").value = "[[${loggedStudent.fullname}]]";
-            document.getElementById("email").value = "[[${loggedStudent.email}]]";
-        }
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
 
-        const modal = document.getElementById("applyModal");
+			const modal = document.getElementById("applyModal");
+			const openBtn = document.getElementById("openApplyModal"); // Apply Now button
+			const closeBtn = document.getElementById("closeModal");
 
-        document.getElementById("closeModal").onclick = () => {
-            modal.style.display = "none";
-        };
+			// ✅ OPEN MODAL
+			if (openBtn && modal) {
+				openBtn.addEventListener("click", function (e) {
+					e.preventDefault();
+					modal.style.display = "block";
+				});
+			}
 
-        window.onclick = function (e) {
-            if (e.target == modal) {
-                modal.style.display = "none";
-            }
-        };
+			// ✅ CLOSE MODAL (X button)
+			if (closeBtn && modal) {
+				closeBtn.addEventListener("click", function () {
+					modal.style.display = "none";
+				});
+			}
 
-        function startTestConfirm(btn) {
+			// ✅ CLICK OUTSIDE TO CLOSE
+			window.addEventListener("click", function (e) {
+				if (e.target === modal) {
+					modal.style.display = "none";
+				}
+			});
 
-            let id = btn.getAttribute("data-id");
+		});
 
-            let confirmBox = confirm(
-                "⚠️ IMPORTANT INSTRUCTIONS\n\n" +
-                "• This test is time-based\n" +
-                "• Do NOT refresh the page\n" +
-                "• Switching tabs may be tracked\n" +
-                "• No cheating allowed\n\n" +
-                "Are you sure you want to start?"
-            );
 
-            if (confirmBox) {
-                window.location.href = "/student/test/start?internshipId=" + id;
-            }
-        }
-    </script>
+		function startTestConfirm(btn) {
 
+			let id = btn.getAttribute("data-id");
+
+			let confirmBox = confirm(
+				"⚠️ IMPORTANT INSTRUCTIONS\n\n" +
+				"• This test is time-based\n" +
+				"• Do NOT refresh the page\n" +
+				"• Switching tabs may be tracked\n" +
+				"• No cheating allowed\n\n" +
+				"Are you sure you want to start?"
+			);
+
+			if (confirmBox) {
+				window.location.href = "/student/test/start?internshipId=" + id;
+			}
+		}
+
+
+	</script>
+	<script th:inline="javascript">
+		function importProfile() {
+			document.getElementById("fullName").value = /*[[${loggedStudent.fullname}]]*/ "";
+			document.getElementById("email").value = /*[[${loggedStudent.email}]]*/ "";
+			document.getElementById("phone").value = "";
+		}
+	</script>
 </body>
+
 </html>

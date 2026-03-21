@@ -11,60 +11,58 @@ import jakarta.persistence.Table;
 @Table(name = "test_answer")
 public class TestAnswer {
 
-	    @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-	    @ManyToOne
-	    private InternshipTestAttempt attempt;
+	@ManyToOne
+	private InternshipTestAttempt attempt;
 
-	    @ManyToOne
-	    private QuizQuestion question;
+	@ManyToOne
+	private QuizQuestion question;
 
-	    private String answerText; // for TEXT / CODE
+	private String answerText; // for TEXT / CODE
 
-	    private String selectedOption; // for MCQ
+	private String selectedOption; // for MCQ
 
-		public Integer getId() {
-			return id;
-		}
+	public Integer getId() {
+		return id;
+	}
 
-		public void setId(Integer id) {
-			this.id = id;
-		}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-		public InternshipTestAttempt getAttempt() {
-			return attempt;
-		}
+	public InternshipTestAttempt getAttempt() {
+		return attempt;
+	}
 
-		public void setAttempt(InternshipTestAttempt attempt) {
-			this.attempt = attempt;
-		}
+	public void setAttempt(InternshipTestAttempt attempt) {
+		this.attempt = attempt;
+	}
 
-		public QuizQuestion getQuestion() {
-			return question;
-		}
+	public QuizQuestion getQuestion() {
+		return question;
+	}
 
-		public void setQuestion(QuizQuestion question) {
-			this.question = question;
-		}
+	public void setQuestion(QuizQuestion question) {
+		this.question = question;
+	}
 
-		public String getAnswerText() {
-			return answerText;
-		}
+	public String getAnswerText() {
+		return answerText;
+	}
 
-		public void setAnswerText(String answerText) {
-			this.answerText = answerText;
-		}
+	public void setAnswerText(String answerText) {
+		this.answerText = answerText;
+	}
 
-		public String getSelectedOption() {
-			return selectedOption;
-		}
+	public String getSelectedOption() {
+		return selectedOption;
+	}
 
-		public void setSelectedOption(String selectedOption) {
-			this.selectedOption = selectedOption;
-		}
-	    
-	    
-	
+	public void setSelectedOption(String selectedOption) {
+		this.selectedOption = selectedOption;
+	}
+
 }

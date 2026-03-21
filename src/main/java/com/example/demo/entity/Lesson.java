@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -29,38 +28,33 @@ public class Lesson {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer lessonId;
-	
+
 	@Column(nullable = false)
 	private String title;
 
 	@Enumerated(EnumType.STRING)
 	private LessonType type;
-	
+
 	private String contentUrl;
-	
+
 	@Column(nullable = false)
 	private Integer position;
-	
+
 	@Column(nullable = false)
 	private boolean freePreview = false;
-	
+
 	@ManyToOne
-	@JoinColumn(nullable = false ,  name = "module_id")
+	@JoinColumn(nullable = false, name = "module_id")
 	private CourseModule module;
 
-	
-	@OneToOne(mappedBy = "lesson" ,cascade = CascadeType.ALL)
-	private Quiz quiz; 
-	
-	@OneToMany(
-		    mappedBy = "lesson",
-		    cascade = CascadeType.ALL,
-		    orphanRemoval = true
-		)
-		private List<LessonProgress> lessonProgressList;
+	@OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL)
+	private Quiz quiz;
+
+	@OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<LessonProgress> lessonProgressList;
 	@Transient
 	private MultipartFile contentFile;
-	
+
 	public Integer getLessonId() {
 		return lessonId;
 	}
@@ -140,6 +134,5 @@ public class Lesson {
 	public void setLessonProgressList(List<LessonProgress> lessonProgressList) {
 		this.lessonProgressList = lessonProgressList;
 	}
-	
-	
+
 }

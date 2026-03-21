@@ -26,7 +26,6 @@ public class InternshipCertificate {
 	@ManyToOne
 	private Internships internship;
 
-	 
 	@ManyToOne
 	@JoinColumn(name = "template_id")
 	private CertificateTemplate template;
@@ -53,7 +52,6 @@ public class InternshipCertificate {
 	public void setStudent(Student student) {
 		this.student = student;
 	}
-
 
 	public String getCertificateNumber() {
 		return certificateNumber;
@@ -95,5 +93,4 @@ public class InternshipCertificate {
 		this.internship = internship;
 	}
 
-	
 }

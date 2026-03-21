@@ -8,35 +8,33 @@ import jakarta.persistence.*;
 @Table(name = "Internships")
 public class Internships {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    private String title;
-    private String role;
-    private String type;
-    private String location;
+	private String title;
+	private String role;
+	private String type;
+	private String location;
 
-    @Column(length = 1000)
-    private String skills; 
+	@Column(length = 1000)
+	private String skills;
 
-    private Integer stipend;
-    private String duration;
-    private LocalDate startDate;
+	private Integer stipend;
+	private String duration;
+	private LocalDate startDate;
 
-    @Column(length = 2000)
-    private String description;
+	@Column(length = 2000)
+	private String description;
 
+	@ManyToOne
+	@JoinColumn(name = "course_id", nullable = true)
+	private Course requiredCourse;
 
-    @ManyToOne
-    @JoinColumn(name = "course_id", nullable = true)
-    private Course requiredCourse;
+	// ADMIN (company)
+	@ManyToOne
+	private Admin admin;
 
-    // ADMIN (company)
-    @ManyToOne
-    private Admin admin;
-
-	
 	public Integer getId() {
 		return id;
 	}
@@ -133,6 +131,4 @@ public class Internships {
 		this.admin = admin;
 	}
 
-    
-    
 }

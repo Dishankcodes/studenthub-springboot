@@ -11,102 +11,97 @@ import jakarta.persistence.Table;
 @Table(name = "test_attempt")
 public class InternshipTestAttempt {
 
-	 @Id
-	    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	    private Integer id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-	    @ManyToOne
-	    private Student student;
+	@ManyToOne
+	private Student student;
 
-	    @ManyToOne
-	    private Internships internship;
+	@ManyToOne
+	private Internships internship;
 
-	    private int totalMarks;
-	    private int score;
+	private int totalMarks;
+	private int score;
 
-	    private boolean passed;
+	private boolean passed;
 
-	    private boolean submitted;
+	private boolean submitted;
 
-	    private double percentage;
-	    
-	    private Integer applicationId;
-	    
-	    
-		public Integer getApplicationId() {
-			return applicationId;
-		}
+	private double percentage;
 
-		public void setApplicationId(Integer applicationId) {
-			this.applicationId = applicationId;
-		}
+	private Integer applicationId;
 
-		public double getPercentage() {
-			return percentage;
-		}
+	public Integer getApplicationId() {
+		return applicationId;
+	}
 
-		public void setPercentage(double percentage) {
-			this.percentage = percentage;
-		}
+	public void setApplicationId(Integer applicationId) {
+		this.applicationId = applicationId;
+	}
 
-		public Integer getId() {
-			return id;
-		}
+	public double getPercentage() {
+		return percentage;
+	}
 
-		public void setId(Integer id) {
-			this.id = id;
-		}
+	public void setPercentage(double percentage) {
+		this.percentage = percentage;
+	}
 
-		public Student getStudent() {
-			return student;
-		}
+	public Integer getId() {
+		return id;
+	}
 
-		public void setStudent(Student student) {
-			this.student = student;
-		}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-		public Internships getInternship() {
-			return internship;
-		}
+	public Student getStudent() {
+		return student;
+	}
 
-		public void setInternship(Internships internship) {
-			this.internship = internship;
-		}
+	public void setStudent(Student student) {
+		this.student = student;
+	}
 
-		public int getTotalMarks() {
-			return totalMarks;
-		}
+	public Internships getInternship() {
+		return internship;
+	}
 
-		public void setTotalMarks(int totalMarks) {
-			this.totalMarks = totalMarks;
-		}
+	public void setInternship(Internships internship) {
+		this.internship = internship;
+	}
 
-		public int getScore() {
-			return score;
-		}
+	public int getTotalMarks() {
+		return totalMarks;
+	}
 
-		public void setScore(int score) {
-			this.score = score;
-		}
+	public void setTotalMarks(int totalMarks) {
+		this.totalMarks = totalMarks;
+	}
 
-		public boolean isPassed() {
-			return passed;
-		}
+	public int getScore() {
+		return score;
+	}
 
-		public void setPassed(boolean passed) {
-			this.passed = passed;
-		}
+	public void setScore(int score) {
+		this.score = score;
+	}
 
-		public boolean isSubmitted() {
-			return submitted;
-		}
+	public boolean isPassed() {
+		return passed;
+	}
 
-		public void setSubmitted(boolean submitted) {
-			this.submitted = submitted;
-		}
+	public void setPassed(boolean passed) {
+		this.passed = passed;
+	}
 
-		
-		
-	    
-	    
+	public boolean isSubmitted() {
+		return submitted;
+	}
+
+	public void setSubmitted(boolean submitted) {
+		this.submitted = submitted;
+	}
+
 }

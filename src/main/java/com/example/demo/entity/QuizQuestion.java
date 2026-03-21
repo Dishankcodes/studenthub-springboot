@@ -43,7 +43,7 @@ public class QuizQuestion {
 
 	@Column(nullable = true)
 	private String correctOption;
-	
+
 	@Column(nullable = false)
 	private Integer marks;
 
@@ -51,11 +51,11 @@ public class QuizQuestion {
 	private Integer position;
 
 	@Enumerated(EnumType.STRING)
-	private QuestionFormat questionFormat; 
-	
+	private QuestionFormat questionFormat;
+
 	@Enumerated(EnumType.STRING)
 	private QuizQuestionType type;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "course_id")
 	private Course course; // for teacher

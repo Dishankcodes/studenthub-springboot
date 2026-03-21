@@ -408,27 +408,28 @@
 		a.btn:focus {
 			text-decoration: none;
 		}
+
 		.profile-section {
-    margin-top: 30px;
-}
+			margin-top: 30px;
+		}
 
-.internship-card {
-    background: #f8faff;
-    padding: 15px;
-    border-radius: 12px;
-    margin-bottom: 10px;
-    border: 1px solid #e5e7eb;
-}
+		.internship-card {
+			background: #f8faff;
+			padding: 15px;
+			border-radius: 12px;
+			margin-bottom: 10px;
+			border: 1px solid #e5e7eb;
+		}
 
-.badge-box {
-    margin: 8px 0;
-    padding: 6px 12px;
-    background: #ede9fe;
-    color: #5b21b6;
-    border-radius: 10px;
-    display: inline-block;
-    font-size: 13px;
-}
+		.badge-box {
+			margin: 8px 0;
+			padding: 6px 12px;
+			background: #ede9fe;
+			color: #5b21b6;
+			border-radius: 10px;
+			display: inline-block;
+			font-size: 13px;
+		}
 	</style>
 </head>
 
@@ -489,33 +490,32 @@
 
 	</div>
 	<div class="main">
-<div class="profile-section">
+		<div class="profile-section">
 
-    <h3>🎓 Internship Achievements</h3>
+			<h3>🎓 Internship Achievements</h3>
 
-    <div th:if="${#lists.isEmpty(completedInternships)}">
-        <p style="color:#777;">No internships completed yet.</p>
-    </div>
+			<div th:if="${#lists.isEmpty(completedInternships)}">
+				<p style="color:#777;">No internships completed yet.</p>
+			</div>
 
-    <div th:each="app : ${completedInternships}" class="internship-card">
+			<div th:each="app : ${completedInternships}" class="internship-card">
 
-        <h4 th:text="${app.internship.title}"></h4>
+				<h4 th:text="${app.internship.title}"></h4>
 
-        <!-- BADGE -->
-        <div th:if="${app.badgeGiven}" class="badge-box">
-            🏆 <span th:text="${app.badgeTitle}"></span>
-        </div>
+				<!-- BADGE -->
+				<div th:if="${app.badgeGiven}" class="badge-box">
+					🏆 <span th:text="${app.badgeTitle}"></span>
+				</div>
 
-        <!-- CERTIFICATE -->
-        <a th:if="${app.certificateGenerated}"
-           th:href="@{'/student/internship/certificate/' + ${app.internship.id}}"
-           class="btn btn-primary">
-           📄 Download Certificate
-        </a>
+				<!-- CERTIFICATE -->
+				<a th:if="${app.certificateGenerated}"
+					th:href="@{'/student/internship/certificate/' + ${app.internship.id}}" class="btn btn-primary">
+					📄 Download Certificate
+				</a>
 
-    </div>
+			</div>
 
-</div>
+		</div>
 		<div class="profile-card">
 
 			<!-- ================= PROFILE HEADER ================= -->

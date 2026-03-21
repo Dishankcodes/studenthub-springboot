@@ -2,581 +2,581 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Internship Test</title>
+	<meta charset="UTF-8">
+	<title>Internship Test</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-    <style>
-        :root {
-            --bg: #020617;
-            --card: rgba(255, 255, 255, 0.05);
-            --text: #fff;
-            --primary: #6366f1;
-            --secondary: #8b5cf6;
-        }
+	<style>
+		:root {
+			--bg: #020617;
+			--card: rgba(255, 255, 255, 0.05);
+			--text: #fff;
+			--primary: #6366f1;
+			--secondary: #8b5cf6;
+		}
 
-        body.light {
-            --bg: #f4f7ff;
-            --card: #ffffff;
-            --text: #1e293b;
-        }
+		body.light {
+			--bg: #f4f7ff;
+			--card: #ffffff;
+			--text: #1e293b;
+		}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Inter", sans-serif;
-        }
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: "Inter", sans-serif;
+		}
 
-        body {
-            background: var(--bg);
-            color: var(--text);
-            display: flex;
-            transition: 0.3s;
-        }
+		body {
+			background: var(--bg);
+			color: var(--text);
+			display: flex;
+			transition: 0.3s;
+		}
 
-        /* SIDEBAR */
-        .sidebar {
-            width: 110px;
-            height: 100vh;
-            padding: 15px;
-            overflow-y: auto;
-            background: var(--card);
-            backdrop-filter: blur(20px);
-        }
+		/* SIDEBAR */
+		.sidebar {
+			width: 110px;
+			height: 100vh;
+			padding: 15px;
+			overflow-y: auto;
+			background: var(--card);
+			backdrop-filter: blur(20px);
+		}
 
-        .q-nav {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-        }
+		.q-nav {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 8px;
+		}
 
-        .q-nav div {
-            padding: 10px;
-            text-align: center;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 12px;
-            background: rgba(255, 255, 255, 0.08);
-            transition: 0.2s;
-        }
+		.q-nav div {
+			padding: 10px;
+			text-align: center;
+			border-radius: 10px;
+			cursor: pointer;
+			font-size: 12px;
+			background: rgba(255, 255, 255, 0.08);
+			transition: 0.2s;
+		}
 
-        .q-nav div.active {
-            background: var(--primary);
-        }
+		.q-nav div.active {
+			background: var(--primary);
+		}
 
-        .q-nav div.answered {
-            background: #22c55e;
-        }
+		.q-nav div.answered {
+			background: #22c55e;
+		}
 
-        /* MAIN */
-        .main {
-            flex: 1;
-            padding: 30px;
-        }
+		/* MAIN */
+		.main {
+			flex: 1;
+			padding: 30px;
+		}
 
-        /* HEADER */
-        .header {
-            position: sticky;
-            top: 0;
-            background: var(--bg);
-            padding: 15px 0;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 10;
-        }
+		/* HEADER */
+		.header {
+			position: sticky;
+			top: 0;
+			background: var(--bg);
+			padding: 15px 0;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			z-index: 10;
+		}
 
-        .timer {
-            padding: 10px 16px;
-            border-radius: 12px;
-            background: var(--card);
-            font-weight: 600;
-        }
+		.timer {
+			padding: 10px 16px;
+			border-radius: 12px;
+			background: var(--card);
+			font-weight: 600;
+		}
 
-        .toggle {
-            cursor: pointer;
-            padding: 8px 14px;
-            border-radius: 10px;
-            background: var(--primary);
-            color: white;
-        }
+		.toggle {
+			cursor: pointer;
+			padding: 8px 14px;
+			border-radius: 10px;
+			background: var(--primary);
+			color: white;
+		}
 
-        /* PROGRESS */
-        .progress-bar {
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin: 20px 0;
-        }
+		/* PROGRESS */
+		.progress-bar {
+			height: 6px;
+			background: rgba(255, 255, 255, 0.1);
+			border-radius: 10px;
+			margin: 20px 0;
+		}
 
-        .progress {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 10px;
-            transition: 0.3s;
-        }
+		.progress {
+			height: 100%;
+			width: 0%;
+			background: linear-gradient(90deg, var(--primary), var(--secondary));
+			border-radius: 10px;
+			transition: 0.3s;
+		}
 
-        /* CARD */
-        .card {
-            background: var(--card);
-            padding: 25px;
-            border-radius: 18px;
-            margin-bottom: 20px;
-            transition: 0.3s;
-        }
+		/* CARD */
+		.card {
+			background: var(--card);
+			padding: 25px;
+			border-radius: 18px;
+			margin-bottom: 20px;
+			transition: 0.3s;
+		}
 
-        .card:hover {
-            transform: translateY(-4px);
-        }
+		.card:hover {
+			transform: translateY(-4px);
+		}
 
-        h3 {
-            margin-bottom: 15px;
-        }
+		h3 {
+			margin-bottom: 15px;
+		}
 
-        /* OPTIONS */
-        .option {
-            display: block;
-            padding: 12px;
-            margin-top: 10px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.08);
-            cursor: pointer;
-            transition: 0.2s;
-        }
+		/* OPTIONS */
+		.option {
+			display: block;
+			padding: 12px;
+			margin-top: 10px;
+			border-radius: 10px;
+			background: rgba(255, 255, 255, 0.08);
+			cursor: pointer;
+			transition: 0.2s;
+		}
 
-        .option:hover {
-            background: rgba(99, 102, 241, 0.3);
-        }
+		.option:hover {
+			background: rgba(99, 102, 241, 0.3);
+		}
 
-        input[type="radio"] {
-            margin-right: 8px;
-        }
+		input[type="radio"] {
+			margin-right: 8px;
+		}
 
-        textarea {
-            width: 100%;
-            margin-top: 12px;
-            border-radius: 10px;
-            padding: 12px;
-            border: none;
-            background: #020617;
-            color: #fff;
-        }
+		textarea {
+			width: 100%;
+			margin-top: 12px;
+			border-radius: 10px;
+			padding: 12px;
+			border: none;
+			background: #020617;
+			color: #fff;
+		}
 
-        body.light textarea {
-            background: #f1f5f9;
-            color: #000;
-        }
+		body.light textarea {
+			background: #f1f5f9;
+			color: #000;
+		}
 
-        /* SUBMIT */
-        .submit-box {
-            text-align: center;
-            margin-top: 30px;
-        }
+		/* SUBMIT */
+		.submit-box {
+			text-align: center;
+			margin-top: 30px;
+		}
 
-        .btn-submit {
-            padding: 14px 30px;
-            border-radius: 12px;
-            border: none;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
+		.btn-submit {
+			padding: 14px 30px;
+			border-radius: 12px;
+			border: none;
+			background: linear-gradient(135deg, var(--primary), var(--secondary));
+			color: white;
+			font-size: 16px;
+			cursor: pointer;
+		}
 
-        .editor {
-            height: 300px;
-            margin-top: 10px;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #1e293b;
-        }
+		.editor {
+			height: 300px;
+			margin-top: 10px;
+			border-radius: 12px;
+			overflow: hidden;
+			border: 1px solid #1e293b;
+		}
 
-        .hidden-code {
-            display: none;
-        }
+		.hidden-code {
+			display: none;
+		}
 
-        .run-box {
-            margin-top: 10px;
-        }
+		.run-box {
+			margin-top: 10px;
+		}
 
-        .run-btn {
-            background: linear-gradient(135deg, #22c55e, #16a34a);
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            margin-bottom: 8px;
-        }
+		.run-btn {
+			background: linear-gradient(135deg, #22c55e, #16a34a);
+			border: none;
+			padding: 8px 16px;
+			border-radius: 8px;
+			color: white;
+			cursor: pointer;
+			margin-bottom: 8px;
+		}
 
-        .output-console {
-            background: #020617;
-            border-radius: 10px;
-            border: 1px solid #1e293b;
-            overflow: hidden;
-        }
+		.output-console {
+			background: #020617;
+			border-radius: 10px;
+			border: 1px solid #1e293b;
+			overflow: hidden;
+		}
 
-        .console-header {
-            padding: 6px 10px;
-            background: #111827;
-            font-size: 13px;
-            border-bottom: 1px solid #1e293b;
-        }
+		.console-header {
+			padding: 6px 10px;
+			background: #111827;
+			font-size: 13px;
+			border-bottom: 1px solid #1e293b;
+		}
 
-        .console-body {
-            padding: 10px;
-            font-size: 13px;
-            min-height: 80px;
-            color: #22c55e;
-            white-space: pre-wrap;
-        }
-    </style>
+		.console-body {
+			padding: 10px;
+			font-size: 13px;
+			min-height: 80px;
+			color: #22c55e;
+			white-space: pre-wrap;
+		}
+	</style>
 </head>
 
 <body>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <div class="q-nav" id="qNav"></div>
-    </div>
+	<!-- SIDEBAR -->
+	<div class="sidebar">
+		<div class="q-nav" id="qNav"></div>
+	</div>
 
-    <!-- MAIN -->
-    <div class="main">
-        <div id="msgBox" style="display:none; margin-bottom:15px; padding:12px; border-radius:10px; font-size:14px; background:#eef2ff;
+	<!-- MAIN -->
+	<div class="main">
+		<div id="msgBox" style="display:none; margin-bottom:15px; padding:12px; border-radius:10px; font-size:14px; background:#eef2ff;
     color:#3730a3;
 "></div>
-        <!-- HEADER -->
-        <div class="header">
-            <h2><i class="bi bi-rocket-takeoff"></i> Internship Assessment</h2>
-
-            <div style="display:flex; gap:10px; align-items:center;">
-                <div class="toggle" onclick="toggleTheme()">
-                    <i class="bi bi-moon"></i>
-                </div>
-                <div class="timer" id="timer">10:00</div>
-            </div>
-        </div>
-
-        <!-- PROGRESS -->
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
-        </div>
-
-        <form th:action="@{/student/test/submit}" method="post">
-
-            <input type="hidden" name="internshipId" th:value="${internshipId}">
-
-            <div th:each="q, i : ${questions}" class="card question" th:id="${'q'+i.index}">
-                <h3>
-                    <span th:text="${i.index + 1}"></span>.
-                    <span th:text="${q.questionText}"></span>
-                </h3>
-
-                <!-- MCQ -->
-                <div th:if="${q.questionFormat.name() == 'MCQ'}">
-                    <label class="option">
-                        <input type="radio" th:name="${'q_' + q.questionId}" value="A">
-                        <span th:text="${q.optionA}"></span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" th:name="${'q_' + q.questionId}" value="B">
-                        <span th:text="${q.optionB}"></span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" th:name="${'q_' + q.questionId}" value="C">
-                        <span th:text="${q.optionC}"></span>
-                    </label>
-                    <label class="option">
-                        <input type="radio" th:name="${'q_' + q.questionId}" value="D">
-                        <span th:text="${q.optionD}"></span>
-                    </label>
-                </div>
-
-                <!-- TEXT -->
-                <div th:if="${q.questionFormat.name() == 'TEXT'}">
-                    <textarea th:name="${'q_' + q.questionId}" rows="4"></textarea>
-                </div>
-
-                <div th:if="${q.questionFormat.name() == 'CODE'}">
-
-                    <!-- Hidden textarea for backend -->
-                    <textarea th:name="${'q_' + q.questionId}" rows="8" class="hidden-code"></textarea>
-
-                    <!-- Monaco Editor Container -->
-                    <div style="font-size:13px;color:#888;margin-top:10px;">
-                        <i class="bi bi-code-slash"></i> Code Editor
-                    </div>
-                    <div class="editor" th:id="${'editor_' + q.questionId}"></div>
-                    <div class="run-box">
-                        <button type="button" class="run-btn" onclick="runCode(this)">
-                            <i class="bi bi-play-fill"></i> Run Code
-                        </button>
-
-                        <div class="output-console">
-                            <div class="console-header">
-                                <i class="bi bi-terminal"></i> Output
-                            </div>
-                            <pre class="console-body">Click "Run Code" to execute...</pre>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="submit-box">
-                <button type="submit" class="btn-submit">
-                    <i class="bi bi-check-circle"></i> Submit Assessment
-                </button>
-            </div>
-
-        </form>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
-
-    <script>
-
-        // =========================
-        // GLOBAL MESSAGE
-        // =========================
-        function showMsg(text, type = "info") {
-            let box = document.getElementById("msgBox");
-            box.style.display = "block";
-
-            if (type === "error") {
-                box.style.background = "#fee2e2";
-                box.style.color = "#991b1b";
-            } else if (type === "success") {
-                box.style.background = "#dcfce7";
-                box.style.color = "#166534";
-            } else {
-                box.style.background = "#eef2ff";
-                box.style.color = "#3730a3";
-            }
+		<!-- HEADER -->
+		<div class="header">
+			<h2><i class="bi bi-rocket-takeoff"></i> Internship Assessment</h2>
+
+			<div style="display:flex; gap:10px; align-items:center;">
+				<div class="toggle" onclick="toggleTheme()">
+					<i class="bi bi-moon"></i>
+				</div>
+				<div class="timer" id="timer">10:00</div>
+			</div>
+		</div>
+
+		<!-- PROGRESS -->
+		<div class="progress-bar">
+			<div class="progress" id="progress"></div>
+		</div>
+
+		<form th:action="@{/student/test/submit}" method="post">
+
+			<input type="hidden" name="internshipId" th:value="${internshipId}">
+
+			<div th:each="q, i : ${questions}" class="card question" th:id="${'q'+i.index}">
+				<h3>
+					<span th:text="${i.index + 1}"></span>.
+					<span th:text="${q.questionText}"></span>
+				</h3>
+
+				<!-- MCQ -->
+				<div th:if="${q.questionFormat.name() == 'MCQ'}">
+					<label class="option">
+						<input type="radio" th:name="${'q_' + q.questionId}" value="A">
+						<span th:text="${q.optionA}"></span>
+					</label>
+					<label class="option">
+						<input type="radio" th:name="${'q_' + q.questionId}" value="B">
+						<span th:text="${q.optionB}"></span>
+					</label>
+					<label class="option">
+						<input type="radio" th:name="${'q_' + q.questionId}" value="C">
+						<span th:text="${q.optionC}"></span>
+					</label>
+					<label class="option">
+						<input type="radio" th:name="${'q_' + q.questionId}" value="D">
+						<span th:text="${q.optionD}"></span>
+					</label>
+				</div>
+
+				<!-- TEXT -->
+				<div th:if="${q.questionFormat.name() == 'TEXT'}">
+					<textarea th:name="${'q_' + q.questionId}" rows="4"></textarea>
+				</div>
+
+				<div th:if="${q.questionFormat.name() == 'CODE'}">
+
+					<!-- Hidden textarea for backend -->
+					<textarea th:name="${'q_' + q.questionId}" rows="8" class="hidden-code"></textarea>
+
+					<!-- Monaco Editor Container -->
+					<div style="font-size:13px;color:#888;margin-top:10px;">
+						<i class="bi bi-code-slash"></i> Code Editor
+					</div>
+					<div class="editor" th:id="${'editor_' + q.questionId}"></div>
+					<div class="run-box">
+						<button type="button" class="run-btn" onclick="runCode(this)">
+							<i class="bi bi-play-fill"></i> Run Code
+						</button>
+
+						<div class="output-console">
+							<div class="console-header">
+								<i class="bi bi-terminal"></i> Output
+							</div>
+							<pre class="console-body">Click "Run Code" to execute...</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="submit-box">
+				<button type="submit" class="btn-submit">
+					<i class="bi bi-check-circle"></i> Submit Assessment
+				</button>
+			</div>
+
+		</form>
+	</div>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+
+	<script>
+
+		// =========================
+		// GLOBAL MESSAGE
+		// =========================
+		function showMsg(text, type = "info") {
+			let box = document.getElementById("msgBox");
+			box.style.display = "block";
+
+			if (type === "error") {
+				box.style.background = "#fee2e2";
+				box.style.color = "#991b1b";
+			} else if (type === "success") {
+				box.style.background = "#dcfce7";
+				box.style.color = "#166534";
+			} else {
+				box.style.background = "#eef2ff";
+				box.style.color = "#3730a3";
+			}
 
-            box.innerText = text;
+			box.innerText = text;
 
-            setTimeout(() => box.style.display = "none", 4000);
-        }
+			setTimeout(() => box.style.display = "none", 4000);
+		}
 
 
-        // =========================
-        // THEME TOGGLE (WITH MONACO)
-        // =========================
-        function toggleTheme() {
-            document.body.classList.toggle("light");
+		// =========================
+		// THEME TOGGLE (WITH MONACO)
+		// =========================
+		function toggleTheme() {
+			document.body.classList.toggle("light");
 
-            let isLight = document.body.classList.contains("light");
+			let isLight = document.body.classList.contains("light");
 
-            localStorage.setItem("theme", isLight ? "light" : "dark");
+			localStorage.setItem("theme", isLight ? "light" : "dark");
 
-            if (window.monaco) {
-                monaco.editor.setTheme(isLight ? "vs" : "vs-dark");
-            }
-        }
+			if (window.monaco) {
+				monaco.editor.setTheme(isLight ? "vs" : "vs-dark");
+			}
+		}
 
-        if (localStorage.getItem("theme") === "light") {
-            document.body.classList.add("light");
-        }
+		if (localStorage.getItem("theme") === "light") {
+			document.body.classList.add("light");
+		}
 
 
-        // =========================
-        // TIMER + SAFE SUBMIT
-        // =========================
-        let time = 600;
+		// =========================
+		// TIMER + SAFE SUBMIT
+		// =========================
+		let time = 600;
 
-        const timerInterval = setInterval(() => {
+		const timerInterval = setInterval(() => {
 
-            let m = Math.floor(time / 60);
-            let s = time % 60;
+			let m = Math.floor(time / 60);
+			let s = time % 60;
 
-            document.getElementById("timer").innerText =
-                `${m}:${s < 10 ? "0" : ""}${s}`;
+			document.getElementById("timer").innerText =
+				`${m}:${s < 10 ? "0" : ""}${s}`;
 
-            if (time === 60) {
-                showMsg("⚠️ Only 1 minute left!", "error");
-            }
+			if (time === 60) {
+				showMsg("⚠️ Only 1 minute left!", "error");
+			}
 
-            if (time <= 0) {
-                clearInterval(timerInterval);
+			if (time <= 0) {
+				clearInterval(timerInterval);
 
-                showMsg("⏳ Time's up! Submitting...", "error");
+				showMsg("⏳ Time's up! Submitting...", "error");
 
-                syncEditors();
+				syncEditors();
 
-                setTimeout(() => {
-                    document.querySelector("form").submit();
-                }, 1000);
-            }
+				setTimeout(() => {
+					document.querySelector("form").submit();
+				}, 1000);
+			}
 
-            time--;
+			time--;
 
-        }, 1000);
+		}, 1000);
 
 
-        // =========================
-        // QUESTION NAVIGATION
-        // =========================
-        const questions = document.querySelectorAll(".question");
-        const nav = document.getElementById("qNav");
+		// =========================
+		// QUESTION NAVIGATION
+		// =========================
+		const questions = document.querySelectorAll(".question");
+		const nav = document.getElementById("qNav");
 
-        questions.forEach((q, i) => {
+		questions.forEach((q, i) => {
 
-            let div = document.createElement("div");
-            div.innerText = i + 1;
+			let div = document.createElement("div");
+			div.innerText = i + 1;
 
-            div.onclick = () => {
-                q.scrollIntoView({ behavior: "smooth" });
-            };
+			div.onclick = () => {
+				q.scrollIntoView({behavior: "smooth"});
+			};
 
-            nav.appendChild(div);
-        });
+			nav.appendChild(div);
+		});
 
-        // ACTIVE QUESTION HIGHLIGHT
-        window.addEventListener("scroll", () => {
+		// ACTIVE QUESTION HIGHLIGHT
+		window.addEventListener("scroll", () => {
 
-            let scrollPos = window.scrollY;
+			let scrollPos = window.scrollY;
 
-            questions.forEach((q, i) => {
+			questions.forEach((q, i) => {
 
-                let offset = q.offsetTop - 120;
+				let offset = q.offsetTop - 120;
 
-                if (scrollPos >= offset) {
-                    nav.querySelectorAll("div").forEach(d => d.classList.remove("active"));
-                    nav.children[i].classList.add("active");
-                }
-            });
-        });
+				if (scrollPos >= offset) {
+					nav.querySelectorAll("div").forEach(d => d.classList.remove("active"));
+					nav.children[i].classList.add("active");
+				}
+			});
+		});
 
 
-        // =========================
-        // PROGRESS TRACKING (FIXED)
-        // =========================
-        document.querySelectorAll("input, textarea").forEach(el => {
-            el.addEventListener("change", updateProgress);
-        });
+		// =========================
+		// PROGRESS TRACKING (FIXED)
+		// =========================
+		document.querySelectorAll("input, textarea").forEach(el => {
+			el.addEventListener("change", updateProgress);
+		});
 
-        function updateProgress() {
+		function updateProgress() {
 
-            let done = 0;
+			let done = 0;
 
-            questions.forEach((q, i) => {
+			questions.forEach((q, i) => {
 
-                let checked = q.querySelector("input:checked");
-                let text = q.querySelector("textarea:not(.hidden-code)");
+				let checked = q.querySelector("input:checked");
+				let text = q.querySelector("textarea:not(.hidden-code)");
 
-                let filled = false;
+				let filled = false;
 
-                if (checked) filled = true;
-                if (text && text.value.trim()) filled = true;
+				if (checked) filled = true;
+				if (text && text.value.trim()) filled = true;
 
-                if (filled) {
-                    done++;
-                    nav.children[i].classList.add("answered");
-                }
-            });
+				if (filled) {
+					done++;
+					nav.children[i].classList.add("answered");
+				}
+			});
 
-            document.getElementById("progress").style.width =
-                (done / questions.length) * 100 + "%";
-        }
+			document.getElementById("progress").style.width =
+				(done / questions.length) * 100 + "%";
+		}
 
 
-        // =========================
-        // MONACO EDITOR (FULL FIX)
-        // =========================
-        let editors = [];
+		// =========================
+		// MONACO EDITOR (FULL FIX)
+		// =========================
+		let editors = [];
 
-        require.config({
-            paths: {
-                vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
-            }
-        });
+		require.config({
+			paths: {
+				vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
+			}
+		});
 
-        require(["vs/editor/editor.main"], function () {
+		require(["vs/editor/editor.main"], function () {
 
-            document.querySelectorAll(".editor").forEach((el, i) => {
+			document.querySelectorAll(".editor").forEach((el, i) => {
 
-                let textarea = el.parentElement.querySelector(".hidden-code");
+				let textarea = el.parentElement.querySelector(".hidden-code");
 
-                let editor = monaco.editor.create(el, {
-                    value: "// Write your code here...",
-                    language: "java",
-                    theme: document.body.classList.contains("light") ? "vs" : "vs-dark",
-                    automaticLayout: true,
-                    fontSize: 14,
-                    minimap: { enabled: false }
-                });
+				let editor = monaco.editor.create(el, {
+					value: "// Write your code here...",
+					language: "java",
+					theme: document.body.classList.contains("light") ? "vs" : "vs-dark",
+					automaticLayout: true,
+					fontSize: 14,
+					minimap: {enabled: false}
+				});
 
-                editor.onDidChangeModelContent(() => {
-                    textarea.value = editor.getValue();
-                });
+				editor.onDidChangeModelContent(() => {
+					textarea.value = editor.getValue();
+				});
 
-                editors.push(editor);
-            });
+				editors.push(editor);
+			});
 
-        });
+		});
 
 
-        // =========================
-        // SYNC EDITORS BEFORE SUBMIT
-        // =========================
-        function syncEditors() {
-            editors.forEach((editor, i) => {
-                let textarea = document.querySelectorAll(".hidden-code")[i];
-                if (editor && textarea) {
-                    textarea.value = editor.getValue();
-                }
-            });
-        }
+		// =========================
+		// SYNC EDITORS BEFORE SUBMIT
+		// =========================
+		function syncEditors() {
+			editors.forEach((editor, i) => {
+				let textarea = document.querySelectorAll(".hidden-code")[i];
+				if (editor && textarea) {
+					textarea.value = editor.getValue();
+				}
+			});
+		}
 
-        document.querySelector("form").addEventListener("submit", syncEditors);
+		document.querySelector("form").addEventListener("submit", syncEditors);
 
-        function runCode(btn) {
+		function runCode(btn) {
 
-            let container = btn.closest(".card");
+			let container = btn.closest(".card");
 
-            // get editor index
-            let index = [...document.querySelectorAll(".run-btn")].indexOf(btn);
+			// get editor index
+			let index = [...document.querySelectorAll(".run-btn")].indexOf(btn);
 
-            let editor = editors[index];
+			let editor = editors[index];
 
-            let code = editor.getValue();
+			let code = editor.getValue();
 
-            let outputBox = container.querySelector(".console-body");
+			let outputBox = container.querySelector(".console-body");
 
-            outputBox.innerText = "Running...";
+			outputBox.innerText = "Running...";
 
-            // 🔥 FAKE COMPILER (SIMULATION)
-            setTimeout(() => {
+			// 🔥 FAKE COMPILER (SIMULATION)
+			setTimeout(() => {
 
-                try {
+				try {
 
-                    // simple simulation
-                    if (code.includes("System.out.println")) {
+					// simple simulation
+					if (code.includes("System.out.println")) {
 
-                        let match = code.match(/System\.out\.println\((.*)\)/);
+						let match = code.match(/System\.out\.println\((.*)\)/);
 
-                        if (match) {
-                            outputBox.innerText = match[1].replace(/["']/g, "");
-                        } else {
-                            outputBox.innerText = "Code executed successfully";
-                        }
+						if (match) {
+							outputBox.innerText = match[1].replace(/["']/g, "");
+						} else {
+							outputBox.innerText = "Code executed successfully";
+						}
 
-                    } else if (code.trim() === "") {
-                        outputBox.innerText = "⚠️ No code to run";
-                    } else {
-                        outputBox.innerText = "✅ Code compiled (simulation)";
-                    }
+					} else if (code.trim() === "") {
+						outputBox.innerText = "⚠️ No code to run";
+					} else {
+						outputBox.innerText = "✅ Code compiled (simulation)";
+					}
 
-                } catch (e) {
-                    outputBox.innerText = "❌ Error in code";
-                }
+				} catch (e) {
+					outputBox.innerText = "❌ Error in code";
+				}
 
-            }, 800);
-        }
-    </script>
+			}, 800);
+		}
+	</script>
 
 </body>
 

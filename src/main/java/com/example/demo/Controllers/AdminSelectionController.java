@@ -30,30 +30,32 @@ public class AdminSelectionController {
 
 	@Autowired
 	private CertificateTemplateRepository templateRepo;
+
 	@GetMapping("/admin-final-selection")
 	public String finalSelection(@RequestParam Integer internshipId, Model model) {
 
-		List<InternshipApplication> app = applicationRepo.findByInternship_IdAndStatus(internshipId,
-				ApplicationStatus.PASSED);
+		List<InternshipApplication> applications = applicationRepo.findByInternship_IdAndStatusIn(internshipId,
+				List.of(ApplicationStatus.PASSED, ApplicationStatus.SELECTED, ApplicationStatus.COMPLETED));
 
+		model.addAttribute("applications", applications);
 		model.addAttribute("templates", templateRepo.findByType(CertificateType.INTERNSHIP));
-		model.addAttribute("applications", app);
 		model.addAttribute("internshipId", internshipId);
 
 		return "admin-final-selection";
 	}
 
 	@PostMapping("/admin/select-student")
-	public String selectStudent(@RequestParam Integer appId) {
+	public String selectStudent(@RequestParam Integer studentId, @RequestParam Integer internshipId) {
 
-		InternshipApplication app = applicationRepo.findById(appId).orElse(null);
+		InternshipApplication app = applicationRepo.findByStudent_StudidAndInternship_Id(studentId, internshipId)
+				.orElse(null);
 
 		if (app != null) {
 			app.setStatus(ApplicationStatus.SELECTED);
 			applicationRepo.save(app);
 		}
 
-		return "redirect:/admin-final-selection?internshipId=" + app.getInternship().getId();
+		return "redirect:/admin-test-results?internshipId=" + internshipId;
 	}
 
 	@PostMapping("/admin/give-badge")
@@ -72,41 +74,42 @@ public class AdminSelectionController {
 	}
 
 	@PostMapping("/admin/give-certificate")
-	public String giveCertificate(@RequestParam Integer appId,
-	                              @RequestParam Integer templateId) {
+	public String giveCertificate(@RequestParam Integer appId, @RequestParam Integer templateId) {
 
-	    InternshipApplication app = applicationRepo.findById(appId).orElse(null);
+		InternshipApplication app = applicationRepo.findById(appId).orElse(null);
 
-	    if (app == null) {
-	        return "redirect:/admin-final-selection";
-	    }
+		if (app == null) {
+			return "redirect:/admin-final-selection";
+		}
 
-	    CertificateTemplate template = templateRepo.findById(templateId).orElse(null);
+		CertificateTemplate template = templateRepo.findById(templateId).orElse(null);
 
-	    if (template == null) {
-	        return "redirect:/admin-final-selection";
-	    }
+		if (template == null) {
+			return "redirect:/admin-final-selection";
+		}
 
-	    // ✅ CREATE CERTIFICATE ENTRY
-	    InternshipCertificate cert = new InternshipCertificate();
-	    cert.setStudent(app.getStudent());
-	    cert.setInternship(app.getInternship());
-	    cert.setTemplate(template);
-	    cert.setIssuedAt(LocalDate.now());
+		// ✅ CREATE CERTIFICATE ENTRY
+		InternshipCertificate cert = new InternshipCertificate();
+		cert.setStudent(app.getStudent());
+		cert.setInternship(app.getInternship());
+		cert.setTemplate(template);
+		cert.setIssuedAt(LocalDate.now());
 
-	    cert.setCertificateNumber("INT-" + System.currentTimeMillis());
+		cert.setCertificateNumber("INT-" + System.currentTimeMillis());
 
-	    // TODO: generate PDF and set path
-	    cert.setPdfPath("/certificates/internship/sample.pdf");
+		// TODO: generate PDF and set path
+		cert.setPdfPath("/certificates/internship/sample.pdf");
 
-	    internshipCertRepo.save(cert);
+		internshipCertRepo.save(cert);
 
-	    // ✅ UPDATE APPLICATION
-	    app.setCertificateGenerated(true);
-	    app.setCertificateTemplateId(templateId);
-	    app.setStatus(ApplicationStatus.COMPLETED);
+		// ✅ UPDATE APPLICATION
+		app.setCertificateGenerated(true);
+		app.setCertificateTemplateId(templateId);
+		app.setStatus(ApplicationStatus.COMPLETED);
 
-	    applicationRepo.save(app);
+		applicationRepo.save(app);
 
-	    return "redirect:/admin-final-selection?internshipId=" + app.getInternship().getId();
-	}}
+		return "redirect:/admin-final-selection?internshipId=" + app.getInternship().getId();
+	}
+
+}

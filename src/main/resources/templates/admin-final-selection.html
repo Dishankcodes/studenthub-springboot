@@ -4,7 +4,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Final Selection</title>
-
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 	<style>
 		:root {
 			--bg-primary: linear-gradient(135deg, #0b0b1f, #14142f);
@@ -150,20 +150,20 @@
 
 		<!-- HEADER -->
 		<div class="header">
-			<h2>🎯 Final Selection</h2>
+			<h2><i class="bi bi-check2-circle"></i> Final Selection</h2>
 
-			<div style="display:flex; gap:10px;">
-				<a th:href="@{'/admin-test-results?internshipId=' + ${internshipId}}" class="btn btn-secondary">📊 Test
-					Results</a>
+			<a th:href="@{/admin-test-results(internshipId=${internshipId})}" class="btn btn-secondary">
+				<i class="bi bi-bar-chart"></i> Test Results
+			</a>
 
-				<a th:href="@{'/admin-applicants?internshipId=' + ${internshipId}}" class="btn btn-secondary">⬅
-					Applicants</a>
-			</div>
+			<a th:href="@{/admin-applicants(id=${internshipId})}" class="btn btn-secondary">
+				<i class="bi bi-people"></i> Applicants
+			</a>
 		</div>
 
-		<!-- EMPTY -->
+
 		<div th:if="${#lists.isEmpty(applications)}">
-			No students passed yet 🚀
+			No eligible(passed) students found
 		</div>
 
 		<!-- CARDS -->
@@ -174,7 +174,13 @@
 				<h3 th:text="${app.student.fullname}"></h3>
 				<p th:text="${app.student.email}"></p>
 
-				<span class="status" th:classappend="${app.status.name().toLowerCase()}" th:text="${app.status}">
+				<span class="status" th:classappend="${app.status.name().toLowerCase()}">
+
+					<i th:if="${app.status.name()=='PASSED'}" class="bi bi-check-circle"></i>
+					<i th:if="${app.status.name()=='SELECTED'}" class="bi bi-person-check"></i>
+					<i th:if="${app.status.name()=='COMPLETED'}" class="bi bi-mortarboard"></i>
+
+					<span th:text="${app.status}"></span>
 				</span>
 
 				<!-- Badge -->
@@ -189,7 +195,9 @@
 				<!-- SELECT -->
 				<form action="/admin/select-student" method="post" th:if="${app.status.name() != 'SELECTED'}">
 					<input type="hidden" name="appId" th:value="${app.id}">
-					<button class="btn btn-primary">✅ Select</button>
+					<button class="btn btn-primary">
+						<i class="bi bi-check-lg"></i> Select
+					</button>
 				</form>
 
 				<!-- BADGE -->
@@ -202,7 +210,9 @@
 						<option value="Best Performer">Best Performer</option>
 					</select>
 
-					<button class="btn btn-success">🏆 Give Badge</button>
+					<button class="btn btn-success">
+						<i class="bi bi-award"></i> Give Badge
+					</button>
 				</form>
 
 				<!-- CERTIFICATE -->
@@ -213,22 +223,22 @@
 					<form action="/admin/give-certificate" method="post">
 						<input type="hidden" name="appId" th:value="${app.id}">
 						<input type="hidden" name="templateId" th:value="${t.id}">
-						<button class="btn btn-success">📄 Generate</button>
+						<button class="btn btn-success">
+							<i class="bi bi-file-earmark-pdf"></i> Generate
+						</button>
 					</form>
 
 				</div>
 
 				<!-- COMPLETED -->
 				<span th:if="${app.certificateGenerated}" class="status completed">
-					🎓 Completed
+					<i class="bi bi-mortarboard"></i> Completed
 				</span>
 
 			</div>
 
 		</div>
-
 	</div>
-
 </body>
 
 </html>

@@ -55,10 +55,10 @@ public class StudentInternshipController {
 
 	@Autowired
 	private InternshipTestAttemptRepository attemptRepo;
-	
+
 	@Autowired
 	private InternshipTestRepository testRepo;
-	
+
 	@Autowired
 	private TestAnswerRepository answerRepo;
 
@@ -98,7 +98,7 @@ public class StudentInternshipController {
 		Internships internship = internshipRepo.findById(id).orElse(null);
 
 		if (internship == null) {
-		    return "redirect:/student-internships";
+			return "redirect:/student-internships";
 		}
 		InternshipApplication application = applicationRepo.findByStudent_StudidAndInternship_Id(studentId, id)
 				.orElse(null);
@@ -112,7 +112,6 @@ public class StudentInternshipController {
 
 		InternshipTestAttempt attempt = attemptRepo.findByStudentStudidAndInternshipId(studentId, id);
 
-		
 		model.addAttribute("testAttempt", attempt);
 		model.addAttribute("internship", internship);
 		model.addAttribute("app", application);
@@ -183,183 +182,169 @@ public class StudentInternshipController {
 
 		applicationRepo.save(app);
 
-		
-		
 		redirectAttributes.addFlashAttribute("success", "Applied Successfully 🚀");
 
 		return "redirect:/student-internship-detail?id=" + internshipId;
 	}
 
 	@GetMapping("/student/test/start")
-	public String startTest(@RequestParam Integer internshipId,
-	                        Model model,
-	                        HttpSession session) {
+	public String startTest(@RequestParam Integer internshipId, Model model, HttpSession session) {
 
-	    Integer studentId = (Integer) session.getAttribute("studentId");
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-	    if (studentId == null) {
-	        return "redirect:/student-login";
-	    }
+		if (studentId == null) {
+			return "redirect:/student-login";
+		}
 
-	    // 🔒 Prevent reattempt
-	    InternshipTestAttempt existing =
-	            attemptRepo.findByStudentStudidAndInternshipId(studentId, internshipId);
+		// 🔒 Prevent reattempt
+		InternshipTestAttempt existing = attemptRepo.findByStudentStudidAndInternshipId(studentId, internshipId);
 
-	    if (existing != null && existing.isSubmitted()) {
-	        return "redirect:/student-internship-detail?id=" + internshipId;
-	    }
+		if (existing != null && existing.isSubmitted()) {
+			return "redirect:/student-internship-detail?id=" + internshipId;
+		}
 
-	    // 🔥 Get test
-	    InternshipTest test = testRepo.findByInternshipId(internshipId);
+		// 🔥 Get test
+		InternshipTest test = testRepo.findByInternshipId(internshipId);
 
-	    // ❌ Block if test not confirmed
-	    if (test == null || !test.isActive()) {
-	        return "redirect:/student-internship-detail?id=" + internshipId;
-	    }
+		// ❌ Block if test not confirmed
+		if (test == null || !test.isActive()) {
+			return "redirect:/student-internship-detail?id=" + internshipId;
+		}
 
-	    // 🔐 Try to get existing questions from session
-	    Object obj = session.getAttribute("testQuestions_" + internshipId);
+		// 🔐 Try to get existing questions from session
+		Object obj = session.getAttribute("testQuestions_" + internshipId);
 
-	    List<QuizQuestion> selected = null;
+		List<QuizQuestion> selected = null;
 
-	    if (obj instanceof List<?>) {
-	        selected = (List<QuizQuestion>) obj;
-	    }
+		if (obj instanceof List<?>) {
+			selected = (List<QuizQuestion>) obj;
+		}
 
-	    // 🔁 If first time → generate & store
-	    if (selected == null) {
+		// 🔁 If first time → generate & store
+		if (selected == null) {
 
-	        List<QuizQuestion> allQuestions =
-	                questionRepo.findByInternshipId(internshipId);
+			List<QuizQuestion> allQuestions = questionRepo.findByInternshipId(internshipId);
 
-	        if (allQuestions == null || allQuestions.isEmpty()) {
-	            return "redirect:/student-internship-detail?id=" + internshipId;
-	        }
+			if (allQuestions == null || allQuestions.isEmpty()) {
+				return "redirect:/student-internship-detail?id=" + internshipId;
+			}
 
-	        // 🔀 Shuffle only once
-	        Collections.shuffle(allQuestions);
+			// 🔀 Shuffle only once
+			Collections.shuffle(allQuestions);
 
-	        int limit = test.getTotalQuestionsToShow();
+			int limit = test.getTotalQuestionsToShow();
 
-	        selected = allQuestions.stream()
-	                .limit(limit)
-	                .toList();
+			selected = allQuestions.stream().limit(limit).toList();
 
-	        // 💾 Save in session (IMPORTANT)
-	        session.setAttribute("testQuestions_" + internshipId, selected);
-	    }
+			// 💾 Save in session (IMPORTANT)
+			session.setAttribute("testQuestions_" + internshipId, selected);
+		}
 
-	    // 🎯 Send to UI
-	    model.addAttribute("questions", selected);
-	    model.addAttribute("internshipId", internshipId);
+		// 🎯 Send to UI
+		model.addAttribute("questions", selected);
+		model.addAttribute("internshipId", internshipId);
 
-	    return "student-test";
+		return "student-test";
 	}
+
 	@PostMapping("/student/test/submit")
-	public String submitTest(
-	        @RequestParam Integer internshipId,
-	        @RequestParam Map<String, String> formData,
-	        HttpSession session,
-	        RedirectAttributes ra) {
+	public String submitTest(@RequestParam Integer internshipId, @RequestParam Map<String, String> formData,
+			HttpSession session, RedirectAttributes ra) {
 
-	    Integer studentId = (Integer) session.getAttribute("studentId");
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-	    if (studentId == null) {
-	        return "redirect:/student-login";
-	    }
+		if (studentId == null) {
+			return "redirect:/student-login";
+		}
 
-	    Student student = studentRepo.findById(studentId).orElse(null);
+		Student student = studentRepo.findById(studentId).orElse(null);
 
-	    if (student == null) {
-	        return "redirect:/student-login";
-	    }
+		if (student == null) {
+			return "redirect:/student-login";
+		}
 
-	    // 🔒 BLOCK MULTIPLE ATTEMPTS
-	    InternshipTestAttempt existing =
-	            attemptRepo.findByStudentStudidAndInternshipId(studentId, internshipId);
+		// 🔒 BLOCK MULTIPLE ATTEMPTS
+		InternshipTestAttempt existing = attemptRepo.findByStudentStudidAndInternshipId(studentId, internshipId);
 
-	    if (existing != null && existing.isSubmitted()) {
-	        ra.addFlashAttribute("msg", "⚠️ You have already submitted this assessment.");
-	        return "redirect:/student-internship-detail?id=" + internshipId;
-	    }
+		if (existing != null && existing.isSubmitted()) {
+			ra.addFlashAttribute("msg", "⚠️ You have already submitted this assessment.");
+			return "redirect:/student-internship-detail?id=" + internshipId;
+		}
 
-	    List<QuizQuestion> questions =
-	            questionRepo.findByInternshipId(internshipId);
+		List<QuizQuestion> questions = questionRepo.findByInternshipId(internshipId);
 
-	    // 🔀 SHUFFLE QUESTIONS (REAL EXAM FEEL)
-	    Collections.shuffle(questions);
+		// 🔀 SHUFFLE QUESTIONS (REAL EXAM FEEL)
+		Collections.shuffle(questions);
 
-	    int score = 0;
-	    int total = 0;
+		int score = 0;
+		int total = 0;
 
-	    InternshipTest test = testRepo.findByInternshipId(internshipId);
+		InternshipTest test = testRepo.findByInternshipId(internshipId);
 
-	    // 🔥 CREATE ATTEMPT FIRST
-	    InternshipTestAttempt attempt = new InternshipTestAttempt();
-	    attempt.setStudent(student);
-	    attempt.setInternship(internshipRepo.findById(internshipId).orElse(null));
-	    attempt.setSubmitted(false);
+		// 🔥 CREATE ATTEMPT FIRST
+		InternshipTestAttempt attempt = new InternshipTestAttempt();
+		attempt.setStudent(student);
+		attempt.setInternship(internshipRepo.findById(internshipId).orElse(null));
+		attempt.setSubmitted(false);
 
-	    attempt = attemptRepo.save(attempt);
+		attempt = attemptRepo.save(attempt);
 
-	    // 🔥 LOOP QUESTIONS
-	    for (QuizQuestion q : questions) {
+		// 🔥 LOOP QUESTIONS
+		for (QuizQuestion q : questions) {
 
-	        total += q.getMarks();
+			total += q.getMarks();
 
-	        String key = "q_" + q.getQuestionId();
-	        String value = formData.get(key);
+			String key = "q_" + q.getQuestionId();
+			String value = formData.get(key);
 
-	        TestAnswer ans = new TestAnswer();
-	        ans.setAttempt(attempt);
-	        ans.setQuestion(q);
+			TestAnswer ans = new TestAnswer();
+			ans.setAttempt(attempt);
+			ans.setQuestion(q);
 
-	        if (q.getQuestionFormat() == QuestionFormat.MCQ) {
+			if (q.getQuestionFormat() == QuestionFormat.MCQ) {
 
-	            ans.setSelectedOption(value);
+				ans.setSelectedOption(value);
 
-	            if (value != null && value.equals(q.getCorrectOption())) {
-	                score += q.getMarks();
-	            }
+				if (value != null && value.equals(q.getCorrectOption())) {
+					score += q.getMarks();
+				}
 
-	        } else {
-	            // TEXT / CODE
-	            ans.setAnswerText(value);
-	        }
+			} else {
+				// TEXT / CODE
+				ans.setAnswerText(value);
+			}
 
-	        answerRepo.save(ans);
-	    }
+			answerRepo.save(ans);
+		}
 
-	    double percentage = (score * 100.0) / total;
+		double percentage = (score * 100.0) / total;
 
-	    boolean passed = percentage >= test.getPassingMarks();
-	    
-	    InternshipApplication app =
-	    	    applicationRepo.findByStudent_StudidAndInternship_Id(studentId, internshipId)
-	    	    .orElse(null);
+		boolean passed = percentage >= test.getPassingMarks();
 
-	    	if (app != null) {
-	    	    app.setStatus(ApplicationStatus.TEST_COMPLETED);
-	    	    applicationRepo.save(app);
-	    	}
-	    attempt.setScore(score);
-	    attempt.setTotalMarks(total);
-	    attempt.setPassed(passed);
-	    attempt.setSubmitted(true);
-	    attempt.setPercentage(percentage);
+		InternshipApplication app = applicationRepo.findByStudent_StudidAndInternship_Id(studentId, internshipId)
+				.orElse(null);
 
-	    attemptRepo.save(attempt);
+		if (app != null) {
+			app.setStatus(ApplicationStatus.TEST_COMPLETED);
+			applicationRepo.save(app);
+		}
+		attempt.setScore(score);
+		attempt.setTotalMarks(total);
+		attempt.setPassed(passed);
+		attempt.setSubmitted(true);
+		attempt.setPercentage(percentage);
 
-	    // 🎯 REAL PRODUCT MESSAGES
-	    if (passed) {
-	        ra.addFlashAttribute("success",
-	            "🎉 Congratulations! You have successfully cleared the assessment.");
-	    } else {
-	        ra.addFlashAttribute("error",
-	            "❌ You did not pass the assessment. You may contact the company for further steps.");
-	    }
+		attemptRepo.save(attempt);
 
-	    session.removeAttribute("testQuestions_" + internshipId);
-	    return "redirect:/student-internship-detail?id=" + internshipId;
+		// 🎯 REAL PRODUCT MESSAGES
+		if (passed) {
+			ra.addFlashAttribute("success", "🎉 Congratulations! You have successfully cleared the assessment.");
+		} else {
+			ra.addFlashAttribute("error",
+					"❌ You did not pass the assessment. You may contact the company for further steps.");
+		}
+
+		session.removeAttribute("testQuestions_" + internshipId);
+		return "redirect:/student-internship-detail?id=" + internshipId;
 	}
 }

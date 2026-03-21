@@ -39,8 +39,7 @@ public class StudentLogin {
 
 	// ================== SIGNUP ==================
 	@PostMapping("/student-login")
-	public String registerStudent(@ModelAttribute Student student, 
-			Model model) {
+	public String registerStudent(@ModelAttribute Student student, Model model) {
 
 		if (repo.existsByEmail(student.getEmail())) {
 			model.addAttribute("signupError", "Email already registered");
@@ -58,24 +57,20 @@ public class StudentLogin {
 
 	// ================== LOGIN ==================
 	@PostMapping("/student-dashboard")
-	public String loginStudent(
-	        @RequestParam String email,
-	        @RequestParam String password,
-	        Model model,
-	        HttpSession session
-	) {
-	    Optional<Student> opt = repo.findByEmail(email);
+	public String loginStudent(@RequestParam String email, @RequestParam String password, Model model,
+			HttpSession session) {
+		Optional<Student> opt = repo.findByEmail(email);
 
-	    if (opt.isEmpty() || !password.equals(opt.get().getPassword())) {
-	        model.addAttribute("loginError", "Invalid email or password");
-	        model.addAttribute("student", new Student());
-	        return "student-login";
-	    }
+		if (opt.isEmpty() || !password.equals(opt.get().getPassword())) {
+			model.addAttribute("loginError", "Invalid email or password");
+			model.addAttribute("student", new Student());
+			return "student-login";
+		}
 
-	    // ✅ SAME STYLE AS ADMIN
-	    session.setAttribute("studentId", opt.get().getStudid()); // or getStudentId()
-	    session.setAttribute("studentEmail", opt.get().getEmail());
+		// ✅ SAME STYLE AS ADMIN
+		session.setAttribute("studentId", opt.get().getStudid()); // or getStudentId()
+		session.setAttribute("studentEmail", opt.get().getEmail());
 
-	    return "redirect:/student-dashboard";
+		return "redirect:/student-dashboard";
 	}
 }

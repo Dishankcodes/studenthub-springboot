@@ -2,411 +2,411 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Dashboard | EduPlatform</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Student Dashboard | EduPlatform</title>
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+	<!-- Bootstrap Icons -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+	<link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
 
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+		}
 
-        body {
-            background: #fff;
-            line-height: 1.6;
-        }
+		body {
+			background: #fff;
+			line-height: 1.6;
+		}
 
-        .main {
-            margin-left: 240px;
-            margin-top: 60px;
-            padding: 30px;
-            transition: 0.3s ease;
-        }
+		.main {
+			margin-left: 240px;
+			margin-top: 60px;
+			padding: 30px;
+			transition: 0.3s ease;
+		}
 
-        /* collapsed */
-        .sidebar.collapsed~.main {
-            margin-left: 80px;
-        }
+		/* collapsed */
+		.sidebar.collapsed~.main {
+			margin-left: 80px;
+		}
 
-        .internship-page {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+		.internship-page {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+		}
 
-        .search-bar {
-            display: flex;
-            gap: 12px;
-            background: #fff;
-            padding: 12px;
-            border-radius: 14px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
-        }
+		.search-bar {
+			display: flex;
+			gap: 12px;
+			background: #fff;
+			padding: 12px;
+			border-radius: 14px;
+			box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+		}
 
-        .search-bar input,
-        .search-bar select {
-            padding: 10px 12px;
-            border-radius: 10px;
-            border: 1px solid #eee;
-            outline: none;
-            font-size: 14px;
-        }
+		.search-bar input,
+		.search-bar select {
+			padding: 10px 12px;
+			border-radius: 10px;
+			border: 1px solid #eee;
+			outline: none;
+			font-size: 14px;
+		}
 
-        .section-title {
-            margin-top: 20px;
-            font-size: 22px;
-            font-weight: 600;
-            color: #111827;
-        }
+		.section-title {
+			margin-top: 20px;
+			font-size: 22px;
+			font-weight: 600;
+			color: #111827;
+		}
 
-        .internship-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 24px;
-        }
+		.internship-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+			gap: 24px;
+		}
 
-        .intern-card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 18px;
-            transition: all 0.25s ease;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+		.intern-card {
+			background: #fff;
+			padding: 20px;
+			border-radius: 18px;
+			transition: all 0.25s ease;
+			box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
 
-        .intern-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.2);
-        }
+		.intern-card:hover {
+			transform: translateY(-6px);
+			box-shadow: 0 12px 30px rgba(99, 102, 241, 0.2);
+		}
 
-        /* RECOMMENDED STYLE */
-        .highlight {
-            border: 2px solid #6366f1;
-        }
+		/* RECOMMENDED STYLE */
+		.highlight {
+			border: 2px solid #6366f1;
+		}
 
-        /* MATCH */
-        .match {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #6366f1;
-            color: #fff;
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-size: 12px;
-        }
+		/* MATCH */
+		.match {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			background: #6366f1;
+			color: #fff;
+			padding: 5px 10px;
+			border-radius: 10px;
+			font-size: 12px;
+		}
 
-        /* COMPANY */
-        .company {
-            color: #666;
-            margin-bottom: 10px;
-        }
+		/* COMPANY */
+		.company {
+			color: #666;
+			margin-bottom: 10px;
+		}
 
-        /* META */
-        .meta {
-            display: flex;
-            gap: 15px;
-            font-size: 13px;
-            margin: 10px 0;
-        }
+		/* META */
+		.meta {
+			display: flex;
+			gap: 15px;
+			font-size: 13px;
+			margin: 10px 0;
+		}
 
-        /* SKILLS */
-        .skills span {
-            background: #eee;
-            padding: 5px 10px;
-            border-radius: 10px;
-            margin-right: 5px;
-            font-size: 12px;
-        }
+		/* SKILLS */
+		.skills span {
+			background: #eee;
+			padding: 5px 10px;
+			border-radius: 10px;
+			margin-right: 5px;
+			font-size: 12px;
+		}
 
-        /* ACTIONS */
-        .actions {
-            margin-top: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+		/* ACTIONS */
+		.actions {
+			margin-top: 15px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
 
-        .apply {
-            background: #6366f1;
-            color: #fff;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
+		.apply {
+			background: #6366f1;
+			color: #fff;
+			border: none;
+			padding: 8px 15px;
+			border-radius: 10px;
+			cursor: pointer;
+		}
 
-        /* Mobile Fix */
-        @media (max-width: 768px) {
-            .sidebar {
-                left: -240px;
-            }
+		/* Mobile Fix */
+		@media (max-width: 768px) {
+			.sidebar {
+				left: -240px;
+			}
 
-            .sidebar.mobile-show {
-                left: 0;
-            }
+			.sidebar.mobile-show {
+				left: 0;
+			}
 
-            .main {
-                margin-left: 0;
-            }
-        }
+			.main {
+				margin-left: 0;
+			}
+		}
 
-        .internship-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 24px;
-        }
+		.internship-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+			gap: 24px;
+		}
 
-        .intern-card {
-            background: #fff;
-            padding: 20px;
-            border-radius: 18px;
-            transition: all 0.25s ease;
-            position: relative;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-        }
+		.intern-card {
+			background: #fff;
+			padding: 20px;
+			border-radius: 18px;
+			transition: all 0.25s ease;
+			position: relative;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+		}
 
-        .intern-card:hover {
-            transform: translateY(-6px) scale(1.01);
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
-        }
+		.intern-card:hover {
+			transform: translateY(-6px) scale(1.01);
+			box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+		}
 
-        .sidebar.mobile-show~.main {
-            filter: blur(2px);
-            pointer-events: none;
-        }
+		.sidebar.mobile-show~.main {
+			filter: blur(2px);
+			pointer-events: none;
+		}
 
-        .details-btn {
-            margin-top: 10px;
-            text-decoration: none;
-            font-size: 13px;
-            color: #fff;
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-weight: 500;
-            display: inline-block;
-            transition: 0.2s;
-        }
+		.details-btn {
+			margin-top: 10px;
+			text-decoration: none;
+			font-size: 13px;
+			color: #fff;
+			background: linear-gradient(135deg, #6366f1, #8b5cf6);
+			padding: 8px 14px;
+			border-radius: 10px;
+			font-weight: 500;
+			display: inline-block;
+			transition: 0.2s;
+		}
 
-        .details-btn:hover {
-            transform: scale(1.05);
-        }
+		.details-btn:hover {
+			transform: scale(1.05);
+		}
 
-        .company {
-            color: #6b7280;
-            font-size: 14px;
-        }
+		.company {
+			color: #6b7280;
+			font-size: 14px;
+		}
 
-        .meta {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            font-size: 13px;
-            color: #555;
-        }
+		.meta {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			font-size: 13px;
+			color: #555;
+		}
 
-        .skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
+		.skills {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 6px;
+		}
 
-        .skills span {
-            background: #eef2ff;
-            color: #4f46e5;
-            padding: 5px 10px;
-            border-radius: 999px;
-            font-size: 11px;
-            white-space: nowrap;
-        }
+		.skills span {
+			background: #eef2ff;
+			color: #4f46e5;
+			padding: 5px 10px;
+			border-radius: 999px;
+			font-size: 11px;
+			white-space: nowrap;
+		}
 
-        small {
-            display: inline-block;
-            background: #fff7ed;
-            color: #ea580c;
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 11px;
-        }
+		small {
+			display: inline-block;
+			background: #fff7ed;
+			color: #ea580c;
+			padding: 4px 8px;
+			border-radius: 8px;
+			font-size: 11px;
+		}
 
-        .highlight {
-            border: 2px solid #22c55e;
-            box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
-        }
+		.highlight {
+			border: 2px solid #22c55e;
+			box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+		}
 
-        .highlight {
-            border: 2px solid #22c55e;
-            box-shadow: 0 0 25px rgba(34, 197, 94, 0.5);
-            animation: glow 1.5s infinite alternate;
-        }
+		.highlight {
+			border: 2px solid #22c55e;
+			box-shadow: 0 0 25px rgba(34, 197, 94, 0.5);
+			animation: glow 1.5s infinite alternate;
+		}
 
-        @keyframes glow {
-            from {
-                box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
-            }
+		@keyframes glow {
+			from {
+				box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+			}
 
-            to {
-                box-shadow: 0 0 30px rgba(34, 197, 94, 0.7);
-            }
-        }
+			to {
+				box-shadow: 0 0 30px rgba(34, 197, 94, 0.7);
+			}
+		}
 
-        .empty-state {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 60vh;
-        }
+		.empty-state {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 60vh;
+		}
 
-        .empty-card {
-            text-align: center;
-            background: #fff;
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            max-width: 400px;
-        }
+		.empty-card {
+			text-align: center;
+			background: #fff;
+			padding: 40px;
+			border-radius: 20px;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+			max-width: 400px;
+		}
 
-        .empty-card h2 {
-            margin-top: 15px;
-            font-size: 22px;
-            color: #111827;
-        }
+		.empty-card h2 {
+			margin-top: 15px;
+			font-size: 22px;
+			color: #111827;
+		}
 
-        .empty-card p {
-            margin: 10px 0 20px;
-            font-size: 14px;
-            color: #6b7280;
-        }
+		.empty-card p {
+			margin: 10px 0 20px;
+			font-size: 14px;
+			color: #6b7280;
+		}
 
-        .explore-btn {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: #fff;
-            padding: 10px 18px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-size: 14px;
-            display: inline-block;
-        }
-    </style>
+		.explore-btn {
+			background: linear-gradient(135deg, #6366f1, #8b5cf6);
+			color: #fff;
+			padding: 10px 18px;
+			border-radius: 10px;
+			text-decoration: none;
+			font-size: 14px;
+			display: inline-block;
+		}
+	</style>
 </head>
 
 <body>
 
-    <!-- ===== SIDEBAR ===== -->
-    <div class="sidebar collapsed" id="sidebar">
-        <button class="toggle-btn" id="toggle">
-            <i class="bi bi-chevron-right"></i>
-        </button>
+	<!-- ===== SIDEBAR ===== -->
+	<div class="sidebar collapsed" id="sidebar">
+		<button class="toggle-btn" id="toggle">
+			<i class="bi bi-chevron-right"></i>
+		</button>
 
-        <div class="sidebar-brand">
-            <a href="/student-dashboard">
-                <img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
-            </a>
-            <h2 class="platform-name">
-                EduPlatform
-            </h2>
-        </div>
+		<div class="sidebar-brand">
+			<a href="/student-dashboard">
+				<img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
+			</a>
+			<h2 class="platform-name">
+				EduPlatform
+			</h2>
+		</div>
 
-        <a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-        <a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
-        <a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
-        <a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
-        <a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
-        <a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
-        <a th:href="@{/student-internships}" class="active"><i class="bi bi-briefcase"></i><span>Internships</span></a>
-        <a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-        <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+		<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+		<a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
+		<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
+		<a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
+		<a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
+		<a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
+		<a th:href="@{/student-internships}" class="active"><i class="bi bi-briefcase"></i><span>Internships</span></a>
+		<a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+		<a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
-    </div>
+	</div>
 
-    <!-- ===== TOPBAR ===== -->
-    <div class="student-topbar">
-        <span class="page-title">Internships</span>
-        <div class="topbar-right">
-            <div class="notif">
-                <a th:href="@{/student-notification}">
-                    <i class="bi bi-bell"></i>
-                    <span class="dot"></span> </a>
-            </div>
+	<!-- ===== TOPBAR ===== -->
+	<div class="student-topbar">
+		<span class="page-title">Internships</span>
+		<div class="topbar-right">
+			<div class="notif">
+				<a th:href="@{/student-notification}">
+					<i class="bi bi-bell"></i>
+					<span class="dot"></span> </a>
+			</div>
 
-            <div class="profile">
-                <a th:href="@{/student-profile}" class="profile-link">
+			<div class="profile">
+				<a th:href="@{/student-profile}" class="profile-link">
 
-                    <img th:src="${loggedStudent != null and loggedStudent.profileImage != null
+					<img th:src="${loggedStudent != null and loggedStudent.profileImage != null
                 ? loggedStudent.profileImage
                 : '/images/default.jpg'}" alt="Profile">
 
-                    <span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
-                        Student
-                    </span>
+					<span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
+						Student
+					</span>
 
-                </a>
-            </div>
-        </div>
+				</a>
+			</div>
+		</div>
 
-    </div>
+	</div>
 
-    <div class="main">
-        <div class="internship-page">
+	<div class="main">
+		<div class="internship-page">
 
-            <div th:if="${#lists.contains(appMap.values().![status.name()], 'ACCEPTED')}"
-                style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:20px;border-radius:15px;margin-bottom:20px;">
+			<div th:if="${#lists.contains(appMap.values().![status.name()], 'ACCEPTED')}"
+				style="background:linear-gradient(135deg,#22c55e,#16a34a);color:#fff;padding:20px;border-radius:15px;margin-bottom:20px;">
 
-                🎉 Congratulations! You are selected for an internship!
+				🎉 Congratulations! You are selected for an internship!
 
-            </div>
-            <!-- SEARCH + FILTER -->
-            <div class="search-bar">
-                <input type="text" placeholder="Search internships (Java, Web, Data Science...)">
-                <select>
-                    <option>All Roles</option>
-                    <option>Backend</option>
-                    <option>Frontend</option>
-                    <option>Data Science</option>
-                </select>
-                <select>
-                    <option>All Locations</option>
-                    <option>Remote</option>
-                    <option>Ahmedabad</option>
-                </select>
-            </div>
-            <div th:if="${#lists.isEmpty(internships)}" class="empty-state">
+			</div>
+			<!-- SEARCH + FILTER -->
+			<div class="search-bar">
+				<input type="text" placeholder="Search internships (Java, Web, Data Science...)">
+				<select>
+					<option>All Roles</option>
+					<option>Backend</option>
+					<option>Frontend</option>
+					<option>Data Science</option>
+				</select>
+				<select>
+					<option>All Locations</option>
+					<option>Remote</option>
+					<option>Ahmedabad</option>
+				</select>
+			</div>
+			<div th:if="${#lists.isEmpty(internships)}" class="empty-state">
 
-                <div class="empty-card">
-                    <i class="bi bi-briefcase" style="font-size:50px;color:#6366f1;"></i>
+				<div class="empty-card">
+					<i class="bi bi-briefcase" style="font-size:50px;color:#6366f1;"></i>
 
-                    <h2>No Internships Available</h2>
+					<h2>No Internships Available</h2>
 
-                    <p>
-                        Currently there are no internships posted for this role.<br>
-                        Please check back later or explore courses to improve your chances 🚀
-                    </p>
+					<p>
+						Currently there are no internships posted for this role.<br>
+						Please check back later or explore courses to improve your chances 🚀
+					</p>
 
-                    <a th:href="@{/student-course}" class="explore-btn">
-                        Explore Courses →
-                    </a>
-                </div>
+					<a th:href="@{/student-course}" class="explore-btn">
+						Explore Courses →
+					</a>
+				</div>
 
-            </div>
-            <!-- RECOMMENDED -->
-            <!-- <h2 class="section-title">🔥 Recommended for You</h2>
+			</div>
+			<!-- RECOMMENDED -->
+			<!-- <h2 class="section-title">🔥 Recommended for You</h2>
             <div class="internship-grid"> -->
 
-            <!-- CARD 1
+			<!-- CARD 1
                 <div class="intern-card highlight">
                     <div class="match">85% Match</div>
                     <h3>Java Backend Intern</h3>
@@ -429,127 +429,127 @@
                     </div>
                 </div> -->
 
-            <div th:if="${!#lists.isEmpty(internships)}">
-                <h2 class="section-title">All Internships</h2>
+			<div th:if="${!#lists.isEmpty(internships)}">
+				<h2 class="section-title">All Internships</h2>
 
-                <div class="internship-grid">
+				<div class="internship-grid">
 
-                    <div class="intern-card"
-                        th:classappend="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'} ? 'highlight'"
-                        th:each="i : ${internships}">
+					<div class="intern-card"
+						th:classappend="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'} ? 'highlight'"
+						th:each="i : ${internships}">
 
 
-                        <div
-                            th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'}">
-                            SELECTED 🎉
-                        </div>
+						<div
+							th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'}">
+							SELECTED 🎉
+						</div>
 
-                        <h3 th:text="${i.title}"></h3>
-                        <p class="company">EduPlatform</p>
+						<h3 th:text="${i.title}"></h3>
+						<p class="company">EduPlatform</p>
 
-                        <div class="meta">
-                            <span>
-                                <i class="bi bi-geo-alt"></i>
-                                <span th:text="${i.location}"></span>
-                            </span>
+						<div class="meta">
+							<span>
+								<i class="bi bi-geo-alt"></i>
+								<span th:text="${i.location}"></span>
+							</span>
 
-                            <span th:if="${i.stipend != null}">
-                                ₹<span th:text="${i.stipend}"></span>
-                            </span>
-                            <span th:if="${i.stipend == null}">
-                                Unpaid
-                            </span>
-                            <span>
-                                <i class="bi bi-clock"></i>
-                                <span th:text="${i.duration}"></span>
-                            </span>
-                        </div>
+							<span th:if="${i.stipend != null}">
+								₹<span th:text="${i.stipend}"></span>
+							</span>
+							<span th:if="${i.stipend == null}">
+								Unpaid
+							</span>
+							<span>
+								<i class="bi bi-clock"></i>
+								<span th:text="${i.duration}"></span>
+							</span>
+						</div>
 
-                        <!-- SKILLS -->
-                        <div class="skills">
-                            <span th:each="skill : ${#strings.arraySplit(i.skills, ',')}" th:text="${skill}">
-                            </span>
-                        </div>
+						<!-- SKILLS -->
+						<div class="skills">
+							<span th:each="skill : ${#strings.arraySplit(i.skills, ',')}" th:text="${skill}">
+							</span>
+						</div>
 
-                        <!-- ELIGIBILITY TAG -->
-                        <div th:if="${i.requiredCourse != null}" style="margin-top:8px;">
-                            <small style="color:#f59e0b;">
-                                Requires: <span th:text="${i.requiredCourse.title}"></span>
-                            </small>
-                        </div>
+						<!-- ELIGIBILITY TAG -->
+						<div th:if="${i.requiredCourse != null}" style="margin-top:8px;">
+							<small style="color:#f59e0b;">
+								Requires: <span th:text="${i.requiredCourse.title}"></span>
+							</small>
+						</div>
 
-                        <!-- ACTIONS -->
-                        <div class="actions">
+						<!-- ACTIONS -->
+						<div class="actions">
 
-                            <!-- 🔥 IF APPLIED -->
-                            <div th:if="${appMap[i.id] != null}">
+							<!-- 🔥 IF APPLIED -->
+							<div th:if="${appMap[i.id] != null}">
 
-                                <!-- ACCEPTED -->
-                                <div
-                                    th:if="${appMap[i.id] != null and 
+								<!-- ACCEPTED -->
+								<div
+									th:if="${appMap[i.id] != null and 
                                     appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'}">
-                                    <span style="color:green; font-weight:600;">🎉 Selected</span>
+									<span style="color:green; font-weight:600;">🎉 Selected</span>
 
-                                    <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
-                                        Offer Letter 📄 →
-                                    </a>
+									<a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
+										Offer Letter 📄 →
+									</a>
 
-                                </div>
+								</div>
 
-                                <!-- PENDING -->
-                                <div
-                                    th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'PENDING'}">
-                                    <div style="font-size:12px;">
-                                        📝 Applied → 🔍 Reviewing → ⏳ Pending
-                                    </div>
-                                    <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
-                                        Track →
-                                    </a>
+								<!-- PENDING -->
+								<div
+									th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'PENDING'}">
+									<div style="font-size:12px;">
+										📝 Applied → 🔍 Reviewing → ⏳ Pending
+									</div>
+									<a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
+										Track →
+									</a>
 
-                                </div>
+								</div>
 
-                                <!-- REJECTED -->
-                                <div
-                                    th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'REJECTED'}">
-                                    <span style="color:red;">❌ Rejected</span>
+								<!-- REJECTED -->
+								<div
+									th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'REJECTED'}">
+									<span style="color:red;">❌ Rejected</span>
 
-                                </div>
+								</div>
 
-                            </div>
+							</div>
 
-                            <!-- 🚀 NOT APPLIED -->
-                            <div th:if="${appMap[i.id] == null}">
-                                <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
-                                    See Details →
-                                </a>
-                            </div>
+							<!-- 🚀 NOT APPLIED -->
+							<div th:if="${appMap[i.id] == null}">
+								<a th:href="@{'/student-internship-detail?id=' + ${i.id}}" class="details-btn">
+									See Details →
+								</a>
+							</div>
 
-                        </div>
-                    </div>
+						</div>
+					</div>
 
-                </div>
-            </div>
-        </div>
+				</div>
+			</div>
+		</div>
 
-    </div>
+	</div>
 
 
 
-    <!-- ===== SCRIPT ===== -->
-    <script>
-        const sidebar = document.getElementById("sidebar");
-        const toggle = document.getElementById("toggle");
-        const icon = toggle.querySelector("i");
+	<!-- ===== SCRIPT ===== -->
+	<script>
+		const sidebar = document.getElementById("sidebar");
+		const toggle = document.getElementById("toggle");
+		const icon = toggle.querySelector("i");
 
-        toggle.addEventListener("click", () => {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle("mobile-show");
-            } else {
-                sidebar.classList.toggle("collapsed");
-                icon.classList.toggle("bi-chevron-right");
-                icon.classList.toggle("bi-chevron-left");
-            }
-        });
-    </script>
+		toggle.addEventListener("click", () => {
+			if (window.innerWidth <= 768) {
+				sidebar.classList.toggle("mobile-show");
+			} else {
+				sidebar.classList.toggle("collapsed");
+				icon.classList.toggle("bi-chevron-right");
+				icon.classList.toggle("bi-chevron-left");
+			}
+		});
+	</script>
 
 </body>

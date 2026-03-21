@@ -66,10 +66,10 @@ public class IndexController {
 
 	@GetMapping("/courses")
 	public String home_course(Model model) {
-	
+
 		List<Course> courses = courseRepo.findByStatus(CourseStatus.PUBLISHED);
 		model.addAttribute("courses", courses);
-		
+
 		return "courses";
 	}
 

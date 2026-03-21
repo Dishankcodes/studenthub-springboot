@@ -8,15 +8,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.entity.Quiz;
 import com.example.demo.entity.QuizQuestion;
 
-public interface QuizQuestionRepository extends JpaRepository<QuizQuestion, Integer>{
-	
+public interface QuizQuestionRepository extends JpaRepository<QuizQuestion, Integer> {
+
 	List<QuizQuestion> findByQuizQuizIdOrderByPosition(Integer quizId);
-	
+
 	long countByQuizQuizId(Integer quizId);
 
-	 List<QuizQuestion> findByQuiz(Quiz quiz);
-	 
-	 List<QuizQuestion> findByInternshipId(Integer internshipId);
+	List<QuizQuestion> findByQuiz(Quiz quiz);
 
-	 List<QuizQuestion> findByCourseCourseId(Integer courseId);
+	List<QuizQuestion> findByInternshipId(Integer internshipId);
+
+	List<QuizQuestion> findByCourseCourseId(Integer courseId);
 }

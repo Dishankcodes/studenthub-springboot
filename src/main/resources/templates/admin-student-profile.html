@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Student Profile</title>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+	<style>
+		body {
+			background: linear-gradient(135deg, #0b0b1f, #14142f);
+			color: #fff;
+			font-family: Poppins;
+		}
+
+		/* HEADER */
+		.header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 20px 110px;
+			background: #1a1a3d;
+		}
+
+		.logo {
+			font-size: 22px;
+			font-weight: 600;
+			color: #6c63ff;
+		}
+
+		.btn-back {
+			padding: 10px 16px;
+			border-radius: 10px;
+			background: rgba(255, 255, 255, 0.08);
+			color: #fff;
+			text-decoration: none;
+			border: 1px solid rgba(255, 255, 255, 0.15);
+		}
+
+		.btn-back:hover {
+			background: #6c63ff;
+		}
+
+		/* CONTAINER */
+		.container {
+			max-width: 900px;
+			margin: 40px auto;
+		}
+
+		/* CARD */
+		.card {
+			background: rgba(255, 255, 255, 0.05);
+			backdrop-filter: blur(14px);
+			border-radius: 16px;
+			padding: 22px;
+			margin-bottom: 20px;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		/* PROFILE */
+		.profile {
+			display: flex;
+			align-items: center;
+			gap: 18px;
+		}
+
+		.profile img {
+			width: 80px;
+			height: 80px;
+			border-radius: 50%;
+		}
+
+		/* STATUS */
+		.status {
+			padding: 5px 12px;
+			border-radius: 20px;
+			font-size: 12px;
+		}
+
+		.accepted {
+			background: #22c55e33;
+			color: #22c55e;
+		}
+
+		.rejected {
+			background: #ef444433;
+			color: #ef4444;
+		}
+
+		.pending {
+			background: #f59e0b33;
+			color: #f59e0b;
+		}
+
+		/* BUTTONS */
+		.actions {
+			display: flex;
+			gap: 10px;
+			margin-top: 15px;
+		}
+
+		.btn {
+			padding: 10px 16px;
+			border: none;
+			border-radius: 10px;
+			cursor: pointer;
+			color: #fff;
+		}
+
+		.btn-success {
+			background: #22c55e;
+		}
+
+		.btn-danger {
+			background: #ef4444;
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- HEADER -->
+	<div class="header">
+		<div class="logo">EduPlatform Admin</div>
+
+		<a th:href="@{'/admin-applicants?id=' + ${internship.id}}" class="btn-back">
+			<i class="bi bi-arrow-left"></i> Back
+		</a>
+	</div>
+
+	<div class="container">
+
+		<!-- ERROR -->
+		<div th:if="${error}" class="card" style="color:#ef4444;">
+			<span th:text="${error}"></span>
+		</div>
+
+		<!-- STUDENT -->
+		<div class="card">
+			<div class="profile">
+				<img th:src="${student.profileImage != null ? student.profileImage : '/images/default.jpg'}">
+
+				<div>
+					<h2 th:text="${student.fullname}"></h2>
+					<p th:text="${student.email}"></p>
+				</div>
+			</div>
+
+			<hr style="margin:15px 0; opacity:0.2;">
+
+			<p><b>College:</b> <span th:text="${student.college}"></span></p>
+			<p><b>Degree:</b> <span th:text="${student.degree}"></span></p>
+		</div>
+
+		<!-- APPLICATION -->
+		<div class="card">
+
+			<h3>Application Details</h3>
+
+			<p><b>Internship:</b> <span th:text="${internship.title}"></span></p>
+			<p><b>Phone:</b> <span th:text="${app.phone}"></span></p>
+
+			<p><b>Cover Letter:</b></p>
+			<p th:text="${app.coverLetter}"></p>
+
+			<p>
+				<b>Status:</b>
+				<span class="status" th:classappend="${app.status.name().toLowerCase()}" th:text="${app.status}">
+				</span>
+			</p>
+
+			<!-- ACTIONS -->
+			<div class="actions" th:if="${app.status.name() == 'PENDING'}">
+
+				<form action="/admin/application/update" method="post">
+					<input type="hidden" name="appId" th:value="${app.id}">
+					<input type="hidden" name="internshipId" th:value="${internship.id}">
+					<button class="btn btn-success" name="action" value="accept">
+						<i class="bi bi-check-lg"></i> Accept
+					</button>
+				</form>
+
+				<form action="/admin/application/update" method="post">
+					<input type="hidden" name="appId" th:value="${app.id}">
+					<input type="hidden" name="internshipId" th:value="${internship.id}">
+					<button class="btn btn-danger" name="action" value="reject">
+						<i class="bi bi-x-lg"></i> Reject
+					</button>
+				</form>
+
+			</div>
+
+		</div>
+
+	</div>
+
+</body>
+
+</html>

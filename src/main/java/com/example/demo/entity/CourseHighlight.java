@@ -9,20 +9,18 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name= "courseHighlight")
+@Table(name = "courseHighlight")
 public class CourseHighlight {
 
-	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	@ManyToOne
+	@JoinColumn(name = "course_id", nullable = false)
+	private Course course;
 
-    @ManyToOne
-    @JoinColumn(name = "course_id", nullable = false)
-    private Course course;
-
-    private String text;
+	private String text;
 
 	public Integer getId() {
 		return id;
@@ -47,6 +45,5 @@ public class CourseHighlight {
 	public void setText(String text) {
 		this.text = text;
 	}
-    
-    
+
 }

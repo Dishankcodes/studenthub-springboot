@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Next Step</title>
+	<title>Next Step</title>
 </head>
+
 <body>
 
-<div class="container">
-    <h2>🎉 Congratulations!</h2>
+	<div class="container">
+		<h2>🎉 Congratulations!</h2>
 
-    <h3 th:text="${internship.title}"></h3>
+		<h3 th:text="${internship.title}"></h3>
 
-    <!-- Badge -->
-    <div th:if="${app.badgeGiven}">
-        <h4>🏆 Badge Earned:</h4>
-        <p th:text="${app.badgeTitle}"></p>
-    </div>
+		<!-- Badge -->
+		<div th:if="${app.badgeGiven}">
+			<h4>🏆 Badge Earned:</h4>
+			<p th:text="${app.badgeTitle}"></p>
+		</div>
 
-    <!-- Certificate -->
-    <div th:if="${app.certificateGenerated}">
-        <h4>📄 Certificate</h4>
-        <a th:href="@{'/download-certificate/' + ${app.id}}">Download Certificate</a>
-    </div>
+		<!-- Certificate -->
+		<div th:if="${app.certificateGenerated}">
+			<h4>📄 Certificate</h4>
+			<a th:href="@{'/download-certificate/' + ${app.id}}">Download Certificate</a>
+		</div>
 
-    <!-- Internship Info -->
-    <h4>📌 Internship Details</h4>
-    <p><b>Role:</b> <span th:text="${internship.role}"></span></p>
-    <p><b>Duration:</b> <span th:text="${internship.duration}"></span></p>
-    <p><b>Start Date:</b> <span th:text="${internship.startDate}"></span></p>
+		<!-- Internship Info -->
+		<h4>📌 Internship Details</h4>
+		<p><b>Role:</b> <span th:text="${internship.role}"></span></p>
+		<p><b>Duration:</b> <span th:text="${internship.duration}"></span></p>
+		<p><b>Start Date:</b> <span th:text="${internship.startDate}"></span></p>
 
-</div>
+	</div>
 
 </body>
+
 </html>

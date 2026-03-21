@@ -169,10 +169,10 @@ public class AdminOtherController {
 	@PostMapping("/admin-announcement/pin/{id}")
 	public String togglePin(@PathVariable Integer id) {
 
-	    Announcement a = announcementRepo.findById(id).orElseThrow();
-	    a.setPinned(!a.isPinned());
-	    announcementRepo.save(a);
+		Announcement a = announcementRepo.findById(id).orElseThrow();
+		a.setPinned(!a.isPinned());
+		announcementRepo.save(a);
 
-	    return "redirect:/admin-announcement";
+		return "redirect:/admin-announcement";
 	}
 }

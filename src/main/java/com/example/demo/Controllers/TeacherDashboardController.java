@@ -21,111 +21,91 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class TeacherDashboardController {
 
-    @Autowired
-    private TeacherRepository teacherRepo;
+	@Autowired
+	private TeacherRepository teacherRepo;
 
-    @Autowired
-    private EnrollmentRepository enrollmentRepo;
+	@Autowired
+	private EnrollmentRepository enrollmentRepo;
 
-    @Autowired
-    private CourseRepository courseRepo;
+	@Autowired
+	private CourseRepository courseRepo;
 
-    @Autowired
-    private InstructorFeedbackRepository instructorFeedbackRepo;
+	@Autowired
+	private InstructorFeedbackRepository instructorFeedbackRepo;
 
-    @GetMapping("/teacher-dashboard")
-    public String teacherDashboard(Model model, HttpSession session) {
+	@GetMapping("/teacher-dashboard")
+	public String teacherDashboard(Model model, HttpSession session) {
 
-       
-        // Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-        // Integer teacherId = (Integer) session.getAttribute("teacherId");
+		// Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
+		// Integer teacherId = (Integer) session.getAttribute("teacherId");
 
-        Integer teacherId = 1; // 🔥 REMOVE after testing
+		Integer teacherId = 1; // 🔥 REMOVE after testing
 
-        // if (loggedIn == null || !loggedIn || teacherId == null) {
-        //     return "redirect:/teacher-auth";
-        // }
+		// if (loggedIn == null || !loggedIn || teacherId == null) {
+		// return "redirect:/teacher-auth";
+		// }
 
-        Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
-        if (teacher == null) {
-            session.invalidate();
-            return "redirect:/teacher-auth";
-        }
+		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+		if (teacher == null) {
+			session.invalidate();
+			return "redirect:/teacher-auth";
+		}
 
-        model.addAttribute("teacher", teacher);
+		model.addAttribute("teacher", teacher);
 
-        long freeCourses =
-                courseRepo.countByTeacherTeacherIdAndPriceIsNull(teacherId);
+		long freeCourses = courseRepo.countByTeacherTeacherIdAndPriceIsNull(teacherId);
 
-        long paidCourses =
-                courseRepo.countByTeacherTeacherIdAndPriceGreaterThan(
-                        teacherId, 0.0
-                );
+		long paidCourses = courseRepo.countByTeacherTeacherIdAndPriceGreaterThan(teacherId, 0.0);
 
-        long totalCourses = freeCourses + paidCourses;
+		long totalCourses = freeCourses + paidCourses;
 
-        long totalStudents =
-                enrollmentRepo.countDistinctStudentsByTeacher(teacherId);
+		long totalStudents = enrollmentRepo.countDistinctStudentsByTeacher(teacherId);
 
-        model.addAttribute("freeCourses", freeCourses);
-        model.addAttribute("paidCourses", paidCourses);
-        model.addAttribute("totalCourses", totalCourses);
-        model.addAttribute("totalStudents", totalStudents);
-        model.addAttribute("teacherCourses", totalCourses);
-        model.addAttribute("teacherStudents", totalStudents);
+		model.addAttribute("freeCourses", freeCourses);
+		model.addAttribute("paidCourses", paidCourses);
+		model.addAttribute("totalCourses", totalCourses);
+		model.addAttribute("totalStudents", totalStudents);
+		model.addAttribute("teacherCourses", totalCourses);
+		model.addAttribute("teacherStudents", totalStudents);
 
-        Double totalRevenue =
-                enrollmentRepo.getTotalRevenueByTeacher(teacherId);
+		Double totalRevenue = enrollmentRepo.getTotalRevenueByTeacher(teacherId);
 
-        if (totalRevenue == null) {
-            totalRevenue = 0.0;
-        }
+		if (totalRevenue == null) {
+			totalRevenue = 0.0;
+		}
 
-        model.addAttribute("totalRevenue", totalRevenue.longValue());
+		model.addAttribute("totalRevenue", totalRevenue.longValue());
 
-        List<Object[]> topCourses =
-                courseRepo.findTopCoursesByEnrollment(teacherId);
+		List<Object[]> topCourses = courseRepo.findTopCoursesByEnrollment(teacherId);
 
-        if (topCourses != null && !topCourses.isEmpty()) {
+		if (topCourses != null && !topCourses.isEmpty()) {
 
-            Object[] row = topCourses.get(0);
+			Object[] row = topCourses.get(0);
 
-            model.addAttribute("name", row[0]);               // course title
-            model.addAttribute("studentCount", row[1]);       // enrollment count
-            model.addAttribute(
-                    "rating",
-                    row[2] != null ? row[2] : 0
-            );
+			model.addAttribute("name", row[0]); // course title
+			model.addAttribute("studentCount", row[1]); // enrollment count
+			model.addAttribute("rating", row[2] != null ? row[2] : 0);
 
-        } else {
+		} else {
 
-            model.addAttribute("name", "N/A");
-            model.addAttribute("studentCount", 0);
-            model.addAttribute("rating", 0);
-        }
+			model.addAttribute("name", "N/A");
+			model.addAttribute("studentCount", 0);
+			model.addAttribute("rating", 0);
+		}
 
+		List<Object[]> courseIncomeList = courseRepo.getCourseIncomeStats(teacherId);
 
-        List<Object[]> courseIncomeList =
-                courseRepo.getCourseIncomeStats(teacherId);
+		List<InstructorFeedback> feedbackList = instructorFeedbackRepo
+				.findTop5ByTeacherTeacherIdOrderByCreatedAtDesc(teacherId);
 
+		List<Object[]> monthlyStudents = enrollmentRepo.countStudentsGroupedByMonth(teacherId);
 
-        List<InstructorFeedback> feedbackList =
-                instructorFeedbackRepo
-                        .findTop5ByTeacherTeacherIdOrderByCreatedAtDesc(
-                                teacherId
-                        );
-        
-        List<Object[]> monthlyStudents =
-                enrollmentRepo.countStudentsGroupedByMonth(teacherId);
- 
-        
-        model.addAttribute("courseIncomeList", courseIncomeList);
-        model.addAttribute("feedbackList", feedbackList);
-        model.addAttribute("teacherStatus", teacher.getStatus());
-        model.addAttribute("monthlyStudents", monthlyStudents);
-        
-        return "teacher-dashboard";
-    }
-    
+		model.addAttribute("courseIncomeList", courseIncomeList);
+		model.addAttribute("feedbackList", feedbackList);
+		model.addAttribute("teacherStatus", teacher.getStatus());
+		model.addAttribute("monthlyStudents", monthlyStudents);
+
+		return "teacher-dashboard";
+	}
 
 }

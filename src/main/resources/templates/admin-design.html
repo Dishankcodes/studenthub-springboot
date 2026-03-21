@@ -2,528 +2,528 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8" />
-    <title>Admin | Certificate Design</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta charset="UTF-8" />
+	<title>Admin | Certificate Design</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Playfair+Display:wght@500;600&display=swap"
-        rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
-        }
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Playfair+Display:wght@500;600&display=swap"
+		rel="stylesheet">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: "Poppins", sans-serif;
+		}
 
-        body {
-            background: #0d0d2b;
-            color: #ffffff;
-        }
+		body {
+			background: #0d0d2b;
+			color: #ffffff;
+		}
 
-        /* ================= NAVBAR ================= */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 22px 110px;
-            background: #1a1a3d;
-        }
+		/* ================= NAVBAR ================= */
+		header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 22px 110px;
+			background: #1a1a3d;
+		}
 
-        .logo {
-            font-size: 26px;
-            font-weight: 700;
-            color: #6c63ff;
-        }
+		.logo {
+			font-size: 26px;
+			font-weight: 700;
+			color: #6c63ff;
+		}
 
-        /* ================= PAGE ================= */
-        .container {
-            padding: 50px 110px;
-        }
+		/* ================= PAGE ================= */
+		.container {
+			padding: 50px 110px;
+		}
 
-        .page-title {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
+		.page-title {
+			font-size: 28px;
+			font-weight: 600;
+			margin-bottom: 6px;
+		}
 
-        .page-subtitle {
-            color: #b5b5ff;
-            margin-bottom: 35px;
-        }
+		.page-subtitle {
+			color: #b5b5ff;
+			margin-bottom: 35px;
+		}
 
-        /* ================= GRID ================= */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 60px;
-        }
+		/* ================= GRID ================= */
+		.grid {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 30px;
+			margin-bottom: 60px;
+		}
 
-        .card {
-            background: #1a1a3d;
-            border-radius: 14px;
-            padding: 24px;
-        }
+		.card {
+			background: #1a1a3d;
+			border-radius: 14px;
+			padding: 24px;
+		}
 
-        .card h3 {
-            font-size: 18px;
-            margin-bottom: 18px;
-        }
+		.card h3 {
+			font-size: 18px;
+			margin-bottom: 18px;
+		}
 
-        .preview-text.name {
-            top: 42%;
-            font-size: 30px;
-            font-family: 'Cinzel', serif;
-            letter-spacing: 1.5px;
-            color: #1f2937;
-        }
+		.preview-text.name {
+			top: 42%;
+			font-size: 30px;
+			font-family: 'Cinzel', serif;
+			letter-spacing: 1.5px;
+			color: #1f2937;
+		}
 
-        .preview-text.course {
-            top: 56%;
-            font-size: 18px;
-            font-family: 'Playfair Display', serif;
-            color: #374151;
-        }
+		.preview-text.course {
+			top: 56%;
+			font-size: 18px;
+			font-family: 'Playfair Display', serif;
+			color: #374151;
+		}
 
-        .preview-text.date {
-            top: 66%;
-            font-size: 14px;
-            font-family: 'Poppins', sans-serif;
-            opacity: 0.85;
-        }
+		.preview-text.date {
+			top: 66%;
+			font-size: 14px;
+			font-family: 'Poppins', sans-serif;
+			opacity: 0.85;
+		}
 
-        .preview-box {
-            position: relative;
-            height: 320px;
-            overflow: hidden;
-            border-radius: 14px;
-            background: #0f1035;
-            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08),
-                0 20px 40px rgba(0, 0, 0, 0.45);
-        }
+		.preview-box {
+			position: relative;
+			height: 320px;
+			overflow: hidden;
+			border-radius: 14px;
+			background: #0f1035;
+			box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+				0 20px 40px rgba(0, 0, 0, 0.45);
+		}
 
-        /* ================= FORM ================= */
-        .form-group {
-            margin-bottom: 16px;
-        }
+		/* ================= FORM ================= */
+		.form-group {
+			margin-bottom: 16px;
+		}
 
-        label {
-            font-size: 14px;
-            color: #cfcfff;
-            display: block;
-            margin-bottom: 6px;
-        }
+		label {
+			font-size: 14px;
+			color: #cfcfff;
+			display: block;
+			margin-bottom: 6px;
+		}
 
-        input,
-        select {
-            width: 100%;
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: none;
-            outline: none;
-            background: #0f1035;
-            color: #fff;
-        }
+		input,
+		select {
+			width: 100%;
+			padding: 10px 12px;
+			border-radius: 8px;
+			border: none;
+			outline: none;
+			background: #0f1035;
+			color: #fff;
+		}
 
-        input[type="file"] {
-            padding: 8px;
-        }
+		input[type="file"] {
+			padding: 8px;
+		}
 
-        .btn {
-            margin-top: 10px;
-            padding: 12px 18px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            background: linear-gradient(135deg, #6c63ff, #857dff);
-            color: #fff;
-        }
+		.btn {
+			margin-top: 10px;
+			padding: 12px 18px;
+			border-radius: 10px;
+			border: none;
+			cursor: pointer;
+			font-weight: 500;
+			background: linear-gradient(135deg, #6c63ff, #857dff);
+			color: #fff;
+		}
 
-        /* ================= PREVIEW ================= */
-        .preview-box {
-            height: 320px;
-            border-radius: 12px;
-            background: #0f1035;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #7777ff;
-            border: 1px dashed #3b3b8f;
-        }
+		/* ================= PREVIEW ================= */
+		.preview-box {
+			height: 320px;
+			border-radius: 12px;
+			background: #0f1035;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #7777ff;
+			border: 1px dashed #3b3b8f;
+		}
 
-        /* ================= TEMPLATE LIST ================= */
-        .template-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 24px;
-        }
+		/* ================= TEMPLATE LIST ================= */
+		.template-list {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+			gap: 24px;
+		}
 
-        .template-card {
-            background: #1a1a3d;
-            border-radius: 14px;
-            padding: 18px;
-        }
+		.template-card {
+			background: #1a1a3d;
+			border-radius: 14px;
+			padding: 18px;
+		}
 
-        .template-preview {
-            height: 140px;
-            border-radius: 10px;
-            background: #0f1035;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #7777ff;
-            margin-bottom: 12px;
-        }
+		.template-preview {
+			height: 140px;
+			border-radius: 10px;
+			background: #0f1035;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			color: #7777ff;
+			margin-bottom: 12px;
+		}
 
-        .template-name {
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
+		.template-name {
+			font-weight: 500;
+			margin-bottom: 6px;
+		}
 
-        .template-meta {
-            font-size: 13px;
-            color: #b5b5ff;
-            margin-bottom: 12px;
-        }
+		.template-meta {
+			font-size: 13px;
+			color: #b5b5ff;
+			margin-bottom: 12px;
+		}
 
-        .actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+		.actions {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
 
-        .btn-activate {
-            padding: 8px 14px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            background: #6c63ff;
-            color: #fff;
-            font-size: 13px;
-        }
+		.btn-activate {
+			padding: 8px 14px;
+			border-radius: 8px;
+			border: none;
+			cursor: pointer;
+			background: #6c63ff;
+			color: #fff;
+			font-size: 13px;
+		}
 
-        .badge-active {
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 20px;
-            background: #2ecc71;
-            color: #fff;
-        }
+		.badge-active {
+			font-size: 12px;
+			padding: 4px 10px;
+			border-radius: 20px;
+			background: #2ecc71;
+			color: #fff;
+		}
 
-        .preview-box {
-            position: relative;
-            height: 320px;
-            overflow: hidden;
-        }
+		.preview-box {
+			position: relative;
+			height: 320px;
+			overflow: hidden;
+		}
 
-        .preview-bg {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+		.preview-bg {
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
 
-        .preview-text {
-            position: absolute;
-            width: 100%;
-            text-align: center;
-            font-weight: 600;
-        }
+		.preview-text {
+			position: absolute;
+			width: 100%;
+			text-align: center;
+			font-weight: 600;
+		}
 
-        .preview-text.name {
-            top: 42%;
-            font-size: 22px;
-        }
+		.preview-text.name {
+			top: 42%;
+			font-size: 22px;
+		}
 
-        .preview-text.course {
-            top: 55%;
-            font-size: 16px;
-        }
+		.preview-text.course {
+			top: 55%;
+			font-size: 16px;
+		}
 
-        .preview-text.date {
-            top: 65%;
-            font-size: 13px;
-        }
+		.preview-text.date {
+			top: 65%;
+			font-size: 13px;
+		}
 
-        .preview-sign {
-            position: absolute;
-            bottom: 30px;
-            right: 40px;
-            width: 90px;
-        }
+		.preview-sign {
+			position: absolute;
+			bottom: 30px;
+			right: 40px;
+			width: 90px;
+		}
 
-        /* ================= ADMIN HEADER ================= */
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 22px 110px;
-            background: #1a1a3d;
-        }
+		/* ================= ADMIN HEADER ================= */
+		.admin-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 22px 110px;
+			background: #1a1a3d;
+		}
 
-        .btn-back-dashboard {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 16px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            text-decoration: none;
-            color: #e5e7eb;
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            transition: all 0.25s ease;
-        }
+		.btn-back-dashboard {
+			display: inline-flex;
+			align-items: center;
+			gap: 8px;
+			padding: 10px 16px;
+			border-radius: 12px;
+			font-size: 14px;
+			font-weight: 500;
+			text-decoration: none;
+			color: #e5e7eb;
+			background: rgba(255, 255, 255, 0.08);
+			border: 1px solid rgba(255, 255, 255, 0.15);
+			transition: all 0.25s ease;
+		}
 
-        .btn-back-dashboard i {
-            font-size: 16px;
-        }
+		.btn-back-dashboard i {
+			font-size: 16px;
+		}
 
-        .btn-back-dashboard:hover {
-            background: linear-gradient(135deg, #6c63ff, #857dff);
-            color: #fff;
-            transform: translateY(-2px);
-        }
+		.btn-back-dashboard:hover {
+			background: linear-gradient(135deg, #6c63ff, #857dff);
+			color: #fff;
+			transform: translateY(-2px);
+		}
 
-        .tab-btn {
-            padding: 8px 16px;
-            border-radius: 8px;
-            border: none;
-            background: #2a2a5a;
-            color: #fff;
-            cursor: pointer;
-        }
+		.tab-btn {
+			padding: 8px 16px;
+			border-radius: 8px;
+			border: none;
+			background: #2a2a5a;
+			color: #fff;
+			cursor: pointer;
+		}
 
-        .tab-btn.active {
-            background: #6c63ff;
-        }
+		.tab-btn.active {
+			background: #6c63ff;
+		}
 
-        .type-badge {
-            font-size: 10px;
-            padding: 3px 8px;
-            border-radius: 999px;
-        }
+		.type-badge {
+			font-size: 10px;
+			padding: 3px 8px;
+			border-radius: 999px;
+		}
 
-        .course {
-            background: rgba(99, 102, 241, 0.2);
-            color: #6366f1;
-        }
+		.course {
+			background: rgba(99, 102, 241, 0.2);
+			color: #6366f1;
+		}
 
-        .internship {
-            background: rgba(34, 197, 94, 0.2);
-            color: #22c55e;
-        }
+		.internship {
+			background: rgba(34, 197, 94, 0.2);
+			color: #22c55e;
+		}
 
-        .template-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            border-radius: 10px;
-        }
-    </style>
+		.template-preview img {
+			width: 100%;
+			height: 100%;
+			object-fit: contain;
+			border-radius: 10px;
+		}
+	</style>
 </head>
 
 <body>
 
-    <header class="admin-header">
-        <div class="logo">EduPlatform Admin</div>
+	<header class="admin-header">
+		<div class="logo">EduPlatform Admin</div>
 
-        <a th:href="@{/admin-dashboard}" class="btn-back-dashboard">
-            <i class="bi bi-arrow-left"></i>
-            Dashboard
-        </a>
-    </header>
-    <div class="container">
+		<a th:href="@{/admin-dashboard}" class="btn-back-dashboard">
+			<i class="bi bi-arrow-left"></i>
+			Dashboard
+		</a>
+	</header>
+	<div class="container">
 
-        <div class="page-title">Certificate Design</div>
-        <div class="page-subtitle">
-            Create, preview, and activate certificate templates for students
-        </div>
+		<div class="page-title">Certificate Design</div>
+		<div class="page-subtitle">
+			Create, preview, and activate certificate templates for students
+		</div>
 
-        <!-- ================= CREATE + PREVIEW ================= -->
-        <div class="grid">
+		<!-- ================= CREATE + PREVIEW ================= -->
+		<div class="grid">
 
-            <!-- CREATE TEMPLATE -->
-            <div class="card">
-                <h3>Create New Template</h3>
+			<!-- CREATE TEMPLATE -->
+			<div class="card">
+				<h3>Create New Template</h3>
 
-                <form th:action="@{/certificate-template/save}" method="post" enctype="multipart/form-data">
+				<form th:action="@{/certificate-template/save}" method="post" enctype="multipart/form-data">
 
-                    <div class="form-group">
-                        <label>Template Name</label>
-                        <input type="text" placeholder="EduPlatform Certificate" name="name" />
-                    </div>
+					<div class="form-group">
+						<label>Template Name</label>
+						<input type="text" placeholder="EduPlatform Certificate" name="name" />
+					</div>
 
-                    <div class="form-group">
-                        <label>Certificate Type</label>
-                        <select name="type">
-                            <option value="COURSE">Course</option>
-                            <option value="INTERNSHIP">Internship</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Background Image</label>
-                        <input type="file" name="backgroundImage" accept="image/png" />
-                    </div>
+					<div class="form-group">
+						<label>Certificate Type</label>
+						<select name="type">
+							<option value="COURSE">Course</option>
+							<option value="INTERNSHIP">Internship</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Background Image</label>
+						<input type="file" name="backgroundImage" accept="image/png" />
+					</div>
 
-                    <div class="form-group">
-                        <label>Signature Image (optional)</label>
-                        <input type="file" name="signatureImage" accept="image/png" />
-                    </div>
+					<div class="form-group">
+						<label>Signature Image (optional)</label>
+						<input type="file" name="signatureImage" accept="image/png" />
+					</div>
 
-                    <div class="form-group">
-                        <label>Font Family</label>
-                        <select name="fontFamily">
-                            <option>Poppins</option>
-                            <option>Montserrat</option>
-                            <option>Roboto</option>
-                        </select>
-                    </div>
+					<div class="form-group">
+						<label>Font Family</label>
+						<select name="fontFamily">
+							<option>Poppins</option>
+							<option>Montserrat</option>
+							<option>Roboto</option>
+						</select>
+					</div>
 
-                    <div class="form-group">
-                        <label>Font Color</label>
-                        <input type="text" name="fontColor" placeholder="#2c3e50" />
-                    </div>
+					<div class="form-group">
+						<label>Font Color</label>
+						<input type="text" name="fontColor" placeholder="#2c3e50" />
+					</div>
 
-                    <button class="btn" type="submit">Save Template</button>
-                </form>
-            </div>
+					<button class="btn" type="submit">Save Template</button>
+				</form>
+			</div>
 
-            <!-- PREVIEW -->
-            <div class="card">
-                <h3>Live Preview</h3>
-                <div class="preview-box" id="previewBox">
-                    <img id="previewBg" class="preview-bg" alt="Certificate Preview" />
+			<!-- PREVIEW -->
+			<div class="card">
+				<h3>Live Preview</h3>
+				<div class="preview-box" id="previewBox">
+					<img id="previewBg" class="preview-bg" alt="Certificate Preview" />
 
-                    <div class="preview-text name" id="previewName">
-                        STUDENT NAME
-                    </div>
+					<div class="preview-text name" id="previewName">
+						STUDENT NAME
+					</div>
 
-                    <div class="preview-text course" id="previewCourse">
-                        COURSE TITLE
-                    </div>
+					<div class="preview-text course" id="previewCourse">
+						COURSE TITLE
+					</div>
 
-                    <div class="preview-text date" id="previewDate">
-                        Issued on: 24 Feb 2026
-                    </div>
+					<div class="preview-text date" id="previewDate">
+						Issued on: 24 Feb 2026
+					</div>
 
-                    <img id="previewSign" class="preview-sign" />
-                </div>
-            </div>
+					<img id="previewSign" class="preview-sign" />
+				</div>
+			</div>
 
-        </div>
-        <div style="display:flex; gap:10px; margin-bottom:20px;">
-            <button class="tab-btn active" onclick="showTab('course')">📘 Course</button>
-            <button class="tab-btn" onclick="showTab('internship')">🎓 Internship</button>
-        </div>
-        <div id="courseTab" class="template-list">
+		</div>
+		<div style="display:flex; gap:10px; margin-bottom:20px;">
+			<button class="tab-btn active" onclick="showTab('course')">📘 Course</button>
+			<button class="tab-btn" onclick="showTab('internship')">🎓 Internship</button>
+		</div>
+		<div id="courseTab" class="template-list">
 
-            <div class="template-card" th:each="t : ${courseTemplates}">
+			<div class="template-card" th:each="t : ${courseTemplates}">
 
-                <div class="template-preview">
-                    <img th:src="@{${t.backgroundImage}}" />
-                </div>
+				<div class="template-preview">
+					<img th:src="@{${t.backgroundImage}}" />
+				</div>
 
-                <div class="template-name">
-                    📘 <span th:text="${t.name}"></span>
-                </div>
+				<div class="template-name">
+					📘 <span th:text="${t.name}"></span>
+				</div>
 
-                <div class="template-meta">
-                    <span class="type-badge course">COURSE</span>
-                </div>
+				<div class="template-meta">
+					<span class="type-badge course">COURSE</span>
+				</div>
 
-                <div class="actions">
-                    <span th:if="${t.active}" class="badge-active">ACTIVE</span>
-                </div>
+				<div class="actions">
+					<span th:if="${t.active}" class="badge-active">ACTIVE</span>
+				</div>
 
-                <form th:if="${!t.active}" th:action="@{/certificate-template/activate/{id}(id=${t.id})}" method="post">
-                    <button class="btn-activate">Activate</button>
-                </form>
+				<form th:if="${!t.active}" th:action="@{/certificate-template/activate/{id}(id=${t.id})}" method="post">
+					<button class="btn-activate">Activate</button>
+				</form>
 
-            </div>
+			</div>
 
-        </div>
-        <div id="internshipTab" class="template-list" style="display:none;">
+		</div>
+		<div id="internshipTab" class="template-list" style="display:none;">
 
-            <div class="template-card" th:each="t : ${internshipTemplates}">
+			<div class="template-card" th:each="t : ${internshipTemplates}">
 
-                <div class="template-preview">
-                    <img th:src="@{${t.backgroundImage}}" />
-                </div>
+				<div class="template-preview">
+					<img th:src="@{${t.backgroundImage}}" />
+				</div>
 
-                <div class="template-name">
-                    🎓 <span th:text="${t.name}"></span>
-                </div>
+				<div class="template-name">
+					🎓 <span th:text="${t.name}"></span>
+				</div>
 
-                <div class="template-meta">
-                    <span class="type-badge internship">INTERNSHIP</span>
-                </div>
+				<div class="template-meta">
+					<span class="type-badge internship">INTERNSHIP</span>
+				</div>
 
-                <div class="actions">
-                    <span th:if="${t.active}" class="badge-active">ACTIVE</span>
-                </div>
+				<div class="actions">
+					<span th:if="${t.active}" class="badge-active">ACTIVE</span>
+				</div>
 
-                <form th:if="${!t.active}" th:action="@{/certificate-template/activate/{id}(id=${t.id})}" method="post">
-                    <button class="btn-activate">Activate</button>
-                </form>
+				<form th:if="${!t.active}" th:action="@{/certificate-template/activate/{id}(id=${t.id})}" method="post">
+					<button class="btn-activate">Activate</button>
+				</form>
 
-            </div>
+			</div>
 
-        </div>
-    </div>
+		</div>
+	</div>
 </body>
 <script>
-    const bgInput = document.querySelector('input[name="backgroundImage"]');
-    const signInput = document.querySelector('input[name="signatureImage"]');
-    const fontSelect = document.querySelector('select[name="fontFamily"]');
-    const colorInput = document.querySelector('input[name="fontColor"]');
+	const bgInput = document.querySelector('input[name="backgroundImage"]');
+	const signInput = document.querySelector('input[name="signatureImage"]');
+	const fontSelect = document.querySelector('select[name="fontFamily"]');
+	const colorInput = document.querySelector('input[name="fontColor"]');
 
-    bgInput?.addEventListener('change', e => {
-        const file = e.target.files[0];
-        if (file) {
-            document.getElementById('previewBg').src = URL.createObjectURL(file);
-        }
-    });
+	bgInput?.addEventListener('change', e => {
+		const file = e.target.files[0];
+		if (file) {
+			document.getElementById('previewBg').src = URL.createObjectURL(file);
+		}
+	});
 
-    signInput?.addEventListener('change', e => {
-        const file = e.target.files[0];
-        if (file) {
-            document.getElementById('previewSign').src = URL.createObjectURL(file);
-        }
-    });
+	signInput?.addEventListener('change', e => {
+		const file = e.target.files[0];
+		if (file) {
+			document.getElementById('previewSign').src = URL.createObjectURL(file);
+		}
+	});
 
-    fontSelect?.addEventListener('change', e => {
-        document.querySelectorAll('.preview-text').forEach(t => {
-            t.style.fontFamily = e.target.value;
-        });
-    });
+	fontSelect?.addEventListener('change', e => {
+		document.querySelectorAll('.preview-text').forEach(t => {
+			t.style.fontFamily = e.target.value;
+		});
+	});
 
-    colorInput?.addEventListener('input', e => {
-        document.querySelectorAll('.preview-text').forEach(t => {
-            t.style.color = e.target.value;
-        });
-    });
+	colorInput?.addEventListener('input', e => {
+		document.querySelectorAll('.preview-text').forEach(t => {
+			t.style.color = e.target.value;
+		});
+	});
 </script>
 <script>
-    function showTab(type) {
-        document.getElementById("courseTab").style.display =
-            type === "course" ? "grid" : "none";
+	function showTab(type) {
+		document.getElementById("courseTab").style.display =
+			type === "course" ? "grid" : "none";
 
-        document.getElementById("internshipTab").style.display =
-            type === "internship" ? "grid" : "none";
+		document.getElementById("internshipTab").style.display =
+			type === "internship" ? "grid" : "none";
 
-        document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+		document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
 
-        event.target.classList.add("active");
-    }
+		event.target.classList.add("active");
+	}
 </script>
 
 </html>
