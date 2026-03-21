@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import com.example.demo.entity.InternshipApplication;
+import com.example.demo.enums.ApplicationStatus;
 
 public interface ApplicationRepository extends JpaRepository<InternshipApplication, Integer> {
 
@@ -24,5 +25,7 @@ public interface ApplicationRepository extends JpaRepository<InternshipApplicati
     List<InternshipApplication> findByStudent_Studid(Integer studentId);
     
     Optional<InternshipApplication> findByStudent_StudidAndInternship_Id(Integer studentId, Integer internshipId);
+    
+    List<InternshipApplication> findByInternship_IdAndStatus(Integer internshipId, ApplicationStatus status);
 
 }

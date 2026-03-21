@@ -197,6 +197,42 @@
         .hidden-code {
             display: none;
         }
+
+        .run-box {
+            margin-top: 10px;
+        }
+
+        .run-btn {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .output-console {
+            background: #020617;
+            border-radius: 10px;
+            border: 1px solid #1e293b;
+            overflow: hidden;
+        }
+
+        .console-header {
+            padding: 6px 10px;
+            background: #111827;
+            font-size: 13px;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .console-body {
+            padding: 10px;
+            font-size: 13px;
+            min-height: 80px;
+            color: #22c55e;
+            white-space: pre-wrap;
+        }
     </style>
 </head>
 
@@ -209,13 +245,17 @@
 
     <!-- MAIN -->
     <div class="main">
-
+        <div id="msgBox" style="display:none; margin-bottom:15px; padding:12px; border-radius:10px; font-size:14px; background:#eef2ff;
+    color:#3730a3;
+"></div>
         <!-- HEADER -->
         <div class="header">
-            <h2>🚀 Internship Assessment</h2>
+            <h2><i class="bi bi-rocket-takeoff"></i> Internship Assessment</h2>
 
             <div style="display:flex; gap:10px; align-items:center;">
-                <div class="toggle" onclick="toggleTheme()">🌙/☀️</div>
+                <div class="toggle" onclick="toggleTheme()">
+                    <i class="bi bi-moon"></i>
+                </div>
                 <div class="timer" id="timer">10:00</div>
             </div>
         </div>
@@ -259,137 +299,285 @@
                 <div th:if="${q.questionFormat.name() == 'TEXT'}">
                     <textarea th:name="${'q_' + q.questionId}" rows="4"></textarea>
                 </div>
+
                 <div th:if="${q.questionFormat.name() == 'CODE'}">
 
                     <!-- Hidden textarea for backend -->
                     <textarea th:name="${'q_' + q.questionId}" rows="8" class="hidden-code"></textarea>
 
                     <!-- Monaco Editor Container -->
+                    <div style="font-size:13px;color:#888;margin-top:10px;">
+                        <i class="bi bi-code-slash"></i> Code Editor
+                    </div>
                     <div class="editor" th:id="${'editor_' + q.questionId}"></div>
+                    <div class="run-box">
+                        <button type="button" class="run-btn" onclick="runCode(this)">
+                            <i class="bi bi-play-fill"></i> Run Code
+                        </button>
 
+                        <div class="output-console">
+                            <div class="console-header">
+                                <i class="bi bi-terminal"></i> Output
+                            </div>
+                            <pre class="console-body">Click "Run Code" to execute...</pre>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="submit-box">
-                <button type="submit" class="btn-submit">🚀 Submit Assessment</button>
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-check-circle"></i> Submit Assessment
+                </button>
             </div>
 
         </form>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+
     <script>
-        // THEME TOGGLE
+
+        // =========================
+        // GLOBAL MESSAGE
+        // =========================
+        function showMsg(text, type = "info") {
+            let box = document.getElementById("msgBox");
+            box.style.display = "block";
+
+            if (type === "error") {
+                box.style.background = "#fee2e2";
+                box.style.color = "#991b1b";
+            } else if (type === "success") {
+                box.style.background = "#dcfce7";
+                box.style.color = "#166534";
+            } else {
+                box.style.background = "#eef2ff";
+                box.style.color = "#3730a3";
+            }
+
+            box.innerText = text;
+
+            setTimeout(() => box.style.display = "none", 4000);
+        }
+
+
+        // =========================
+        // THEME TOGGLE (WITH MONACO)
+        // =========================
         function toggleTheme() {
             document.body.classList.toggle("light");
-            localStorage.setItem("theme", document.body.classList.contains("light") ? "light" : "dark");
+
+            let isLight = document.body.classList.contains("light");
+
+            localStorage.setItem("theme", isLight ? "light" : "dark");
+
+            if (window.monaco) {
+                monaco.editor.setTheme(isLight ? "vs" : "vs-dark");
+            }
         }
 
         if (localStorage.getItem("theme") === "light") {
             document.body.classList.add("light");
         }
 
-        // TIMER + AUTO SUBMIT
+
+        // =========================
+        // TIMER + SAFE SUBMIT
+        // =========================
         let time = 600;
 
         const timerInterval = setInterval(() => {
-            let min = Math.floor(time / 60);
-            let sec = time % 60;
+
+            let m = Math.floor(time / 60);
+            let s = time % 60;
 
             document.getElementById("timer").innerText =
-                `${min}:${sec < 10 ? "0" : ""}${sec}`;
+                `${m}:${s < 10 ? "0" : ""}${s}`;
+
+            if (time === 60) {
+                showMsg("⚠️ Only 1 minute left!", "error");
+            }
 
             if (time <= 0) {
                 clearInterval(timerInterval);
-                alert("⏳ Time's up! Submitting your test...");
+
+                showMsg("⏳ Time's up! Submitting...", "error");
+
                 syncEditors();
-                document.querySelector("form").submit();
+
+                setTimeout(() => {
+                    document.querySelector("form").submit();
+                }, 1000);
             }
 
             time--;
+
         }, 1000);
 
 
-        // NAVIGATION
+        // =========================
+        // QUESTION NAVIGATION
+        // =========================
         const questions = document.querySelectorAll(".question");
         const nav = document.getElementById("qNav");
 
         questions.forEach((q, i) => {
+
             let div = document.createElement("div");
             div.innerText = i + 1;
 
             div.onclick = () => {
-                document.getElementById("q" + i).scrollIntoView({ behavior: "smooth" });
+                q.scrollIntoView({ behavior: "smooth" });
             };
 
             nav.appendChild(div);
         });
 
-        // PROGRESS TRACKING
+        // ACTIVE QUESTION HIGHLIGHT
+        window.addEventListener("scroll", () => {
+
+            let scrollPos = window.scrollY;
+
+            questions.forEach((q, i) => {
+
+                let offset = q.offsetTop - 120;
+
+                if (scrollPos >= offset) {
+                    nav.querySelectorAll("div").forEach(d => d.classList.remove("active"));
+                    nav.children[i].classList.add("active");
+                }
+            });
+        });
+
+
+        // =========================
+        // PROGRESS TRACKING (FIXED)
+        // =========================
         document.querySelectorAll("input, textarea").forEach(el => {
             el.addEventListener("change", updateProgress);
         });
 
         function updateProgress() {
-            let answered = 0;
+
+            let done = 0;
 
             questions.forEach((q, i) => {
-                let inputs = q.querySelectorAll("input:checked, textarea");
-                let filled = [...inputs].some(e => e.value);
+
+                let checked = q.querySelector("input:checked");
+                let text = q.querySelector("textarea:not(.hidden-code)");
+
+                let filled = false;
+
+                if (checked) filled = true;
+                if (text && text.value.trim()) filled = true;
 
                 if (filled) {
-                    answered++;
+                    done++;
                     nav.children[i].classList.add("answered");
                 }
             });
 
             document.getElementById("progress").style.width =
-                (answered / questions.length) * 100 + "%";
+                (done / questions.length) * 100 + "%";
         }
 
 
         // =========================
-        // MONACO EDITOR INTEGRATION
+        // MONACO EDITOR (FULL FIX)
         // =========================
         let editors = [];
 
-        require.config({ paths: { vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs" } });
+        require.config({
+            paths: {
+                vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
+            }
+        });
 
         require(["vs/editor/editor.main"], function () {
 
-            document.querySelectorAll(".editor").forEach((el, index) => {
+            document.querySelectorAll(".editor").forEach((el, i) => {
 
-                let textarea = el.previousElementSibling;
+                let textarea = el.parentElement.querySelector(".hidden-code");
 
                 let editor = monaco.editor.create(el, {
-                    value: "",
-                    language: "java", // change dynamically if needed
+                    value: "// Write your code here...",
+                    language: "java",
                     theme: document.body.classList.contains("light") ? "vs" : "vs-dark",
                     automaticLayout: true,
                     fontSize: 14,
                     minimap: { enabled: false }
                 });
 
-                // sync editor -> textarea
                 editor.onDidChangeModelContent(() => {
                     textarea.value = editor.getValue();
                 });
 
                 editors.push(editor);
             });
+
         });
 
-        // Sync before submit
+
+        // =========================
+        // SYNC EDITORS BEFORE SUBMIT
+        // =========================
         function syncEditors() {
-            document.querySelectorAll(".editor").forEach((el, index) => {
-                let textarea = el.previousElementSibling;
-                textarea.value = editors[index].getValue();
+            editors.forEach((editor, i) => {
+                let textarea = document.querySelectorAll(".hidden-code")[i];
+                if (editor && textarea) {
+                    textarea.value = editor.getValue();
+                }
             });
         }
 
         document.querySelector("form").addEventListener("submit", syncEditors);
 
+        function runCode(btn) {
+
+            let container = btn.closest(".card");
+
+            // get editor index
+            let index = [...document.querySelectorAll(".run-btn")].indexOf(btn);
+
+            let editor = editors[index];
+
+            let code = editor.getValue();
+
+            let outputBox = container.querySelector(".console-body");
+
+            outputBox.innerText = "Running...";
+
+            // 🔥 FAKE COMPILER (SIMULATION)
+            setTimeout(() => {
+
+                try {
+
+                    // simple simulation
+                    if (code.includes("System.out.println")) {
+
+                        let match = code.match(/System\.out\.println\((.*)\)/);
+
+                        if (match) {
+                            outputBox.innerText = match[1].replace(/["']/g, "");
+                        } else {
+                            outputBox.innerText = "Code executed successfully";
+                        }
+
+                    } else if (code.trim() === "") {
+                        outputBox.innerText = "⚠️ No code to run";
+                    } else {
+                        outputBox.innerText = "✅ Code compiled (simulation)";
+                    }
+
+                } catch (e) {
+                    outputBox.innerText = "❌ Error in code";
+                }
+
+            }, 800);
+        }
     </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+
 </body>
 
 </html>

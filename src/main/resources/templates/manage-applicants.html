@@ -283,6 +283,10 @@
                     🧪 Create Test
                 </a>
 
+<a th:href="@{'/admin/final-selection?internshipId=' + ${i.id}}"
+   class="btn-action">
+   🎯 Final Selection
+</a>
             </div>
 
             <div th:if="${#lists.isEmpty(applications)}" class="alert alert-info">

@@ -468,7 +468,22 @@
 
 	</div>
 	<div class="main">
+<h3>🏆 Achievements</h3>
 
+<div th:each="app : ${completedInternships}">
+    
+    <div>
+        <p th:text="${app.internship.title}"></p>
+
+        <span th:if="${app.badgeGiven}">🏆 Badge Earned</span>
+
+        <a th:if="${app.certificateGenerated}" 
+           th:href="@{'/download-cert?internshipId=' + ${app.internship.id}}">
+           Download Certificate
+        </a>
+    </div>
+
+</div>
 		<div class="profile-card">
 
 			<!-- ================= PROFILE HEADER ================= -->

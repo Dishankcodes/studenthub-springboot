@@ -8,12 +8,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.entity.InternshipApplication;
 import com.example.demo.entity.InternshipTest;
+import com.example.demo.entity.InternshipTestAttempt;
 import com.example.demo.entity.Internships;
 import com.example.demo.entity.QuizQuestion;
+import com.example.demo.enums.ApplicationStatus;
 import com.example.demo.enums.QuestionFormat;
 import com.example.demo.enums.QuizQuestionType;
+import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.InternshipRepository;
+import com.example.demo.repository.InternshipTestAttemptRepository;
 import com.example.demo.repository.InternshipTestRepository;
 import com.example.demo.repository.QuizQuestionRepository;
 
@@ -28,6 +33,12 @@ public class AdminInternshipTestController {
 
     @Autowired
     private QuizQuestionRepository questionRepo;
+    
+    @Autowired
+    private  InternshipTestAttemptRepository attemptRepo;
+    
+    @Autowired
+    private ApplicationRepository applicationRepo;
 
     @GetMapping("/admin-internship-test")
     public String openTest(
@@ -63,14 +74,20 @@ public class AdminInternshipTestController {
     @PostMapping("/admin-internship-test/bulk-save")
     public String bulkSave(
             @RequestParam Integer internshipId,
-            @RequestParam List<String> questionText,
-            @RequestParam List<String> format,
+            @RequestParam(required = false) List<String> questionText,
+            @RequestParam(required = false) List<String> format,
             @RequestParam(required = false) List<String> optionA,
             @RequestParam(required = false) List<String> optionB,
             @RequestParam(required = false) List<String> optionC,
             @RequestParam(required = false) List<String> optionD,
             @RequestParam(required = false) List<String> correctOption,
             RedirectAttributes ra) {
+
+        // ❌ no questions generated
+        if (questionText == null || questionText.isEmpty()) {
+            ra.addFlashAttribute("error", "⚠️ Please generate questions before saving");
+            return "redirect:/admin-internship-test?internshipId=" + internshipId;
+        }
 
         Internships internship = internshipRepo.findById(internshipId).orElse(null);
 
@@ -258,4 +275,51 @@ public class AdminInternshipTestController {
 
         return "redirect:/admin-internship-test?internshipId=" + internshipId;
     }
+    
+    @GetMapping("/admin-test-results")
+    public String testResults(@RequestParam Integer internshipId, Model model) {
+
+        List<InternshipTestAttempt> attempts =
+                attemptRepo.findByInternship_Id(internshipId);
+
+        model.addAttribute("attempts", attempts);
+        model.addAttribute("internshipId", internshipId);
+
+        return "admin-test-results";
+    }
+    
+    @PostMapping("/admin-test-result/update")
+    public String updateTestResult(@RequestParam Integer attemptId,
+                                   @RequestParam String action,
+                                   @RequestParam Integer internshipId) {
+
+        InternshipTestAttempt attempt =
+                attemptRepo.findById(attemptId).orElse(null);
+
+        if (attempt == null) {
+            return "redirect:/admin-test-results?internshipId=" + internshipId;
+        }
+
+        InternshipApplication app =
+            applicationRepo.findByStudent_StudidAndInternship_Id(
+                attempt.getStudent().getStudid(),
+                internshipId
+            ).orElse(null);
+
+        if (app == null) {
+            return "redirect:/admin-test-results?internshipId=" + internshipId;
+        }
+
+        if ("pass".equals(action)) {
+            app.setStatus(ApplicationStatus.PASSED);
+        } else {
+            app.setStatus(ApplicationStatus.REJECTED);
+        }
+
+        applicationRepo.save(app);
+
+        return "redirect:/admin-test-results?internshipId=" + internshipId;
+    }
+    
+   
 }

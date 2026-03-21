@@ -2,7 +2,11 @@ package com.example.demo.entity;
 
 import java.time.LocalDate;
 
+import com.example.demo.enums.CertificateType;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -28,6 +32,10 @@ public class CertificateTemplate {
 	private String fontColor;
 	
 	private boolean active;
+	
+	@Enumerated(EnumType.STRING)
+	private CertificateType type;
+	
 	
 	private LocalDate createdAt;
 
@@ -56,6 +64,14 @@ public class CertificateTemplate {
 	}
 
 	
+
+	public CertificateType getType() {
+		return type;
+	}
+
+	public void setType(CertificateType type) {
+		this.type = type;
+	}
 
 	public String getSignatureImage() {
 		return signatureImage;

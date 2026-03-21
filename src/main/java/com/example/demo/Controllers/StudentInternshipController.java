@@ -330,26 +330,33 @@ public class StudentInternshipController {
 	        answerRepo.save(ans);
 	    }
 
-	    boolean passed = score >= test.getPassingMarks();
+	    double percentage = (score * 100.0) / total;
 
+	    boolean passed = percentage >= test.getPassingMarks();
+	    
+	    InternshipApplication app =
+	    	    applicationRepo.findByStudent_StudidAndInternship_Id(studentId, internshipId)
+	    	    .orElse(null);
+
+	    	if (app != null) {
+	    	    app.setStatus(ApplicationStatus.TEST_COMPLETED);
+	    	    applicationRepo.save(app);
+	    	}
 	    attempt.setScore(score);
 	    attempt.setTotalMarks(total);
 	    attempt.setPassed(passed);
 	    attempt.setSubmitted(true);
+	    attempt.setPercentage(percentage);
 
 	    attemptRepo.save(attempt);
 
 	    // 🎯 REAL PRODUCT MESSAGES
 	    if (passed) {
-	        ra.addFlashAttribute("msg",
-	                "🎉 Assessment completed successfully! You have cleared the test.\n" +
-	                "Our team will review your profile and contact you shortly.\n" +
-	                "You can also track updates in your dashboard.");
+	        ra.addFlashAttribute("success",
+	            "🎉 Congratulations! You have successfully cleared the assessment.");
 	    } else {
-	        ra.addFlashAttribute("msg",
-	                "✅ Assessment submitted.\n" +
-	                "Our team will review your responses and get back to you.\n" +
-	                "Keep checking your dashboard for updates.");
+	        ra.addFlashAttribute("error",
+	            "❌ You did not pass the assessment. You may contact the company for further steps.");
 	    }
 
 	    session.removeAttribute("testQuestions_" + internshipId);

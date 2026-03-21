@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.CertificateTemplate;
+import com.example.demo.enums.CertificateType;
 import com.example.demo.repository.CertificateTemplateRepository;
 
 @Controller
@@ -61,11 +62,12 @@ public class AdminDesignController {
 			@RequestParam(required = false) MultipartFile signatureImage,
 			@RequestParam String fontFamily,
 			@RequestParam String fontColor,
+			@RequestParam CertificateType type,
 			Model model) throws IOException {
 
 		CertificateTemplate template = new CertificateTemplate();
 		template.setName(name);
-
+		template.setType(type);
 		template.setBackgroundImage(
 				saveFile(backgroundImage, "certificate-templates"));
 
@@ -78,6 +80,7 @@ public class AdminDesignController {
 		template.setFontColor(fontColor);
 		template.setCreatedAt(LocalDate.now());
 		template.setActive(false);
+		
 		templateRepo.save(template);
 		return "redirect:/admin-design";
 	}

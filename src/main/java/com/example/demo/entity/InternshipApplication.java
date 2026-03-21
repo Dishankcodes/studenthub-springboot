@@ -42,6 +42,27 @@ public class InternshipApplication {
     @Column(length = 1000)
     private String coverLetter;
 
+    private boolean badgeGiven;
+    
+    private boolean certificateGenerated;
+    
+    
+	public boolean isBadgeGiven() {
+		return badgeGiven;
+	}
+
+	public void setBadgeGiven(boolean badgeGiven) {
+		this.badgeGiven = badgeGiven;
+	}
+
+	public boolean isCertificateGenerated() {
+		return certificateGenerated;
+	}
+
+	public void setCertificateGenerated(boolean certificateGenerated) {
+		this.certificateGenerated = certificateGenerated;
+	}
+
 	public Integer getId() {
 		return id;
 	}

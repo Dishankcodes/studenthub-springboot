@@ -155,6 +155,22 @@
             border-radius: 8px;
             border: 1px solid #ddd;
         }
+
+        .alert {
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
     </style>
 </head>
 
@@ -218,12 +234,16 @@
 
         <div class="detail-container">
 
-            <!-- HEADER -->
+            <!-- GLOBAL MESSAGES -->
+            <div th:if="${success}" class="alert success" th:text="${success}"></div>
+            <div th:if="${error}" class="alert error" th:text="${error}"></div>
+            <div th:if="${msg}" class="alert" style="background:#eef2ff;color:#3730a3;" th:text="${msg}"></div>
 
+            <!-- HEADER -->
             <div class="detail-header">
                 <h1 th:text="${internship.title}"></h1>
                 <p class="company">EduPlatform</p>
-                <p th:if="${app != null}" th:text="${app.status}"></p>
+
                 <div class="meta">
                     <span>
                         <i class="bi bi-geo-alt"></i>
@@ -241,24 +261,7 @@
                     </span>
                 </div>
             </div>
-            <div th:if="${app != null}" style="margin-bottom:15px;">
 
-                <div th:if="${app.status != null and app.status.name() == 'ACCEPTED'}"
-                    style="background:#22c55e;color:white;padding:15px;border-radius:12px;text-align:center;">
-                    🎉 Congratulations! You are selected!
-                </div>
-
-                <div th:if="${app.status != null and app.status.name() == 'PENDING'}"
-                    style="background:#f59e0b;color:white;padding:15px;border-radius:12px;text-align:center;">
-                    ⏳ Your application is under review
-                </div>
-
-                <div th:if="${app.status != null and app.status.name() == 'REJECTED'}"
-                    style="background:#ef4444;color:white;padding:15px;border-radius:12px;text-align:center;">
-                    ❌ Application rejected
-                </div>
-
-            </div>
             <!-- DESCRIPTION -->
             <div class="detail-section">
                 <h3>About the Internship</h3>
@@ -278,13 +281,12 @@
             <!-- SKILLS -->
             <div class="detail-section">
                 <h3>Required Skills</h3>
-
                 <div class="skills">
-                    <span th:each="skill : ${#strings.arraySplit(internship.skills, ',')}" th:text="${skill}">
-                    </span>
+                    <span th:each="skill : ${#strings.arraySplit(internship.skills, ',')}" th:text="${skill}"></span>
                 </div>
             </div>
 
+            <!-- ELIGIBILITY -->
             <div class="detail-section" th:if="${internship.requiredCourse != null}">
                 <h3>Eligibility</h3>
 
@@ -294,16 +296,24 @@
                 </p>
 
                 <a th:href="@{'/student-course-details?courseId=' + ${internship.requiredCourse.courseId}}"
-                    class="btn btn-warning mt-2">
+                    class="apply-btn">
                     Go to Course
                 </a>
             </div>
+
+            <!-- APPLY SECTION -->
             <div class="apply-box">
 
                 <!-- NOT APPLIED -->
                 <div th:if="${app == null}">
+
+                    <div class="alert" style="background:#eef2ff;color:#3730a3;">
+                        <i class="bi bi-info-circle"></i>
+                        You can apply for this internship. Make sure your profile is complete.
+                    </div>
+
                     <button class="apply-btn" onclick="openModal()">
-                        Apply Now 🚀
+                        <i class="bi bi-send"></i> Apply Now
                     </button>
                 </div>
 
@@ -311,45 +321,49 @@
                 <div th:if="${app != null}">
 
                     <!-- PENDING -->
-                    <button th:if="${app.status != null and app.status.name() == 'PENDING'}" class="apply-btn" disabled
-                        style="opacity:0.6;">
-                        ⏳ Under Review
-                    </button>
+                    <div th:if="${app.status.name() == 'PENDING'}" class="alert"
+                        style="background:#fef3c7;color:#92400e;">
+                        <i class="bi bi-hourglass-split"></i>
+                        Your application is under review. Please wait for updates.
+                    </div>
 
                     <!-- ACCEPTED -->
-                    <div th:if="${app.status != null and app.status.name() == 'ACCEPTED'}">
+                    <div th:if="${app.status.name() == 'ACCEPTED'}">
 
-                        <button class="apply-btn" style="background:#22c55e;">
-                            🎉 Selected
-                        </button>
-
-                        <br><br>
+                        <div class="alert success">
+                            <i class="bi bi-check-circle"></i>
+                            Congratulations! You have been shortlisted 🎉
+                        </div>
 
                         <a th:href="@{'/student/offer-letter?appId=' + ${app.id}}" class="apply-btn"
                             style="background:#0ea5e9;">
-                            📄 Download Offer Letter
+                            <i class="bi bi-file-earmark-text"></i> Download Offer Letter
                         </a>
 
                     </div>
 
                     <!-- REJECTED -->
-                    <button th:if="${app.status != null and app.status.name() == 'REJECTED'}" class="apply-btn"
-                        style="background:#ef4444;">
-                        ❌ Rejected
-                    </button>
+                    <div th:if="${app.status.name() == 'REJECTED'}" class="alert error">
+                        <i class="bi bi-x-circle"></i>
+                        Unfortunately, your application was not selected. Keep trying 💪
+                    </div>
 
                 </div>
-
             </div>
-            <div id="applyModal" class="modal">
 
+            <!-- APPLY MODAL -->
+            <div id="applyModal" class="modal">
                 <div class="modal-content">
 
                     <span class="close-btn" id="closeModal">&times;</span>
 
                     <h2>Apply for Internship</h2>
 
-                    <!-- 🔥 IMPORT BUTTON -->
+                    <p style="font-size:13px;color:#555;margin-bottom:10px;">
+                        <i class="bi bi-info-circle"></i>
+                        Make sure your profile is complete. Resume is recommended.
+                    </p>
+
                     <button type="button" class="import-btn" onclick="importProfile()">
                         Import from Profile
                     </button>
@@ -382,95 +396,76 @@
                             <label>Cover Letter</label>
                             <textarea name="coverLetter"></textarea>
                         </div>
-                        <p style="font-size:12px; color:#888;">
-                            You can import your profile or edit details manually
-                        </p>
-                        <button type="submit" class="apply-btn">Submit</button>
 
+                        <button type="submit" class="apply-btn">Submit</button>
                     </form>
 
                 </div>
             </div>
 
+            <!-- TEST SECTION -->
             <div th:if="${app != null and app.status.name() == 'ACCEPTED'}">
 
                 <!-- NOT ATTEMPTED -->
                 <div th:if="${testAttempt == null}">
-                    <button onclick="startTestConfirm(this)" th:data-id="${internship.id}" class="btn btn-main">
-                        🚀 Start Test
+                    <button onclick="startTestConfirm(this)" th:data-id="${internship.id}" class="apply-btn">
+                        <i class="bi bi-play-circle"></i> Start Assessment
                     </button>
                 </div>
 
                 <!-- FAILED -->
-                <div th:if="${testAttempt != null and !testAttempt.passed}">
-                    ❌ You did not pass the test
+                <div th:if="${testAttempt != null and !testAttempt.passed}" class="alert error">
+                    <i class="bi bi-x-octagon"></i>
+                    You did not pass the assessment.<br>
+                    You may contact the company for further clarification.
                 </div>
 
                 <!-- PASSED -->
                 <div th:if="${testAttempt != null and testAttempt.passed}">
-                    ✅ Test Cleared 🎉
-                </div>
 
-                <div th:if="${testAttempt != null and !testAttempt.submitted}">
-                    Continue Test
+                    <a th:href="@{'/student/next-step?internshipId=' + ${internship.id}}" class="apply-btn"
+                        style="margin-bottom:10px;">
+                        <i class="bi bi-arrow-right-circle"></i> View Next Steps
+                    </a>
+
+                    <div class="alert success">
+                        <i class="bi bi-trophy"></i>
+                        Congratulations! You have cleared the test 🎉
+                    </div>
+
                 </div>
 
             </div>
+
         </div>
     </div>
 
-    a
+
+
 
 
     <script>
         function openModal() {
             document.getElementById("applyModal").style.display = "block";
         }
-    </script>
-    <!-- ===== SCRIPT ===== -->
-    <script>
-        const sidebar = document.getElementById("sidebar");
-        const toggle = document.getElementById("toggle");
-        const icon = toggle.querySelector("i");
-
-        toggle.addEventListener("click", () => {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle("mobile-show");
-            } else {
-                sidebar.classList.toggle("collapsed");
-                icon.classList.toggle("bi-chevron-right");
-                icon.classList.toggle("bi-chevron-left");
-            }
-        });
 
         function importProfile() {
-
             document.getElementById("fullName").value = "[[${loggedStudent.fullname}]]";
             document.getElementById("email").value = "[[${loggedStudent.email}]]";
         }
-        document.getElementById("openApplyModal")?.addEventListener("click", () => {
-            modal.style.display = "block";
-
-            importProfile(); // 🔥 auto fill
-        });
 
         const modal = document.getElementById("applyModal");
 
-        // CLOSE
         document.getElementById("closeModal").onclick = () => {
             modal.style.display = "none";
         };
 
-        // CLOSE OUTSIDE CLICK
         window.onclick = function (e) {
             if (e.target == modal) {
                 modal.style.display = "none";
             }
         };
 
-    </script>
-
-    <script>
         function startTestConfirm(btn) {
 
             let id = btn.getAttribute("data-id");
@@ -491,3 +486,4 @@
     </script>
 
 </body>
+</html>

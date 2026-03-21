@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div class="container">
+
+    <h2>🧪 Test Results</h2>
+
+    <div th:each="a : ${attempts}" class="card">
+
+        <h3 th:text="${a.student.fullname}"></h3>
+
+        <p>Score: <b th:text="${a.score}"></b></p>
+        <p>Percentage: <b th:text="${a.percentage} + '%'"></b></p>
+
+        <span th:if="${a.passed}" style="color:green;">PASSED</span>
+        <span th:if="${!a.passed}" style="color:red;">FAILED</span>
+
+        <form action="/admin-test-result/update" method="post">
+
+            <input type="hidden" name="attemptId" th:value="${a.id}">
+            <input type="hidden" name="internshipId" th:value="${internshipId}">
+
+            <button name="action" value="pass">✅ Pass</button>
+            <button name="action" value="fail">❌ Fail</button>
+
+        </form>
+
+    </div>
+
+</div>
+</body>
+</html>

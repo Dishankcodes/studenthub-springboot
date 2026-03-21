@@ -28,6 +28,16 @@ public class InternshipTestAttempt {
 
 	    private boolean submitted;
 
+	    private double percentage;
+	    
+		public double getPercentage() {
+			return percentage;
+		}
+
+		public void setPercentage(double percentage) {
+			this.percentage = percentage;
+		}
+
 		public Integer getId() {
 			return id;
 		}
@@ -83,6 +93,9 @@ public class InternshipTestAttempt {
 		public void setSubmitted(boolean submitted) {
 			this.submitted = submitted;
 		}
+
+		
+		
 	    
 	    
 }

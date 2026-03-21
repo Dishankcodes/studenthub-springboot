@@ -5,104 +5,106 @@
     <meta charset="UTF-8">
     <title>Internship Test Builder</title>
 
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
+        :root {
+            --bg: #0b0b1f;
+            --card: rgba(255, 255, 255, 0.06);
+            --border: rgba(255, 255, 255, 0.1);
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+        }
+
         body {
             background: linear-gradient(135deg, #0b0b1f, #14142f);
+            font-family: "Inter", sans-serif;
             color: #fff;
-            font-family: Poppins;
         }
 
-        /* LAYOUT */
+        /* better spacing */
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: auto;
-            padding: 20px;
+            padding: 30px
         }
 
-        /* HEADER */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .card {
+            background: var(--card);
+            padding: 22px;
+            border-radius: 16px;
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
             margin-bottom: 20px;
         }
 
-        .btn {
-            padding: 10px 16px;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-back {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .btn-main {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-        }
-
-        .btn-success {
-            background: #22c55e;
-        }
-
-        /* GRID */
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        /* CARD */
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-
-        /* INPUT */
+        /* inputs */
         input,
         textarea,
         select {
             width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border-radius: 10px;
-            border: none;
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-        }
-
-        /* QUESTION */
-        .question-item {
-            background: rgba(255, 255, 255, 0.05);
             padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: #020617;
+            color: #fff;
+            margin-top: 10px;
         }
 
-        .badge {
-            font-size: 11px;
-            padding: 3px 8px;
-            border-radius: 8px;
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
         }
 
-        .badge-mcq {
-            background: #0ea5e9;
+        /* buttons */
+        .btn {
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .badge-text {
-            background: #f59e0b;
+        .btn-main {
+            background: linear-gradient(135deg, var(--primary), var(--secondary))
         }
 
-        .badge-code {
-            background: #22c55e;
+        .btn-success {
+            background: #22c55e
+        }
+
+        .btn-back {
+            background: rgba(255, 255, 255, 0.1)
+        }
+
+        .btn:hover {
+            transform: scale(1.05)
+        }
+
+        /* toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #020617;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            display: none;
+        }
+
+        /* loader */
+        .loader {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
-
 </head>
 
 <body>
@@ -117,16 +119,18 @@
                 <input type="hidden" name="internshipId" th:value="${internship.id}">
                 <button class="btn btn-success">✅ Confirm Test</button>
             </form>
-        </div>
 
-        <div class="grid">
+        </div>
+       <div th:if="${error}" class="toast" style="display:block;border-color:#ef4444;" th:text="${error}"></div>
+<div th:if="${msg}" class="toast" style="display:block;border-color:#22c55e;" th:text="${msg}"></div>
+  <div class="grid">
 
             <!-- LEFT SIDE -->
             <div>
 
                 <!-- TEST SETTINGS -->
                 <div class="card">
-                    <h3>⚙️ Test Settings</h3>
+                    <h3><i class="bi bi-gear"></i> Test Settings</h3>
 
                     <form method="post" th:action="@{/admin-internship-test/update}">
 
@@ -135,8 +139,8 @@
                         <label>Duration (minutes)</label>
                         <input type="number" name="duration" th:value="${test.durationMinutes}">
 
-                        <label>Passing Marks</label>
-                        <input type="number" name="passingMarks" th:value="${test.passingMarks}">
+                        <label>Passing Percentage (%)</label>
+						<input type="number" name="passingMarks" th:value="${test.passingMarks}" min="1" max="100">
 
                         <label>Questions to Show</label>
                         <input type="number" name="totalQuestions" th:value="${test.totalQuestionsToShow}">
@@ -148,7 +152,7 @@
 
                 <!-- ADD QUESTION -->
                 <div class="card">
-                    <h3>➕ Add Question</h3>
+                    <h3><i class="bi bi-plus-circle"></i> Add Question</h3>
 
                     <form th:action="@{/admin-internship-test/add-question}" method="post">
 
@@ -184,7 +188,7 @@
                 </div>
 
                 <div class="card">
-                    <h3>🧠 Bulk Question Generator</h3>
+                    <h3><i class="bi bi-lightning"></i> Bulk Question Generator</h3>
 
                     <label>Total Questions</label>
                     <input type="number" id="totalQ">
@@ -200,16 +204,24 @@
 
                     <br><br>
 
-                    <!-- 🔥 THIS IS YOUR GENERATE BUTTON -->
-                    <button class="btn btn-main" onclick="generate()">⚡ Generate Questions</button>
+                    <button class="btn btn-main" type="button" onclick="generate()">
+                        <i class="bi bi-lightning-charge"></i> Generate Questions
+                    </button>
 
+                    <div class="loader" id="loader">
+                        ⏳ Generating questions... Please wait (10s)
+                    </div>
+
+                    <div class="toast" id="toast"></div>
                     <form method="post" action="/admin-internship-test/bulk-save">
                         <input type="hidden" name="internshipId" th:value="${internship.id}">
 
                         <div id="bulkContainer"></div>
 
                         <br>
-                        <button class="btn btn-success">💾 Save All Questions</button>
+                        <button class="btn btn-success" type="button" onclick="validateBulkSave()">
+    <i class="bi bi-save"></i> Save All Questions
+</button>
                     </form>
                 </div>
             </div>
@@ -256,9 +268,35 @@
     </div>
 
     <script>
+
+        // save scroll before submit
+        document.querySelectorAll("form").forEach(f => {
+            f.addEventListener("submit", () => {
+                localStorage.setItem("scrollY", window.scrollY);
+            });
+        });
+
+        // restore scroll
+        window.onload = () => {
+            let y = localStorage.getItem("scrollY");
+            if (y) {
+                window.scrollTo(0, y);
+                localStorage.removeItem("scrollY");
+            }
+        }
         function toggleFields(select) {
             let mcq = document.querySelector(".mcq");
             mcq.style.display = (select.value === "MCQ") ? "block" : "none";
+        }
+
+
+        function showToast(msg, type = "success") {
+            let toast = document.getElementById("toast");
+            toast.innerText = msg;
+            toast.style.display = "block";
+            toast.style.borderColor = type === "error" ? "#ef4444" : "#22c55e";
+
+            setTimeout(() => toast.style.display = "none", 3000);
         }
 
         function generate() {
@@ -268,14 +306,36 @@
             let code = +document.getElementById("code").value || 0;
             let text = +document.getElementById("text").value || 0;
 
-            if (mcq + code + text !== total) {
-                alert("❌ Total mismatch!");
+            // ❌ VALIDATION
+            if (!total || total <= 0) {
+                showToast("Enter total questions ❌", "error");
                 return;
             }
 
+            if (mcq + code + text !== total) {
+                showToast("MCQ + Code + Text must equal Total ❌", "error");
+                return;
+            }
+
+            if (mcq > total) {
+                showToast("MCQ cannot exceed total ❌", "error");
+                return;
+            }
+
+            // 🔥 LOADER
+            document.getElementById("loader").style.display = "block";
+
+            setTimeout(() => {
+                createQuestions(mcq, code, text);
+                document.getElementById("loader").style.display = "none";
+                showToast("Questions generated successfully 🚀");
+            }, 10000); // 10 sec
+        }
+
+        function createQuestions(mcq, code, text) {
+
             let container = document.getElementById("bulkContainer");
             container.innerHTML = "";
-
             let index = 0;
 
             function create(type) {
@@ -294,24 +354,43 @@
 
                 <select name="correctOption">
                     <option value="">Correct Option</option>
-                    <option>A</option>
-                    <option>B</option>
-                    <option>C</option>
-                    <option>D</option>
+                    <option>A</option><option>B</option><option>C</option><option>D</option>
                 </select>
-            ` : ''}
-        </div>
-        `;
+            `: ''}
+        </div>`;
             }
 
-            for (let i = 0; i < mcq; i++, index++)
-                container.innerHTML += create("MCQ");
+            for (let i = 0; i < mcq; i++, index++) container.innerHTML += create("MCQ");
+            for (let i = 0; i < code; i++, index++) container.innerHTML += create("CODE");
+            for (let i = 0; i < text; i++, index++) container.innerHTML += create("TEXT");
+        }
+        
+        function validateBulkSave(){
 
-            for (let i = 0; i < code; i++, index++)
-                container.innerHTML += create("CODE");
+            let container = document.getElementById("bulkContainer");
 
-            for (let i = 0; i < text; i++, index++)
-                container.innerHTML += create("TEXT");
+            // ❌ no generated questions
+            if(container.children.length === 0){
+                showToast("⚠️ Please generate questions before saving","error");
+                return;
+            }
+
+            // ❌ check empty question text
+            let empty = false;
+
+            container.querySelectorAll("textarea[name='questionText']").forEach(t=>{
+                if(!t.value.trim()){
+                    empty = true;
+                }
+            });
+
+            if(empty){
+                showToast("⚠️ Please fill all generated questions","error");
+                return;
+            }
+
+            // ✅ submit form manually
+            container.closest("form").submit();
         }
     </script>
 </body>

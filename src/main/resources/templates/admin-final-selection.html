@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div class="container">
+
+    <h2>🎯 Final Selection</h2>
+
+    <div th:each="app : ${applications}" class="card">
+
+        <h3 th:text="${app.student.fullname}"></h3>
+        <p th:text="${app.student.email}"></p>
+
+        <p>Status: <b th:text="${app.status}"></b></p>
+
+        <!-- SELECT -->
+        <form action="/admin/select-student" method="post">
+            <input type="hidden" name="appId" th:value="${app.id}">
+            <button>✅ Select</button>
+        </form>
+
+        <!-- BADGE -->
+        <form action="/admin/give-badge" method="post">
+            <input type="hidden" name="appId" th:value="${app.id}">
+            <button th:if="${!app.badgeGiven}">🏆 Give Badge</button>
+            <span th:if="${app.badgeGiven}">🏆 Badge Given</span>
+        </form>
+
+        <!-- CERTIFICATE -->
+        <form action="/admin/generate-internship-certificate" method="post">
+            <input type="hidden" name="appId" th:value="${app.id}">
+            <button th:if="${!app.certificateGenerated}">📄 Generate Certificate</button>
+            <span th:if="${app.certificateGenerated}">✅ Certificate Generated</span>
+        </form>
+
+    </div>
+
+</div>
+</body>
+</html>

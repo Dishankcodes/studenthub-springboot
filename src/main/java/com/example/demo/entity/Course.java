@@ -43,8 +43,6 @@ public class Course {
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("position ASC")
 	private Set<CourseModule> modules = new LinkedHashSet<>();
-
-	
 	
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderColumn(name = "position")

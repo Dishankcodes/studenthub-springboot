@@ -1,0 +1,99 @@
+package com.example.demo.entity;
+
+import java.time.LocalDate;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "internship_certificate")
+public class InternshipCertificate {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+
+	@ManyToOne
+	@JoinColumn(name = "student_id")
+	private Student student;
+
+	@ManyToOne
+	private Internships internship;
+
+	 
+	@ManyToOne
+	@JoinColumn(name = "template_id")
+	private CertificateTemplate template;
+
+	@Column(unique = true, nullable = false)
+	private String certificateNumber;
+
+	private LocalDate issuedAt;
+
+	private String pdfPath;
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
+	}
+
+
+	public String getCertificateNumber() {
+		return certificateNumber;
+	}
+
+	public void setCertificateNumber(String certificateNumber) {
+		this.certificateNumber = certificateNumber;
+	}
+
+	public LocalDate getIssuedAt() {
+		return issuedAt;
+	}
+
+	public void setIssuedAt(LocalDate issuedAt) {
+		this.issuedAt = issuedAt;
+	}
+
+	public String getPdfPath() {
+		return pdfPath;
+	}
+
+	public void setPdfPath(String pdfPath) {
+		this.pdfPath = pdfPath;
+	}
+
+	public CertificateTemplate getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(CertificateTemplate template) {
+		this.template = template;
+	}
+
+	public Internships getInternship() {
+		return internship;
+	}
+
+	public void setInternship(Internships internship) {
+		this.internship = internship;
+	}
+
+	
+}

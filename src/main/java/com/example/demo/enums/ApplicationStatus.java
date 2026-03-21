@@ -2,6 +2,11 @@ package com.example.demo.enums;
 
 public enum ApplicationStatus {
     PENDING,
+    APPLIED,
     ACCEPTED,
-    REJECTED
+    REJECTED,
+    TEST_COMPLETED,
+    PASSED,
+    SELECTED,
+    COMPLETED
 }
