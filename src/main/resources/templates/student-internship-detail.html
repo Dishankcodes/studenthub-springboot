@@ -396,9 +396,9 @@
 
                 <!-- NOT ATTEMPTED -->
                 <div th:if="${testAttempt == null}">
-                    <a th:href="@{'/student/test/start?internshipId=' + ${internship.id}}" class="apply-btn">
-                        🧪 Give Test
-                    </a>
+                    <button onclick="startTestConfirm(this)" th:data-id="${internship.id}" class="btn btn-main">
+                        🚀 Start Test
+                    </button>
                 </div>
 
                 <!-- FAILED -->
@@ -411,9 +411,15 @@
                     ✅ Test Cleared 🎉
                 </div>
 
+                <div th:if="${testAttempt != null and !testAttempt.submitted}">
+                    Continue Test
+                </div>
+
             </div>
         </div>
     </div>
+
+    a
 
 
     <script>
@@ -436,8 +442,7 @@
                 icon.classList.toggle("bi-chevron-left");
             }
         });
-    </script>
-    <script>
+
         function importProfile() {
 
             document.getElementById("fullName").value = "[[${loggedStudent.fullname}]]";
@@ -448,8 +453,7 @@
 
             importProfile(); // 🔥 auto fill
         });
-    </script>
-    <script>
+
         const modal = document.getElementById("applyModal");
 
         // CLOSE
@@ -465,4 +469,25 @@
         };
 
     </script>
+
+    <script>
+        function startTestConfirm(btn) {
+
+            let id = btn.getAttribute("data-id");
+
+            let confirmBox = confirm(
+                "⚠️ IMPORTANT INSTRUCTIONS\n\n" +
+                "• This test is time-based\n" +
+                "• Do NOT refresh the page\n" +
+                "• Switching tabs may be tracked\n" +
+                "• No cheating allowed\n\n" +
+                "Are you sure you want to start?"
+            );
+
+            if (confirmBox) {
+                window.location.href = "/student/test/start?internshipId=" + id;
+            }
+        }
+    </script>
+
 </body>

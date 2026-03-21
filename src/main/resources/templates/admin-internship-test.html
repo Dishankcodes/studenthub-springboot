@@ -113,7 +113,10 @@
         <div class="header">
             <a th:href="@{/manage-internships}" class="btn btn-back">⬅ Back</a>
             <h2 th:text="${internship.title} + ' Test Builder'"></h2>
-            <button class="btn btn-success">✅ Confirm Test</button>
+            <form th:action="@{/admin-internship-test/confirm}" method="post">
+                <input type="hidden" name="internshipId" th:value="${internship.id}">
+                <button class="btn btn-success">✅ Confirm Test</button>
+            </form>
         </div>
 
         <div class="grid">
@@ -125,7 +128,7 @@
                 <div class="card">
                     <h3>⚙️ Test Settings</h3>
 
-                    <form method="post" th:action="@{/admin/internship/test/update}">
+                    <form method="post" th:action="@{/admin-internship-test/update}">
 
                         <input type="hidden" name="internshipId" th:value="${internship.id}">
 
@@ -147,7 +150,7 @@
                 <div class="card">
                     <h3>➕ Add Question</h3>
 
-                    <form th:action="@{/admin/internship/test/add-question}" method="post">
+                    <form th:action="@{/admin-internship-test/add-question}" method="post">
 
                         <input type="hidden" name="internshipId" th:value="${internship.id}">
 
@@ -180,6 +183,35 @@
                     </form>
                 </div>
 
+                <div class="card">
+                    <h3>🧠 Bulk Question Generator</h3>
+
+                    <label>Total Questions</label>
+                    <input type="number" id="totalQ">
+
+                    <label>MCQ Count</label>
+                    <input type="number" id="mcq">
+
+                    <label>Code Count</label>
+                    <input type="number" id="code">
+
+                    <label>Text Count</label>
+                    <input type="number" id="text">
+
+                    <br><br>
+
+                    <!-- 🔥 THIS IS YOUR GENERATE BUTTON -->
+                    <button class="btn btn-main" onclick="generate()">⚡ Generate Questions</button>
+
+                    <form method="post" action="/admin-internship-test/bulk-save">
+                        <input type="hidden" name="internshipId" th:value="${internship.id}">
+
+                        <div id="bulkContainer"></div>
+
+                        <br>
+                        <button class="btn btn-success">💾 Save All Questions</button>
+                    </form>
+                </div>
             </div>
 
             <!-- RIGHT SIDE -->
@@ -208,7 +240,7 @@
 
                         <br><br>
 
-                        <a th:href="@{'/admin/internship/test/delete?questionId=' + ${q.questionId} + '&internshipId=' + ${internship.id}}"
+                        <a th:href="@{'/admin-internship-test/delete?questionId=' + ${q.questionId} + '&internshipId=' + ${internship.id}}"
                             class="btn btn-back">
                             Delete
                         </a>
@@ -228,8 +260,60 @@
             let mcq = document.querySelector(".mcq");
             mcq.style.display = (select.value === "MCQ") ? "block" : "none";
         }
-    </script>
 
+        function generate() {
+
+            let total = +document.getElementById("totalQ").value;
+            let mcq = +document.getElementById("mcq").value || 0;
+            let code = +document.getElementById("code").value || 0;
+            let text = +document.getElementById("text").value || 0;
+
+            if (mcq + code + text !== total) {
+                alert("❌ Total mismatch!");
+                return;
+            }
+
+            let container = document.getElementById("bulkContainer");
+            container.innerHTML = "";
+
+            let index = 0;
+
+            function create(type) {
+                return `
+        <div class="question-item">
+            <h4>Q${index + 1} (${type})</h4>
+
+            <textarea name="questionText" placeholder="Enter question"></textarea>
+            <input type="hidden" name="format" value="${type}">
+
+            ${type === "MCQ" ? `
+                <input name="optionA" placeholder="Option A">
+                <input name="optionB" placeholder="Option B">
+                <input name="optionC" placeholder="Option C">
+                <input name="optionD" placeholder="Option D">
+
+                <select name="correctOption">
+                    <option value="">Correct Option</option>
+                    <option>A</option>
+                    <option>B</option>
+                    <option>C</option>
+                    <option>D</option>
+                </select>
+            ` : ''}
+        </div>
+        `;
+            }
+
+            for (let i = 0; i < mcq; i++, index++)
+                container.innerHTML += create("MCQ");
+
+            for (let i = 0; i < code; i++, index++)
+                container.innerHTML += create("CODE");
+
+            for (let i = 0; i < text; i++, index++)
+                container.innerHTML += create("TEXT");
+        }
+    </script>
 </body>
 
 </html>

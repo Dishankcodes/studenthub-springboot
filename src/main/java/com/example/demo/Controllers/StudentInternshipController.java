@@ -1,6 +1,7 @@
 package com.example.demo.Controllers;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,9 @@ import com.example.demo.entity.InternshipTestAttempt;
 import com.example.demo.entity.Internships;
 import com.example.demo.entity.QuizQuestion;
 import com.example.demo.entity.Student;
+import com.example.demo.entity.TestAnswer;
 import com.example.demo.enums.ApplicationStatus;
+import com.example.demo.enums.QuestionFormat;
 import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.EnrollmentRepository;
 import com.example.demo.repository.InternshipRepository;
@@ -28,6 +31,7 @@ import com.example.demo.repository.InternshipTestAttemptRepository;
 import com.example.demo.repository.InternshipTestRepository;
 import com.example.demo.repository.QuizQuestionRepository;
 import com.example.demo.repository.StudentRepository;
+import com.example.demo.repository.TestAnswerRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -54,6 +58,9 @@ public class StudentInternshipController {
 	
 	@Autowired
 	private InternshipTestRepository testRepo;
+	
+	@Autowired
+	private TestAnswerRepository answerRepo;
 
 	@GetMapping("/student-internships")
 	public String studentInternships(Model model, HttpSession session) {
@@ -184,7 +191,9 @@ public class StudentInternshipController {
 	}
 
 	@GetMapping("/student/test/start")
-	public String startTest(@RequestParam Integer internshipId, Model model, HttpSession session) {
+	public String startTest(@RequestParam Integer internshipId,
+	                        Model model,
+	                        HttpSession session) {
 
 	    Integer studentId = (Integer) session.getAttribute("studentId");
 
@@ -192,7 +201,7 @@ public class StudentInternshipController {
 	        return "redirect:/student-login";
 	    }
 
-	    // ❌ prevent reattempt
+	    // 🔒 Prevent reattempt
 	    InternshipTestAttempt existing =
 	            attemptRepo.findByStudentStudidAndInternshipId(studentId, internshipId);
 
@@ -200,19 +209,47 @@ public class StudentInternshipController {
 	        return "redirect:/student-internship-detail?id=" + internshipId;
 	    }
 
+	    // 🔥 Get test
 	    InternshipTest test = testRepo.findByInternshipId(internshipId);
 
-	    List<QuizQuestion> allQuestions =
-	            questionRepo.findByInternshipId(internshipId);
+	    // ❌ Block if test not confirmed
+	    if (test == null || !test.isActive()) {
+	        return "redirect:/student-internship-detail?id=" + internshipId;
+	    }
 
-	    // 🔥 RANDOMIZE
-	    java.util.Collections.shuffle(allQuestions);
+	    // 🔐 Try to get existing questions from session
+	    Object obj = session.getAttribute("testQuestions_" + internshipId);
 
-	    int limit = test.getTotalQuestionsToShow();
+	    List<QuizQuestion> selected = null;
 
-	    List<QuizQuestion> selected =
-	            allQuestions.stream().limit(limit).toList();
+	    if (obj instanceof List<?>) {
+	        selected = (List<QuizQuestion>) obj;
+	    }
 
+	    // 🔁 If first time → generate & store
+	    if (selected == null) {
+
+	        List<QuizQuestion> allQuestions =
+	                questionRepo.findByInternshipId(internshipId);
+
+	        if (allQuestions == null || allQuestions.isEmpty()) {
+	            return "redirect:/student-internship-detail?id=" + internshipId;
+	        }
+
+	        // 🔀 Shuffle only once
+	        Collections.shuffle(allQuestions);
+
+	        int limit = test.getTotalQuestionsToShow();
+
+	        selected = allQuestions.stream()
+	                .limit(limit)
+	                .toList();
+
+	        // 💾 Save in session (IMPORTANT)
+	        session.setAttribute("testQuestions_" + internshipId, selected);
+	    }
+
+	    // 🎯 Send to UI
 	    model.addAttribute("questions", selected);
 	    model.addAttribute("internshipId", internshipId);
 
@@ -221,7 +258,7 @@ public class StudentInternshipController {
 	@PostMapping("/student/test/submit")
 	public String submitTest(
 	        @RequestParam Integer internshipId,
-	        @RequestParam Map<String, String> answers,
+	        @RequestParam Map<String, String> formData,
 	        HttpSession session,
 	        RedirectAttributes ra) {
 
@@ -233,40 +270,68 @@ public class StudentInternshipController {
 
 	    Student student = studentRepo.findById(studentId).orElse(null);
 
-	    // ❌ BLOCK MULTIPLE ATTEMPTS FIRST
+	    if (student == null) {
+	        return "redirect:/student-login";
+	    }
+
+	    // 🔒 BLOCK MULTIPLE ATTEMPTS
 	    InternshipTestAttempt existing =
 	            attemptRepo.findByStudentStudidAndInternshipId(studentId, internshipId);
 
 	    if (existing != null && existing.isSubmitted()) {
-	        ra.addFlashAttribute("msg", "You already attempted this test!");
+	        ra.addFlashAttribute("msg", "⚠️ You have already submitted this assessment.");
 	        return "redirect:/student-internship-detail?id=" + internshipId;
 	    }
 
 	    List<QuizQuestion> questions =
 	            questionRepo.findByInternshipId(internshipId);
 
+	    // 🔀 SHUFFLE QUESTIONS (REAL EXAM FEEL)
+	    Collections.shuffle(questions);
+
 	    int score = 0;
 	    int total = 0;
 
+	    InternshipTest test = testRepo.findByInternshipId(internshipId);
+
+	    // 🔥 CREATE ATTEMPT FIRST
+	    InternshipTestAttempt attempt = new InternshipTestAttempt();
+	    attempt.setStudent(student);
+	    attempt.setInternship(internshipRepo.findById(internshipId).orElse(null));
+	    attempt.setSubmitted(false);
+
+	    attempt = attemptRepo.save(attempt);
+
+	    // 🔥 LOOP QUESTIONS
 	    for (QuizQuestion q : questions) {
 
 	        total += q.getMarks();
 
 	        String key = "q_" + q.getQuestionId();
-	        String studentAnswer = answers.get(key);
+	        String value = formData.get(key);
 
-	        if (studentAnswer != null && studentAnswer.equals(q.getCorrectOption())) {
-	            score += q.getMarks();
+	        TestAnswer ans = new TestAnswer();
+	        ans.setAttempt(attempt);
+	        ans.setQuestion(q);
+
+	        if (q.getQuestionFormat() == QuestionFormat.MCQ) {
+
+	            ans.setSelectedOption(value);
+
+	            if (value != null && value.equals(q.getCorrectOption())) {
+	                score += q.getMarks();
+	            }
+
+	        } else {
+	            // TEXT / CODE
+	            ans.setAnswerText(value);
 	        }
-	    }
 
-	    InternshipTest test = testRepo.findByInternshipId(internshipId);
+	        answerRepo.save(ans);
+	    }
 
 	    boolean passed = score >= test.getPassingMarks();
 
-	    InternshipTestAttempt attempt = new InternshipTestAttempt();
-	    attempt.setStudent(student);
-	    attempt.setInternship(internshipRepo.findById(internshipId).orElse(null));
 	    attempt.setScore(score);
 	    attempt.setTotalMarks(total);
 	    attempt.setPassed(passed);
@@ -274,8 +339,20 @@ public class StudentInternshipController {
 
 	    attemptRepo.save(attempt);
 
-	    ra.addFlashAttribute("msg", passed ? "Test Passed 🎉" : "Test Failed ❌");
+	    // 🎯 REAL PRODUCT MESSAGES
+	    if (passed) {
+	        ra.addFlashAttribute("msg",
+	                "🎉 Assessment completed successfully! You have cleared the test.\n" +
+	                "Our team will review your profile and contact you shortly.\n" +
+	                "You can also track updates in your dashboard.");
+	    } else {
+	        ra.addFlashAttribute("msg",
+	                "✅ Assessment submitted.\n" +
+	                "Our team will review your responses and get back to you.\n" +
+	                "Keep checking your dashboard for updates.");
+	    }
 
+	    session.removeAttribute("testQuestions_" + internshipId);
 	    return "redirect:/student-internship-detail?id=" + internshipId;
 	}
 }

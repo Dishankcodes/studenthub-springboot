@@ -29,7 +29,7 @@ public class AdminInternshipTestController {
     @Autowired
     private QuizQuestionRepository questionRepo;
 
-    @GetMapping("/admin/internship/test")
+    @GetMapping("/admin-internship-test")
     public String openTest(
             @RequestParam Integer internshipId,
             Model model) {
@@ -51,8 +51,7 @@ public class AdminInternshipTestController {
             testRepo.save(test);
         }
 
-        List<QuizQuestion> questions =
-                questionRepo.findByInternshipId(internshipId);
+        List<QuizQuestion> questions = questionRepo.findByInternshipId(internshipId);
 
         model.addAttribute("test", test);
         model.addAttribute("internship", internship);
@@ -61,7 +60,84 @@ public class AdminInternshipTestController {
         return "admin-internship-test";
     }
 
-    @PostMapping("/admin/internship/test/add-question")
+    @PostMapping("/admin-internship-test/bulk-save")
+    public String bulkSave(
+            @RequestParam Integer internshipId,
+            @RequestParam List<String> questionText,
+            @RequestParam List<String> format,
+            @RequestParam(required = false) List<String> optionA,
+            @RequestParam(required = false) List<String> optionB,
+            @RequestParam(required = false) List<String> optionC,
+            @RequestParam(required = false) List<String> optionD,
+            @RequestParam(required = false) List<String> correctOption,
+            RedirectAttributes ra) {
+
+        Internships internship = internshipRepo.findById(internshipId).orElse(null);
+
+        if (internship == null) {
+            return "redirect:/manage-internships";
+        }
+
+        int position = questionRepo.findByInternshipId(internshipId).size() + 1;
+
+        int mcqIndex = 0;
+
+        for (int i = 0; i < questionText.size(); i++) {
+
+            String text = questionText.get(i);
+
+            // ✅ skip empty safely
+            if (text == null || text.trim().isEmpty()) {
+                continue;
+            }
+
+            QuizQuestion q = new QuizQuestion();
+            q.setInternship(internship);
+            q.setQuestionText(text.trim());
+            q.setMarks(1);
+            q.setPosition(position++);
+            q.setType(QuizQuestionType.INTERNSHIP);
+
+            String type = format.get(i);
+
+            if ("MCQ".equals(type)) {
+
+                q.setQuestionFormat(QuestionFormat.MCQ);
+
+                // ✅ safe checks for lists
+                q.setOptionA(getSafe(optionA, mcqIndex));
+                q.setOptionB(getSafe(optionB, mcqIndex));
+                q.setOptionC(getSafe(optionC, mcqIndex));
+                q.setOptionD(getSafe(optionD, mcqIndex));
+                q.setCorrectOption(getSafe(correctOption, mcqIndex));
+
+                mcqIndex++;
+
+            } else if ("TEXT".equals(type)) {
+
+                q.setQuestionFormat(QuestionFormat.TEXT);
+
+            } else if ("CODE".equals(type)) {
+
+                q.setQuestionFormat(QuestionFormat.CODE);
+            }
+
+            questionRepo.save(q);
+        }
+
+        ra.addFlashAttribute("msg", "Questions Saved Successfully ✅");
+
+        return "redirect:/admin-internship-test?internshipId=" + internshipId;
+    }
+
+    private String getSafe(List<String> list, int index) {
+        if (list == null || index >= list.size()) {
+            return null;
+        }
+        return list.get(index);
+    }
+
+    @PostMapping("/admin-internship-test/add-question")
     public String addQuestion(
             @RequestParam Integer internshipId,
             @RequestParam String questionText,
@@ -73,8 +149,7 @@ public class AdminInternshipTestController {
             @RequestParam(required = false) String correctOption,
             RedirectAttributes ra) {
 
-        Internships internship =
-                internshipRepo.findById(internshipId).orElse(null);
+        Internships internship = internshipRepo.findById(internshipId).orElse(null);
 
         if (internship == null) {
             return "redirect:/manage-internships";
@@ -82,65 +157,51 @@ public class AdminInternshipTestController {
 
         if (questionText == null || questionText.trim().isEmpty()) {
             ra.addFlashAttribute("error", "Question cannot be empty ❌");
-            return "redirect:/admin/internship/test?internshipId=" + internshipId;
+            return "redirect:/admin-internship-test?internshipId=" + internshipId;
         }
 
         QuizQuestion q = new QuizQuestion();
 
         q.setInternship(internship);
-        q.setQuestionText(questionText);
+        q.setQuestionText(questionText.trim());
         q.setMarks(1);
         q.setType(QuizQuestionType.INTERNSHIP);
 
-        int position =
-                questionRepo.findByInternshipId(internshipId).size() + 1;
+        int position = questionRepo.findByInternshipId(internshipId).size() + 1;
         q.setPosition(position);
-        q.setQuiz(null);
 
-        switch (format) {
+        if ("MCQ".equals(format)) {
 
-            case "MCQ":
-                if (correctOption == null || correctOption.isEmpty()) {
-                    ra.addFlashAttribute("error", "Select correct option ❌");
-                    return "redirect:/admin/internship/test?internshipId=" + internshipId;
-                }
+            if (correctOption == null || correctOption.isEmpty()) {
+                ra.addFlashAttribute("error", "Correct option required for MCQ ❌");
+                return "redirect:/admin-internship-test?internshipId=" + internshipId;
+            }
 
-                q.setQuestionFormat(QuestionFormat.MCQ);
-                q.setOptionA(optionA);
-                q.setOptionB(optionB);
-                q.setOptionC(optionC);
-                q.setOptionD(optionD);
-                q.setCorrectOption(correctOption);
-                break;
+            q.setQuestionFormat(QuestionFormat.MCQ);
+            q.setOptionA(optionA);
+            q.setOptionB(optionB);
+            q.setOptionC(optionC);
+            q.setOptionD(optionD);
+            q.setCorrectOption(correctOption);
 
-            case "TEXT":
-                q.setQuestionFormat(QuestionFormat.TEXT);
-                q.setOptionA(null);
-                q.setOptionB(null);
-                q.setOptionC(null);
-                q.setOptionD(null);
-                q.setCorrectOption(null);
-                break;
+        } else if ("TEXT".equals(format)) {
 
-            case "CODE":
-                q.setQuestionFormat(QuestionFormat.CODE);
-                q.setOptionA(null);
-                q.setOptionB(null);
-                q.setOptionC(null);
-                q.setOptionD(null);
-                q.setCorrectOption(null);
-                break;
+            q.setQuestionFormat(QuestionFormat.TEXT);
+            q.setCorrectOption(null); // explicit safe
+
+        } else if ("CODE".equals(format)) {
+
+            q.setQuestionFormat(QuestionFormat.CODE);
+            q.setCorrectOption(null); // explicit safe
         }
-
         questionRepo.save(q);
 
         ra.addFlashAttribute("msg", "Question Added ✅");
 
-        return "redirect:/admin/internship/test?internshipId=" + internshipId;
+        return "redirect:/admin-internship-test?internshipId=" + internshipId;
     }
 
-    
-    @GetMapping("/admin/internship/test/delete")
+    @GetMapping("/admin-internship-test/delete")
     public String deleteQuestion(
             @RequestParam Integer questionId,
             @RequestParam Integer internshipId,
@@ -150,11 +211,11 @@ public class AdminInternshipTestController {
 
         ra.addFlashAttribute("msg", "Question Deleted 🗑️");
 
-        return "redirect:/admin/internship/test?internshipId=" + internshipId;
+        return "redirect:/admin-internship-test?internshipId=" + internshipId;
     }
 
-    
-    @PostMapping("/admin/internship/test/update")
+   
+    @PostMapping("/admin-internship-test/update")
     public String updateTest(
             @RequestParam Integer internshipId,
             @RequestParam int duration,
@@ -164,6 +225,11 @@ public class AdminInternshipTestController {
 
         InternshipTest test = testRepo.findByInternshipId(internshipId);
 
+        if (test == null) {
+            ra.addFlashAttribute("error", "Test not found ❌");
+            return "redirect:/manage-internships";
+        }
+
         test.setDurationMinutes(duration);
         test.setPassingMarks(passingMarks);
         test.setTotalQuestionsToShow(totalQuestions);
@@ -172,6 +238,24 @@ public class AdminInternshipTestController {
 
         ra.addFlashAttribute("msg", "Test Updated ✅");
 
-        return "redirect:/admin/internship/test?internshipId=" + internshipId;
+        return "redirect:/admin-internship-test?internshipId=" + internshipId;
+    }
+    
+    @PostMapping("/admin-internship-test/confirm")
+    public String confirmTest(@RequestParam Integer internshipId, RedirectAttributes ra) {
+
+        InternshipTest test = testRepo.findByInternshipId(internshipId);
+
+        if (test == null) {
+            ra.addFlashAttribute("error", "Test not found ❌");
+            return "redirect:/admin-internship-test?internshipId=" + internshipId;
+        }
+
+        test.setActive(true);
+        testRepo.save(test);
+
+        ra.addFlashAttribute("msg", "✅ Test is now LIVE for students");
+
+        return "redirect:/admin-internship-test?internshipId=" + internshipId;
     }
 }
