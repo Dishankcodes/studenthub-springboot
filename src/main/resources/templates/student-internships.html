@@ -516,6 +516,44 @@
 								</div>
 
 							</div>
+							<div th:if="${appMap[i.id] != null 
+    and appMap[i.id].status != null 
+    and appMap[i.id].status.name() == 'FAILED'}">
+
+    <span style="color:#dc2626; font-weight:600;">
+        ❌ Test Failed
+    </span>
+
+    <div style="font-size:12px; color:#6b7280; margin-top:5px;">
+        You did not pass the assessment.<br>
+        Contact the office for re-attempt.
+    </div>
+
+    <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" 
+       class="details-btn">
+        See Details →
+    </a>
+
+</div>
+<div th:if="${appMap[i.id] != null 
+    and appMap[i.id].allowReattempt}">
+
+    <span style="color:#f59e0b; font-weight:600;">
+        🔁 Reattempt Available
+    </span>
+
+    <div style="font-size:12px; color:#6b7280; margin-top:5px;">
+        You have been granted another attempt.<br>
+        Click below to retry the test.
+    </div>
+
+    <a th:href="@{'/student-internship-detail?id=' + ${i.id}}" 
+       class="details-btn"
+       style="background:linear-gradient(135deg,#f59e0b,#f97316);">
+        Attempt Again →
+    </a>
+
+</div>
 
 							<!-- 🚀 NOT APPLIED -->
 							<div th:if="${appMap[i.id] == null}">

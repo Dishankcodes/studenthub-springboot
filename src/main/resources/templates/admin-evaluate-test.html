@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Evaluate Test</title>
+
+    <style>
+        body {
+            background: linear-gradient(135deg,#0b0b1f,#14142f);
+            color: #fff;
+            font-family: Poppins;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            background: rgba(255,255,255,0.08);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            border: none;
+            padding: 8px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .correct {
+            background: #22c55e;
+            color: white;
+        }
+
+        .wrong {
+            background: #ef4444;
+            color: white;
+        }
+
+        .final-btn {
+            background: linear-gradient(135deg,#6366f1,#8b5cf6);
+            padding: 12px 20px;
+            color: white;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>🧠 Evaluate Test</h2>
+
+    <div th:each="ans : ${answers}" class="card">
+
+        <div class="question">
+            Q: <span th:text="${ans.question.questionText}"></span>
+        </div>
+
+        <!-- MCQ -->
+        <div th:if="${ans.question.questionFormat.name() == 'MCQ'}">
+            <p>Your Answer: <b th:text="${ans.selectedOption}"></b></p>
+            <p>Correct Answer: <b th:text="${ans.question.correctOption}"></b></p>
+
+            <p th:if="${ans.isCorrect}" style="color:#22c55e;">✔ Correct</p>
+            <p th:if="${ans.isCorrect == false}" style="color:#ef4444;">❌ Wrong</p>
+        </div>
+
+        <!-- TEXT / CODE -->
+        <div th:if="${ans.question.questionFormat.name() != 'MCQ'}">
+
+            <div class="answer">
+                <b>Student Answer:</b>
+                <pre th:text="${ans.answerText}"></pre>
+            </div>
+
+            <form action="/admin-evaluate-answer" method="post">
+                <input type="hidden" name="answerId" th:value="${ans.id}">
+
+                <button class="btn correct" name="correct" value="true">✔ Correct</button>
+                <button class="btn wrong" name="correct" value="false">❌ Wrong</button>
+            </form>
+
+        </div>
+
+    </div>
+
+    <!-- FINALIZE -->
+    <form th:action="@{/admin-finalize-score}" method="post">
+        <input type="hidden" name="attemptId" th:value="${attempt.id}">
+        <button class="final-btn">🚀 Finalize Score</button>
+    </form>
+
+</div>
+
+</body>
+</html>

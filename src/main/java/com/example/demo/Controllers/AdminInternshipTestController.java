@@ -13,6 +13,7 @@ import com.example.demo.entity.InternshipTest;
 import com.example.demo.entity.InternshipTestAttempt;
 import com.example.demo.entity.Internships;
 import com.example.demo.entity.QuizQuestion;
+import com.example.demo.entity.TestAnswer;
 import com.example.demo.enums.ApplicationStatus;
 import com.example.demo.enums.QuestionFormat;
 import com.example.demo.enums.QuizQuestionType;
@@ -21,6 +22,7 @@ import com.example.demo.repository.InternshipRepository;
 import com.example.demo.repository.InternshipTestAttemptRepository;
 import com.example.demo.repository.InternshipTestRepository;
 import com.example.demo.repository.QuizQuestionRepository;
+import com.example.demo.repository.TestAnswerRepository;
 
 @Controller
 public class AdminInternshipTestController {
@@ -40,6 +42,10 @@ public class AdminInternshipTestController {
 	@Autowired
 	private ApplicationRepository applicationRepo;
 
+	
+	@Autowired
+	private TestAnswerRepository answerRepo;
+	
 	@GetMapping("/admin-internship-test")
 	public String openTest(@RequestParam Integer internshipId, Model model) {
 
@@ -306,10 +312,92 @@ public class AdminInternshipTestController {
 
 		if (app != null) {
 			app.setAllowReattempt(true);
-			app.setStatus(ApplicationStatus.APPLIED); // reset for retry
+			app.setStatus(ApplicationStatus.FAILED); // keep failed, just allow retry
 			applicationRepo.save(app);
 		}
 
 		return "redirect:/admin-test-results?internshipId=" + internshipId;
+	}
+	
+	@GetMapping("/admin-evaluate-test")
+	public String evaluateTest(@RequestParam Integer attemptId, Model model) {
+
+	    InternshipTestAttempt attempt = attemptRepo.findById(attemptId).orElse(null);
+
+	    if (attempt == null) return "redirect:/admin-test-results";
+
+	    List<TestAnswer> answers = answerRepo.findByAttempt_Id(attemptId);
+
+	    model.addAttribute("attempt", attempt);
+	    model.addAttribute("answers", answers);
+
+	    return "admin-evaluate-test";
+	}
+	
+	@PostMapping("/admin-evaluate-answer")
+	public String evaluateAnswer(@RequestParam Integer answerId,
+	                             @RequestParam Boolean correct) {
+
+	    TestAnswer ans = answerRepo.findById(answerId).orElse(null);
+
+	    if (ans != null) {
+	        ans.setIsCorrect(correct);
+
+	        if (correct) {
+	            ans.setAwardedMarks(ans.getQuestion().getMarks());
+	        } else {
+	            ans.setAwardedMarks(0);
+	        }
+
+	        answerRepo.save(ans);
+	    }
+
+	    return "redirect:/admin-evaluate-test?attemptId=" + ans.getAttempt().getId();
+	}
+	@PostMapping("/admin-finalize-score")
+	public String finalizeScore(@RequestParam Integer attemptId) {
+
+	    InternshipTestAttempt attempt = attemptRepo.findById(attemptId).orElse(null);
+
+	    List<TestAnswer> answers = answerRepo.findByAttempt_Id(attemptId);
+
+	    int total = 0;
+	    int score = 0;
+
+	    for (TestAnswer a : answers) {
+
+	        total += a.getQuestion().getMarks();
+
+	        if (a.getAwardedMarks() != null) {
+	            score += a.getAwardedMarks();
+	        }
+	    }
+
+	    double percentage = (score * 100.0) / total;
+
+	    attempt.setScore(score);
+	    attempt.setTotalMarks(total);
+	    attempt.setPercentage(percentage);
+
+	    InternshipTest test = testRepo.findByInternshipId(attempt.getInternship().getId());
+
+	    boolean passed = percentage >= test.getPassingMarks();
+	    attempt.setPassed(passed);
+
+	    attemptRepo.save(attempt);
+
+	    // 🔥 UPDATE APPLICATION
+	    InternshipApplication app = applicationRepo
+	            .findByStudent_StudidAndInternship_Id(
+	                    attempt.getStudent().getStudid(),
+	                    attempt.getInternship().getId())
+	            .orElse(null);
+
+	    if (app != null) {
+	        app.setStatus(passed ? ApplicationStatus.PASSED : ApplicationStatus.FAILED);
+	        applicationRepo.save(app);
+	    }
+
+	    return "redirect:/admin-test-results?internshipId=" + attempt.getInternship().getId();
 	}
 }

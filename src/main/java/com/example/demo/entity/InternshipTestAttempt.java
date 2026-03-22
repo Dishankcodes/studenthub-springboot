@@ -1,10 +1,14 @@
 package com.example.demo.entity;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -31,6 +35,9 @@ public class InternshipTestAttempt {
 	private double percentage;
 
 	private Integer applicationId;
+	
+	@OneToMany(mappedBy = "attempt", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<TestAnswer> answers;
 
 	public Integer getApplicationId() {
 		return applicationId;
@@ -103,5 +110,14 @@ public class InternshipTestAttempt {
 	public void setSubmitted(boolean submitted) {
 		this.submitted = submitted;
 	}
+
+	public List<TestAnswer> getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(List<TestAnswer> answers) {
+		this.answers = answers;
+	}
+	
 
 }

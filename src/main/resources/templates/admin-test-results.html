@@ -165,6 +165,10 @@
 
 			<div class="actions">
 
+<a th:href="@{'/admin-evaluate-test?attemptId=' + ${a.id}}"
+   class="btn btn-primary">
+   <i class="bi bi-eye"></i> Check Answers
+</a>
 
 				<form action="/admin/select-student" method="post" th:if="${a.passed}">
 

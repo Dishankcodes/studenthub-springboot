@@ -2,581 +2,648 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Internship Test</title>
+    <meta charset="UTF-8">
+    <title>Internship Test</title>
 
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-	<style>
-		:root {
-			--bg: #020617;
-			--card: rgba(255, 255, 255, 0.05);
-			--text: #fff;
-			--primary: #6366f1;
-			--secondary: #8b5cf6;
-		}
+    <style>
+        :root {
+            --bg: #020617;
+            --card: rgba(255, 255, 255, 0.05);
+            --text: #fff;
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+        }
 
-		body.light {
-			--bg: #f4f7ff;
-			--card: #ffffff;
-			--text: #1e293b;
-		}
+        body.light {
+            --bg: #f4f7ff;
+            --card: #ffffff;
+            --text: #1e293b;
+        }
 
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-			font-family: "Inter", sans-serif;
-		}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", sans-serif;
+        }
 
-		body {
-			background: var(--bg);
-			color: var(--text);
-			display: flex;
-			transition: 0.3s;
-		}
+        body {
+            background: var(--bg);
+            color: var(--text);
+            display: flex;
+            transition: 0.3s;
+        }
 
-		/* SIDEBAR */
-		.sidebar {
-			width: 110px;
-			height: 100vh;
-			padding: 15px;
-			overflow-y: auto;
-			background: var(--card);
-			backdrop-filter: blur(20px);
-		}
+        .sidebar {
+            width: 110px;
+            height: 100vh;
+            position: fixed;
+            /* 🔥 FIX */
+            left: 0;
+            top: 0;
+            padding: 15px;
+            overflow-y: auto;
+            background: var(--card);
+            backdrop-filter: blur(20px);
+        }
 
-		.q-nav {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			gap: 8px;
-		}
+        .q-nav {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
 
-		.q-nav div {
-			padding: 10px;
-			text-align: center;
-			border-radius: 10px;
-			cursor: pointer;
-			font-size: 12px;
-			background: rgba(255, 255, 255, 0.08);
-			transition: 0.2s;
-		}
+        .q-nav div {
+            padding: 10px;
+            text-align: center;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            background: rgba(255, 255, 255, 0.08);
+            transition: 0.2s;
+        }
 
-		.q-nav div.active {
-			background: var(--primary);
-		}
+        .q-nav div.active {
+            background: var(--primary);
+        }
 
-		.q-nav div.answered {
-			background: #22c55e;
-		}
+        .q-nav div.answered {
+            background: #22c55e;
+        }
 
-		/* MAIN */
-		.main {
-			flex: 1;
-			padding: 30px;
-		}
+        .main {
+            margin-left: 120px;
+            /* 🔥 space for sidebar */
+            flex: 1;
+            padding: 30px;
+        }
 
-		/* HEADER */
-		.header {
-			position: sticky;
-			top: 0;
-			background: var(--bg);
-			padding: 15px 0;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			z-index: 10;
-		}
+        /* HEADER */
+        .header {
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            padding: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
 
-		.timer {
-			padding: 10px 16px;
-			border-radius: 12px;
-			background: var(--card);
-			font-weight: 600;
-		}
+        .timer {
+            padding: 10px 16px;
+            border-radius: 12px;
+            background: var(--card);
+            font-weight: 600;
+        }
 
-		.toggle {
-			cursor: pointer;
-			padding: 8px 14px;
-			border-radius: 10px;
-			background: var(--primary);
-			color: white;
-		}
+        .toggle {
+            cursor: pointer;
+            padding: 8px 14px;
+            border-radius: 10px;
+            background: var(--primary);
+            color: white;
+        }
 
-		/* PROGRESS */
-		.progress-bar {
-			height: 6px;
-			background: rgba(255, 255, 255, 0.1);
-			border-radius: 10px;
-			margin: 20px 0;
-		}
+        /* PROGRESS */
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 20px 0;
+        }
 
-		.progress {
-			height: 100%;
-			width: 0%;
-			background: linear-gradient(90deg, var(--primary), var(--secondary));
-			border-radius: 10px;
-			transition: 0.3s;
-		}
+        .progress {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: 0.3s;
+        }
 
-		/* CARD */
-		.card {
-			background: var(--card);
-			padding: 25px;
-			border-radius: 18px;
-			margin-bottom: 20px;
-			transition: 0.3s;
-		}
+        /* CARD */
+        .card {
+            background: var(--card);
+            padding: 25px;
+            border-radius: 18px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
 
-		.card:hover {
-			transform: translateY(-4px);
-		}
+        .card:hover {
+            transform: translateY(-4px);
+        }
 
-		h3 {
-			margin-bottom: 15px;
-		}
+        h3 {
+            margin-bottom: 15px;
+        }
 
-		/* OPTIONS */
-		.option {
-			display: block;
-			padding: 12px;
-			margin-top: 10px;
-			border-radius: 10px;
-			background: rgba(255, 255, 255, 0.08);
-			cursor: pointer;
-			transition: 0.2s;
-		}
+        /* OPTIONS */
+        .option {
+            display: block;
+            padding: 12px;
+            margin-top: 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            transition: 0.2s;
+        }
 
-		.option:hover {
-			background: rgba(99, 102, 241, 0.3);
-		}
+        .option:hover {
+            background: rgba(99, 102, 241, 0.3);
+        }
 
-		input[type="radio"] {
-			margin-right: 8px;
-		}
+        input[type="radio"] {
+            margin-right: 8px;
+        }
 
-		textarea {
-			width: 100%;
-			margin-top: 12px;
-			border-radius: 10px;
-			padding: 12px;
-			border: none;
-			background: #020617;
-			color: #fff;
-		}
+        textarea {
+            width: 100%;
+            margin-top: 12px;
+            border-radius: 10px;
+            padding: 12px;
+            border: none;
+            background: #020617;
+            color: #fff;
+        }
 
-		body.light textarea {
-			background: #f1f5f9;
-			color: #000;
-		}
+        body.light textarea {
+            background: #f1f5f9;
+            color: #000;
+        }
 
-		/* SUBMIT */
-		.submit-box {
-			text-align: center;
-			margin-top: 30px;
-		}
+        /* SUBMIT */
+        .submit-box {
+            text-align: center;
+            margin-top: 30px;
+        }
 
-		.btn-submit {
-			padding: 14px 30px;
-			border-radius: 12px;
-			border: none;
-			background: linear-gradient(135deg, var(--primary), var(--secondary));
-			color: white;
-			font-size: 16px;
-			cursor: pointer;
-		}
+        .btn-submit {
+            padding: 14px 30px;
+            border-radius: 12px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
-		.editor {
-			height: 300px;
-			margin-top: 10px;
-			border-radius: 12px;
-			overflow: hidden;
-			border: 1px solid #1e293b;
-		}
+        .editor {
+            height: 300px;
+            margin-top: 10px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #1e293b;
+        }
 
-		.hidden-code {
-			display: none;
-		}
+        .hidden-code {
+            display: none;
+        }
 
-		.run-box {
-			margin-top: 10px;
-		}
+        .run-box {
+            margin-top: 10px;
+        }
 
-		.run-btn {
-			background: linear-gradient(135deg, #22c55e, #16a34a);
-			border: none;
-			padding: 8px 16px;
-			border-radius: 8px;
-			color: white;
-			cursor: pointer;
-			margin-bottom: 8px;
-		}
+        .run-btn {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
 
-		.output-console {
-			background: #020617;
-			border-radius: 10px;
-			border: 1px solid #1e293b;
-			overflow: hidden;
-		}
+        .output-console {
+            background: #020617;
+            border-radius: 10px;
+            border: 1px solid #1e293b;
+            overflow: hidden;
+        }
 
-		.console-header {
-			padding: 6px 10px;
-			background: #111827;
-			font-size: 13px;
-			border-bottom: 1px solid #1e293b;
-		}
+        .console-header {
+            padding: 6px 10px;
+            background: #111827;
+            font-size: 13px;
+            border-bottom: 1px solid #1e293b;
+        }
 
-		.console-body {
-			padding: 10px;
-			font-size: 13px;
-			min-height: 80px;
-			color: #22c55e;
-			white-space: pre-wrap;
-		}
-	</style>
+        .console-body {
+            padding: 10px;
+            font-size: 13px;
+            min-height: 80px;
+            color: #22c55e;
+            white-space: pre-wrap;
+        }
+
+        .q-nav div {
+            background: rgba(255, 255, 255, 0.08);
+            color: #aaa;
+        }
+
+        .q-nav div.active {
+            background: #6366f1;
+            /* current */
+            color: white;
+        }
+
+        .q-nav div.answered {
+            background: #22c55e;
+            /* answered */
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
 
-	<!-- SIDEBAR -->
-	<div class="sidebar">
-		<div class="q-nav" id="qNav"></div>
-	</div>
 
-	<!-- MAIN -->
-	<div class="main">
-		<div id="msgBox" style="display:none; margin-bottom:15px; padding:12px; border-radius:10px; font-size:14px; background:#eef2ff;
+
+    <!-- MAIN -->
+    <div class="main">
+        <div id="msgBox" style="display:none; margin-bottom:15px; padding:12px; border-radius:10px; font-size:14px; background:#eef2ff;
     color:#3730a3;
 "></div>
-		<!-- HEADER -->
-		<div class="header">
-			<h2><i class="bi bi-rocket-takeoff"></i> Internship Assessment</h2>
-
-			<div style="display:flex; gap:10px; align-items:center;">
-				<div class="toggle" onclick="toggleTheme()">
-					<i class="bi bi-moon"></i>
-				</div>
-				<div class="timer" id="timer">10:00</div>
-			</div>
-		</div>
-
-		<!-- PROGRESS -->
-		<div class="progress-bar">
-			<div class="progress" id="progress"></div>
-		</div>
-
-		<form th:action="@{/student/test/submit}" method="post">
-
-			<input type="hidden" name="internshipId" th:value="${internshipId}">
-
-			<div th:each="q, i : ${questions}" class="card question" th:id="${'q'+i.index}">
-				<h3>
-					<span th:text="${i.index + 1}"></span>.
-					<span th:text="${q.questionText}"></span>
-				</h3>
-
-				<!-- MCQ -->
-				<div th:if="${q.questionFormat.name() == 'MCQ'}">
-					<label class="option">
-						<input type="radio" th:name="${'q_' + q.questionId}" value="A">
-						<span th:text="${q.optionA}"></span>
-					</label>
-					<label class="option">
-						<input type="radio" th:name="${'q_' + q.questionId}" value="B">
-						<span th:text="${q.optionB}"></span>
-					</label>
-					<label class="option">
-						<input type="radio" th:name="${'q_' + q.questionId}" value="C">
-						<span th:text="${q.optionC}"></span>
-					</label>
-					<label class="option">
-						<input type="radio" th:name="${'q_' + q.questionId}" value="D">
-						<span th:text="${q.optionD}"></span>
-					</label>
-				</div>
-
-				<!-- TEXT -->
-				<div th:if="${q.questionFormat.name() == 'TEXT'}">
-					<textarea th:name="${'q_' + q.questionId}" rows="4"></textarea>
-				</div>
-
-				<div th:if="${q.questionFormat.name() == 'CODE'}">
-
-					<!-- Hidden textarea for backend -->
-					<textarea th:name="${'q_' + q.questionId}" rows="8" class="hidden-code"></textarea>
-
-					<!-- Monaco Editor Container -->
-					<div style="font-size:13px;color:#888;margin-top:10px;">
-						<i class="bi bi-code-slash"></i> Code Editor
-					</div>
-					<div class="editor" th:id="${'editor_' + q.questionId}"></div>
-					<div class="run-box">
-						<button type="button" class="run-btn" onclick="runCode(this)">
-							<i class="bi bi-play-fill"></i> Run Code
-						</button>
-
-						<div class="output-console">
-							<div class="console-header">
-								<i class="bi bi-terminal"></i> Output
-							</div>
-							<pre class="console-body">Click "Run Code" to execute...</pre>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="submit-box">
-				<button type="submit" class="btn-submit">
-					<i class="bi bi-check-circle"></i> Submit Assessment
-				</button>
-			</div>
-
-		</form>
-	</div>
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
-
-	<script>
-
-		// =========================
-		// GLOBAL MESSAGE
-		// =========================
-		function showMsg(text, type = "info") {
-			let box = document.getElementById("msgBox");
-			box.style.display = "block";
-
-			if (type === "error") {
-				box.style.background = "#fee2e2";
-				box.style.color = "#991b1b";
-			} else if (type === "success") {
-				box.style.background = "#dcfce7";
-				box.style.color = "#166534";
-			} else {
-				box.style.background = "#eef2ff";
-				box.style.color = "#3730a3";
-			}
+        <div th:if="${noQuestions}"
+            style="display:flex; justify-content:center; align-items:center; height:80vh; flex-direction:column; text-align:center;">
+
+
+            <h2 style="color:#f59e0b; font-size:28px;">
+                ⚠️ Assessment Not Ready
+            </h2>
+
+            <p style="color:#94a3b8; margin-top:10px; max-width:400px;">
+                The assessment has been created, but questions are not uploaded yet.
+                <br><br>
+                Please contact your mentor or check again later.
+            </p>
+
+            <br>
+
+            <a th:href="@{'/student-internship-detail?id=' + ${internshipId}}" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);
+          padding:12px 24px;
+          border-radius:12px;
+          color:white;
+          text-decoration:none;">
+                ⬅ Go Back
+            </a>
+
+
+        </div>
+        <div th:if="${noQuestions != true}">
+            <!-- SIDEBAR -->
+            <div class="sidebar">
+                <div class="q-nav" id="qNav"></div>
+            </div>
+            <!-- HEADER -->
+            <div class="header">
+                <h2><i class="bi bi-rocket-takeoff"></i> Internship Assessment</h2>
+
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <div class="toggle" onclick="toggleTheme()" id="themeBtn">
+                        🌙
+                    </div>
+                    <div class="timer" id="timer">10:00</div>
+                </div>
+            </div>
+
+            <!-- PROGRESS -->
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+
+            <form th:action="@{/student/test/submit}" method="post">
+
+                <input type="hidden" name="internshipId" th:value="${internshipId}">
+
+                <div th:each="q, i : ${questions}" class="card question" th:id="${'q'+i.index}">
+                    <h3>
+                        <span th:text="${i.index + 1}"></span>.
+                        <span th:text="${q.questionText}"></span>
+                    </h3>
+
+                    <!-- MCQ -->
+                    <div th:if="${q.questionFormat.name() == 'MCQ'}">
+                        <label class="option">
+                            <input type="radio" th:name="${'q_' + q.questionId}" value="A">
+                            <span th:text="${q.optionA}"></span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" th:name="${'q_' + q.questionId}" value="B">
+                            <span th:text="${q.optionB}"></span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" th:name="${'q_' + q.questionId}" value="C">
+                            <span th:text="${q.optionC}"></span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" th:name="${'q_' + q.questionId}" value="D">
+                            <span th:text="${q.optionD}"></span>
+                        </label>
+                    </div>
+
+                    <!-- TEXT -->
+                    <div th:if="${q.questionFormat.name() == 'TEXT'}">
+                        <textarea th:name="${'q_' + q.questionId}" rows="4"></textarea>
+                    </div>
+
+                    <div th:if="${q.questionFormat.name() == 'CODE'}">
+
+                        <!-- Hidden textarea for backend -->
+                        <textarea th:name="${'q_' + q.questionId}" rows="8" class="hidden-code"></textarea>
+
+                        <!-- Monaco Editor Container -->
+                        <div style="font-size:13px;color:#888;margin-top:10px;">
+                            <i class="bi bi-code-slash"></i> Code Editor
+                        </div>
+                        <div class="editor" th:id="${'editor_' + q.questionId}"></div>
+                        <div class="run-box">
+                            <button type="button" class="run-btn" onclick="runCode(this)">
+                                <i class="bi bi-play-fill"></i> Run Code
+                            </button>
+
+                            <div class="output-console">
+                                <div class="console-header">
+                                    <i class="bi bi-terminal"></i> Output
+                                </div>
+                                <pre class="console-body">Click "Run Code" to execute...</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-			box.innerText = text;
+                <div class="submit-box">
+                    <button type="submit" class="btn-submit">
+                        <i class="bi bi-check-circle"></i> Submit Assessment
+                    </button>
+                </div>
 
-			setTimeout(() => box.style.display = "none", 4000);
-		}
+            </form>
+        </div>
+    </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
 
-		// =========================
-		// THEME TOGGLE (WITH MONACO)
-		// =========================
-		function toggleTheme() {
-			document.body.classList.toggle("light");
+    <script>
 
-			let isLight = document.body.classList.contains("light");
+        // =========================
+        // GLOBAL MESSAGE
+        // =========================
+        function showMsg(text, type = "info") {
+            let box = document.getElementById("msgBox");
+            box.style.display = "block";
 
-			localStorage.setItem("theme", isLight ? "light" : "dark");
+            if (type === "error") {
+                box.style.background = "#fee2e2";
+                box.style.color = "#991b1b";
+            } else if (type === "success") {
+                box.style.background = "#dcfce7";
+                box.style.color = "#166534";
+            } else {
+                box.style.background = "#eef2ff";
+                box.style.color = "#3730a3";
+            }
 
-			if (window.monaco) {
-				monaco.editor.setTheme(isLight ? "vs" : "vs-dark");
-			}
-		}
+            box.innerText = text;
 
-		if (localStorage.getItem("theme") === "light") {
-			document.body.classList.add("light");
-		}
+            setTimeout(() => box.style.display = "none", 4000);
+        }
 
 
-		// =========================
-		// TIMER + SAFE SUBMIT
-		// =========================
-		let time = 600;
+        function toggleTheme() {
+            document.body.classList.toggle("light");
 
-		const timerInterval = setInterval(() => {
+            let isLight = document.body.classList.contains("light");
 
-			let m = Math.floor(time / 60);
-			let s = time % 60;
+            localStorage.setItem("theme", isLight ? "light" : "dark");
 
-			document.getElementById("timer").innerText =
-				`${m}:${s < 10 ? "0" : ""}${s}`;
+            document.getElementById("themeBtn").innerText = isLight ? "☀️" : "🌙";
 
-			if (time === 60) {
-				showMsg("⚠️ Only 1 minute left!", "error");
-			}
+            if (window.monaco) {
+                monaco.editor.setTheme(isLight ? "vs" : "vs-dark");
+            }
+        }
 
-			if (time <= 0) {
-				clearInterval(timerInterval);
+        // Load theme
+        if (localStorage.getItem("theme") === "light") {
+            document.body.classList.add("light");
+            document.getElementById("themeBtn").innerText = "☀️";
+        }
 
-				showMsg("⏳ Time's up! Submitting...", "error");
 
-				syncEditors();
+        let totalTime = 600; // 10 min
 
-				setTimeout(() => {
-					document.querySelector("form").submit();
-				}, 1000);
-			}
+        // Load saved time or set new
+        let savedTime = localStorage.getItem("examTime");
+        let startTime = localStorage.getItem("examStart");
 
-			time--;
+        if (!startTime) {
+            startTime = Date.now();
+            localStorage.setItem("examStart", startTime);
+        }
 
-		}, 1000);
+        let elapsed = Math.floor((Date.now() - startTime) / 1000);
+        let time = totalTime - elapsed;
 
+        const timerInterval = setInterval(() => {
 
-		// =========================
-		// QUESTION NAVIGATION
-		// =========================
-		const questions = document.querySelectorAll(".question");
-		const nav = document.getElementById("qNav");
+            if (time <= 0) {
+                clearInterval(timerInterval);
+                showMsg("⏳ Time's up! Submitting...", "error");
 
-		questions.forEach((q, i) => {
+                syncEditors();
+                localStorage.removeItem("examStart");
 
-			let div = document.createElement("div");
-			div.innerText = i + 1;
+                setTimeout(() => {
+                    document.querySelector("form").submit();
+                }, 1000);
+                return;
+            }
 
-			div.onclick = () => {
-				q.scrollIntoView({behavior: "smooth"});
-			};
+            let m = Math.floor(time / 60);
+            let s = time % 60;
 
-			nav.appendChild(div);
-		});
+            document.getElementById("timer").innerText =
+                `${m}:${s < 10 ? "0" : ""}${s}`;
 
-		// ACTIVE QUESTION HIGHLIGHT
-		window.addEventListener("scroll", () => {
+            if (time === 60) {
+                showMsg("⚠️ Only 1 minute left!", "error");
+            }
 
-			let scrollPos = window.scrollY;
+            time--;
 
-			questions.forEach((q, i) => {
+        }, 1000);
 
-				let offset = q.offsetTop - 120;
 
-				if (scrollPos >= offset) {
-					nav.querySelectorAll("div").forEach(d => d.classList.remove("active"));
-					nav.children[i].classList.add("active");
-				}
-			});
-		});
+        const questions = document.querySelectorAll(".question");
 
+        if (questions.length === 0) {
+            console.log("No questions loaded");
+        }
+        if (questions.length > 0) {
 
-		// =========================
-		// PROGRESS TRACKING (FIXED)
-		// =========================
-		document.querySelectorAll("input, textarea").forEach(el => {
-			el.addEventListener("change", updateProgress);
-		});
+            const nav = document.getElementById("qNav");
 
-		function updateProgress() {
+            questions.forEach((q, i) => {
+                let div = document.createElement("div");
+                div.innerText = i + 1;
 
-			let done = 0;
+                div.onclick = () => {
+                    q.scrollIntoView({ behavior: "smooth" });
+                };
 
-			questions.forEach((q, i) => {
+                nav.appendChild(div);
+            });
 
-				let checked = q.querySelector("input:checked");
-				let text = q.querySelector("textarea:not(.hidden-code)");
+        }
 
-				let filled = false;
+        // ACTIVE QUESTION HIGHLIGHT
+        window.addEventListener("scroll", () => {
 
-				if (checked) filled = true;
-				if (text && text.value.trim()) filled = true;
+            let scrollPos = window.scrollY;
 
-				if (filled) {
-					done++;
-					nav.children[i].classList.add("answered");
-				}
-			});
+            questions.forEach((q, i) => {
 
-			document.getElementById("progress").style.width =
-				(done / questions.length) * 100 + "%";
-		}
+                let offset = q.offsetTop - 200;
 
+                if (scrollPos >= offset) {
+                    nav.querySelectorAll("div").forEach(d => d.classList.remove("active"));
+                    nav.children[i].classList.add("active");
+                }
+            });
+        });
 
-		// =========================
-		// MONACO EDITOR (FULL FIX)
-		// =========================
-		let editors = [];
 
-		require.config({
-			paths: {
-				vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
-			}
-		});
+        // =========================
+        // PROGRESS TRACKING (FIXED)
+        // =========================
+        document.querySelectorAll("input, textarea").forEach(el => {
+            el.addEventListener("change", updateProgress);
+        });
 
-		require(["vs/editor/editor.main"], function () {
+        function updateProgress() {
 
-			document.querySelectorAll(".editor").forEach((el, i) => {
+            let done = 0;
 
-				let textarea = el.parentElement.querySelector(".hidden-code");
+            questions.forEach((q, i) => {
 
-				let editor = monaco.editor.create(el, {
-					value: "// Write your code here...",
-					language: "java",
-					theme: document.body.classList.contains("light") ? "vs" : "vs-dark",
-					automaticLayout: true,
-					fontSize: 14,
-					minimap: {enabled: false}
-				});
+                let checked = q.querySelector("input:checked");
+                let text = q.querySelector("textarea:not(.hidden-code)");
 
-				editor.onDidChangeModelContent(() => {
-					textarea.value = editor.getValue();
-				});
+                let filled = false;
 
-				editors.push(editor);
-			});
+                if (checked) filled = true;
+                if (text && text.value.trim()) filled = true;
 
-		});
+                if (filled) {
+                    done++;
+                    nav.children[i].classList.add("answered");
+                } else {
+                    nav.children[i].classList.remove("answered");
+                }
+            });
 
+            document.getElementById("progress").style.width =
+                (done / questions.length) * 100 + "%";
+        }
 
-		// =========================
-		// SYNC EDITORS BEFORE SUBMIT
-		// =========================
-		function syncEditors() {
-			editors.forEach((editor, i) => {
-				let textarea = document.querySelectorAll(".hidden-code")[i];
-				if (editor && textarea) {
-					textarea.value = editor.getValue();
-				}
-			});
-		}
 
-		document.querySelector("form").addEventListener("submit", syncEditors);
+        // =========================
+        // MONACO EDITOR (FULL FIX)
+        // =========================
+        let editors = [];
 
-		function runCode(btn) {
+        require.config({
+            paths: {
+                vs: "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs"
+            }
+        });
 
-			let container = btn.closest(".card");
+        require(["vs/editor/editor.main"], function () {
 
-			// get editor index
-			let index = [...document.querySelectorAll(".run-btn")].indexOf(btn);
+            document.querySelectorAll(".editor").forEach((el, i) => {
 
-			let editor = editors[index];
+                let textarea = el.parentElement.querySelector(".hidden-code");
 
-			let code = editor.getValue();
+                let editor = monaco.editor.create(el, {
+                    value: "// Write your code here...",
+                    language: "java",
+                    theme: document.body.classList.contains("light") ? "vs" : "vs-dark",
+                    automaticLayout: true,
+                    fontSize: 14,
+                    minimap: { enabled: false }
+                });
 
-			let outputBox = container.querySelector(".console-body");
+                editor.onDidChangeModelContent(() => {
+                    textarea.value = editor.getValue();
+                });
 
-			outputBox.innerText = "Running...";
+                editors.push(editor);
+            });
 
-			// 🔥 FAKE COMPILER (SIMULATION)
-			setTimeout(() => {
+        });
 
-				try {
 
-					// simple simulation
-					if (code.includes("System.out.println")) {
+        // =========================
+        // SYNC EDITORS BEFORE SUBMIT
+        // =========================
+        function syncEditors() {
+            editors.forEach((editor, i) => {
+                let textarea = document.querySelectorAll(".hidden-code")[i];
+                if (editor && textarea) {
+                    textarea.value = editor.getValue();
+                }
+            });
+        }
 
-						let match = code.match(/System\.out\.println\((.*)\)/);
+        document.querySelector("form").addEventListener("submit", syncEditors);
 
-						if (match) {
-							outputBox.innerText = match[1].replace(/["']/g, "");
-						} else {
-							outputBox.innerText = "Code executed successfully";
-						}
+        function runCode(btn) {
 
-					} else if (code.trim() === "") {
-						outputBox.innerText = "⚠️ No code to run";
-					} else {
-						outputBox.innerText = "✅ Code compiled (simulation)";
-					}
+            let container = btn.closest(".card");
 
-				} catch (e) {
-					outputBox.innerText = "❌ Error in code";
-				}
+            // get editor index
+            let index = [...document.querySelectorAll(".run-btn")].indexOf(btn);
 
-			}, 800);
-		}
-	</script>
+            let editor = editors[index];
+
+            let code = editor.getValue();
+
+            let outputBox = container.querySelector(".console-body");
+
+            outputBox.innerText = "Running...";
+
+            // 🔥 FAKE COMPILER (SIMULATION)
+            setTimeout(() => {
+
+                try {
+
+                    // simple simulation
+                    if (code.includes("System.out.println")) {
+
+                        let match = code.match(/System\.out\.println\((.*)\)/);
+
+                        if (match) {
+                            outputBox.innerText = match[1].replace(/["']/g, "");
+                        } else {
+                            outputBox.innerText = "Code executed successfully";
+                        }
+
+                    } else if (code.trim() === "") {
+                        outputBox.innerText = "⚠️ No code to run";
+                    } else {
+                        outputBox.innerText = "✅ Code compiled (simulation)";
+                    }
+
+                } catch (e) {
+                    outputBox.innerText = "❌ Error in code";
+                }
+
+            }, 800);
+        }
+    </script>
 
 </body>
 

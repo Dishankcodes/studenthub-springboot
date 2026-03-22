@@ -238,7 +238,15 @@
 			<div th:if="${success}" class="alert success" th:text="${success}"></div>
 			<div th:if="${error}" class="alert error" th:text="${error}"></div>
 			<div th:if="${msg}" class="alert" style="background:#eef2ff;color:#3730a3;" th:text="${msg}"></div>
+<!-- ⏳ PENDING EVALUATION -->
+<div th:if="${testAttempt != null and testAttempt.submitted and app.status.name() == 'PENDING'}"
+     class="alert" style="background:#e0f2fe;color:#0369a1;">
 
+    <i class="bi bi-hourglass-split"></i>
+    Your test has been submitted successfully.<br>
+    ⏳ Awaiting admin evaluation.
+
+</div>
 			<!-- HEADER -->
 			<div class="detail-header">
 				<h1 th:text="${internship.title}"></h1>
@@ -422,14 +430,14 @@
 				</div>
 
 				<!-- FAILED -->
-				<div th:if="${testAttempt != null and !testAttempt.passed}" class="alert error">
+				<div th:if="${testAttempt != null and app.status.name() == 'FAILED'}" class="alert error">
 					<i class="bi bi-x-octagon"></i>
 					You did not pass the assessment.<br>
 					You may contact the company for further clarification.
 				</div>
 
 				<!-- PASSED -->
-				<div th:if="${testAttempt != null and testAttempt.passed}">
+				<div th:if="${testAttempt != null and app.status.name() == 'PASSED'}">
 
 					<a th:href="@{'/student/next-step?internshipId=' + ${internship.id}}" class="apply-btn"
 						style="margin-bottom:10px;">
@@ -445,13 +453,25 @@
 
 			</div>
 			<div th:if="${app != null and app.allowReattempt}">
-				<button onclick="startTestConfirm(this)" th:data-id="${internship.id}" class="apply-btn">
 
-					🔁 Reattempt Test
+    <!-- 🔁 MESSAGE -->
+    <div class="alert" style="background:#fef3c7;color:#92400e;">
+        <i class="bi bi-arrow-repeat"></i>
+        You have been granted a re-attempt opportunity.<br>
+        Please retry the assessment carefully. This may be your final chance.
+    </div>
 
-				</button>
+    <!-- 🔁 BUTTON -->
+    <button onclick="startTestConfirm(this)" 
+            th:data-id="${internship.id}" 
+            class="apply-btn"
+            style="background:linear-gradient(135deg,#f59e0b,#f97316); margin-top:10px;">
 
-			</div>
+        🔁 Start Reattempt Test
+
+    </button>
+
+</div>
 
 		</div>
 	</div>

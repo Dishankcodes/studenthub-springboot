@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
@@ -15,15 +16,36 @@ public class TestAnswer {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToOne
-	private InternshipTestAttempt attempt;
 
+	@ManyToOne
+	@JoinColumn(name = "attempt_id")
+	private InternshipTestAttempt attempt;
 	@ManyToOne
 	private QuizQuestion question;
 
 	private String answerText; // for TEXT / CODE
 
 	private String selectedOption; // for MCQ
+
+	private Boolean isCorrect;   // admin marks true/false
+	private Integer awardedMarks; // manual marks
+	
+	
+	public Boolean getIsCorrect() {
+		return isCorrect;
+	}
+
+	public void setIsCorrect(Boolean isCorrect) {
+		this.isCorrect = isCorrect;
+	}
+
+	public Integer getAwardedMarks() {
+		return awardedMarks;
+	}
+
+	public void setAwardedMarks(Integer awardedMarks) {
+		this.awardedMarks = awardedMarks;
+	}
 
 	public Integer getId() {
 		return id;
