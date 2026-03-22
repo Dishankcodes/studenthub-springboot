@@ -43,26 +43,26 @@ public class EmailService {
         SimpleMailMessage message = new SimpleMailMessage();
 
         message.setTo(toEmail);
-        message.setSubject("🎉 Internship Application Accepted");
+        message.setSubject("Application Accepted | " + title);
 
         message.setText(
                 "Dear " + name + ",\n\n" +
 
-                "Congratulations! 🎉\n" +
-                "You have been accepted for the internship \"" + title + "\".\n\n" +
+                "Your application for the internship \"" + title + "\" has been accepted.\n\n" +
 
-                "📌 Next Step:\n" +
-                "If the company has arranged an assessment test, you will need to complete it.\n" +
-                "Otherwise, you may contact the company/admin for further details.\n\n" +
+                "Next Step:\n" +
+                "If the company has arranged an assessment test, you are required to complete it.\n" +
+                "Otherwise, please wait for further instructions or contact the admin.\n\n" +
 
-                "👉 Please login to your EduPlatform account to continue.\n\n" +
+                "Please login to your EduPlatform account to continue.\n\n" +
 
                 "Best Regards,\nEduPlatform Team"
         );
 
         mailSender.send(message);
     }
-
+    
+    
     // ================= OFFER EMAIL =================
     public void sendOfferLetter(String toEmail, String name,
                                 String title, String role, String type,
@@ -148,6 +148,76 @@ public class EmailService {
 
         mailSender.send(message);
     }
+    
+    public void sendTestSubmittedMail(String toEmail, String name, String title) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(toEmail);
+        message.setSubject("Test Submitted | " + title);
+
+        message.setText(
+                "Dear " + name + ",\n\n" +
+
+                "Your assessment for the internship \"" + title + "\" has been successfully submitted.\n\n" +
+
+                "Our team will now evaluate your responses.\n" +
+                "You will be notified once the results are available.\n\n" +
+
+                "Please keep checking your dashboard for updates.\n\n" +
+
+                "Best Regards,\nEduPlatform Team"
+        );
+
+        mailSender.send(message);
+    }
+    
+    public void sendTestPassedMail(String toEmail, String name, String title) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(toEmail);
+        message.setSubject("Assessment Result | " + title);
+
+        message.setText(
+                "Dear " + name + ",\n\n" +
+
+                "We are pleased to inform you that you have successfully cleared the assessment for the internship \"" + title + "\".\n\n" +
+
+                "You have moved to the next stage of the selection process.\n" +
+                "Our team will review your performance and notify you regarding the final selection.\n\n" +
+
+                "Please stay updated through your dashboard.\n\n" +
+
+                "Best Regards,\nEduPlatform Team"
+        );
+
+        mailSender.send(message);
+    }
+    
+    public void sendTestFailedMail(String toEmail, String name, String title) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(toEmail);
+        message.setSubject("Assessment Result | " + title);
+
+        message.setText(
+                "Dear " + name + ",\n\n" +
+
+                "Thank you for completing the assessment for the internship \"" + title + "\".\n\n" +
+
+                "After evaluation, we regret to inform you that you did not meet the required criteria for this opportunity.\n\n" +
+
+                "We encourage you to continue improving your skills and apply again in the future.\n\n" +
+
+                "Best Regards,\nEduPlatform Team"
+        );
+
+        mailSender.send(message);
+    }
+    
+    
 
     // ================= HELPER =================
     private String safe(String value) {

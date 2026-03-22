@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.Service.EmailService;
 import com.example.demo.entity.InternshipApplication;
 import com.example.demo.entity.InternshipTest;
 import com.example.demo.entity.InternshipTestAttempt;
@@ -61,6 +62,10 @@ public class StudentInternshipController {
 
 	@Autowired
 	private TestAnswerRepository answerRepo;
+	
+	@Autowired
+	private EmailService emailService;
+
 
 	@GetMapping("/student-internships")
 	public String studentInternships(Model model, HttpSession session) {
@@ -369,8 +374,13 @@ public class StudentInternshipController {
 
 	        app.setAllowReattempt(false);
 
-	        // ❗ WAIT FOR ADMIN EVALUATION
 	        app.setStatus(ApplicationStatus.TEST_SUBMITTED);
+
+	        emailService.sendTestSubmittedMail(
+	            app.getEmail(),
+	            app.getFullName(),
+	            app.getInternship().getTitle()
+	        );
 	        applicationRepo.save(app);
 	    }
 

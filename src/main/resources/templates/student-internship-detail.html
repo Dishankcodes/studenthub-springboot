@@ -255,7 +255,7 @@
                 Please try again carefully. This may be your final chance.
 
             </div>
-            <div th:if="${testAttempt != null and app.status.name() == 'PASSED'}" class="alert success">
+            <div th:if="${app != null and testAttempt != null and app.status.name() == 'PASSED'}" class="alert success">
 
                 🎉 <b>Congratulations!</b><br><br>
 
@@ -263,7 +263,7 @@
                 You can now proceed to the next steps.
 
             </div>
-            <div th:if="${testAttempt != null and app.status.name() == 'FAILED'}" class="alert error">
+            <div th:if="${app != null and testAttempt != null and app.status.name() == 'FAILED'}" class="alert error">
 
                 ❌ <b>Assessment Result: Not Cleared</b><br><br>
 
@@ -280,13 +280,8 @@
                 </a>
 
             </div>
-            <div th:if="${testAttempt != null and app.status.name() == 'PENDING'}" class="alert"
-                style="background:#e0f2fe;color:#0369a1;">
 
-                ⏳ Your assessment has been submitted successfully.<br>
-                Please wait while our team evaluates your responses.
 
-            </div>
             <!-- HEADER -->
             <div class="detail-header">
                 <h1 th:text="${internship.title}"></h1>

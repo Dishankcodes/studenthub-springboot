@@ -157,14 +157,29 @@ public class AdminInternshipController {
 		Internships i = app.getInternship();
 		if ("accept".equals(action)) {
 			app.setStatus(ApplicationStatus.ACCEPTED);
-			emailService.sendAcceptedMail(app.getEmail(), app.getFullName(), i.getTitle());
+
+			emailService.sendAcceptedMail(
+			    app.getEmail(),
+			    app.getFullName(),
+			    app.getInternship().getTitle()
+			);
 			ra.addFlashAttribute("msg", "✅ Student accepted successfully");
 
-		} else if ("reject".equals(action)) {
+		}
+		else if ("reject".equals(action)) {
+			
 			app.setStatus(ApplicationStatus.REJECTED);
-			emailService.sendRejectionMail(app.getEmail(), app.getFullName(), i.getTitle(), i.getRole(), i.getType());
+		
+			emailService.sendRejectionMail(
+				    app.getEmail(),
+				    app.getFullName(),
+				    app.getInternship().getTitle(),
+				    app.getInternship().getRole(),
+				    app.getInternship().getType()
+				);
 			ra.addFlashAttribute("msg", "❌ Student rejected");
-		} else if ("select".equals(action)) {
+		} 
+		else if ("select".equals(action)) {
 
 		    app.setStatus(ApplicationStatus.SELECTED);
 
