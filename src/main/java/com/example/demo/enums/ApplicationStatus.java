@@ -1,5 +1,16 @@
 package com.example.demo.enums;
 
 public enum ApplicationStatus {
-	PENDING, APPLIED, ACCEPTED, REJECTED, TEST_COMPLETED, PASSED, SELECTED, COMPLETED, FAILED
+    APPLIED,          // student applied
+    REJECTED,         // admin rejected
+    ACCEPTED,         // admin accepted
+
+    TEST_PENDING,     // test available but not attempted
+    TEST_SUBMITTED,   // student submitted, waiting evaluation
+
+    PASSED,           // test passed
+    FAILED,           // test failed
+
+    SELECTED,         // final selection
+    COMPLETED         // certificate done
 }

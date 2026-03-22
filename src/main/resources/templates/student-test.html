@@ -433,50 +433,87 @@
         }
 
 
-        let totalTime = 600; // 10 min
+        // =========================
+        // 🔥 EXAM TIMER SYSTEM (PRO)
+        // =========================
 
-        // Load saved time or set new
-        let savedTime = localStorage.getItem("examTime");
+        let totalTime = 600; // 10 minutes
+
+        let examActive = localStorage.getItem("examActive");
         let startTime = localStorage.getItem("examStart");
 
-        if (!startTime) {
-            startTime = Date.now();
-            localStorage.setItem("examStart", startTime);
+        // ❌ If user directly opens page (without clicking start)
+        if (!examActive || !startTime) {
+            showMsg("🚫 Unauthorized access to test!", "error");
+
+            setTimeout(() => {
+                window.location.href = "/student-internships";
+            }, 1500);
         }
 
+        // ⏱️ Calculate remaining time
         let elapsed = Math.floor((Date.now() - startTime) / 1000);
-        let time = totalTime - elapsed;
+        let timeLeft = totalTime - elapsed;
 
+        // ❌ If time already over
+        if (timeLeft <= 0) {
+
+            showMsg("⏳ Time already expired! Submitting...", "error");
+
+            syncEditors();
+
+            setTimeout(() => {
+                document.querySelector("form").submit();
+            }, 1000);
+        }
+
+        // ⏳ START TIMER
         const timerInterval = setInterval(() => {
 
-            if (time <= 0) {
+            if (timeLeft <= 0) {
+
                 clearInterval(timerInterval);
+
                 showMsg("⏳ Time's up! Submitting...", "error");
 
                 syncEditors();
+
                 localStorage.removeItem("examStart");
+                localStorage.removeItem("examActive");
 
                 setTimeout(() => {
                     document.querySelector("form").submit();
                 }, 1000);
+
                 return;
             }
 
-            let m = Math.floor(time / 60);
-            let s = time % 60;
+            let m = Math.floor(timeLeft / 60);
+            let s = timeLeft % 60;
 
             document.getElementById("timer").innerText =
                 `${m}:${s < 10 ? "0" : ""}${s}`;
 
-            if (time === 60) {
+            // ⚠️ Warning at 1 minute
+            if (timeLeft === 60) {
                 showMsg("⚠️ Only 1 minute left!", "error");
             }
 
-            time--;
+            timeLeft--;
 
         }, 1000);
 
+        document.querySelector("form").addEventListener("submit", function () {
+            localStorage.removeItem("examStart");
+            localStorage.removeItem("examActive");
+        });
 
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "F5" || (e.ctrlKey && e.key === "r")) {
+                e.preventDefault();
+                showMsg("🚫 Refresh is not allowed during the test!", "error");
+            }
+        });
         const questions = document.querySelectorAll(".question");
 
         if (questions.length === 0) {

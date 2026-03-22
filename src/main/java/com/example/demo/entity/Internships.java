@@ -35,6 +35,16 @@ public class Internships {
 	@ManyToOne
 	private Admin admin;
 
+	@Column(nullable = false)
+	private Boolean hasTest = false;
+	
+	public Boolean getHasTest() {
+	    return hasTest;
+	}
+
+	public void setHasTest(Boolean hasTest) {
+	    this.hasTest = hasTest;
+	}
 	public Integer getId() {
 		return id;
 	}

@@ -37,6 +37,31 @@ public class EmailService {
 
         mailSender.send(message);
     }
+    
+    public void sendAcceptedMail(String toEmail, String name, String title) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setTo(toEmail);
+        message.setSubject("🎉 Internship Application Accepted");
+
+        message.setText(
+                "Dear " + name + ",\n\n" +
+
+                "Congratulations! 🎉\n" +
+                "You have been accepted for the internship \"" + title + "\".\n\n" +
+
+                "📌 Next Step:\n" +
+                "If the company has arranged an assessment test, you will need to complete it.\n" +
+                "Otherwise, you may contact the company/admin for further details.\n\n" +
+
+                "👉 Please login to your EduPlatform account to continue.\n\n" +
+
+                "Best Regards,\nEduPlatform Team"
+        );
+
+        mailSender.send(message);
+    }
 
     // ================= OFFER EMAIL =================
     public void sendOfferLetter(String toEmail, String name,

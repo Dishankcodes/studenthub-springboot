@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.Service.EmailService;
 import com.example.demo.entity.InternshipApplication;
 import com.example.demo.entity.InternshipTest;
 import com.example.demo.entity.InternshipTestAttempt;
@@ -46,33 +47,61 @@ public class AdminInternshipTestController {
 	@Autowired
 	private TestAnswerRepository answerRepo;
 	
+	@Autowired
+	private EmailService emailService;
+
+	
 	@GetMapping("/admin-internship-test")
 	public String openTest(@RequestParam Integer internshipId, Model model) {
 
-		Internships internship = internshipRepo.findById(internshipId).orElse(null);
+	    Internships internship = internshipRepo.findById(internshipId).orElse(null);
 
-		if (internship == null) {
-			return "redirect:/manage-internships";
-		}
+	    if (internship == null) {
+	        return "redirect:/manage-internships";
+	    }
 
-		InternshipTest test = testRepo.findByInternshipId(internshipId);
+	    // ✅ GET TEST (DO NOT AUTO CREATE)
+	    InternshipTest test = testRepo.findByInternshipId(internshipId);
 
-		if (test == null) {
-			test = new InternshipTest();
-			test.setInternship(internship);
-			test.setDurationMinutes(10);
-			test.setPassingMarks(40);
-			test.setTotalQuestionsToShow(5);
-			testRepo.save(test);
-		}
+	    // ✅ GET QUESTIONS
+	    List<QuizQuestion> questions = questionRepo.findByInternshipId(internshipId);
 
-		List<QuizQuestion> questions = questionRepo.findByInternshipId(internshipId);
+	    // ✅ PASS EVERYTHING TO UI
+	    model.addAttribute("test", test);
+	    model.addAttribute("internship", internship);
+	    model.addAttribute("questions", questions);
 
-		model.addAttribute("test", test);
-		model.addAttribute("internship", internship);
-		model.addAttribute("questions", questions);
+	    return "admin-internship-test";
+	}
+	@PostMapping("/admin/enable-test")
+	public String enableTest(@RequestParam Integer internshipId,
+	                         RedirectAttributes ra) {
 
-		return "admin-internship-test";
+	    Internships i = internshipRepo.findById(internshipId).orElse(null);
+
+	    if (i == null) {
+	        return "redirect:/manage-internships";
+	    }
+
+	    // ✅ ENABLE TEST
+	    i.setHasTest(true);
+	    internshipRepo.save(i);
+
+	    // ✅ CREATE TEST OBJECT (IMPORTANT)
+	    InternshipTest test = testRepo.findByInternshipId(internshipId);
+
+	    if (test == null) {
+	        test = new InternshipTest();
+	        test.setInternship(i);
+	        test.setDurationMinutes(10);
+	        test.setPassingMarks(40);
+	        test.setTotalQuestionsToShow(5);
+	        testRepo.save(test);
+	    }
+
+	    ra.addFlashAttribute("msg", "✅ Test created. Now add questions");
+
+	    return "redirect:/admin-internship-test?internshipId=" + internshipId;
 	}
 
 	@PostMapping("/admin-internship-test/bulk-save")
@@ -354,50 +383,75 @@ public class AdminInternshipTestController {
 
 	    return "redirect:/admin-evaluate-test?attemptId=" + ans.getAttempt().getId();
 	}
-	@PostMapping("/admin-finalize-score")
-	public String finalizeScore(@RequestParam Integer attemptId) {
-
-	    InternshipTestAttempt attempt = attemptRepo.findById(attemptId).orElse(null);
-
-	    List<TestAnswer> answers = answerRepo.findByAttempt_Id(attemptId);
-
-	    int total = 0;
-	    int score = 0;
-
-	    for (TestAnswer a : answers) {
-
-	        total += a.getQuestion().getMarks();
-
-	        if (a.getAwardedMarks() != null) {
-	            score += a.getAwardedMarks();
-	        }
-	    }
-
-	    double percentage = (score * 100.0) / total;
-
-	    attempt.setScore(score);
-	    attempt.setTotalMarks(total);
-	    attempt.setPercentage(percentage);
-
-	    InternshipTest test = testRepo.findByInternshipId(attempt.getInternship().getId());
-
-	    boolean passed = percentage >= test.getPassingMarks();
-	    attempt.setPassed(passed);
-
-	    attemptRepo.save(attempt);
-
-	    // 🔥 UPDATE APPLICATION
-	    InternshipApplication app = applicationRepo
-	            .findByStudent_StudidAndInternship_Id(
-	                    attempt.getStudent().getStudid(),
-	                    attempt.getInternship().getId())
-	            .orElse(null);
-
-	    if (app != null) {
-	        app.setStatus(passed ? ApplicationStatus.PASSED : ApplicationStatus.FAILED);
-	        applicationRepo.save(app);
-	    }
-
-	    return "redirect:/admin-test-results?internshipId=" + attempt.getInternship().getId();
-	}
+//	@PostMapping("/admin-finalize-score")
+//	public String finalizeScore(@RequestParam Integer attemptId) {
+//
+//	    InternshipTestAttempt attempt = attemptRepo.findById(attemptId).orElse(null);
+//
+//	    List<TestAnswer> answers = answerRepo.findByAttempt_Id(attemptId);
+//
+//	    int total = 0;
+//	    int score = 0;
+//
+//	    for (TestAnswer a : answers) {
+//
+//	        total += a.getQuestion().getMarks();
+//
+//	        if (a.getAwardedMarks() != null) {
+//	            score += a.getAwardedMarks();
+//	        }
+//	    }
+//
+//	    double percentage = (score * 100.0) / total;
+//
+//	    attempt.setScore(score);
+//	    attempt.setTotalMarks(total);
+//	    attempt.setPercentage(percentage);
+//
+//	    InternshipTest test = testRepo.findByInternshipId(attempt.getInternship().getId());
+//
+//	    boolean passed = percentage >= test.getPassingMarks();
+//	    attempt.setPassed(passed);
+//
+//	    attemptRepo.save(attempt);
+//
+//	    // 🔥 UPDATE APPLICATION
+//	    InternshipApplication app = applicationRepo
+//	            .findByStudent_StudidAndInternship_Id(
+//	                    attempt.getStudent().getStudid(),
+//	                    attempt.getInternship().getId())
+//	            .orElse(null);
+//
+//	    if (app != null) {
+//
+//	        if (passed) {
+//
+//	            app.setStatus(ApplicationStatus.PASSED);
+//
+//	            // 🎉 SEND PASS MAIL
+//	            emailService.sendCustomMail(
+//	                    app.getEmail(),
+//	                    "Test Cleared 🎉",
+//	                    "Congratulations " + app.getFullName() +
+//	                    ",\n\nYou have successfully cleared the internship assessment." +
+//	                    "\n\nOur team will contact you shortly for final selection."
+//	            );
+//
+//	        } else {
+//
+//	            app.setStatus(ApplicationStatus.FAILED);
+//
+//	            emailService.sendCustomMail(
+//	                    app.getEmail(),
+//	                    "Test Result ❌",
+//	                    "Hi " + app.getFullName() +
+//	                    ",\n\nUnfortunately, you did not clear the test." +
+//	                    "\n\nYou can improve and try again in the future."
+//	            );
+//	        }
+//
+//	        applicationRepo.save(app);
+//	    }
+//	    return "redirect:/admin-test-results?internshipId=" + attempt.getInternship().getId();
+//	}
 }

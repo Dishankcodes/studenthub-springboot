@@ -10,9 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.Service.EmailService;
 import com.example.demo.entity.CertificateTemplate;
 import com.example.demo.entity.InternshipApplication;
 import com.example.demo.entity.InternshipCertificate;
+import com.example.demo.entity.Internships;
 import com.example.demo.enums.ApplicationStatus;
 import com.example.demo.enums.CertificateType;
 import com.example.demo.repository.ApplicationRepository;
@@ -30,6 +32,9 @@ public class AdminSelectionController {
 
 	@Autowired
 	private CertificateTemplateRepository templateRepo;
+
+	@Autowired
+	private EmailService emailService;
 
 	@GetMapping("/admin-final-selection")
 	public String finalSelection(@RequestParam Integer internshipId, Model model) {
@@ -52,6 +57,20 @@ public class AdminSelectionController {
 
 		if (app != null) {
 			app.setStatus(ApplicationStatus.SELECTED);
+
+			Internships i = app.getInternship();
+
+			emailService.sendOfferLetter(
+			        app.getEmail(),
+			        app.getFullName(),
+			        i.getTitle(),
+			        i.getRole(),
+			        i.getType(),
+			        i.getLocation(),
+			        i.getStipend(),
+			        i.getDuration(),
+			        i.getStartDate()
+			);
 			applicationRepo.save(app);
 		}
 

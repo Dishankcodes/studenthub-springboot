@@ -9,11 +9,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.Service.EmailService;
 import com.example.demo.entity.Admin;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.InternshipApplication;
+import com.example.demo.entity.InternshipTest;
 import com.example.demo.entity.Internships;
 import com.example.demo.entity.Student;
 import com.example.demo.enums.ApplicationStatus;
@@ -21,6 +23,7 @@ import com.example.demo.repository.AdminRepository;
 import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.InternshipRepository;
+import com.example.demo.repository.InternshipTestRepository;
 import com.example.demo.repository.StudentRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -45,6 +48,9 @@ public class AdminInternshipController {
 
 	@Autowired
 	private EmailService emailService;
+
+	@Autowired
+	private InternshipTestRepository testRepo;
 
 	@GetMapping("/manage-internships")
 	public String manageInternships(Model model, HttpSession session) {
@@ -76,7 +82,8 @@ public class AdminInternshipController {
 	public String saveInternship(@RequestParam String title, @RequestParam String role, @RequestParam String type,
 			@RequestParam String location, @RequestParam String skills, @RequestParam(required = false) Integer stipend,
 			@RequestParam String duration, @RequestParam(required = false) String startDate,
-			@RequestParam String description, @RequestParam(required = false) Integer courseId) {
+			@RequestParam String description, @RequestParam(required = false) Integer courseId,
+			@RequestParam Boolean hasTest) {
 
 		Integer adminId = 1;
 		Admin admin = adminRepo.findById(adminId).orElse(null);
@@ -90,6 +97,7 @@ public class AdminInternshipController {
 		i.setSkills(skills);
 		i.setStipend(stipend);
 		i.setDuration(duration);
+		i.setHasTest(hasTest);
 		if (startDate != null && !startDate.isEmpty()) {
 			i.setStartDate(LocalDate.parse(startDate));
 		}
@@ -138,43 +146,85 @@ public class AdminInternshipController {
 
 	@PostMapping("/admin/application/update")
 	public String updateApplication(@RequestParam Integer appId, @RequestParam String action,
-			@RequestParam Integer internshipId) {
+			@RequestParam Integer internshipId, RedirectAttributes ra) {
 
 		InternshipApplication app = applicationRepo.findById(appId).orElse(null);
 
 		if (app == null) {
-			return "redirect:/manage-internships";
+			ra.addFlashAttribute("error", "Application not found ❌");
+			return "redirect:/admin-applicants?id=" + internshipId;
 		}
-
 		Internships i = app.getInternship();
-
-		// ✅ NULL SAFE VALUES
-		String title = (i != null && i.getTitle() != null) ? i.getTitle() : "N/A";
-		String role = (i != null && i.getRole() != null) ? i.getRole() : "N/A";
-		String type = (i != null && i.getType() != null) ? i.getType() : "N/A";
-		String location = (i != null && i.getLocation() != null) ? i.getLocation() : "N/A";
-		Integer stipend = (i != null && i.getStipend() != null) ? i.getStipend() : 0;
-		String duration = (i != null && i.getDuration() != null) ? i.getDuration() : "N/A";
-		LocalDate startDate = (i != null && i.getStartDate() != null) ? i.getStartDate() : LocalDate.now();
-
 		if ("accept".equals(action)) {
-
 			app.setStatus(ApplicationStatus.ACCEPTED);
-
-			// 🔥 SEND OFFER EMAIL
-			emailService.sendOfferLetter(app.getEmail(), app.getFullName(), title, role, type, location, stipend,
-					duration, startDate);
+			emailService.sendAcceptedMail(app.getEmail(), app.getFullName(), i.getTitle());
+			ra.addFlashAttribute("msg", "✅ Student accepted successfully");
 
 		} else if ("reject".equals(action)) {
-
 			app.setStatus(ApplicationStatus.REJECTED);
+			emailService.sendRejectionMail(app.getEmail(), app.getFullName(), i.getTitle(), i.getRole(), i.getType());
+			ra.addFlashAttribute("msg", "❌ Student rejected");
+		} else if ("select".equals(action)) {
 
-			// 🔥 SEND REJECTION EMAIL
-			emailService.sendRejectionMail(app.getEmail(), app.getFullName(), title, role, type);
+		    app.setStatus(ApplicationStatus.SELECTED);
+
+		    applicationRepo.save(app);
+
+		    ra.addFlashAttribute("msg", "🎯 Student moved to final selection");
+
+		
+			emailService.sendOfferLetter(app.getEmail(), app.getFullName(), i.getTitle(), i.getRole(), i.getType(),
+					i.getLocation(), i.getStipend(), i.getDuration(), i.getStartDate());
+
+			ra.addFlashAttribute("msg", "🎉 Student selected & offer sent");
+		    return "redirect:/admin-final-selection?internshipId=" + internshipId;
+			
 		}
-
 		applicationRepo.save(app);
 
 		return "redirect:/admin-applicants?id=" + internshipId;
 	}
+
+	@PostMapping("/admin/toggle-test")
+	public String toggleTest(@RequestParam Integer internshipId,
+	                         @RequestParam(required = false) Boolean confirmRemove,
+	                         RedirectAttributes ra) {
+
+	    Internships i = internshipRepo.findById(internshipId).orElse(null);
+
+	    if (i == null) {
+	        ra.addFlashAttribute("error", "Internship not found ❌");
+	        return "redirect:/manage-internships";
+	    }
+
+	    InternshipTest test = testRepo.findByInternshipId(internshipId);
+	    // ================= ADD TEST =================
+	    if (!i.getHasTest()) {
+	        i.setHasTest(true);
+	        internshipRepo.save(i);
+	        ra.addFlashAttribute("msg", "✅ Test enabled. Now create/manage it");
+	    }
+	    // ================= REMOVE TEST =================
+	    else {
+	        // ❗ FIRST CLICK → ASK CONFIRMATION
+	        if (confirmRemove == null || !confirmRemove) {
+	            ra.addFlashAttribute("error",
+	                    "⚠️ Are you sure you want to remove the test? Click again to confirm.");
+
+	            return "redirect:/manage-internships";
+	        }
+	        // ✅ CONFIRMED REMOVE
+	        if (test != null) {
+	            testRepo.delete(test);
+	        }
+
+	        i.setHasTest(false);
+	        internshipRepo.save(i);
+
+	        ra.addFlashAttribute("msg", "❌ Test removed successfully");
+	    }
+
+	    return "redirect:/manage-internships";
+	}
+	
 }

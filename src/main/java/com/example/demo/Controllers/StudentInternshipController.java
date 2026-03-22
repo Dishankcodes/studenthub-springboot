@@ -156,7 +156,7 @@ public class StudentInternshipController {
 
 		app.setStudent(student);
 		app.setInternship(internship);
-		app.setStatus(ApplicationStatus.PENDING);
+		app.setStatus(ApplicationStatus.APPLIED);
 
 		app.setFullName(fullName);
 		app.setEmail(email);
@@ -210,7 +210,7 @@ public class StudentInternshipController {
 
 		    if (app == null || !app.isAllowReattempt()) {
 		        ra.addFlashAttribute("msg", "⚠️ You have already attempted this test.");
-		        return "redirect:/student-internship-detail?id=" + internshipId;
+		        return "redirect:/student-internship-detail?id=" + internshipId + "&msg=submitted";
 		    }
 
 		    // 🔥 REATTEMPT → DELETE OLD ATTEMPT
@@ -370,8 +370,7 @@ public class StudentInternshipController {
 	        app.setAllowReattempt(false);
 
 	        // ❗ WAIT FOR ADMIN EVALUATION
-	        app.setStatus(ApplicationStatus.PENDING);
-
+	        app.setStatus(ApplicationStatus.TEST_SUBMITTED);
 	        applicationRepo.save(app);
 	    }
 

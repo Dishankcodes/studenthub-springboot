@@ -123,7 +123,28 @@
 		</div>
 		<div th:if="${error}" class="toast" style="display:block;border-color:#ef4444;" th:text="${error}"></div>
 		<div th:if="${msg}" class="toast" style="display:block;border-color:#22c55e;" th:text="${msg}"></div>
-		<div class="grid">
+		<!-- ❌ NO TEST STATE -->
+<div th:if="${test == null or !internship.hasTest}" class="card" style="text-align:center;">
+
+    <h2>⚠️ No Test Created</h2>
+
+    <p style="color:#9ca3af; margin-top:10px;">
+        This internship does not have any test yet.<br><br>
+
+        👉 If you want to create a test, click below.<br>
+        👉 After that you can add questions and configure it.
+    </p>
+
+    <form th:action="@{/admin/enable-test}" method="post">
+        <input type="hidden" name="internshipId" th:value="${internship.id}">
+
+        <button class="btn btn-main" style="margin-top:15px;">
+            ➕ Add Test
+        </button>
+    </form>
+
+</div>
+		<div class="grid" th:if="${test != null and internship.hasTest}">
 
 			<!-- LEFT SIDE -->
 			<div>

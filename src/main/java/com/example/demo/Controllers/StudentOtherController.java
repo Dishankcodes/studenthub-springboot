@@ -51,7 +51,7 @@ public class StudentOtherController {
 				.orElse(null);
 
 		if (app != null) {
-			app.setStatus(ApplicationStatus.PENDING);
+			app.setStatus(ApplicationStatus.APPLIED);
 			app.setAllowReattempt(false);
 			applicationRepo.save(app);
 		}
