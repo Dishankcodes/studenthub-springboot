@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.Service.EmailService;
 import com.example.demo.entity.CertificateTemplate;
@@ -74,61 +75,71 @@ public class AdminSelectionController {
 			applicationRepo.save(app);
 		}
 
-		return "redirect:/admin-test-results?internshipId=" + internshipId;
+		return "redirect:/admin-final-selection?internshipId=" + internshipId;
 	}
 
 	@PostMapping("/admin/give-badge")
-	public String giveBadge(@RequestParam Integer appId, @RequestParam String badgeTitle) {
+	public String giveBadge(@RequestParam Integer appId,
+	                        @RequestParam String badgeTitle,
+	                        RedirectAttributes ra) {
 
-		InternshipApplication app = applicationRepo.findById(appId).orElse(null);
+	    InternshipApplication app = applicationRepo.findById(appId).orElse(null);
 
-		if (app != null) {
-			app.setBadgeGiven(true);
-			app.setBadgeTitle(badgeTitle);
+	    if (app != null) {
+	        app.setBadgeGiven(true);
+	        app.setBadgeTitle(badgeTitle);
 
-			applicationRepo.save(app);
-		}
+	        applicationRepo.save(app);
 
-		return "redirect:/admin-final-selection?internshipId=" + app.getInternship().getId();
+	        // ✅ MESSAGE
+	        ra.addFlashAttribute("msg",
+	                "🏆 Badge '" + badgeTitle + "' awarded to " + app.getFullName());
+	    }
+
+	    return "redirect:/admin-final-selection?internshipId=" + app.getInternship().getId();
 	}
 
 	@PostMapping("/admin/give-certificate")
-	public String giveCertificate(@RequestParam Integer appId, @RequestParam Integer templateId) {
+	public String giveCertificate(@RequestParam Integer appId,
+	                             @RequestParam Integer templateId,
+	                             RedirectAttributes ra) {
 
-		InternshipApplication app = applicationRepo.findById(appId).orElse(null);
+	    InternshipApplication app = applicationRepo.findById(appId).orElse(null);
 
-		if (app == null) {
-			return "redirect:/admin-final-selection";
-		}
+	    if (app == null) {
+	        ra.addFlashAttribute("error", "Application not found");
+	        return "redirect:/admin-final-selection";
+	    }
 
-		CertificateTemplate template = templateRepo.findById(templateId).orElse(null);
+	    CertificateTemplate template = templateRepo.findById(templateId).orElse(null);
 
-		if (template == null) {
-			return "redirect:/admin-final-selection";
-		}
+	    if (template == null) {
+	        ra.addFlashAttribute("error", "Template not found");
+	        return "redirect:/admin-final-selection";
+	    }
 
-		// ✅ CREATE CERTIFICATE ENTRY
-		InternshipCertificate cert = new InternshipCertificate();
-		cert.setStudent(app.getStudent());
-		cert.setInternship(app.getInternship());
-		cert.setTemplate(template);
-		cert.setIssuedAt(LocalDate.now());
+	    // ✅ CREATE CERTIFICATE
+	    InternshipCertificate cert = new InternshipCertificate();
+	    cert.setStudent(app.getStudent());
+	    cert.setInternship(app.getInternship());
+	    cert.setTemplate(template);
+	    cert.setIssuedAt(LocalDate.now());
+	    cert.setCertificateNumber("INT-" + System.currentTimeMillis());
+	    cert.setPdfPath("/certificates/internship/sample.pdf");
 
-		cert.setCertificateNumber("INT-" + System.currentTimeMillis());
+	    internshipCertRepo.save(cert);
 
-		// TODO: generate PDF and set path
-		cert.setPdfPath("/certificates/internship/sample.pdf");
+	    // ✅ UPDATE APPLICATION
+	    app.setCertificateGenerated(true);
+	    app.setCertificateTemplateId(templateId);
+	    app.setStatus(ApplicationStatus.COMPLETED); // 🔥 IMPORTANT
 
-		internshipCertRepo.save(cert);
+	    applicationRepo.save(app);
 
-		// ✅ UPDATE APPLICATION
-		app.setCertificateGenerated(true);
-		app.setCertificateTemplateId(templateId);
-		app.setStatus(ApplicationStatus.COMPLETED);
+	    // ✅ MESSAGE
+	    ra.addFlashAttribute("msg",
+	            "🎓 Internship completed & certificate generated for " + app.getFullName());
 
-		applicationRepo.save(app);
-
-		return "redirect:/admin-final-selection?internshipId=" + app.getInternship().getId();
+	    return "redirect:/admin-final-selection?internshipId=" + app.getInternship().getId();
 	}
-
 }

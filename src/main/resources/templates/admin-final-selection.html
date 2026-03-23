@@ -2,243 +2,306 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Final Selection</title>
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-	<style>
-		:root {
-			--bg-primary: linear-gradient(135deg, #0b0b1f, #14142f);
-			--bg-content: #1a1a3d;
-			--accent: #6366f1;
-			--text-light: #eaeaf0;
-			--text-muted: #9ca3af;
-			--success: #22c55e;
-			--danger: #ef4444;
-			--warning: #f59e0b;
-		}
+    <meta charset="UTF-8">
+    <title>Final Selection</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: linear-gradient(135deg, #0b0b1f, #14142f);
+            --bg-content: #1a1a3d;
+            --accent: #6366f1;
+            --text-light: #eaeaf0;
+            --text-muted: #9ca3af;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
 
-		/* PAGE */
-		body {
-			background: var(--bg-primary);
-			color: var(--text-light);
-			font-family: 'Poppins', sans-serif;
-		}
+        /* PAGE */
+        body {
+            background: var(--bg-primary);
+            color: var(--text-light);
+            font-family: 'Poppins', sans-serif;
+        }
 
-		/* CONTAINER */
-		.container {
-			max-width: 1100px;
-			margin: auto;
-			padding: 20px;
-		}
+        /* CONTAINER */
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
 
-		/* HEADER */
-		.header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 20px;
-		}
+        /* HEADER */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-		/* BUTTONS */
-		.btn {
-			border: none;
-			padding: 8px 14px;
-			border-radius: 10px;
-			font-size: 13px;
-			cursor: pointer;
-			text-decoration: none;
-			display: inline-flex;
-			align-items: center;
-			gap: 5px;
-		}
+        /* BUTTONS */
+        .btn {
+            border: none;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
 
-		.btn-primary {
-			background: var(--accent);
-			color: #fff;
-		}
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
 
-		.btn-success {
-			background: rgba(34, 197, 94, 0.2);
-			color: var(--success);
-		}
+        .btn-success {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
 
-		.btn-danger {
-			background: rgba(239, 68, 68, 0.2);
-			color: var(--danger);
-		}
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger);
+        }
 
-		.btn-secondary {
-			background: rgba(255, 255, 255, 0.08);
-			color: var(--text-light);
-		}
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-light);
+        }
 
-		.btn:hover {
-			transform: translateY(-2px);
-		}
+        .btn:hover {
+            transform: translateY(-2px);
+        }
 
-		/* CARD */
-		.card {
-			background: rgba(255, 255, 255, 0.05);
-			backdrop-filter: blur(14px);
-			border-radius: 16px;
-			padding: 18px;
-			margin-bottom: 15px;
-			border: 1px solid rgba(255, 255, 255, 0.08);
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
+        /* CARD */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(14px);
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-		/* LEFT */
-		.left h3 {
-			margin-bottom: 4px;
-		}
+        /* LEFT */
+        .left h3 {
+            margin-bottom: 4px;
+        }
 
-		.left p {
-			font-size: 13px;
-			color: var(--text-muted);
-		}
+        .left p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
 
-		/* STATUS */
-		.status {
-			font-size: 12px;
-			padding: 4px 10px;
-			border-radius: 999px;
-		}
+        /* STATUS */
+        .status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 999px;
+        }
 
-		.status.passed {
-			background: rgba(34, 197, 94, 0.2);
-			color: #22c55e;
-		}
+        .status.passed {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
 
-		.status.selected {
-			background: rgba(99, 102, 241, 0.2);
-			color: #6366f1;
-		}
+        .status.selected {
+            background: rgba(99, 102, 241, 0.2);
+            color: #6366f1;
+        }
 
-		.status.completed {
-			background: rgba(245, 158, 11, 0.2);
-			color: #f59e0b;
-		}
+        .status.completed {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
 
-		/* ACTIONS */
-		.actions {
-			display: flex;
-			flex-direction: column;
-			gap: 8px;
-		}
+        /* ACTIONS */
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-		/* TEMPLATE PREVIEW */
-		.template-box {
-			display: flex;
-			gap: 10px;
-			margin-top: 8px;
-		}
+        /* TEMPLATE PREVIEW */
+        .template-box {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
 
-		.template-box img {
-			width: 90px;
-			height: 60px;
-			border-radius: 8px;
-		}
-	</style>
+        .template-box img {
+            width: 90px;
+            height: 60px;
+            border-radius: 8px;
+        }
+
+        /* BACK BUTTON */
+        .btn-back {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+        }
+
+        .btn-back:hover {
+            background: #6366f1;
+        }
+
+        /* DESIGN BUTTON */
+        .btn-design {
+            background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+            color: #fff;
+            margin-top: 8px;
+        }
+
+        .btn-design:hover {
+            transform: scale(1.05);
+        }
+
+        /* NO CERT MESSAGE */
+        .no-cert-box {
+            background: rgba(245, 158, 11, 0.15);
+            color: #f59e0b;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* FLASH */
+        .flash {
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .flash.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .flash.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+    </style>
 
 </head>
 
 <body>
 
-	<div class="container">
+    <div class="container">
 
-		<!-- HEADER -->
-		<div class="header">
-			<h2><i class="bi bi-check2-circle"></i> Final Selection</h2>
+        <!-- HEADER -->
+        <div class="header">
+            <h2><i class="bi bi-check2-circle"></i> Final Selection</h2>
 
-			<a th:href="@{/admin-test-results(internshipId=${internshipId})}" class="btn btn-secondary">
-				<i class="bi bi-bar-chart"></i> Test Results
-			</a>
+            <a th:href="@{/admin-test-results(internshipId=${internshipId})}" class="btn btn-secondary">
+                <i class="bi bi-bar-chart"></i> Test Results
+            </a>
 
-			<a th:href="@{/admin-applicants(id=${internshipId})}" class="btn btn-secondary">
-				<i class="bi bi-people"></i> Applicants
-			</a>
-		</div>
+            <a th:href="@{/admin-applicants(id=${internshipId})}" class="btn btn-secondary">
+                <i class="bi bi-people"></i> Applicants
+            </a>
 
+            <a href="/manage-internships" class="btn btn-back">
+                ⬅ Back to Manage Internships
+            </a>
+        </div>
 
-		<div th:if="${#lists.isEmpty(applications)}">
-			No eligible(passed) students found
-		</div>
+        <div th:if="${msg}" class="flash success" th:text="${msg}"></div>
+        <div th:if="${error}" class="flash error" th:text="${error}"></div>
+        <div th:if="${#lists.isEmpty(applications)}">
+            No eligible(passed) students found
+        </div>
 
-		<!-- CARDS -->
-		<div th:each="app : ${applications}" class="card">
+        <!-- CARDS -->
+        <div th:each="app : ${applications}" class="card">
 
-			<!-- LEFT -->
-			<div class="left">
-				<h3 th:text="${app.student.fullname}"></h3>
-				<p th:text="${app.student.email}"></p>
+            <!-- LEFT -->
+            <div class="left">
+                <h3 th:text="${app.student.fullname}"></h3>
+                <p th:text="${app.student.email}"></p>
 
-				<span class="status" th:classappend="${app.status.name().toLowerCase()}">
+                <span class="status" th:classappend="${app.status.name().toLowerCase()}">
 
-					<i th:if="${app.status.name()=='PASSED'}" class="bi bi-check-circle"></i>
-					<i th:if="${app.status.name()=='SELECTED'}" class="bi bi-person-check"></i>
-					<i th:if="${app.status.name()=='COMPLETED'}" class="bi bi-mortarboard"></i>
+                    <i th:if="${app.status.name()=='PASSED'}" class="bi bi-check-circle"></i>
+                    <i th:if="${app.status.name()=='SELECTED'}" class="bi bi-person-check"></i>
+                    <i th:if="${app.status.name()=='COMPLETED'}" class="bi bi-mortarboard"></i>
 
-					<span th:text="${app.status}"></span>
-				</span>
+                    <span th:text="${app.status}"></span>
+                </span>
 
-				<!-- Badge -->
-				<div th:if="${app.badgeGiven}">
-					🏆 <span th:text="${app.badgeTitle}"></span>
-				</div>
-			</div>
+                <div th:if="${app.badgeGiven}" style="margin-top:6px;">
+                    🏆 Badge: <b th:text="${app.badgeTitle}"></b>
+                </div>
+            </div>
 
-			<!-- RIGHT -->
-			<div class="actions">
+            <!-- RIGHT -->
+            <div class="actions">
 
-				<!-- SELECT -->
-				<form action="/admin/select-student" method="post" th:if="${app.status.name() != 'SELECTED'}">
-					<input type="hidden" name="appId" th:value="${app.id}">
-					<button class="btn btn-primary">
-						<i class="bi bi-check-lg"></i> Select
-					</button>
-				</form>
+                <!-- BADGE -->
+                <form action="/admin/give-badge" method="post" th:if="${!app.badgeGiven}">
+                    <input type="hidden" name="appId" th:value="${app.id}">
 
-				<!-- BADGE -->
-				<form action="/admin/give-badge" method="post" th:if="${!app.badgeGiven}">
-					<input type="hidden" name="appId" th:value="${app.id}">
+                    <select name="badgeTitle">
+                        <option value="Intern">Intern</option>
+                        <option value="Top Intern">Top Intern</option>
+                        <option value="Best Performer">Best Performer</option>
+                    </select>
 
-					<select name="badgeTitle">
-						<option value="Intern">Intern</option>
-						<option value="Top Intern">Top Intern</option>
-						<option value="Best Performer">Best Performer</option>
-					</select>
+                    <button class="btn btn-success">
+                        <i class="bi bi-award"></i> Give Badge
+                    </button>
+                </form>
 
-					<button class="btn btn-success">
-						<i class="bi bi-award"></i> Give Badge
-					</button>
-				</form>
+                <!-- CERTIFICATE -->
+                <div th:if="${!app.certificateGenerated}" th:each="t : ${templates}" class="template-box">
 
-				<!-- CERTIFICATE -->
-				<div th:if="${!app.certificateGenerated}" th:each="t : ${templates}" class="template-box">
+                    <img th:src="@{${t.backgroundImage}}">
 
-					<img th:src="@{${t.backgroundImage}}">
+                    <form action="/admin/give-certificate" method="post">
+                        <input type="hidden" name="appId" th:value="${app.id}">
+                        <input type="hidden" name="templateId" th:value="${t.id}">
+                        <button class="btn btn-success">
+                            <i class="bi bi-file-earmark-pdf"></i> Generate
+                        </button>
+                    </form>
 
-					<form action="/admin/give-certificate" method="post">
-						<input type="hidden" name="appId" th:value="${app.id}">
-						<input type="hidden" name="templateId" th:value="${t.id}">
-						<button class="btn btn-success">
-							<i class="bi bi-file-earmark-pdf"></i> Generate
-						</button>
-					</form>
+                </div>
 
-				</div>
+                <!-- CERTIFICATE SECTION -->
 
-				<!-- COMPLETED -->
-				<span th:if="${app.certificateGenerated}" class="status completed">
-					<i class="bi bi-mortarboard"></i> Completed
-				</span>
+                <div th:if="${!app.certificateGenerated}" style="margin-top:10px;">
 
-			</div>
+                    <div class="no-cert-box">
+                        <i class="bi bi-exclamation-circle"></i>
+                        No certificate generated for this internship yet.
+                    </div>
 
-		</div>
-	</div>
+                    <!-- GO TO DESIGN -->
+                    <a href="/admin-design" class="btn btn-design">
+                        🎨 Design Certificate
+                    </a>
+
+                </div>
+
+                <div th:if="${app.certificateGenerated}" class="status completed">
+                    🎓 Internship Completed + Certificate Generated
+                </div>
+
+            </div>
+
+        </div>
+    </div>
 </body>
 
 </html>

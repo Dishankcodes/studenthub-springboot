@@ -111,7 +111,7 @@ public class AdminInternshipController {
 
 		internshipRepo.save(i);
 
-		return "redirect:/admin-post-internships";
+		return "redirect:/manage-internships";
 	}
 
 	@GetMapping("/admin-applicants")
@@ -151,7 +151,7 @@ public class AdminInternshipController {
 		InternshipApplication app = applicationRepo.findById(appId).orElse(null);
 
 		if (app == null) {
-			ra.addFlashAttribute("error", "Application not found ❌");
+			ra.addFlashAttribute("error", "Application not found");
 			return "redirect:/admin-applicants?id=" + internshipId;
 		}
 		Internships i = app.getInternship();
@@ -163,7 +163,8 @@ public class AdminInternshipController {
 			    app.getFullName(),
 			    app.getInternship().getTitle()
 			);
-			ra.addFlashAttribute("msg", "✅ Student accepted successfully");
+			ra.addFlashAttribute("msg",
+				 app.getFullName() +  "Student accepted successfully");
 
 		}
 		else if ("reject".equals(action)) {
@@ -177,7 +178,8 @@ public class AdminInternshipController {
 				    app.getInternship().getRole(),
 				    app.getInternship().getType()
 				);
-			ra.addFlashAttribute("msg", "❌ Student rejected");
+			ra.addFlashAttribute("msg",
+				   app.getFullName() + "Student rejected ");
 		} 
 		else if ("select".equals(action)) {
 
@@ -185,13 +187,13 @@ public class AdminInternshipController {
 
 		    applicationRepo.save(app);
 
-		    ra.addFlashAttribute("msg", "🎯 Student moved to final selection");
+		    ra.addFlashAttribute("msg", app.getFullName() + "Student moved to final selection");
 
 		
 			emailService.sendOfferLetter(app.getEmail(), app.getFullName(), i.getTitle(), i.getRole(), i.getType(),
 					i.getLocation(), i.getStipend(), i.getDuration(), i.getStartDate());
 
-			ra.addFlashAttribute("msg", "🎉 Student selected & offer sent");
+			ra.addFlashAttribute("msg", app.getFullName() + "Student selected & offer sent");
 		    return "redirect:/admin-final-selection?internshipId=" + internshipId;
 			
 		}

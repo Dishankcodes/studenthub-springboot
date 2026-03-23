@@ -261,6 +261,46 @@
             font-size: 12px;
             color: #aaa;
         }
+
+        .flash i {
+            margin-right: 6px;
+        }
+
+        .status i {
+            margin-right: 5px;
+        }
+
+        .btn i {
+            margin-right: 5px;
+        }
+
+        /* STATUS COLORS IMPROVE */
+        .status {
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        /* FINAL TAG */
+        .final {
+            font-weight: 600;
+        }
+
+        /* EMPTY STATE */
+        .flash {
+            text-align: center;
+            background: rgba(99, 102, 241, 0.1);
+            color: #c7d2fe;
+        }
+
+        /* BUTTON SPACING */
+        .actions {
+            gap: 10px;
+        }
+
+        /* HOVER BOOST */
+        .applicant-card:hover {
+            transform: translateY(-5px) scale(1.01);
+        }
     </style>
 </head>
 
@@ -305,9 +345,15 @@
             <div th:if="${#lists.isEmpty(applications)}" class="alert alert-info">
                 No applicants yet 🚀
             </div>
-            <div th:if="${msg}" class="flash success" th:text="${msg}"></div>
-            <div th:if="${error}" class="flash error" th:text="${error}"></div>
+            <div th:if="${msg}" class="flash success">
+                <i class="bi bi-check-circle"></i>
+                <span th:text="${msg}"></span>
+            </div>
 
+            <div th:if="${error}" class="flash error">
+                <i class="bi bi-exclamation-circle"></i>
+                <span th:text="${error}"></span>
+            </div>
             <div class="filter-bar" style="margin-bottom:15px; display:flex; gap:10px; flex-wrap:wrap;">
 
                 <!-- SEARCH -->
@@ -356,7 +402,16 @@
         ${app.status.name() == 'APPLIED'} ? 'pending' :
         (${app.status.name() == 'ACCEPTED'} ? 'accepted' :
         (${app.status.name() == 'REJECTED'} ? 'rejected' :
-        (${app.status.name() == 'SELECTED'} ? 'accepted' : '')))" th:text="${app.status}">
+        (${app.status.name() == 'SELECTED'} ? 'accepted' : '')))}">
+
+                                <i class="bi" th:classappend="
+        ${app.status.name() == 'APPLIED'} ? 'bi-hourglass-split' :
+        (${app.status.name() == 'ACCEPTED'} ? 'bi-check-circle' :
+        (${app.status.name() == 'REJECTED'} ? 'bi-x-circle' :
+        (${app.status.name() == 'SELECTED'} ? 'bi-person-check' : '')))}">
+                                </i>
+
+                                <span th:text="${app.status}"></span>
                             </span>
                         </div>
                     </div>
@@ -390,25 +445,30 @@
                             <input type="hidden" name="internshipId" th:value="${internship.id}">
 
                             <button name="action" value="accept" class="btn btn-success">
-                                ✔ Accept
+                                <i class="bi bi-check-lg"></i> Accept
                             </button>
 
                             <button name="action" value="reject" class="btn btn-danger">
-                                ✖ Reject
+                                <i class="bi bi-x-lg"></i> Reject
                             </button>
                         </form>
 
                         <!-- FINAL STATUS -->
                         <span th:if="${app.status.name() == 'ACCEPTED'}" class="final accepted">
-                            🎉 Accepted
+                            <i class="bi bi-check-lg"></i> Accepted
                         </span>
 
                         <span th:if="${app.status.name() == 'REJECTED'}" class="final rejected">
-                            ❌ Rejected
+                            <i class="bi bi-x-circle"></i> Rejected
                         </span>
-                        <button name="action" value="select" class="btn btn-primary">
-                            🎯 Select
-                        </button>
+                        <form action="/admin/select-student" method="post">
+                            <input type="hidden" name="studentId" th:value="${app.student.studid}">
+                            <input type="hidden" name="internshipId" th:value="${internship.id}">
+
+                            <button name="action" value="select" class="btn btn-primary">
+                                <i class="bi bi-person-check"></i> Select
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

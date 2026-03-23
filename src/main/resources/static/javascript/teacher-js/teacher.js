@@ -10,29 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    /* ================= CREATE COURSE MODAL ================= */
-    const courseModal = document.getElementById("createCourseModal");
-    const openCourseBtn = document.querySelector(".primary-btn");
-
-    if (courseModal && openCourseBtn) {
-        const closeCourseBtn = courseModal.querySelector(".close-btn");
-        const cancelCourseBtn = courseModal.querySelector(".cancel-btn");
-
-        openCourseBtn.addEventListener("click", () => {
-            courseModal.classList.add("show");
-        });
-
-        function closeCourseModal() {
-            courseModal.classList.remove("show");
-        }
-
-        closeCourseBtn?.addEventListener("click", closeCourseModal);
-        cancelCourseBtn?.addEventListener("click", closeCourseModal);
-
-        window.addEventListener("click", (e) => {
-            if (e.target === courseModal) closeCourseModal();
-        });
-    }
 
     /* ================= CHANGE PASSWORD MODAL ================= */
     const openPasswordBtn = document.getElementById("openPassword");
