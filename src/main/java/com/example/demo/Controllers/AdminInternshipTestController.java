@@ -357,9 +357,13 @@ public class AdminInternshipTestController {
 
 	    List<TestAnswer> answers = answerRepo.findByAttempt_Id(attemptId);
 
+	    InternshipTest test = testRepo.findByInternshipId(
+	            attempt.getInternship().getId()
+	    );
+	    
 	    model.addAttribute("attempt", attempt);
 	    model.addAttribute("answers", answers);
-
+	    model.addAttribute("test", test);
 	    return "admin-evaluate-test";
 	}
 	
@@ -384,7 +388,7 @@ public class AdminInternshipTestController {
 	    return "redirect:/admin-evaluate-test?attemptId=" + ans.getAttempt().getId();
 	}
 	@PostMapping("/admin-finalize-score")
-	public String finalizeScore(@RequestParam Integer attemptId) {
+	public String finalizeScore(@RequestParam Integer attemptId,RedirectAttributes ra) {
 
 	    InternshipTestAttempt attempt = attemptRepo.findById(attemptId).orElse(null);
 
@@ -393,6 +397,8 @@ public class AdminInternshipTestController {
 	    int total = 0;
 	    int score = 0;
 
+	    
+	    
 	    for (TestAnswer a : answers) {
 
 	        total += a.getQuestion().getMarks();
@@ -402,6 +408,8 @@ public class AdminInternshipTestController {
 	        }
 	    }
 
+	    if (total == 0) total = 1;
+	    
 	    double percentage = (score * 100.0) / total;
 
 	    attempt.setScore(score);
@@ -441,6 +449,7 @@ public class AdminInternshipTestController {
 	    	}
 
 	        applicationRepo.save(app);
+	        ra.addFlashAttribute("msg", "Evaluation completed successfully");
 	    }
 	    return "redirect:/admin-test-results?internshipId=" + attempt.getInternship().getId();
 	}

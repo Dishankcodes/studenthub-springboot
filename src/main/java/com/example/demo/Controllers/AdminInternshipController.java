@@ -164,7 +164,7 @@ public class AdminInternshipController {
 			    app.getInternship().getTitle()
 			);
 			ra.addFlashAttribute("msg",
-				 app.getFullName() +  "Student accepted successfully");
+				 app.getFullName() +  " accepted successfully");
 
 		}
 		else if ("reject".equals(action)) {
@@ -179,7 +179,7 @@ public class AdminInternshipController {
 				    app.getInternship().getType()
 				);
 			ra.addFlashAttribute("msg",
-				   app.getFullName() + "Student rejected ");
+				   app.getFullName() + " rejected ");
 		} 
 		else if ("select".equals(action)) {
 
@@ -187,7 +187,7 @@ public class AdminInternshipController {
 
 		    applicationRepo.save(app);
 
-		    ra.addFlashAttribute("msg", app.getFullName() + "Student moved to final selection");
+		    ra.addFlashAttribute("msg", app.getFullName() + " moved to final selection");
 
 		
 			emailService.sendOfferLetter(app.getEmail(), app.getFullName(), i.getTitle(), i.getRole(), i.getType(),

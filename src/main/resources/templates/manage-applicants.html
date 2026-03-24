@@ -398,17 +398,17 @@
                             </p>
 
                             <!-- STATUS -->
-                            <span class="status" th:classappend="
-        ${app.status.name() == 'APPLIED'} ? 'pending' :
-        (${app.status.name() == 'ACCEPTED'} ? 'accepted' :
-        (${app.status.name() == 'REJECTED'} ? 'rejected' :
-        (${app.status.name() == 'SELECTED'} ? 'accepted' : '')))}">
+                           <span class="status"
+      th:classappend="${app.status.name() == 'APPLIED' ? ' pending' : 
+                (app.status.name() == 'ACCEPTED' ? ' accepted' : 
+                (app.status.name() == 'REJECTED' ? ' rejected' : 
+                (app.status.name() == 'SELECTED' ? ' accepted' : '')))}">
+      
 
-                                <i class="bi" th:classappend="
-        ${app.status.name() == 'APPLIED'} ? 'bi-hourglass-split' :
-        (${app.status.name() == 'ACCEPTED'} ? 'bi-check-circle' :
-        (${app.status.name() == 'REJECTED'} ? 'bi-x-circle' :
-        (${app.status.name() == 'SELECTED'} ? 'bi-person-check' : '')))}">
+                                <i class="bi" th:classappend="${app.status.name() == 'APPLIED' ? 'bi-hourglass-split' : 
+                (app.status.name() == 'ACCEPTED' ? 'bi-check-circle' : 
+                (app.status.name() == 'REJECTED' ? 'bi-x-circle' : 
+                (app.status.name() == 'SELECTED' ? 'bi-person-check' : '')))}">
                                 </i>
 
                                 <span th:text="${app.status}"></span>

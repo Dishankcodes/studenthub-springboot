@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Evaluate Test</title>
 
     <style>
         body {
-            background: linear-gradient(135deg,#0b0b1f,#14142f);
+            background: linear-gradient(135deg, #0b0b1f, #14142f);
             color: #fff;
             font-family: Poppins;
         }
@@ -18,10 +19,17 @@
         }
 
         .card {
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.06);
             padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            border-radius: 16px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: 0.2s ease;
+        }
+
+        .card:hover {
+            border-color: #6366f1;
+            transform: translateY(-2px);
         }
 
         .question {
@@ -30,7 +38,7 @@
         }
 
         .answer {
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
             padding: 10px;
             border-radius: 10px;
             margin-top: 10px;
@@ -55,7 +63,7 @@
         }
 
         .final-btn {
-            background: linear-gradient(135deg,#6366f1,#8b5cf6);
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             padding: 12px 20px;
             color: white;
             border-radius: 12px;
@@ -67,51 +75,140 @@
 
 <body>
 
-<div class="container">
+    <div class="container">
+        <div class="card" style="margin-bottom:20px;">
 
-    <h2>🧠 Evaluate Test</h2>
+            <h3>Test Overview</h3>
 
-    <div th:each="ans : ${answers}" class="card">
+            <p>
+                <b>Student:</b>
+                <span th:text="${attempt.student.fullname}"></span>
+            </p>
 
-        <div class="question">
-            Q: <span th:text="${ans.question.questionText}"></span>
+            <p>
+                <b>Internship:</b>
+                <span th:text="${attempt.internship.title}"></span>
+            </p>
+
+            <p>
+                <b>Passing Marks:</b>
+<span th:text="${test != null ? test.passingMarks : 'Not Set'}"></span>%
+            </p>
+
+            <p>
+                <b>Live Score:</b>
+                <span id="liveScore">0</span>
+            </p>
+
+            <p>
+                <b>Evaluated:</b>
+                <span id="checkedCount">0</span> / <span th:text="${#lists.size(answers)}"></span>
+            </p>
+
         </div>
+        <h2>🧠 Evaluate Test</h2>
 
-        <!-- MCQ -->
-        <div th:if="${ans.question.questionFormat.name() == 'MCQ'}">
-            <p>Your Answer: <b th:text="${ans.selectedOption}"></b></p>
-            <p>Correct Answer: <b th:text="${ans.question.correctOption}"></b></p>
+        <div th:each="ans : ${answers}" class="card">
 
-            <p th:if="${ans.isCorrect}" style="color:#22c55e;">✔ Correct</p>
-            <p th:if="${ans.isCorrect == false}" style="color:#ef4444;">❌ Wrong</p>
-        </div>
-
-        <!-- TEXT / CODE -->
-        <div th:if="${ans.question.questionFormat.name() != 'MCQ'}">
-
-            <div class="answer">
-                <b>Student Answer:</b>
-                <pre th:text="${ans.answerText}"></pre>
+            <div class="question">
+                Q: <span th:text="${ans.question.questionText}"></span>
             </div>
 
-            <form action="/admin-evaluate-answer" method="post">
-                <input type="hidden" name="answerId" th:value="${ans.id}">
+            <!-- MCQ -->
+            <div th:if="${ans.question.questionFormat.name() == 'MCQ'}">
+                <p>Your Answer: <b th:text="${ans.selectedOption}"></b></p>
+                <p>Correct Answer: <b th:text="${ans.question.correctOption}"></b></p>
 
-                <button class="btn correct" name="correct" value="true">✔ Correct</button>
-                <button class="btn wrong" name="correct" value="false">❌ Wrong</button>
-            </form>
+                <p th:if="${ans.isCorrect}" style="color:#22c55e;">✔ Correct</p>
+                <p th:if="${ans.isCorrect == false}" style="color:#ef4444;">❌ Wrong</p>
+            </div>
+
+            <!-- TEXT / CODE -->
+            <div th:if="${ans.question.questionFormat.name() != 'MCQ'}">
+
+                <div class="answer">
+                    <b>Student Answer:</b>
+                    <pre th:text="${ans.answerText}"></pre>
+                </div>
+
+                <form th:action="@{/admin-evaluate-answer}" method="post">
+                    <input type="hidden" name="answerId" th:value="${ans.id}">
+
+                    <button type="button" class="btn correct"
+                        th:attr="onclick='markAnswer(this, true, ' + ${ans.question.marks} + ')'">
+                        Correct
+                    </button>
+
+                    <button type="button" class="btn wrong"
+                        th:attr="onclick='markAnswer(this, false, ' + ${ans.question.marks} + ')'">
+                        Wrong
+                    </button>
+                </form>
+
+            </div>
 
         </div>
+        <div class="card">
+
+            <h3>Evaluation Summary</h3>
+
+            <p>Score: <span id="liveScore">0</span></p>
+            <p>Questions Checked: <span id="checkedCount">0</span></p>
+
+            <p style="color:#9ca3af;">
+                Final result will be calculated after submission.
+            </p>
+
+        </div>
+        <!-- FINALIZE -->
+        <form th:action="@{/admin-finalize-score}" method="post">
+            <input type="hidden" name="attemptId" th:value="${attempt.id}">
+            <button class="final-btn" style="width:100%; margin-top:20px;">
+                Finalize Evaluation & Calculate Result
+            </button>
+        </form>
 
     </div>
+    <script>
+        let score = 0;
+        let checked = 0;
 
-    <!-- FINALIZE -->
-    <form th:action="@{/admin-finalize-score}" method="post">
-        <input type="hidden" name="attemptId" th:value="${attempt.id}">
-        <button class="final-btn">🚀 Finalize Score</button>
-    </form>
+        function markAnswer(btn, isCorrect, marks) {
 
-</div>
+            let card = btn.closest(".card");
 
+            if (card.classList.contains("done")) return;
+
+            card.classList.add("done");
+
+            // Disable buttons
+            let buttons = card.querySelectorAll("button");
+            buttons.forEach(b => b.disabled = true);
+
+            // Highlight
+            if (isCorrect) {
+                card.style.borderColor = "#22c55e";
+                score += marks;
+            } else {
+                card.style.borderColor = "#ef4444";
+            }
+
+            checked++;
+
+            document.getElementById("liveScore").innerText = score;
+            document.getElementById("checkedCount").innerText = checked;
+
+            // Submit silently
+            let form = btn.closest("form");
+            let input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "correct";
+            input.value = isCorrect;
+
+            form.appendChild(input);
+            form.submit();
+        }
+    </script>
 </body>
+
 </html>

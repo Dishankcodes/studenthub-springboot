@@ -2,329 +2,329 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Course Analytics</title>
+    <meta charset="UTF-8">
+    <title>Course Analytics</title>
 
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
-	<style>
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-			font-family: 'Poppins', sans-serif;
-		}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-		body {
-			background: #f4f6f9;
-			color: #1f1f2e;
-			padding: 30px;
-		}
+        body {
+            background: #f4f6f9;
+            color: #1f1f2e;
+            padding: 30px;
+        }
 
-		/* ===== PAGE CONTAINER ===== */
+        /* ===== PAGE CONTAINER ===== */
 
-		.container {
-			max-width: 1200px;
-			margin: auto;
-		}
+        .container {
+            max-width: 1200px;
+            margin: auto;
+        }
 
-		/* ===== HEADER ===== */
+        /* ===== HEADER ===== */
 
-		.page-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 30px;
-		}
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
 
-		.page-title {
-			font-size: 28px;
-			font-weight: 600;
-		}
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+        }
 
-		.back-btn {
-			background: #1f1f2e;
-			color: white;
-			padding: 10px 18px;
-			border-radius: 8px;
-			text-decoration: none;
-			display: flex;
-			align-items: center;
-			gap: 6px;
-			transition: 0.2s;
-		}
+        .back-btn {
+            background: #1f1f2e;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
 
-		.back-btn:hover {
-			background: #33334a;
-		}
+        .back-btn:hover {
+            background: #33334a;
+        }
 
-		/* ===== STATS GRID ===== */
+        /* ===== STATS GRID ===== */
 
-		.stats-grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-			gap: 20px;
-			margin-bottom: 35px;
-		}
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 35px;
+        }
 
-		.stat-card {
-			background: white;
-			padding: 22px;
-			border-radius: 14px;
-			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
-			transition: 0.25s;
-		}
+        .stat-card {
+            background: white;
+            padding: 22px;
+            border-radius: 14px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+            transition: 0.25s;
+        }
 
-		.stat-card:hover {
-			transform: translateY(-4px);
-		}
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
 
-		.stat-value {
-			font-size: 26px;
-			font-weight: 600;
-			margin-bottom: 4px;
-		}
+        .stat-value {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
 
-		.stat-label {
-			font-size: 13px;
-			color: #777;
-		}
+        .stat-label {
+            font-size: 13px;
+            color: #777;
+        }
 
-		/* ===== SECTION CARD ===== */
+        /* ===== SECTION CARD ===== */
 
-		.section-card {
-			background: white;
-			padding: 24px;
-			border-radius: 14px;
-			box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
-			margin-bottom: 30px;
-		}
+        .section-card {
+            background: white;
+            padding: 24px;
+            border-radius: 14px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 30px;
+        }
 
-		.section-title {
-			font-size: 18px;
-			font-weight: 600;
-			margin-bottom: 20px;
-		}
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
 
-		/* ===== STUDENT TABLE ===== */
+        /* ===== STUDENT TABLE ===== */
 
-		table {
-			width: 100%;
-			border-collapse: collapse;
-		}
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-		thead {
-			background: #f2f4f7;
-		}
+        thead {
+            background: #f2f4f7;
+        }
 
-		th {
-			font-size: 13px;
-			font-weight: 600;
-			padding: 12px;
-			text-align: left;
-			color: #444;
-		}
+        th {
+            font-size: 13px;
+            font-weight: 600;
+            padding: 12px;
+            text-align: left;
+            color: #444;
+        }
 
-		td {
-			padding: 12px;
-			font-size: 14px;
-		}
+        td {
+            padding: 12px;
+            font-size: 14px;
+        }
 
-		tbody tr {
-			border-bottom: 1px solid #eee;
-			transition: 0.2s;
-		}
+        tbody tr {
+            border-bottom: 1px solid #eee;
+            transition: 0.2s;
+        }
 
-		tbody tr:hover {
-			background: #fafafa;
-		}
+        tbody tr:hover {
+            background: #fafafa;
+        }
 
-		/* ===== PROGRESS BAR ===== */
+        /* ===== PROGRESS BAR ===== */
 
-		.progress-wrapper {
-			display: flex;
-			align-items: center;
-			gap: 10px;
-		}
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-		.progress-bar {
-			flex: 1;
-			background: #eee;
-			height: 8px;
-			border-radius: 6px;
-			overflow: hidden;
-		}
+        .progress-bar {
+            flex: 1;
+            background: #eee;
+            height: 8px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
 
-		.progress-fill {
-			background: #4caf50;
-			height: 100%;
-		}
+        .progress-fill {
+            background: #4caf50;
+            height: 100%;
+        }
 
-		.progress-text {
-			font-size: 13px;
-			color: #555;
-		}
+        .progress-text {
+            font-size: 13px;
+            color: #555;
+        }
 
-		/* ===== MODULE STRUCTURE ===== */
+        /* ===== MODULE STRUCTURE ===== */
 
-		.module {
-			margin-bottom: 20px;
-		}
+        .module {
+            margin-bottom: 20px;
+        }
 
-		.module-title {
-			font-weight: 600;
-			margin-bottom: 10px;
-			font-size: 15px;
-		}
+        .module-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
 
-		.lesson-list {
-			padding-left: 18px;
-			color: #555;
-			font-size: 14px;
-		}
+        .lesson-list {
+            padding-left: 18px;
+            color: #555;
+            font-size: 14px;
+        }
 
-		.lesson-list li {
-			margin-bottom: 4px;
-		}
-	</style>
+        .lesson-list li {
+            margin-bottom: 4px;
+        }
+    </style>
 
 </head>
 
 <body>
 
-	<div class="container">
+    <div class="container">
 
-		<!-- HEADER -->
+        <!-- HEADER -->
 
-		<div class="page-header">
+        <div class="page-header">
 
-			<h2 class="page-title" th:text="${course.title} + ' Analytics'">
-				Course Analytics
-			</h2>
+            <h2 class="page-title" th:text="${course.title} + ' Analytics'">
+                Course Analytics
+            </h2>
 
-			<a th:href="@{/teacher-course}" class="back-btn">
-				<i class="bi bi-arrow-left"></i>
-				Back to Courses
-			</a>
+            <a th:href="@{/teacher-course}" class="back-btn">
+                <i class="bi bi-arrow-left"></i>
+                Back to Courses
+            </a>
 
-		</div>
+        </div>
 
-		<!-- STATS -->
+        <!-- STATS -->
 
-		<div class="stats-grid">
+        <div class="stats-grid">
 
-			<div class="stat-card">
-				<div class="stat-value" th:text="${totalStudents}">0</div>
-				<div class="stat-label">Total Students</div>
-			</div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${totalStudents}">0</div>
+                <div class="stat-label">Total Students</div>
+            </div>
 
-			<div class="stat-card">
-				<div class="stat-value" th:text="${activeStudents}">0</div>
-				<div class="stat-label">Active Students</div>
-			</div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${activeStudents}">0</div>
+                <div class="stat-label">Active Students</div>
+            </div>
 
-			<div class="stat-card">
-				<div class="stat-value" th:text="${suspendedStudents}">0</div>
-				<div class="stat-label">Suspended Students</div>
-			</div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${suspendedStudents}">0</div>
+                <div class="stat-label">Suspended Students</div>
+            </div>
 
-			<div class="stat-card">
-				<div class="stat-value" th:text="${moduleCount}">0</div>
-				<div class="stat-label">Modules</div>
-			</div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${moduleCount}">0</div>
+                <div class="stat-label">Modules</div>
+            </div>
 
-			<div class="stat-card">
-				<div class="stat-value" th:text="${lessonCount}">0</div>
-				<div class="stat-label">Lessons</div>
-			</div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${lessonCount}">0</div>
+                <div class="stat-label">Lessons</div>
+            </div>
 
-			<div class="stat-card">
-				<div class="stat-value" th:text="${quizCount}">0</div>
-				<div class="stat-label">Quizzes</div>
-			</div>
+            <div class="stat-card">
+                <div class="stat-value" th:text="${quizCount}">0</div>
+                <div class="stat-label">Quizzes</div>
+            </div>
 
-		</div>
+        </div>
 
-		<!-- STUDENT PROGRESS -->
+        <!-- STUDENT PROGRESS -->
 
-		<div class="section-card">
+        <div class="section-card">
 
-			<div class="section-title">
-				Student Progress
-			</div>
+            <div class="section-title">
+                Student Progress
+            </div>
 
-			<table>
+            <table>
 
-				<thead>
-					<tr>
-						<th>Student</th>
-						<th>Completed</th>
-						<th>Total Lessons</th>
-						<th>Progress</th>
-					</tr>
-				</thead>
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Completed</th>
+                        <th>Total Lessons</th>
+                        <th>Progress</th>
+                    </tr>
+                </thead>
 
-				<tbody>
+                <tbody>
 
-					<tr th:each="p : ${studentProgressList}">
+                    <tr th:each="p : ${studentProgressList}">
 
-						<td th:text="${p.student.fullname}"></td>
+                        <td th:text="${p.student.fullname}"></td>
 
-						<td th:text="${p.completed}"></td>
+                        <td th:text="${p.completed}"></td>
 
-						<td th:text="${p.total}"></td>
+                        <td th:text="${p.total}"></td>
 
-						<td>
+                        <td>
 
-							<div class="progress-wrapper">
+                            <div class="progress-wrapper">
 
-								<div class="progress-bar">
-									<div class="progress-fill" th:style="'width:' + ${p.progress} + '%'">
-									</div>
-								</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" th:style="'width:' + ${p.progress} + '%'">
+                                    </div>
+                                </div>
 
-								<span class="progress-text" th:text="${p.progress + '%'}"></span>
+                                <span class="progress-text" th:text="${p.progress + '%'}"></span>
 
-							</div>
+                            </div>
 
-						</td>
+                        </td>
 
-					</tr>
+                    </tr>
 
-				</tbody>
+                </tbody>
 
-			</table>
+            </table>
 
-		</div>
+        </div>
 
-		<!-- COURSE STRUCTURE -->
+        <!-- COURSE STRUCTURE -->
 
-		<div class="section-card">
+        <div class="section-card">
 
-			<div class="section-title">
-				Course Structure
-			</div>
+            <div class="section-title">
+                Course Structure
+            </div>
 
-			<div th:each="module : ${modules}" class="module">
+            <div th:each="module : ${modules}" class="module">
 
-				<div class="module-title" th:text="${module.title}">
-					Module Title
-				</div>
+                <div class="module-title" th:text="${module.title}">
+                    Module Title
+                </div>
 
-				<ul class="lesson-list">
+                <ul class="lesson-list">
 
-					<li th:each="lesson : ${module.lessons}" th:text="${lesson.title}">
-						Lesson Title
-					</li>
+                    <li th:each="lesson : ${module.lessons}" th:text="${lesson.title}">
+                        Lesson Title
+                    </li>
 
-				</ul>
+                </ul>
 
-			</div>
+            </div>
 
-		</div>
+        </div>
 
-	</div>
+    </div>
 
 </body>
 
