@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.entity.CertificateTemplate;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseCertificate;
+import com.example.demo.entity.Internships;
 import com.example.demo.entity.Student;
 import com.example.demo.enums.CertificateType;
 import com.example.demo.repository.CertificateTemplateRepository;
@@ -202,5 +203,5 @@ public class StudentCertificateController {
 		return "/uploads/certificates/student-" + student.getStudid() + "/course-" + course.getCourseId()
 				+ "/certificate.pdf";
 	}
-
+	
 }

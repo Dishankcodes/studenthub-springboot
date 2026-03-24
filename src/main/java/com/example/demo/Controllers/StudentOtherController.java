@@ -78,7 +78,7 @@ public class StudentOtherController {
 		return "redirect:/student-internship-detail?id=" + internshipId;
 	}
 
-	@GetMapping("/student/internship/certificate/{internshipId}")
+	@GetMapping("/student-internship/certificate/{internshipId}")
 	public void downloadInternshipCertificate(@PathVariable Integer internshipId, HttpSession session,
 			HttpServletResponse response) throws Exception {
 
@@ -87,14 +87,30 @@ public class StudentOtherController {
 		InternshipCertificate cert = internshipCertRepo.findByStudentStudidAndInternshipId(studentId, internshipId)
 				.orElse(null);
 
-		if (cert == null)
-			return;
-
-		File file = new File(System.getProperty("user.dir") + cert.getPdfPath());
-
+		if (cert == null) {
+		    response.sendError(404, "Certificate not found");
+		    return;
+		}
+		File file = new File(System.getProperty("user.dir") + "/" + cert.getPdfPath());
+		
 		response.setContentType("application/pdf");
-		response.setHeader("Content-Disposition", "attachment; filename=internship-certificate.pdf");
+		String studentName = cert.getStudent().getFullname()
+		        .replaceAll("[^a-zA-Z0-9 ]", "")
+		        .trim()
+		        .replace(" ", "_");
 
+		String internshipName = cert.getInternship().getTitle()
+		        .replaceAll("[^a-zA-Z0-9 ]", "")
+		        .trim()
+		        .replace(" ", "_");
+
+		String fileName = studentName + "-" + internshipName + "-Certificate.pdf";
+
+		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
+		if (!file.exists()) {
+		    response.sendError(404, "Certificate file not found");
+		    return;
+		}
 		Files.copy(file.toPath(), response.getOutputStream());
 		response.getOutputStream().flush();
 	}

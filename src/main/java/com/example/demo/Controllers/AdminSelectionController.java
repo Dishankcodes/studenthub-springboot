@@ -1,5 +1,7 @@
 package com.example.demo.Controllers;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -16,11 +18,19 @@ import com.example.demo.entity.CertificateTemplate;
 import com.example.demo.entity.InternshipApplication;
 import com.example.demo.entity.InternshipCertificate;
 import com.example.demo.entity.Internships;
+import com.example.demo.entity.Student;
 import com.example.demo.enums.ApplicationStatus;
 import com.example.demo.enums.CertificateType;
 import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.CertificateTemplateRepository;
 import com.example.demo.repository.InternshipCertificateRepository;
+import com.lowagie.text.Document;
+import com.lowagie.text.Element;
+import com.lowagie.text.Image;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfContentByte;
+import com.lowagie.text.pdf.PdfWriter;
 
 @Controller
 public class AdminSelectionController {
@@ -99,10 +109,92 @@ public class AdminSelectionController {
 	    return "redirect:/admin-final-selection?internshipId=" + app.getInternship().getId();
 	}
 
+
+	private String generateInternshipPdf(Student student, Internships internship, CertificateTemplate template) throws Exception {
+
+	    String baseDir = System.getProperty("user.dir") + "/uploads/certificates/student-" 
+	            + student.getStudid() + "/internship-" + internship.getId();
+
+	    File dir = new File(baseDir);
+	    if (!dir.exists()) dir.mkdirs();
+
+	    String pdfPath = baseDir + "/internship-certificate.pdf";
+
+	    Document document = new Document(PageSize.A4);
+	    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
+
+	    document.open();
+
+	    /* Background */
+	    if (template.getBackgroundImage() != null) {
+	        String bgPath = System.getProperty("user.dir") + template.getBackgroundImage();
+	        File bgFile = new File(bgPath);
+
+	        if (bgFile.exists()) {
+	            Image bg = Image.getInstance(bgPath);
+	            bg.scaleAbsolute(PageSize.A4.getWidth(), PageSize.A4.getHeight());
+	            bg.setAbsolutePosition(0, 0);
+	            writer.getDirectContentUnder().addImage(bg);
+	        }
+	    }
+
+	    PdfContentByte text = writer.getDirectContent();
+
+	    BaseFont bold = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
+	    BaseFont normal = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
+
+	    /* STUDENT NAME */
+	    text.beginText();
+	    text.setFontAndSize(bold, 30);
+	    text.showTextAligned(Element.ALIGN_CENTER,
+	            student.getFullname().toUpperCase(),
+	            PageSize.A4.getWidth() / 2, 420, 0);
+	    text.endText();
+
+	    /* INTERNSHIP TITLE */
+	    text.beginText();
+	    text.setFontAndSize(normal, 20);
+	    text.showTextAligned(Element.ALIGN_CENTER,
+	            internship.getTitle(),
+	            PageSize.A4.getWidth() / 2, 370, 0);
+	    text.endText();
+
+	    /* ROLE */
+	    text.beginText();
+	    text.setFontAndSize(normal, 16);
+	    text.showTextAligned(Element.ALIGN_CENTER,
+	            "Role: " + internship.getRole(),
+	            PageSize.A4.getWidth() / 2, 340, 0);
+	    text.endText();
+
+	    /* DATE */
+	    text.beginText();
+	    text.setFontAndSize(normal, 12);
+	    text.showTextAligned(Element.ALIGN_CENTER,
+	            "Issued on: " + LocalDate.now(),
+	            PageSize.A4.getWidth() / 2, 300, 0);
+	    text.endText();
+
+	    /* Signature */
+	    if (template.getSignatureImage() != null) {
+	        Image sign = Image.getInstance(System.getProperty("user.dir") + template.getSignatureImage());
+	        sign.scaleToFit(120, 60);
+	        sign.setAbsolutePosition(400, 150);
+	        document.add(sign);
+	    }
+
+	    document.close();
+
+	    return "/uploads/certificates/student-" + student.getStudid()
+	            + "/internship-" + internship.getId()
+	            + "/internship-certificate.pdf";
+	}
+
+	
 	@PostMapping("/admin/give-certificate")
 	public String giveCertificate(@RequestParam Integer appId,
 	                             @RequestParam Integer templateId,
-	                             RedirectAttributes ra) {
+	                             RedirectAttributes ra) throws Exception{
 
 	    InternshipApplication app = applicationRepo.findById(appId).orElse(null);
 
@@ -125,7 +217,13 @@ public class AdminSelectionController {
 	    cert.setTemplate(template);
 	    cert.setIssuedAt(LocalDate.now());
 	    cert.setCertificateNumber("INT-" + System.currentTimeMillis());
-	    cert.setPdfPath("/certificates/internship/sample.pdf");
+	    String pdfPath = generateInternshipPdf(
+	            app.getStudent(),
+	            app.getInternship(),
+	            template
+	    );
+
+	    cert.setPdfPath(pdfPath);
 
 	    internshipCertRepo.save(cert);
 
