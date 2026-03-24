@@ -14,7 +14,7 @@
 
     <style>
         .internship-list-container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: auto;
         }
 
@@ -23,103 +23,180 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
+        .header-row h1 {
+            font-weight: 600;
+        }
+
+        /* CREATE BUTTON */
         .btn-create {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 10px 18px;
+            border-radius: 12px;
             color: #fff;
             text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.25s;
+        }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
         }
 
         /* CARD */
         .internship-card {
             background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 15px;
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            padding: 20px 22px;
+            margin-bottom: 18px;
+
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
 
-        /* BUTTON */
-        .btn-view {
-            background: #0ea5e9;
-            padding: 8px 15px;
-            border-radius: 10px;
-            color: #fff;
-            text-decoration: none;
-        }
-
-        /* CARD FIX */
-        .internship-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: 0.25s;
         }
 
         .internship-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(99, 102, 241, 0.25);
         }
 
-        /* RIGHT SIDE BUTTON STACK */
-        .right {
+        /* LEFT */
+        .left h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .left .meta {
+            font-size: 13px;
+            opacity: 0.7;
+        }
+
+        .left .tag {
+            margin-top: 6px;
+            font-size: 12px;
+            background: rgba(99, 102, 241, 0.15);
+            padding: 4px 10px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        /* RIGHT ACTIONS */
+        .actions {
             display: flex;
-            flex-direction: column;
-            gap: 8px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
-        /* COMMON BUTTON */
+        /* BUTTON STYLE */
         .btn-action {
+            border: none;
             padding: 8px 14px;
             border-radius: 10px;
-            color: #fff;
-            text-decoration: none;
             font-size: 13px;
-            text-align: center;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            text-decoration: none;
             transition: 0.2s;
         }
 
-        /* APPLICANTS BUTTON */
-        .btn-applicants {
+        /* VARIANTS */
+        .btn-primary-custom {
             background: #0ea5e9;
+            color: white;
         }
 
-        .btn-applicants:hover {
+        .btn-primary-custom:hover {
             background: #0284c7;
         }
 
-        /* TEST BUTTON */
-        .btn-test {
+        .btn-gradient {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
         }
 
-        .btn-test:hover {
+        .btn-gradient:hover {
             transform: scale(1.05);
         }
 
-        /* CREATE BUTTON IMPROVE */
-        .btn-create {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            padding: 10px 18px;
+        .btn-danger-custom {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger-custom:hover {
+            background: #dc2626;
+        }
+
+        /* ALERT IMPROVE */
+        .alert {
             border-radius: 10px;
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* FILTER BAR */
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* INPUT GROUP */
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+        }
+
+        .filter-group i {
+            opacity: 0.7;
+        }
+
+        .filter-group input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            width: 180px;
+            font-size: 14px;
+        }
+
+        /* BUTTON */
+        .btn-filter {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            padding: 10px 16px;
+            border-radius: 12px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 6px;
             transition: 0.2s;
         }
 
-        .btn-create:hover {
-            transform: scale(1.05);
+        .btn-filter:hover {
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -213,78 +290,113 @@
                         <h1>Internship Management</h1>
 
                         <a href="/admin-post-internships" class="btn-create">
-                            + Post Internship
+                            <i class="bi bi-plus-circle"> </i> Post Internship
                         </a>
                     </div>
-                    <div th:if="${msg}" class="alert alert-success" th:text="${msg}" style="margin-bottom:15px;"></div>
-
-                    <div th:if="${error}" class="alert alert-danger" th:text="${error}" style="margin-bottom:15px;">
+                    <div th:if="${msg}" class="alert alert-success">
+                        <i class="bi bi-check-circle"></i>
+                        <span th:text="${msg}"></span>
                     </div>
-                    <div class="internship-list">
 
-                        <div th:each="i : ${internships}" class="internship-card">
+                    <div th:if="${error}" class="alert alert-danger">
+                        <i class="bi bi-x-circle"></i>
+                        <span th:text="${error}"></span>
+                    </div>
+                </div>
+                <div class="filter-bar">
 
-                            <div class="left">
-                                <h3 th:text="${i.title}"></h3>
-                                <p th:text="${i.location}"></p>
+                    <!-- SEARCH -->
+                    <div class="filter-group">
+                        <i class="bi bi-search"></i>
+                        <input type="text" name="keyword" placeholder="Search internships..."
+                            th:value="${param.keyword}">
+                    </div>
 
-                                <small>
-                                    Required Course:
-                                    <span
-                                        th:text="${i.requiredCourse != null ? i.requiredCourse.title : 'None'}"></span>
-                                </small>
+                    <!-- LOCATION FILTER -->
+                    <div class="filter-group">
+                        <i class="bi bi-geo-alt"></i>
+                        <input type="text" name="location" placeholder="Filter by location..."
+                            th:value="${param.location}">
+                    </div>
+
+                    <!-- BUTTON -->
+                    <button type="submit" class="btn-filter">
+                        <i class="bi bi-funnel"></i>
+                        Apply
+                    </button>
+
+                </div>
+                <div class="internship-list">
+
+                    <div th:each="i : ${internships}" class="internship-card">
+
+                        <!-- LEFT -->
+                        <div class="left">
+                            <h3 th:text="${i.title}"></h3>
+
+                            <div class="meta">
+                                <i class="bi bi-geo-alt"></i>
+                                <span th:text="${i.location}"></span>
                             </div>
 
-                            <div class="right">
-
-                                <!-- 👥 Applicants -->
-                                <a th:href="@{'/admin-applicants?id=' + ${i.id}}" class="btn-action btn-applicants">
-                                    👥 Applicants
-                                </a>
-
-                                <!-- 🔥 TOGGLE TEST -->
-                                <form th:action="@{/admin/toggle-test}" method="post">
-
-    <input type="hidden" name="internshipId" th:value="${i.id != null ? i.id : internship.id}">
-
-    <!-- 👇 CONFIRM REMOVE FLAG -->
-    <input type="hidden" name="confirmRemove" value="true">
-
-    <button class="btn-action btn-test">
-
-        <span th:if="${(i != null ? i.hasTest : internship.hasTest)}">
-            ❌ Remove Test
-        </span>
-
-        <span th:if="${!(i != null ? i.hasTest : internship.hasTest)}">
-            ➕ Add Test
-        </span>
-
-    </button>
-
-</form>
-
-                                <!-- 📝 MANAGE TEST -->
-                                <a th:if="${i.hasTest}" th:href="@{'/admin-internship-test?internshipId=' + ${i.id}}"
-                                    class="btn-action btn-test">
-                                    📝 Manage Test
-                                </a>
-
-
-                                <a th:href="@{'/admin-final-selection?internshipId=' + ${i.id}}" class="btn-action">
-                                    🎯 Final Selection
-                                </a>
+                            <div class="tag">
+                                <i class="bi bi-book"></i>
+                                <span
+                                    th:text="${i.requiredCourse != null ? i.requiredCourse.title : 'No course required'}"></span>
                             </div>
+                        </div>
+
+                        <!-- RIGHT ACTIONS -->
+                        <div class="actions">
+
+                            <!-- Applicants -->
+                            <a th:href="@{'/admin-applicants?id=' + ${i.id}}" class="btn-action btn-primary-custom">
+                                <i class="bi bi-people"></i>
+                                Applicants
+                            </a>
+
+                            <!-- Toggle Test -->
+                            <form th:action="@{/admin/toggle-test}" method="post">
+                                <input type="hidden" name="internshipId" th:value="${i.id}">
+                                <input type="hidden" name="confirmRemove" value="true">
+
+                                <button class="btn-action btn-gradient">
+
+                                    <span th:if="${i.hasTest}">
+                                        <i class="bi bi-x-circle"></i> Remove Test
+                                    </span>
+
+                                    <span th:if="${!i.hasTest}">
+                                        <i class="bi bi-plus-circle"></i> Add Test
+                                    </span>
+
+                                </button>
+                            </form>
+
+                            <!-- Manage Test -->
+                            <a th:if="${i.hasTest}" th:href="@{'/admin-internship-test?internshipId=' + ${i.id}}"
+                                class="btn-action btn-gradient">
+                                <i class="bi bi-ui-checks-grid"></i>
+                                Manage Test
+                            </a>
+
+                            <!-- Final Selection -->
+                            <a th:href="@{'/admin-final-selection?internshipId=' + ${i.id}}"
+                                class="btn-action btn-primary-custom">
+                                <i class="bi bi-trophy"></i>
+                                Final Selection
+                            </a>
 
                         </div>
 
                     </div>
 
                 </div>
-            </main>
         </div>
-
+        
     </div>
+
+    
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
