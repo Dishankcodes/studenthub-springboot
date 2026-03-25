@@ -2,450 +2,456 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Teacher Dashboard</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Classroom
 
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
-	<link rel="stylesheet" th:href="@{/css/teacher-css/teacher-activity.css}">
-	<style>
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-			font-family: 'Poppins', sans-serif;
-		}
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		body {
-			background: #1f1f2e;
-			color: white;
-		}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
+    <link rel="stylesheet" th:href="@{/css/teacher-css/teacher-activity.css}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-
-		.main-content {
-			margin-left: 260px;
-			padding: 20 30px;
-			transition: margin-left 0.3s ease;
-		}
-
-		/* When sidebar is collapsed */
-		body.sidebar-collapsed .main-content {
-			margin-left: 80px;
-		}
+        body {
+            background: #1f1f2e;
+            color: white;
+        }
 
 
-		.page-title {
-			font-size: 28px;
-			font-weight: 600;
-			margin-top: 30px;
-			margin-left: 20px;
-		}
+        .main-content {
+            margin-left: 260px;
+            padding: 20 30px;
+            transition: margin-left 0.3s ease;
+        }
 
-		/* ===== PAGE HEADER ===== */
-		/* ===== Layout ===== */
-		.dashboard {
-			padding: 30px;
-		}
+        /* When sidebar is collapsed */
+        body.sidebar-collapsed .main-content {
+            margin-left: 80px;
+        }
 
-		.section-title {
-			margin: 30px 0 15px;
-			font-size: 22px;
-			font-weight: 600;
-		}
 
-		.status-banner {
-			margin: 20px 30px;
-			padding: 14px 18px;
-			border-radius: 8px;
-			font-weight: 500;
-		}
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-top: 30px;
+            margin-left: 20px;
+        }
 
-		.status-banner.suspended {
-			background: #fff3cd;
-			color: #856404;
-			border-left: 6px solid #ffc107;
-		}
+        /* ===== PAGE HEADER ===== */
+        /* ===== Layout ===== */
+        .dashboard {
+            padding: 30px;
+        }
 
-		.status-banner.blocked {
-			background: #f8d7da;
-			color: #721c24;
-			border-left: 6px solid #dc3545;
-		}
-	</style>
+        .section-title {
+            margin: 30px 0 15px;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .status-banner {
+            margin: 20px 30px;
+            padding: 14px 18px;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .status-banner.suspended {
+            background: #fff3cd;
+            color: #856404;
+            border-left: 6px solid #ffc107;
+        }
+
+        .status-banner.blocked {
+            background: #f8d7da;
+            color: #721c24;
+            border-left: 6px solid #dc3545;
+        }
+        .create-announcement-card h3 {
+    margin-bottom: 12px; /* was too big */
+}
+    </style>
 </head>
 
 <body class="sidebar-collapsed">
-	<aside class="sidebar collapsed">
-		<div class="sidebar-logo">
-			<img th:src="@{/images/logo.png}" alt="EduPlatform Logo">
-			<span class="logo-text">EduPlatform</span>
-		</div>
-
-		<nav class="sidebar-menu">
-			<a th:href="@{/teacher-dashboard}"><i class="bi bi-speedometer2"></i><span> Dashboard
-				</span></a>
-			<a th:href="@{/teacher-course}"><i class="bi bi-journal-text"></i><span>Course Management</span></a>
-			<a th:href="@{/teacher-creates-course}"><i class="bi bi-journal-plus"></i><span>Create Course</span></a>
-			<a th:href="@{/teacher-activity}" class="active"><i class="bi bi-pencil-square"></i><span>Genereal
-					Activities</span></a>
-			<a th:href="@{/teacher-students}"><i class="bi bi-people"></i><span>Students</span></a>
-			<a th:href="@{/teacher-communication}"><i class="bi bi-chat-dots"></i><span>Communication</span></a>
-			<a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback & Ratings</span></a>
-			<a th:href="@{/teacher-profile}"><i class="bi bi-gear"></i><span>Profile</span></a>
-			<a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
-		</nav>
-	</aside>
-
-	<!-- ===== MAIN CONTENT ===== -->
-	<main class="main-content">
-		<!-- ===== TOP HEADER ===== -->
-		<header class="top-header">
-			<div class="header-left">
-				<button class="sidebar-toggle" id="sidebarToggle">
-					<i class="bi bi-list"></i>
-				</button>
-
-				<span class="page-title">Dashboard</span>
-			</div>
-
-			<div class="header-right">
-				<div class="profile-trigger" id="profileToggle">
-					<span th:text="${teacher.firstname + ' ' + teacher.lastname}">
-						Dishank
-					</span>
-					<div class="avatar">
-						<i class="bi bi-person-fill"></i>
-					</div>
-					<i class="bi bi-caret-down-fill"></i>
-				</div>
-
-
-				<div class="profile-dropdown" id="profileDropdown">
-					<a th:href="@{/teacher-profile}">Profile</a>
-					<a href="@{/logout}">Logout</a>
-				</div>
-			</div>
-		</header>
-
-		<hr class="header-divider">
-
-		<div class="dashboard">
-
-			<div th:if="${teacher.status.name() == 'SUSPENDED'}" class="status-banner suspended">
-				⚠ Your account is suspended.
-				You cannot upload notes or create announcements.
-			</div>
-
-			<div th:if="${teacher.status.name() == 'BLOCKED'}" class="status-banner blocked">
-				🚫 Your account has been blocked by admin.
-				All activities are disabled.
-			</div>
-			<!-- ===== TEACHER STATUS MESSAGE ===== -->
-			<div id="statusMessage" th:if="${param.msg == 'pending'}" class="info status-pending">
-				✅ Notes uploaded successfully.<br>
-				⏳ Under review. Auto-approval in progress.
-			</div>
-
-			<div id="statusMessage" th:if="${teacherMsg}" th:switch="${#strings.substringBefore(teacherMsg, ':')}"
-				class="info">
-
-				<span th:case="'approved'" class="status-approved">
-					✅ Your note
-					<strong th:text="${#strings.substringAfter(teacherMsg, ':')}"></strong>
-					has been approved 🎉
-				</span>
-
-				<span th:case="'rejected'" class="status-rejected">
-					❌ Your note
-					<strong th:text="${#strings.substringAfter(teacherMsg, ':')}"></strong>
-					was rejected. Please update and re-upload.
-				</span>
-			</div>
-			<!-- ===== INFO MESSAGE (FULL WIDTH) ===== -->
-			<p th:if="${param.msg == 'pending'}" class="info">
-				✅ Notes uploaded successfully.<br>
-				⏳ Sent for review.
-			</p>
-
-			<!-- ===== TWO COLUMN LAYOUT ===== -->
-			<div class="notes-layout">
-
-				<!-- ===== LEFT: UPLOAD NOTES ===== -->
-				<div class="notes-upload-card">
-					<h3>Upload Notes</h3>
-
-					<form th:action="@{/teacher-notes/upload}" method="post" enctype="multipart/form-data">
-
-						<input type="text" name="title" placeholder="Notes title" required>
+    <aside class="sidebar collapsed">
+        <div class="sidebar-logo">
+            <img th:src="@{/images/logo.png}" alt="EduPlatform Logo">
+            <span class="logo-text">EduPlatform</span>
+        </div>
+
+        <nav class="sidebar-menu">
+            <a th:href="@{/teacher-dashboard}"><i class="bi bi-speedometer2"></i><span> Dashboard
+                </span></a>
+            <a th:href="@{/teacher-course}"><i class="bi bi-journal-text"></i><span>Course Management</span></a>
+            <a th:href="@{/teacher-creates-course}"><i class="bi bi-journal-plus"></i><span>Create Course</span></a>
+            <a th:href="@{/teacher-activity}" class="active"><i class="bi bi-pencil-square"></i><span>Genereal
+                    Activities</span></a>
+            <a th:href="@{/teacher-students}"><i class="bi bi-people"></i><span>Students</span></a>
+            <a th:href="@{/teacher-communication}"><i class="bi bi-chat-dots"></i><span>Communication</span></a>
+            <a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback & Ratings</span></a>
+            <a th:href="@{/teacher-profile}"><i class="bi bi-gear"></i><span>Profile</span></a>
+            <a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+        </nav>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="main-content">
+        <!-- ===== TOP HEADER ===== -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="bi bi-list"></i>
+                </button>
+
+                <span class="page-title">Dashboard</span>
+            </div>
+
+            <div class="header-right">
+                <div class="profile-trigger" id="profileToggle">
+                    <span th:text="${teacher.firstname + ' ' + teacher.lastname}">
+                        Dishank
+                    </span>
+                    <div class="avatar">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <i class="bi bi-caret-down-fill"></i>
+                </div>
+
+
+                <div class="profile-dropdown" id="profileDropdown">
+                    <a th:href="@{/teacher-profile}">Profile</a>
+                    <a href="@{/logout}">Logout</a>
+                </div>
+            </div>
+        </header>
+
+        <hr class="header-divider">
+
+        <div class="dashboard">
+
+            <div th:if="${teacher.status.name() == 'SUSPENDED'}" class="status-banner suspended">
+                ⚠ Your account is suspended.
+                You cannot upload notes or create announcements.
+            </div>
+
+            <div th:if="${teacher.status.name() == 'BLOCKED'}" class="status-banner blocked">
+                🚫 Your account has been blocked by admin.
+                All activities are disabled.
+            </div>
+            <!-- ===== TEACHER STATUS MESSAGE ===== -->
+            <div id="statusMessage" th:if="${param.msg == 'pending'}" class="info status-pending">
+                ✅ Notes uploaded successfully.<br>
+                ⏳ Under review. Auto-approval in progress.
+            </div>
+
+            <div id="statusMessage" th:if="${teacherMsg}" th:switch="${#strings.substringBefore(teacherMsg, ':')}"
+                class="info">
+
+                <span th:case="'approved'" class="status-approved">
+                    ✅ Your note
+                    <strong th:text="${#strings.substringAfter(teacherMsg, ':')}"></strong>
+                    has been approved 🎉
+                </span>
+
+                <span th:case="'rejected'" class="status-rejected">
+                    ❌ Your note
+                    <strong th:text="${#strings.substringAfter(teacherMsg, ':')}"></strong>
+                    was rejected. Please update and re-upload.
+                </span>
+            </div>
+            <!-- ===== INFO MESSAGE (FULL WIDTH) ===== -->
+            <p th:if="${param.msg == 'pending'}" class="info">
+                ✅ Notes uploaded successfully.<br>
+                ⏳ Sent for review.
+            </p>
+
+            <!-- ===== TWO COLUMN LAYOUT ===== -->
+            <div class="notes-layout">
+
+                <!-- ===== LEFT: UPLOAD NOTES ===== -->
+                <div class="notes-upload-card">
+                    <h3>Upload Notes</h3>
+
+                    <form th:action="@{/teacher-notes/upload}" method="post" enctype="multipart/form-data">
+
+                        <input type="text" name="title" placeholder="Notes title" required>
 
-						<textarea name="description" placeholder="Optional description"></textarea>
+                        <textarea name="description" placeholder="Optional description"></textarea>
 
-						<select name="categoryId" required>
-							<option value="">Select category</option>
-							<option th:each="c : ${categories}" th:value="${c.categoryId}" th:text="${c.name}">
-							</option>
-						</select>
+                        <select name="categoryId" required>
+                            <option value="">Select category</option>
+                            <option th:each="c : ${categories}" th:value="${c.categoryId}" th:text="${c.name}">
+                            </option>
+                        </select>
 
-						<input type="file" name="file" required>
+                        <input type="file" name="file" required>
 
-						<button type="submit">
-							<i class="bi bi-upload"></i> Upload Notes
-						</button>
-					</form>
-				</div>
-
-				<!-- ===== RIGHT: UPLOADED NOTES ===== -->
-				<div class="uploaded-notes">
-					<h3>My Uploaded Notes</h3>
-
-					<div th:if="${#lists.isEmpty(notes)}" class="info">
-						You haven’t uploaded any notes yet.
-					</div>
-
-					<div class="notes-grid" th:if="${!#lists.isEmpty(notes)}">
-
-						<div class="note-item" th:each="n : ${notes}">
-
-							<h4 th:text="${n.title}">Note Title</h4>
-
-							<p th:text="${n.description}">
-								Description
-							</p>
-
-							<span th:switch="${n.status}">
-								<span th:case="'PENDING'" class="status-badge status-pending">
-									⏳ PENDING
-								</span>
-								<span th:case="'APPROVED'" class="status-badge status-approved">
-									✅ APPROVED
-								</span>
-								<span th:case="'REJECTED'" class="status-badge status-rejected">
-									❌ REJECTED
-								</span>
-							</span>
-
-							<div class="meta">
-								<strong th:text="${n.category.name}"></strong>
-								•
-								<span th:text="${#temporals.format(n.uploadedAt,'dd MMM yyyy')}"></span>
-							</div>
-
-							<div class="note-actions">
-								<a th:href="${n.fileUrl}" download title="Download">
-									<i class="bi bi-download"></i>
-								</a>
-
-								<a th:href="${n.fileUrl}" target="_blank" title="Open">
-									<i class="bi bi-box-arrow-up-right"></i>
-								</a>
-							</div>
-
-						</div>
-					</div>
-				</div>
-
-			</div>
-			<hr class="section-divider">
-
-			<div class="section-wrapper">
-
-				<div class="section-title">
-					<i class="bi bi-megaphone-fill"></i>
-					Announcements
-				</div>
-
-				<!-- ================= CREATE ANNOUNCEMENT ================= -->
-				<div class="create-announcement-card">
-
-					<h3>Create Announcement</h3>
-
-					<form action="/teacher-announcement/create" method="post" enctype="multipart/form-data">
-
-						<select name="courseId">
-							<option value="">General (All Students)</option>
-							<option th:each="c : ${courses}" th:value="${c.courseId}" th:text="${c.title}">
-							</option>
-						</select>
-
-						<input type="text" name="title" placeholder="Announcement title" required>
-
-						<textarea name="message" placeholder="Write your announcement..." required></textarea>
-
-						<input type="file" name="file">
-
-						<button type="submit" th:disabled="${teacher.status.name() != 'ACTIVE'}">
-							<i class="bi bi-send"></i> Publish
-						</button>
-
-					</form>
-				</div>
-
-				<!-- ================= TABS ================= -->
-				<div class="tabs">
-					<button class="tab-btn active" onclick="switchTab('myTab', this)">
-						My Announcements
-					</button>
-
-					<button class="tab-btn" onclick="switchTab('othersTab', this)">
-						Other Teachers
-					</button>
-					<button class="tab-btn" onclick="switchTab('adminTab', this)">
-						Admin Announcements
-					</button>
-				</div>
-
-				<!-- ================= MY ANNOUNCEMENTS ================= -->
-				<div id="myTab" class="tab-content active">
-
-					<div th:if="${#lists.isEmpty(myAnnouncements)}" class="empty-state" style="margin-top:20px;">
-						<div class="empty-icon">
-							<i class="bi bi-megaphone"></i>
-						</div>
-						<h3>No announcements yet</h3>
-						<p>You haven’t posted anything yet.</p>
-					</div>
-
-					<div th:each="a : ${myAnnouncements}" th:if="${a.active}"
-						th:class="${a.pinned ? 'announcement-card pinned' : 'announcement-card'}">
-
-						<h4>
-							<span th:if="${a.pinned}">📌 </span>
-							<span th:text="${a.title}"></span>
-						</h4>
-
-						<div class="announcement-meta">
-							<span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
-							•
-							<span th:text="${a.course != null ? a.course.title : 'General'}"></span>
-						</div>
-
-						<div class="announcement-message" th:text="${a.message}">
-						</div>
-
-						<div th:if="${a.attachmentUrl != null}" class="attachment">
-							📎
-							<a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}"></a>
-						</div>
-
-					</div>
-				</div>
-
-				<!-- ================= OTHER TEACHERS ================= -->
-				<div id="othersTab" class="tab-content">
-
-					<div th:each="a : ${announcements}" th:if="${a.teacher != null}" class="announcement-card">
-
-						<h4>
-							<span th:if="${a.pinned}">📌 </span>
-							<span th:text="${a.title}"></span>
-						</h4>
-
-						<div class="announcement-meta">
-							By
-							<span th:text="${a.teacher.firstname + ' ' + a.teacher.lastname}"></span>
-							•
-							<span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
-						</div>
-
-						<div class="announcement-message" th:text="${a.message}">
-						</div>
-
-					</div>
-				</div>
-				<!-- ================= ADMIN ANNOUNCEMENTS ================= -->
-				<div id="adminTab" class="tab-content">
-
-					<div th:if="${#lists.isEmpty(adminAnnouncements)}" style="margin-top:20px;" class="info">
-						No admin announcements yet.
-					</div>
-
-					<div th:each="a : ${adminAnnouncements}"
-						th:class="${a.pinned ? 'announcement-card pinned' : 'announcement-card'}">
-
-						<h4>
-							<span th:if="${a.pinned}">📌 </span>
-							<span th:text="${a.title}"></span>
-						</h4>
-
-						<div class="announcement-meta">
-							<strong>Admin</strong>
-							•
-							<span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
-						</div>
-
-						<div class="announcement-message" th:text="${a.message}">
-						</div>
-
-						<div th:if="${a.attachmentUrl != null}" class="attachment">
-							📎
-							<a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}">
-							</a>
-						</div>
-
-					</div>
-
-				</div>
-
-			</div>
-		</div>
-	</main>
-	<script>
-
-		const toggleBtn = document.getElementById("sidebarToggle");
-		const sidebar = document.querySelector(".sidebar");
-
-		const body = document.body;
-
-		toggleBtn.addEventListener("click", () => {
-			sidebar.classList.toggle("collapsed");
-			body.classList.toggle("sidebar-collapsed");
-		});
-
-
-		const profileToggle = document.getElementById("profileToggle");
-		const profileDropdown = document.getElementById("profileDropdown");
-
-		if (profileToggle) {
-			profileToggle.addEventListener("click", () => {
-				profileDropdown.classList.toggle("show");
-			});
-
-			document.addEventListener("click", (e) => {
-				if (!profileToggle.contains(e.target)) {
-					profileDropdown.classList.remove("show");
-				}
-			});
-		}
-	</script>
-	<script>
-		const statusMsg = document.getElementById("statusMessage");
-
-		if (statusMsg) {
-			setTimeout(() => {
-				statusMsg.style.opacity = "0";
-				statusMsg.style.transform = "translateY(-10px)";
-				setTimeout(() => statusMsg.remove(), 500);
-			}, 30000); // 30 seconds
-		}
-	</script>
-	<script>
-		function switchTab(tabId, btn) {
-
-			document.querySelectorAll(".tab-content")
-				.forEach(tab => tab.classList.remove("active"));
-
-			document.querySelectorAll(".tab-btn")
-				.forEach(button => button.classList.remove("active"));
-
-			document.getElementById(tabId)
-				.classList.add("active");
-
-			btn.classList.add("active");
-		}
-	</script>
+                        <button type="submit">
+                            <i class="bi bi-upload"></i> Upload Notes
+                        </button>
+                    </form>
+                </div>
+
+                <!-- ===== RIGHT: UPLOADED NOTES ===== -->
+                <div class="uploaded-notes">
+                    <h3>My Uploaded Notes</h3>
+
+                    <div th:if="${#lists.isEmpty(notes)}" class="info">
+                        You haven’t uploaded any notes yet.
+                    </div>
+
+                    <div class="notes-grid" th:if="${!#lists.isEmpty(notes)}">
+
+                        <div class="note-item" th:each="n : ${notes}">
+
+                            <h4 th:text="${n.title}">Note Title</h4>
+
+                            <p th:text="${n.description}">
+                                Description
+                            </p>
+
+                            <span th:switch="${n.status}">
+                                <span th:case="'PENDING'" class="status-badge status-pending">
+                                    ⏳ PENDING
+                                </span>
+                                <span th:case="'APPROVED'" class="status-badge status-approved">
+                                    ✅ APPROVED
+                                </span>
+                                <span th:case="'REJECTED'" class="status-badge status-rejected">
+                                    ❌ REJECTED
+                                </span>
+                            </span>
+
+                            <div class="meta">
+                                <strong th:text="${n.category.name}"></strong>
+                                •
+                                <span th:text="${#temporals.format(n.uploadedAt,'dd MMM yyyy')}"></span>
+                            </div>
+
+                            <div class="note-actions">
+                                <a th:href="${n.fileUrl}" download title="Download">
+                                    <i class="bi bi-download"></i>
+                                </a>
+
+                                <a th:href="${n.fileUrl}" target="_blank" title="Open">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <hr class="section-divider">
+
+            <div class="section-wrapper">
+
+                <div class="section-title">
+                    <i class="bi bi-megaphone-fill"></i>
+                    Announcements
+                </div>
+
+                <!-- ================= CREATE ANNOUNCEMENT ================= -->
+                <div class="create-announcement-card">
+
+                    <h3>Create Announcement</h3>
+                    <div class="announcement-form-row">
+                        <form action="/teacher-announcement/create" method="post" enctype="multipart/form-data">
+
+                            <select name="courseId">
+                                <option value="">General (All Students)</option>
+                                <option th:each="c : ${courses}" th:value="${c.courseId}" th:text="${c.title}">
+                                </option>
+                            </select>
+
+                            <input type="text" name="title" placeholder="Announcement title" required>
+
+                            <textarea name="message" placeholder="Write your announcement..." required></textarea>
+
+                            <input type="file" name="file">
+
+                            <button type="submit" th:disabled="${teacher.status.name() != 'ACTIVE'}">
+                                <i class="bi bi-send"></i> Publish
+                            </button>
+
+                        </form>
+                    </div>
+                </div>
+
+                <!-- ================= TABS ================= -->
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('myTab', this)">
+                        My Announcements
+                    </button>
+
+                    <button class="tab-btn" onclick="switchTab('othersTab', this)">
+                        Other Teachers
+                    </button>
+                    <button class="tab-btn" onclick="switchTab('adminTab', this)">
+                        Admin Announcements
+                    </button>
+                </div>
+
+                <!-- ================= MY ANNOUNCEMENTS ================= -->
+                <div id="myTab" class="tab-content active">
+
+                    <div th:if="${#lists.isEmpty(myAnnouncements)}" class="empty-state" style="margin-top:20px;">
+                        <div class="empty-icon">
+                            <i class="bi bi-megaphone"></i>
+                        </div>
+                        <h3>No announcements yet</h3>
+                        <p>You haven’t posted anything yet.</p>
+                    </div>
+
+                    <div th:each="a : ${myAnnouncements}" th:if="${a.active}"
+                        th:class="${a.pinned ? 'announcement-card pinned' : 'announcement-card'}">
+
+                        <h4>
+                            <span th:if="${a.pinned}">📌 </span>
+                            <span th:text="${a.title}"></span>
+                        </h4>
+
+                        <div class="announcement-meta">
+                            <span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
+                            •
+                            <span th:text="${a.course != null ? a.course.title : 'General'}"></span>
+                        </div>
+
+                        <div class="announcement-message" th:text="${a.message}">
+                        </div>
+
+                        <div th:if="${a.attachmentUrl != null}" class="attachment">
+                            📎
+                            <a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}"></a>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ================= OTHER TEACHERS ================= -->
+                <div id="othersTab" class="tab-content">
+
+                    <div th:each="a : ${announcements}" th:if="${a.teacher != null}" class="announcement-card">
+
+                        <h4>
+                            <span th:if="${a.pinned}">📌 </span>
+                            <span th:text="${a.title}"></span>
+                        </h4>
+
+                        <div class="announcement-meta">
+                            By
+                            <span th:text="${a.teacher.firstname + ' ' + a.teacher.lastname}"></span>
+                            •
+                            <span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
+                        </div>
+
+                        <div class="announcement-message" th:text="${a.message}">
+                        </div>
+
+                    </div>
+                </div>
+                <!-- ================= ADMIN ANNOUNCEMENTS ================= -->
+                <div id="adminTab" class="tab-content">
+
+                    <div th:if="${#lists.isEmpty(adminAnnouncements)}" style="margin-top:20px;" class="info">
+                        No admin announcements yet.
+                    </div>
+
+                    <div th:each="a : ${adminAnnouncements}"
+                        th:class="${a.pinned ? 'announcement-card pinned' : 'announcement-card'}">
+
+                        <h4>
+                            <span th:if="${a.pinned}">📌 </span>
+                            <span th:text="${a.title}"></span>
+                        </h4>
+
+                        <div class="announcement-meta">
+                            <strong>Admin</strong>
+                            •
+                            <span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
+                        </div>
+
+                        <div class="announcement-message" th:text="${a.message}">
+                        </div>
+
+                        <div th:if="${a.attachmentUrl != null}" class="attachment">
+                            📎
+                            <a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}">
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+    <script>
+
+        const toggleBtn = document.getElementById("sidebarToggle");
+        const sidebar = document.querySelector(".sidebar");
+
+        const body = document.body;
+
+        toggleBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("collapsed");
+            body.classList.toggle("sidebar-collapsed");
+        });
+
+
+        const profileToggle = document.getElementById("profileToggle");
+        const profileDropdown = document.getElementById("profileDropdown");
+
+        if (profileToggle) {
+            profileToggle.addEventListener("click", () => {
+                profileDropdown.classList.toggle("show");
+            });
+
+            document.addEventListener("click", (e) => {
+                if (!profileToggle.contains(e.target)) {
+                    profileDropdown.classList.remove("show");
+                }
+            });
+        }
+    </script>
+    <script>
+        const statusMsg = document.getElementById("statusMessage");
+
+        if (statusMsg) {
+            setTimeout(() => {
+                statusMsg.style.opacity = "0";
+                statusMsg.style.transform = "translateY(-10px)";
+                setTimeout(() => statusMsg.remove(), 500);
+            }, 30000); // 30 seconds
+        }
+    </script>
+    <script>
+        function switchTab(tabId, btn) {
+
+            document.querySelectorAll(".tab-content")
+                .forEach(tab => tab.classList.remove("active"));
+
+            document.querySelectorAll(".tab-btn")
+                .forEach(button => button.classList.remove("active"));
+
+            document.getElementById(tabId)
+                .classList.add("active");
+
+            btn.classList.add("active");
+        }
+    </script>
 </body>
 
 </html>

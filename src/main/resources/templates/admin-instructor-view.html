@@ -2,404 +2,506 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Instructor Feedback</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Instructor Feedback</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<!-- Bootstrap -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-	<!-- Bootstrap Icons -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-	<!-- Admin Sidebar CSS -->
-	<link th:href="@{/css/admin-css/admin_sidebar.css}" rel="stylesheet">
-	<style>
-		body {
-			font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-		}
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Admin Sidebar CSS -->
+    <link th:href="@{/css/admin-css/admin_sidebar.css}" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
 
-		/* =======================
+        /* =======================
    BASE
 ======================= */
-		.dashboard {
-			padding: 36px 42px;
-			width: 100%;
-			color: #e5e7eb;
-		}
+        .dashboard {
+            padding: 36px 42px;
+            width: 100%;
+            color: #e5e7eb;
+        }
 
-		.feedback-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: flex-start;
-			margin-bottom: 32px;
-			gap: 20px;
-		}
+        .feedback-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+            gap: 20px;
+        }
 
-		.feedback-header h2 {
-			font-size: 1.9rem;
-			font-weight: 600;
-			color: #f9fafb;
-		}
+        .feedback-header h2 {
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: #f9fafb;
+        }
 
-		.feedback-sub {
-			color: #9ca3af;
-			font-size: 14px;
-			margin-top: 6px;
-		}
+        .feedback-sub {
+            color: #9ca3af;
+            font-size: 14px;
+            margin-top: 6px;
+        }
 
-		/* =======================
+        /* =======================
    BACK BUTTON
 ======================= */
-		.btn-back {
-			display: inline-flex;
-			align-items: center;
-			gap: 8px;
-			padding: 10px 18px;
-			border-radius: 12px;
-			font-size: 14px;
-			font-weight: 500;
-			text-decoration: none;
-			color: #e5e7eb;
-			background: rgba(255, 255, 255, 0.06);
-			border: 1px solid rgba(255, 255, 255, 0.12);
-			transition: 0.25s ease;
-			white-space: nowrap;
-		}
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            color: #e5e7eb;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            transition: 0.25s ease;
+            white-space: nowrap;
+        }
 
-		.btn-back:hover {
-			background: rgba(56, 189, 248, 0.18);
-			color: #e0f2fe;
-			transform: translateY(-1px);
-		}
+        .btn-back:hover {
+            background: rgba(56, 189, 248, 0.18);
+            color: #e0f2fe;
+            transform: translateY(-1px);
+        }
 
-		/* =======================
+        /* =======================
    CARD BASE
 ======================= */
-		.activity-card,
-		.rating-card {
-			background: linear-gradient(145deg, #020617, #020617cc);
-			border-radius: 18px;
-			padding: 28px;
-			margin-bottom: 32px;
-			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
-		}
+        .activity-card,
+        .rating-card {
+            background: linear-gradient(145deg, #020617, #020617cc);
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 32px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
 
-		.activity-card h5,
-		.rating-card h3 {
-			font-weight: 600;
-			margin-bottom: 14px;
-		}
+        .activity-card h5,
+        .rating-card h3 {
+            font-weight: 600;
+            margin-bottom: 14px;
+        }
 
-		/* =======================
+        /* =======================
    RATING
 ======================= */
-		.rating-value {
-			font-size: 38px;
-			font-weight: 700;
-			color: #facc15;
-			margin-top: 4px;
-		}
+        .rating-value {
+            font-size: 38px;
+            font-weight: 700;
+            color: #facc15;
+            margin-top: 4px;
+        }
 
-		.rating-meta {
-			color: #9ca3af;
-			font-size: 14px;
-			margin-top: 4px;
-		}
+        .rating-meta {
+            color: #9ca3af;
+            font-size: 14px;
+            margin-top: 4px;
+        }
 
-		/* =======================
+        /* =======================
    TABLE (ADMIN DARK)
 ======================= */
 
-		.table {
-			width: 100%;
-			margin-top: 18px;
-			border-collapse: separate;
-			border-spacing: 0;
-			color: #e5e7eb;
-			font-size: 14px;
-		}
+        .table {
+            width: 100%;
+            margin-top: 18px;
+            border-collapse: separate;
+            border-spacing: 0;
+            color: #e5e7eb;
+            font-size: 14px;
+        }
 
-		.table thead {
-			background: rgba(255, 255, 255, 0.05);
-		}
+        .table thead {
+            background: rgba(255, 255, 255, 0.05);
+        }
 
-		.table thead th {
-			color: #9ca3af;
-			font-weight: 600;
-			font-size: 13px;
-			letter-spacing: 0.4px;
-			text-transform: uppercase;
-			border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-			padding: 14px 16px;
-		}
+        .table thead th {
+            color: #9ca3af;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 14px 16px;
+        }
 
-		.table tbody tr {
-			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-			transition: background 0.2s ease;
-		}
+        .table tbody tr {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            transition: background 0.2s ease;
+        }
 
-		.table tbody tr:hover {
-			background: rgba(59, 130, 246, 0.08);
-		}
+        .table tbody tr:hover {
+            background: rgba(59, 130, 246, 0.08);
+        }
 
-		.table td {
-			padding: 14px 16px;
-			color: #d1d5db;
-			vertical-align: middle;
-		}
+        .table td {
+            padding: 14px 16px;
+            color: #d1d5db;
+            vertical-align: middle;
+        }
 
-		/* rating column */
-		.table td:nth-child(2) {
-			font-weight: 600;
-			color: #facc15;
-		}
+        /* rating column */
+        .table td:nth-child(2) {
+            font-weight: 600;
+            color: #facc15;
+        }
 
-		/* Comment column */
-		.table td:nth-child(3) {
-			color: #d1d5db;
-		}
+        /* Comment column */
+        .table td:nth-child(3) {
+            color: #d1d5db;
+        }
 
-		/* =======================
+        /* =======================
    EMPTY STATE
 ======================= */
-		.empty {
-			text-align: center;
-			padding: 30px;
-			color: #9ca3af;
-			font-size: 14px;
-		}
+        .empty {
+            text-align: center;
+            padding: 30px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
 
-		/* =======================
+        /* =======================
    PROFILE CARD
 ======================= */
-		#instructorProfile img {
-			border: 2px solid rgba(255, 255, 255, 0.15);
-		}
+        #instructorProfile img {
+            border: 2px solid rgba(255, 255, 255, 0.15);
+        }
 
-		#instructorProfile p {
-			margin-bottom: 8px;
-			font-size: 14px;
-			color: #d1d5db;
-		}
+        #instructorProfile p {
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #d1d5db;
+        }
 
-		#instructorProfile b {
-			color: #f9fafb;
-		}
+        #instructorProfile b {
+            color: #f9fafb;
+        }
 
-		/* =======================
+        /* =======================
    RESPONSIVE
 ======================= */
-		@media (max-width: 768px) {
-			.dashboard {
-				padding: 24px;
-			}
+        @media (max-width: 768px) {
+            .dashboard {
+                padding: 24px;
+            }
 
-			.feedback-header {
-				flex-direction: column;
-				align-items: flex-start;
-			}
-		}
+            .feedback-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
 
-		.rating-card {
-			margin-bottom: 28px;
-		}
+        .rating-card {
+            margin-bottom: 28px;
+        }
 
-		.activity-card h5 {
-			font-size: 1.1rem;
-			margin-bottom: 16px;
-		}
+        .activity-card h5 {
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
 
-		/* =======================
+        /* =======================
    FORCE DARK TABLE
 ======================= */
 
-		.activity-card table {
-			background: transparent !important;
-			color: #e5e7eb;
-		}
+        .activity-card table {
+            background: transparent !important;
+            color: #e5e7eb;
+        }
 
-		.activity-card thead {
-			background: rgba(255, 255, 255, 0.05) !important;
-		}
+        .activity-card thead {
+            background: rgba(255, 255, 255, 0.05) !important;
+        }
 
-		.activity-card thead th {
-			background: transparent !important;
-			color: #9ca3af !important;
-			border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-		}
+        .activity-card thead th {
+            background: transparent !important;
+            color: #9ca3af !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        }
 
-		.activity-card tbody {
-			background: transparent !important;
-		}
+        .activity-card tbody {
+            background: transparent !important;
+        }
 
-		.activity-card tbody tr {
-			background: transparent !important;
-		}
+        .activity-card tbody tr {
+            background: transparent !important;
+        }
 
-		.activity-card tbody td {
-			color: #d1d5db !important;
-			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-		}
+        .activity-card tbody td {
+            color: #d1d5db !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
 
-		/* =======================
+        /* =======================
    REMOVE BOOTSTRAP WHITE TABLE
 ======================= */
 
-		.activity-card .table> :not(caption)>*>* {
-			background-color: transparent !important;
-		}
+        .activity-card .table> :not(caption)>*>* {
+            background-color: transparent !important;
+        }
 
-		/* optional: slightly darker hover */
-		.activity-card .table tbody tr:hover>* {
-			background-color: rgba(59, 130, 246, 0.08) !important;
-		}
-	</style>
+        /* optional: slightly darker hover */
+        .activity-card .table tbody tr:hover>* {
+            background-color: rgba(59, 130, 246, 0.08) !important;
+        }
+
+        .teacher-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 22px;
+            font-weight: 600;
+            color: #f9fafb;
+        }
+
+        .teacher-title i {
+            color: #60a5fa;
+        }
+
+        .btn-view-profile {
+            margin-left: 10px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.05);
+            color: #e5e7eb;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-view-profile:hover {
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .rating-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .rating-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(250, 204, 21, 0.15);
+            color: #facc15;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        #instructorProfile {
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        #instructorProfile h5 {
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        #instructorProfile .row {
+            align-items: center;
+        }
+
+        .table {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table thead th {
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .table tbody tr {
+            transition: 0.2s;
+        }
+
+        .table tbody tr:hover {
+            background: rgba(59, 130, 246, 0.12);
+        }
+
+        /* STAR ICON FIX */
+        .star {
+            color: #facc15;
+            margin-right: 4px;
+        }
+
+        .activity-card {
+            margin-bottom: 28px;
+        }
+
+        .rating-card {
+            margin-bottom: 28px;
+        }
+
+        .empty {
+            color: #cbd5f5;
+            opacity: 0.8;
+        }
+    </style>
 </head>
 
 <body>
 
-	<div class="layout">
+    <div class="layout">
 
 
-		<!-- ===== CONTENT ===== -->
-		<div class="content-area">
+        <!-- ===== CONTENT ===== -->
+        <div class="content-area">
 
-			<!-- TOPBAR -->
-			<header class="topbar">
-				<span class="page-title">Instructor Feedback</span>
-			</header>
+            <!-- TOPBAR -->
+            <header class="topbar">
+                <span class="page-title">Instructor Feedback</span>
+            </header>
 
-			<!-- MAIN -->
-			<main class="dashboard">
+            <!-- MAIN -->
+            <main class="dashboard">
 
-				<!-- HEADER -->
-				<div class="feedback-header">
-					<div>
-						<h2 class="d-flex align-items-center gap-2">
-							<span th:text="${teacher.firstname + ' ' + teacher.lastname}"></span>
+                <!-- HEADER -->
+                <div class="feedback-header">
+                    <div>
+                        <h2 class="teacher-title">
+                            <i class="bi bi-person-badge"></i>
+                            <span th:text="${teacher.firstname + ' ' + teacher.lastname}"></span>
 
-							<button class="btn btn-sm btn-outline-info" id="toggleProfileBtn">
-								View Profile
-							</button>
-						</h2>
-						<div class="feedback-sub">Student feedback & ratings overview</div>
-					</div>
+                            <button class="btn-view-profile" id="toggleProfileBtn">
+                                <i class="bi bi-person-lines-fill"></i>
+                                View Profile
+                            </button>
+                        </h2>
+                        <div class="feedback-sub">Student feedback & ratings overview</div>
+                    </div>
 
-					<a th:href="@{/manage-teachers}" class="btn-back">
-						<i class="bi bi-arrow-left"></i> Back to Instructors
-					</a>
-				</div>
+                    <a th:href="@{/manage-teachers}" class="btn-back">
+                        <i class="bi bi-arrow-left"></i> Back to Instructors
+                    </a>
+                </div>
 
-				<!-- RATING SUMMARY -->
-				<div class="rating-card">
-					<h3>Overall Rating</h3>
-					<div class="rating-value">
-						⭐ <span th:text="${#numbers.formatDecimal(avgRating,1,1)}">4.5</span>
-					</div>
-					<div class="rating-meta">
-						Based on <strong th:text="${totalRatings}">0</strong> reviews
-					</div>
-				</div>
-				<!-- INSTRUCTOR PROFILE (ADMIN VIEW) -->
-				<div class="activity-card mt-4 d-none" id="instructorProfile">
+                <!-- RATING SUMMARY -->
+                <div class="rating-card">
+                    <div class="rating-top">
+                        <h3>Overall Rating</h3>
+                        <span class="rating-pill">
+                            <i class="bi bi-star-fill"></i>
+                            <span th:text="${#numbers.formatDecimal(avgRating,1,1)}"></span>
+                        </span>
+                    </div>
 
-					<h5>Instructor Profile</h5>
+                    <div class="rating-meta">
+                        Based on <strong th:text="${totalRatings}"></strong> reviews
+                    </div>
+                </div><!-- INSTRUCTOR PROFILE (ADMIN VIEW) -->
+                <div class="activity-card mt-4 d-none" id="instructorProfile">
 
-					<div class="row mt-3">
-						<div class="col-md-3 text-center">
-							<img th:src="${profile != null && profile.profileImage != null 
+                    <h5>Instructor Profile</h5>
+
+                    <div class="row mt-3">
+                        <div class="col-md-3 text-center">
+                            <img th:src="${profile != null && profile.profileImage != null 
           ? profile.profileImage 
           : '/images/default.jpg'}" class="img-fluid rounded-circle mb-2" style="max-width:120px">
-						</div>
+                        </div>
 
-						<div class="col-md-9">
-							<p><b>Email:</b> <span th:text="${teacher.email}"></span></p>
-							<p><b>Phone:</b> <span th:text="${teacher.phoneno}"></span></p>
+                        <div class="col-md-9">
+                            <p><b>Email:</b> <span th:text="${teacher.email}"></span></p>
+                            <p><b>Phone:</b> <span th:text="${teacher.phoneno}"></span></p>
 
-							<p th:if="${profile != null}">
-								<b>Qualification:</b>
-								<span th:text="${profile.qualification}"></span>
-							</p>
+                            <p th:if="${profile != null}">
+                                <b>Qualification:</b>
+                                <span th:text="${profile.qualification}"></span>
+                            </p>
 
-							<p th:if="${profile != null}">
-								<b>Specialist:</b>
-								<span th:text="${profile.specialist}"></span>
-							</p>
+                            <p th:if="${profile != null}">
+                                <b>Specialist:</b>
+                                <span th:text="${profile.specialist}"></span>
+                            </p>
 
-							<p th:if="${profile != null}">
-								<b>Experience:</b>
-								<span th:text="${profile.experience}"></span> years
-							</p>
+                            <p th:if="${profile != null}">
+                                <b>Experience:</b>
+                                <span th:text="${profile.experience}"></span> years
+                            </p>
 
-							<p th:if="${profile != null}">
-								<b>Bio:</b>
-								<span th:text="${profile.bio}"></span>
-							</p>
-						</div>
-					</div>
+                            <p th:if="${profile != null}">
+                                <b>Bio:</b>
+                                <span th:text="${profile.bio}"></span>
+                            </p>
+                        </div>
+                    </div>
 
-					<!-- ADMIN ACTIONS -->
-					<div class="mt-3 d-flex gap-2">
-						<button class="btn btn-warning btn-sm">Suspend</button>
-						<button class="btn btn-danger btn-sm">Block</button>
-						<button class="btn btn-secondary btn-sm">Hide Instructor</button>
-					</div>
+                    <!-- ADMIN ACTIONS -->
+                    <div class="mt-3 d-flex gap-2">
+                        <button class="btn btn-warning btn-sm">Suspend</button>
+                        <button class="btn btn-danger btn-sm">Block</button>
+                        <button class="btn btn-secondary btn-sm">Hide Instructor</button>
+                    </div>
 
-				</div>
-				<!-- FEEDBACK TABLE -->
-				<div class="activity-card">
-					<h5>Student Reviews</h5>
+                </div>
+                <!-- FEEDBACK TABLE -->
+                <div class="activity-card">
+                    <h5>Student Reviews</h5>
 
-					<table class="table mt-3">
-						<thead>
-							<tr>
-								<th>Student</th>
-								<th>Rating</th>
-								<th>Comment</th>
-								<th>Date</th>
-							</tr>
-						</thead>
-						<tbody>
+                    <table class="table mt-3">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Rating</th>
+                                <th>Comment</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
 
-							<tr th:each="f : ${feedbacks}">
-								<td th:text="${f.student.fullname}">Student</td>
-								<td>
-									<span class="star">⭐</span>
-									<span th:text="${f.rating}">5</span>
-								</td>
-								<td th:text="${f.comment}">Great teaching</td>
-								<td th:text="${#temporals.format(f.createdAt,'dd MMM yyyy')}">
-									01 Jan 2025
-								</td>
-							</tr>
+                            <tr th:each="f : ${feedbacks}">
+                                <td th:text="${f.student.fullname}">Student</td>
+                                <td>
+                                    <span class="star">⭐</span>
+                                    <span th:text="${f.rating}">5</span>
+                                </td>
+                                <td th:text="${f.comment}">Great teaching</td>
+                                <td th:text="${#temporals.format(f.createdAt,'dd MMM yyyy')}">
+                                    01 Jan 2025
+                                </td>
+                            </tr>
 
-							<tr th:if="${#lists.isEmpty(feedbacks)}">
-								<td colspan="4" class="empty">
-									No feedback submitted yet.
-								</td>
-							</tr>
+                            <tr th:if="${#lists.isEmpty(feedbacks)}">
+                                <td colspan="4" class="empty">
+                                    No feedback submitted yet.
+                                </td>
+                            </tr>
 
-						</tbody>
-					</table>
-				</div>
+                        </tbody>
+                    </table>
+                </div>
 
-			</main>
-		</div>
-	</div>
+            </main>
+        </div>
+    </div>
 
-	<!-- Bootstrap JS -->
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-	<script>
-		const toggleBtn = document.getElementById("toggleProfileBtn");
-		const profileBox = document.getElementById("instructorProfile");
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const toggleBtn = document.getElementById("toggleProfileBtn");
+        const profileBox = document.getElementById("instructorProfile");
 
-		toggleBtn.addEventListener("click", () => {
-			profileBox.classList.toggle("d-none");
+        toggleBtn.addEventListener("click", () => {
+            profileBox.classList.toggle("d-none");
 
-			toggleBtn.textContent = profileBox.classList.contains("d-none")
-				? "View Profile"
-				: "Hide Profile";
-		});
-	</script>
+            toggleBtn.textContent = profileBox.classList.contains("d-none")
+                ? "View Profile"
+                : "Hide Profile";
+        });
+    </script>
 </body>
 
 </html>

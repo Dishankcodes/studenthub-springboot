@@ -28,6 +28,25 @@
             color: var(--text-light);
         }
 
+        .feedback-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            font-size: 18px;
+            font-weight: 600;
+
+            color: #e5e7eb;
+            /* 🔥 brighter white */
+        }
+
+        /* ICON COLOR */
+        .feedback-title i {
+            color: #60a5fa;
+            /* subtle blue highlight */
+            font-size: 18px;
+        }
+
         /* ===== HEADER ===== */
         .container>.d-flex {
             padding-bottom: 12px;
@@ -151,8 +170,31 @@
 
         .course-meta {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .card.mb-3.shadow-sm {
+            background: #1f1f46;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.2s;
+        }
+
+        .card.mb-3.shadow-sm:hover {
+            transform: translateY(-3px);
+        }
+
+        .card-body .border.rounded {
+            background: #2a2a5c;
+            border-radius: 10px;
+            padding: 14px;
+            transition: 0.2s;
+        }
+
+        .card-body .border.rounded:hover {
+            background: #32326b;
         }
 
         .type-pill {
@@ -206,6 +248,57 @@
             font-size: 1.4rem;
             letter-spacing: 0.3px;
         }
+
+        .view-profile-text {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-left: 6px;
+            font-weight: 400;
+        }
+
+        .instructor-link:hover .view-profile-text {
+            color: #e0f2fe;
+        }
+
+        .card.shadow-sm.mb-4 {
+            background: #1f1f46;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 4px;
+            transition: 0.25s;
+        }
+
+        .card.shadow-sm.mb-4:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .card.shadow-sm.mb-4 h4 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .feedback-card {
+            background: #1f1f46;
+            border-radius: 12px;
+            padding: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.2s;
+        }
+
+        .feedback-card:hover {
+            background: #26265a;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .container {
+            max-width: 1100px;
+        }
     </style>
 </head>
 
@@ -234,7 +327,6 @@
                     Course Title
                 </h4>
 
-                <!-- Instructor -->
                 <p class="mb-1 text-muted">
                     Instructor:
                     <a th:if="${course.teacher != null}"
@@ -296,15 +388,12 @@
             </div>
         </div>
 
-        <!-- ===== MODULES EMPTY STATE ===== -->
         <div th:if="${course.modules == null or #lists.isEmpty(course.modules)}" class="alert alert-warning">
             No modules added to this course.
         </div>
-
-        <!-- ===== MODULES LIST ===== -->
+        
         <div th:each="module, mStat : ${course.modules}" class="card mb-3 shadow-sm">
 
-            <!-- Module Header -->
             <div class="card-header bg-dark text-white">
                 <strong>
                     Module <span th:text="${mStat.index + 1}">1</span>:
@@ -314,45 +403,39 @@
 
             <div class="card-body">
 
-                <!-- LESSONS EMPTY STATE -->
                 <div th:if="${module.lessons == null or #lists.isEmpty(module.lessons)}" class="text-muted">
                     No lessons in this module.
                 </div>
-
-                <!-- LESSONS LIST -->
+                
                 <div th:each="lesson, lStat : ${module.lessons}" class="border rounded p-3 mb-3">
-
                     <h6 class="fw-semibold mb-2">
                         Lesson <span th:text="${lStat.index + 1}">1</span>:
                         <span th:text="${lesson.title}">Lesson Title</span>
                     </h6>
-
-                    <!-- QUIZ -->
                     <div th:if="${lesson.quiz != null}" class="list-group list-group-flush mt-2">
 
                         <div class="list-group-item">
                             <i class="bi bi-question-circle"></i>
                             Quiz:
-
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
 
         </div>
         <!-- ===== COURSE FEEDBACK ===== -->
         <div class="card shadow-sm mb-4">
             <div class="card-body">
-
-                <h5 class="fw-bold">
+                <h5 class="feedback-title">
+                    <i class="bi bi-chat-dots"></i>
                     Course Feedback
-                    <span class="badge bg-primary ms-2">
-                        ⭐ <span th:text="${#numbers.formatDecimal(avgRating,1,1)}"></span>
+
+                    <span class="rating-pill ms-2">
+                        <i class="bi bi-star-fill"></i>
+                        <span th:text="${#numbers.formatDecimal(avgRating,1,1)}"></span>
                     </span>
-                    <span class="text-muted ms-2">
+
+                    <span class="review-count">
                         (<span th:text="${reviewCount}"></span> reviews)
                     </span>
                 </h5>
@@ -362,7 +445,6 @@
                 </div>
 
                 <div th:each="f : ${feedbacks}" class="feedback-card mt-3">
-
                     <div>
                         <span class="rating-stars">
                             <i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1,f.rating)}"></i>
@@ -375,10 +457,8 @@
                         — <span th:text="${f.student.fullname}"></span>
                     </small>
                 </div>
-
             </div>
         </div>
-
     </div>
 
     <!-- Bootstrap JS -->
