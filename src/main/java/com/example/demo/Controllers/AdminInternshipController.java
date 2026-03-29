@@ -121,9 +121,14 @@ public class AdminInternshipController {
 
 		List<InternshipApplication> applications = applicationRepo.findByInternshipId(id);
 
-		model.addAttribute("internship", internship);
-		model.addAttribute("applications", applications);
-
+		if (internship == null) {
+		    model.addAttribute("internship", null);
+		    model.addAttribute("applications", List.of()); 
+		    model.addAttribute("error", "No internship found or student hasn't applied.");
+		} else {
+		    model.addAttribute("internship", internship);
+		    model.addAttribute("applications", applications);
+		}
 		return "manage-applicants";
 	}
 

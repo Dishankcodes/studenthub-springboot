@@ -303,10 +303,10 @@
                             <td>
                                 <div class="action-buttons">
 
-                                    <!-- VIEW -->
-                                    <a th:href="@{/admin-student/view/{id}(id=${student.studid})}" class="btn-view">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
+                                   <a th:href="@{'/admin-student-dashboard?id=' + ${student.studid}}"
+   class="btn btn-secondary btn-sm">
+    <i class="bi bi-eye"></i>
+</a>
 
                                     <!-- DELETE -->
                                     <form th:action="@{/admin-student/delete/{id}(id=${student.studid})}" method="post"

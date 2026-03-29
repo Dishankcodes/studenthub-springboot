@@ -145,6 +145,10 @@
                     <h2 th:text="${student.fullname}"></h2>
                     <p th:text="${student.email}"></p>
                 </div>
+                <a th:href="@{'/admin-student-dashboard?id=' + ${student.studid}}"
+   class="btn-back">
+    <i class="bi bi-bar-chart"></i> Full Dashboard
+</a>
             </div>
 
             <hr style="margin:15px 0; opacity:0.2;">
