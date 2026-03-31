@@ -1,311 +1,464 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <title>Final Selection</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
         :root {
-            --bg-primary: linear-gradient(135deg, #0b0b1f, #14142f);
-            --bg-content: #1a1a3d;
+            --bg: linear-gradient(135deg, #050516, #0c0c2b);
+            --card: rgba(255, 255, 255, 0.06);
             --accent: #6366f1;
-            --text-light: #eaeaf0;
-            --text-muted: #9ca3af;
+            --accent2: #8b5cf6;
+            --text: #f8fafc;
+            --muted: #94a3b8;
             --success: #22c55e;
             --danger: #ef4444;
             --warning: #f59e0b;
         }
 
-        /* PAGE */
         body {
-            background: var(--bg-primary);
-            color: var(--text-light);
+            margin: 0;
+            background: var(--bg);
             font-family: 'Poppins', sans-serif;
+            color: var(--text);
         }
 
-        /* CONTAINER */
         .container {
             max-width: 1100px;
             margin: auto;
-            padding: 20px;
+            padding: 30px 20px;
         }
 
-        /* HEADER */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
-        /* BUTTONS */
-        .btn {
-            border: none;
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
+        .header h2 {
+            font-size: 20px;
+            display: flex;
+            gap: 8px;
             align-items: center;
-            gap: 5px;
         }
 
-        .btn-primary {
-            background: var(--accent);
-            color: #fff;
+        .header-actions {
+            display: flex;
+            gap: 10px;
         }
 
-        .btn-success {
-            background: rgba(34, 197, 94, 0.2);
+        .btn-header {
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 13px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            transition: .25s;
+        }
+
+        .btn-header:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .flash {
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .flash.success {
+            background: rgba(34, 197, 94, .15);
             color: var(--success);
         }
 
-        .btn-danger {
-            background: rgba(239, 68, 68, 0.2);
+        .flash.error {
+            background: rgba(239, 68, 68, .15);
             color: var(--danger);
         }
 
-        .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            color: var(--text-light);
+
+        .empty-box {
+            text-align: center;
+            padding: 60px;
+            opacity: .7;
+        }
+
+        .table-head {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr;
+            font-size: 12px;
+            margin-bottom: 10px;
+            color: var(--muted);
+        }
+
+        .card {
+            display: grid;
+            grid-template-columns: 2fr 1fr 2fr;
+            gap: 20px;
+            align-items: center;
+
+            padding: 18px;
+            border-radius: 16px;
+            background: var(--card);
+            backdrop-filter: blur(14px);
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-bottom: 15px;
+
+            transition: .25s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, .3);
+        }
+
+        .student h3 {
+            margin: 0;
+            font-size: 15px;
+        }
+
+        .student p {
+            margin: 5px 0 0;
+            font-size: 12px;
+            color: var(--muted);
+        }
+
+        .status {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e5e7eb;
+            font-size: 0.75rem;
+            padding: 0.35rem 0.5rem;
+            border-radius: 0.45rem;
+            backdrop-filter: blur(6px);
+            min-width: 110px;
+        }
+
+        .status:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+        }
+
+        .status option {
+            background: #0f172a;
+            color: #e5e7eb;
+        }
+
+        .status.passed {
+            background: rgba(34, 197, 94, .15);
+            color: #22c55e !important;
+        }
+
+        .status.selected {
+            background: rgba(99, 102, 241, .15);
+            color: #a5b4fc !important;
+        }
+
+        .status.completed {
+            background: rgba(245, 158, 11, .15);
+            color: #f59e0b !important;
+        }
+
+
+
+        .badge {
+            margin-top: 8px;
+            display: inline-flex;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 11px;
+            background: rgba(99, 102, 241, .2);
+        }
+
+
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .btn {
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            border: none;
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            cursor: pointer;
+            transition: .25s;
         }
 
         .btn:hover {
             transform: translateY(-2px);
         }
 
-        /* CARD */
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(14px);
-            border-radius: 16px;
-            padding: 18px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .btn-success {
+            background: rgba(34, 197, 94, .2);
+            color: var(--success);
         }
 
-        /* LEFT */
-        .left h3 {
-            margin-bottom: 4px;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: white;
         }
 
-        .left p {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        /* STATUS */
-        .status {
-            font-size: 12px;
-            padding: 4px 10px;
-            border-radius: 999px;
-        }
-
-        .status.passed {
-            background: rgba(34, 197, 94, 0.2);
-            color: #22c55e;
-        }
-
-        .status.selected {
-            background: rgba(99, 102, 241, 0.2);
-            color: #6366f1;
-        }
-
-        .status.completed {
-            background: rgba(245, 158, 11, 0.2);
-            color: #f59e0b;
-        }
-
-        /* ACTIONS */
-        .actions {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        /* TEMPLATE PREVIEW */
-        .template-box {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
-        }
-
-        .template-box img {
-            width: 90px;
-            height: 60px;
+        select {
+            padding: 7px;
             border-radius: 8px;
+            background: rgba(255, 255, 255, .05);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, .1);
         }
 
-        /* BACK BUTTON */
-        .btn-back {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
+
+        .certificate-box {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px dashed rgba(255, 255, 255, 0.08);
         }
 
-        .btn-back:hover {
-            background: #6366f1;
+
+        .template-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
-        /* DESIGN BUTTON */
-        .btn-design {
-            background: linear-gradient(135deg, #0ea5e9, #3b82f6);
-            color: #fff;
+        .template-card img {
+            width: 80px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, .1);
+        }
+
+
+        .no-cert-box {
+            font-size: 12px;
+            opacity: .7;
             margin-top: 8px;
         }
 
-        .btn-design:hover {
-            transform: scale(1.05);
-        }
 
-        /* NO CERT MESSAGE */
-        .no-cert-box {
-            background: rgba(245, 158, 11, 0.15);
-            color: #f59e0b;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            margin-bottom: 8px;
-            display: flex;
+        .btn-design {
+            margin-top: 10px;
+            font-size: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            gap: 5px;
             align-items: center;
-            gap: 6px;
+            color: #a5b4fc;
         }
 
-        /* FLASH */
-        .flash {
-            padding: 12px;
+
+        .done-box {
+            background: rgba(34, 197, 94, .15);
+            padding: 10px;
             border-radius: 10px;
-            margin-bottom: 15px;
+            font-size: 12px;
+            color: var(--success);
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .badge-form {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: nowrap;
+
+        }
+
+
+        .badge-form select {
+            min-width: 140px;
+        }
+
+
+        .badge-form .btn {
+            white-space: nowrap;
+        }
+
+        select:hover {
+            border-color: var(--accent);
+        }
+
+        select {
+            padding: 7px 12px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #f1f5f9;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        select option {
+            background-color: #0f172a;
+            color: #e5e7eb;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        select option:checked {
+            background-color: #6366f1;
+            color: white;
+        }
+
+        .internship-name {
             font-size: 14px;
-        }
-
-        .flash.success {
-            background: rgba(34, 197, 94, 0.2);
-            color: #22c55e;
-        }
-
-        .flash.error {
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
+            font-weight: 400;
+            color: var(--muted);
         }
     </style>
-
 </head>
 
 <body>
 
     <div class="container">
 
-        <!-- HEADER -->
         <div class="header">
-            <h2><i class="bi bi-check2-circle"></i> Final Selection</h2>
+            <h2>
+                <i class="bi bi-check2-circle"></i>
+                Final Selection
+                <span class="internship-name" th:if="${internship != null and internship.title != null}">
+                    • <span th:text="${internship.title}"></span>
+                </span>
+            </h2>
 
-            <a th:href="@{/admin-test-results(internshipId=${internshipId})}" class="btn btn-secondary">
-                <i class="bi bi-bar-chart"></i> Test Results
-            </a>
-
-            <a th:href="@{/admin-applicants(id=${internshipId})}" class="btn btn-secondary">
-                <i class="bi bi-people"></i> Applicants
-            </a>
-
-            <a href="/manage-internships" class="btn btn-back">
-                ⬅ Back to Manage Internships
-            </a>
+            <div class="header-actions">
+                <a th:href="@{/admin-test-results(internshipId=${internshipId})}" class="btn-header">
+                    <i class="bi bi-graph-up"></i> Results
+                </a>
+                <a th:href="@{/admin-applicants(id=${internshipId})}" class="btn-header">
+                    <i class="bi bi-people-fill"></i> Applicants
+                </a>
+                <a th:href="@{/manage-internships}" class="btn-header">
+                    <i class="bi bi-arrow-left"></i> Manage Internships
+                </a>
+            </div>
         </div>
 
-        <div th:if="${msg}" class="flash success" th:text="${msg}"></div>
-        <div th:if="${error}" class="flash error" th:text="${error}"></div>
-        <div th:if="${#lists.isEmpty(applications)}">
-            No eligible(passed) students found
+        <!-- FLASH -->
+        <div th:if="${msg}" class="flash success">
+            <i class="bi bi-check-circle"></i>
+            <span th:text="${msg}"></span>
         </div>
 
-        <!-- CARDS -->
+        <div th:if="${error}" class="flash error">
+            <i class="bi bi-x-circle"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <!-- EMPTY -->
+        <div th:if="${#lists.isEmpty(applications)}" class="empty-box">
+            <i class="bi bi-emoji-frown" style="font-size:30px;"></i>
+            <p>No eligible or selected students found</p>
+        </div>
+
+        <div class="table-head">
+            <div>Student</div>
+            <div>Status</div>
+            <div style="text-align:right;">Actions</div>
+        </div>
+
+        <!-- CARD -->
         <div th:each="app : ${applications}" class="card">
 
-            <!-- LEFT -->
-            <div class="left">
-                <h3 th:text="${app.student.fullname}"></h3>
-                <p th:text="${app.student.email}"></p>
+            <div class="student">
+                <h3><i class="bi bi-person-circle"></i> <span th:text="${app.student.fullname}"></span></h3>
+                <p><i class="bi bi-envelope"></i> <span th:text="${app.student.email}"></span></p>
+            </div>
 
-                <span class="status" th:classappend="${app.status.name().toLowerCase()}">
-
-                    <i th:if="${app.status.name()=='PASSED'}" class="bi bi-check-circle"></i>
-                    <i th:if="${app.status.name()=='SELECTED'}" class="bi bi-person-check"></i>
-                    <i th:if="${app.status.name()=='COMPLETED'}" class="bi bi-mortarboard"></i>
-
-                    <span th:text="${app.status}"></span>
-                </span>
-
-                <div th:if="${app.badgeGiven}" style="margin-top:6px;">
-                    🏆 Badge: <b th:text="${app.badgeTitle}"></b>
+            <div>
+                <span class="status" th:classappend="${app.status.name().toLowerCase()}"> <i
+                        th:if="${app.status.name()=='PASSED'}" class="bi bi-check-circle"></i> <i
+                        th:if="${app.status.name()=='SELECTED'}" class="bi bi-person-check"></i> <i
+                        th:if="${app.status.name()=='COMPLETED'}" class="bi bi-mortarboard"></i> <span
+                        th:text="${app.status}"></span> </span>
+                <div th:if="${app.badgeGiven}" class="badge">
+                    <i class="bi bi-trophy-fill"></i>
+                    <span th:text="${app.badgeTitle}"></span>
                 </div>
             </div>
 
-            <!-- RIGHT -->
             <div class="actions">
+                <form th:action="@{/admin/give-badge}" method="post" th:if="${!app.badgeGiven}" class="badge-form">
 
-                <!-- BADGE -->
-                <form action="/admin/give-badge" method="post" th:if="${!app.badgeGiven}">
                     <input type="hidden" name="appId" th:value="${app.id}">
 
                     <select name="badgeTitle">
+                        <option disabled selected>Select Badge</option>
                         <option value="Intern">Intern</option>
                         <option value="Top Intern">Top Intern</option>
                         <option value="Best Performer">Best Performer</option>
                         <option value="Fast Learner">Fast Learner</option>
                         <option value="Team Player">Team Player</option>
-                        <option value="Consistent Performer">Consistent Performer</option>
-                        <option value="Outstanding Contributor">Outstanding Contributor</option>
                     </select>
 
                     <button class="btn btn-success">
-                        <i class="bi bi-award"></i> Give Badge
+                        <i class="bi bi-stars"></i> Award Badge
                     </button>
                 </form>
 
                 <!-- CERTIFICATE -->
-                <div th:if="${!app.certificateGenerated}" th:each="t : ${templates}" class="template-box">
+                <div th:if="${!app.certificateGenerated}" class="certificate-box">
 
-                    <img th:src="@{${t.backgroundImage}}">
-
-                    <form action="/admin/give-certificate" method="post">
-                        <input type="hidden" name="appId" th:value="${app.id}">
-                        <input type="hidden" name="templateId" th:value="${t.id}">
-                        <button class="btn btn-success">
-                            <i class="bi bi-file-earmark-pdf"></i> Generate
-                        </button>
-                    </form>
-
-                </div>
-
-                <!-- CERTIFICATE SECTION -->
-
-                <div th:if="${!app.certificateGenerated}" style="margin-top:10px;">
+                    <div th:each="t : ${templates}" class="template-card">
+                        <img th:src="@{${t.backgroundImage}}">
+                        <form action="/admin/give-certificate" method="post">
+                            <input type="hidden" name="appId" th:value="${app.id}">
+                            <input type="hidden" name="templateId" th:value="${t.id}">
+                            <button class="btn btn-primary">
+                                <i class="bi bi-file-earmark-pdf"></i> Generate
+                            </button>
+                        </form>
+                    </div>
 
                     <div class="no-cert-box">
                         <i class="bi bi-exclamation-circle"></i>
-                        No certificate generated for this internship yet.
+                        The internship coordinator has not created any certificate templates yet.
                     </div>
 
-                    <!-- GO TO DESIGN -->
-                    <a href="/admin-design" class="btn btn-design">
-                        🎨 Design Certificate
+                    <a th:href="@{/admin-design}" class="btn-design">
+                        <i class="bi bi-palette"></i> Create Template
                     </a>
-
                 </div>
 
-                <div th:if="${app.certificateGenerated}" class="status completed">
-                    🎓 Internship Completed + Certificate Generated
+                <!-- DONE -->
+                <div th:if="${app.certificateGenerated}" class="done-box">
+                    <i class="bi bi-check-circle"></i>
+                    Certificate Generated + Internship Completed
                 </div>
 
             </div>
-
         </div>
+
     </div>
+
 </body>
 
 </html>

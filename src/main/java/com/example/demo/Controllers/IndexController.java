@@ -28,19 +28,21 @@ public class IndexController {
 
 	@Autowired
 	private CourseFeedbackRepository feedbackRepo;
-
+	
 	@GetMapping("/verify/{certNumber}")
 	public String certificateVerify(@PathVariable String certNumber, Model model) {
 
-		CourseCertificate cert = certificateRepo.findByCertificateNumber(certNumber).orElse(null);
+	    CourseCertificate cert = certificateRepo
+	            .findByCertificateNumber(certNumber)
+	            .orElse(null);
 
-		if (certNumber == null) {
-			model.addAttribute("invalid", true);
-			return "certificate-verify";
-		}
+	    // Always set invalid
+	    boolean invalid = (cert == null);
 
-		model.addAttribute("cert", cert);
-		return "certificate-verify";
+	    model.addAttribute("cert", cert);
+	    model.addAttribute("invalid", invalid);
+
+	    return "certificate-verify";
 	}
 
 	@GetMapping({ "/", "/index" })

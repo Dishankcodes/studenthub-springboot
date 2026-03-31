@@ -3,13 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Certificate Verification</title>
+    <title
+        th:text="${cert != null && cert.course != null ? cert.course.title + ' Certificate Verification' : 'Certificate Verification'}">
+    </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap');
+
         :root {
             --bg: radial-gradient(circle at top, #1e1b4b, #020617);
             --glass: rgba(255, 255, 255, 0.06);
@@ -23,7 +24,7 @@
 
         * {
             box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
+            font-family: "Inter", sans-serif;
         }
 
         body {
@@ -35,25 +36,27 @@
             flex-direction: column;
         }
 
-        /* ================= HERO ================= */
+
         .hero {
-            padding: 4rem 1rem 2.5rem;
+            padding: 4rem 1rem 2rem;
             text-align: center;
         }
 
         .hero h1 {
-            font-size: 2.2rem;
+            font-family: "Poppins", sans-serif;
+            font-size: 2.4rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
+            letter-spacing: 0.5px;
         }
 
         .hero p {
             color: var(--muted);
-            max-width: 620px;
-            margin: 0 auto;
+            max-width: 640px;
+            margin: auto;
+            font-size: 0.95rem;
         }
 
-        /* ================= CARD ================= */
         .verify-wrapper {
             flex: 1;
             display: flex;
@@ -64,19 +67,24 @@
 
         .verify-card {
             width: 100%;
-            max-width: 520px;
+            max-width: 540px;
             background: var(--glass);
             border: 1px solid var(--border);
-            border-radius: 1rem;
+            border-radius: 1.2rem;
             padding: 2rem;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
             text-align: center;
+            transition: .3s;
         }
 
-        /* Status Icons */
+        .verify-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, .25);
+        }
+
         .status-icon {
-            font-size: 3.2rem;
-            margin-bottom: 0.75rem;
+            font-size: 3.5rem;
+            margin-bottom: 0.6rem;
         }
 
         .success {
@@ -87,9 +95,9 @@
             color: var(--danger);
         }
 
-        /* Headings */
         .verify-card h2 {
-            margin: 0.5rem 0;
+            font-family: "Poppins", sans-serif;
+            margin: 0.4rem 0;
         }
 
         .verify-card p {
@@ -97,7 +105,6 @@
             font-size: 0.9rem;
         }
 
-        /* Details */
         .details {
             margin-top: 1.5rem;
             text-align: left;
@@ -106,7 +113,7 @@
         .detail-row {
             display: flex;
             justify-content: space-between;
-            padding: 0.6rem 0;
+            padding: 0.7rem 0;
             border-bottom: 1px dashed var(--border);
             font-size: 0.85rem;
         }
@@ -119,33 +126,46 @@
             font-weight: 600;
         }
 
-        /* Button */
         .btn-primary {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 6px;
             margin-top: 1.5rem;
-            padding: 0.55rem 1.2rem;
-            background: var(--primary);
+            padding: 0.6rem 1.4rem;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
             color: white;
-            border-radius: 0.5rem;
+            border-radius: 0.6rem;
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: .25s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 1.5rem;
+            padding: 0.6rem 1.4rem;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--border);
+            color: white;
+            border-radius: 0.6rem;
             text-decoration: none;
             font-size: 0.85rem;
         }
 
-        .btn-primary:hover {
-            background: #4f46e5;
-        }
-
-        /* ================= PROMO ================= */
         .promo {
             text-align: center;
-            padding: 2rem 1rem 1.5rem;
+            padding: 2.2rem 1rem 1.5rem;
             border-top: 1px solid var(--border);
         }
 
         .promo h3 {
-            margin-bottom: 0.3rem;
+            font-family: "Poppins", sans-serif;
         }
 
         .promo p {
@@ -153,7 +173,6 @@
             font-size: 0.85rem;
         }
 
-        /* ================= FOOTER ================= */
         footer {
             text-align: center;
             padding: 1rem;
@@ -165,72 +184,89 @@
 
 <body>
 
-    <!-- HERO -->
+
     <section class="hero">
-        <h1>Certificate Verification</h1>
-        <p>Verify the authenticity of certificates issued by our learning platform.
-            This page ensures trust, transparency, and credibility.</p>
+        <h1>Certificate Verification Portal</h1>
+        <p>
+            This verification page confirms the authenticity of certificates issued by our platform.
+            Every verified certificate is securely recorded and trusted by industry partners.
+        </p>
     </section>
 
-    <!-- CARD -->
     <section class="verify-wrapper">
 
-        <!-- ❌ INVALID -->
+
+        <div class="verify-card" th:if="${cert == null and !invalid}">
+            <div class="status-icon">
+                <i class="bi bi-search"></i>
+            </div>
+            <h2>No Certificate Found</h2>
+            <p>
+                We could not locate any certificate with this ID.
+                Please check the link or ensure the certificate was issued by our platform.
+            </p>
+            <a href="/" class="btn-secondary">
+                <i class="bi bi-arrow-left"></i> Go Back
+            </a>
+        </div>
+
         <div class="verify-card" th:if="${invalid}">
             <div class="status-icon error">
                 <i class="bi bi-x-circle-fill"></i>
             </div>
             <h2>Invalid Certificate</h2>
             <p>
-                This certificate number does not exist or has been tampered with.
-                Please verify the source before trusting it.
+                This certificate is not recognized in our system.
+                It may be altered, expired, or not officially issued.
             </p>
         </div>
 
-        <!-- ✅ VERIFIED -->
-        <div class="verify-card" th:if="${cert}">
+        <div class="verify-card" th:if="${cert !=null}">
             <div class="status-icon success">
                 <i class="bi bi-patch-check-fill"></i>
             </div>
-            <h2>Certificate Verified</h2>
-            <p>This certificate is officially issued and valid.</p>
+
+            <h2>Verified Certificate</h2>
+            <p>
+                This credential has been successfully verified and is recognized as authentic.
+            </p>
 
             <div class="details">
                 <div class="detail-row">
-                    <span>Student</span>
+                    <span>Student Name</span>
                     <span th:text="${cert.student.fullname}"></span>
                 </div>
 
                 <div class="detail-row">
-                    <span>Course</span>
-                    <span th:text="${cert.course.title}"></span>
+                    <span>Course / Program</span>
+                    <span th:text="${cert.course != null ? cert.course.title : 'Not Available'}"></span>
                 </div>
-
                 <div class="detail-row">
-                    <span>Issued On</span>
+                    <span>Issued Date</span>
                     <span th:text="${cert.issuedAt}"></span>
                 </div>
+                <div class="detail-row">
+                    <span>Status</span>
+                    <span style="color:#22c55e;">Valid & Verified</span>
+                </div>
             </div>
-
             <a class="btn-primary" th:href="${cert.pdfPath}" target="_blank">
-                <i class="bi bi-file-earmark-pdf"></i>
-                View Certificate PDF
+                <i class="bi bi-file-earmark-pdf"></i> View Certificate
             </a>
         </div>
-
     </section>
-
-    <!-- PROMO -->
     <section class="promo">
-        <h3>Learn. Get Certified. Get Verified.</h3>
-        <p>All certificates are securely generated and verifiable online.</p>
+        <h3><i class="bi bi-mortarboard-fill"></i> Build Skills. Earn Credentials. Get Verified.</h3>
+        <p>
+            Our certification system ensures credibility and trust.
+            Recognized by industry professionals and learning partners worldwide.
+        </p>
+        <a href="/index" class="btn-primary">
+            <i class="bi bi-person-plus-fill"></i> Start Learning
+        </a>
     </section>
-
-    <!-- FOOTER -->
     <footer>
-        © 2026 EduPlatform · Certificate Verification System
+        © 2026 EduPlatform · Trusted Certificate Verification System
     </footer>
-
 </body>
-
 </html>

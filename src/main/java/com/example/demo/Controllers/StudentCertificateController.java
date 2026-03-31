@@ -119,7 +119,6 @@ public class StudentCertificateController {
 
 		CourseCertificate cert = certificateRepo.findById(id).orElseThrow();
 
-		// 🔒 ownership check
 		if (!cert.getStudent().getStudid().equals(studentId)) {
 			return;
 		}
@@ -135,8 +134,7 @@ public class StudentCertificateController {
 		Files.copy(file.toPath(), response.getOutputStream());
 		response.getOutputStream().flush();
 	}
-	/* ================= PDF GENERATOR ================= */
-
+	
 	private String generatePdf(Student student, Course course, CertificateTemplate template) throws Exception {
 
 		String baseDir = System.getProperty("user.dir") + "/uploads/certificates/student-" + student.getStudid()
@@ -153,7 +151,7 @@ public class StudentCertificateController {
 
 		document.open();
 
-		/* Background */
+		
 		if (template.getBackgroundImage() != null) {
 			String bgPath = System.getProperty("user.dir") + template.getBackgroundImage();
 			File bgFile = new File(bgPath);
@@ -166,31 +164,28 @@ public class StudentCertificateController {
 			}
 		}
 
-		/* Text */
+	
 		PdfContentByte text = writer.getDirectContent();
 		BaseFont bold = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
 		BaseFont normal = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
-		/* ================= STUDENT NAME ================= */
 		text.beginText();
 		text.setFontAndSize(bold, 32);
 		text.showTextAligned(Element.ALIGN_CENTER, student.getFullname().toUpperCase(), PageSize.A4.getWidth() / 2, 430,
 				0);
 		text.endText();
 
-		/* ================= COURSE NAME ================= */
 		text.beginText();
 		text.setFontAndSize(normal, 20);
 		text.showTextAligned(Element.ALIGN_CENTER, course.getTitle(), PageSize.A4.getWidth() / 2, 380, 0);
 		text.endText();
 
-		/* ================= ISSUED DATE ================= */
+	
 		text.beginText();
 		text.setFontAndSize(normal, 13);
 		text.showTextAligned(Element.ALIGN_CENTER, "Issued on: " + LocalDate.now(), PageSize.A4.getWidth() / 2, 340, 0);
 		text.endText();
-		/* Signature */
 		if (template.getSignatureImage() != null) {
 			Image sign = Image.getInstance(System.getProperty("user.dir") + template.getSignatureImage());
 			sign.scaleToFit(120, 60);
