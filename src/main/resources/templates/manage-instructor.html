@@ -239,7 +239,6 @@ STATUS SELECT (ADMIN THEME)
             padding: 4px 8px;
             outline: none;
         }
-        
     </style>
 </head>
 
@@ -291,6 +290,9 @@ STATUS SELECT (ADMIN THEME)
                         <li class="sidebar__item"><a th:href="@{/admin-post-internships}">
                                 <i class="bi bi-plus-circle"></i><span>Post Internships </span></a></li>
 
+                        <li class="sidebar__item"><a th:href="@{/admin-chat}">
+                                <i class="bi bi-chat-dots"></i><span>Chat System</span></a></li>
+
                         <li class="sidebar__item"><a th:href="@{/admin-announcement}">
                                 <i class="bi bi-briefcase"></i><span>Announcements</span></a></li>
 
@@ -312,9 +314,7 @@ STATUS SELECT (ADMIN THEME)
             </nav>
         </aside>
 
-        <!-- ===== CONTENT AREA ===== -->
         <div class="content-area">
-            <!-- ===== TOPBAR ===== -->
             <header class="topbar">
                 <span class="page-title"> Instructor Management</span>
                 <div class="topbar-right">
@@ -325,18 +325,15 @@ STATUS SELECT (ADMIN THEME)
                 </div>
             </header>
 
-            <!-- ===== MAIN CONTENT ===== -->
             <main class="home-section">
 
                 <div class="table-controls">
 
-                    <!-- SEARCH -->
                     <div class="search-box">
                         <i class="bi bi-search"></i>
                         <input type="text" id="searchInput" placeholder="Search instructors...">
                     </div>
 
-                    <!-- STATUS FILTER -->
                     <select id="statusFilter" class="status-select">
                         <option value="ALL">All Status</option>
                         <option value="ACTIVE">Active</option>
@@ -380,11 +377,9 @@ STATUS SELECT (ADMIN THEME)
                                         </option>
 
                                     </select>
-
                                     <button class="btn btn-success btn-sm">
                                         <i class="bi bi-check"></i>
                                     </button>
-
                                 </form>
                             </td>
                             <td>
@@ -403,8 +398,6 @@ STATUS SELECT (ADMIN THEME)
             </main>
         </div>
     </div>
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

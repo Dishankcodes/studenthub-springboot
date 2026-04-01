@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
@@ -228,6 +229,8 @@
                         <li class="sidebar__item"><a th:href="@{/admin-post-internships}">
                                 <i class="bi bi-plus-circle"></i><span>Post Internships </span></a></li>
 
+                        <li class="sidebar__item"><a th:href="@{/admin-chat}">
+                                <i class="bi bi-chat-dots"></i><span>Chat System</span></a></li>
 
                         <li class="sidebar__item"><a th:href="@{/admin-announcement}">
                                 <i class="bi bi-briefcase"></i><span>Announcements</span></a></li>
@@ -449,21 +452,21 @@
 
                         <!-- REVENUE -->
                         <div class="col-xl-3 col-md-6">
-                                <div class="stat-card">
-                                    <div class="stat-top">
-                                        <div>
-                                            <div class="stat-title">Revenue</div>
-                                            <div class="stat-value">₹1,24,000</div>
-                                        </div>
-                                        <i class="bi bi-currency-rupee stat-icon-modern"></i>
+                            <div class="stat-card">
+                                <div class="stat-top">
+                                    <div>
+                                        <div class="stat-title">Revenue</div>
+                                        <div class="stat-value">₹1,24,000</div>
                                     </div>
-                                    <div class="stat-progress">
-                                        <span style="width: 85%"></span>
-                                    </div>
-                                    <div class="stat-footer">
-                                        +18% growth this month
-                                    </div>
+                                    <i class="bi bi-currency-rupee stat-icon-modern"></i>
                                 </div>
+                                <div class="stat-progress">
+                                    <span style="width: 85%"></span>
+                                </div>
+                                <div class="stat-footer">
+                                    +18% growth this month
+                                </div>
+                            </div>
                         </div>
 
                     </div>

@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Your Sidebar CSS -->
+    <link th:href="@{/css/admin-css/admin_sidebar.css}" rel="stylesheet">
+    <link href="admin-sidebar.css" rel="stylesheet">
+    <style>
+        /* ===== ROOT FIX ===== */
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            background: #020617;
+            color: #e5e7eb;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ===== LAYOUT ===== */
+        .layout {
+            display: flex;
+            height: 100vh;
+        }
+
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .home-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .main {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* ===== CHAT CONTAINER ===== */
+        .chat-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ===== CHAT SIDEBAR ===== */
+        .chat-bar {
+            width: 260px;
+            height: 100%;
+            overflow-y: auto;
+            background: #0f172a;
+            border-right: 1px solid #1f2937;
+        }
+
+        /* ===== SEARCH ===== */
+        #searchUser {
+            width: 90%;
+            margin: 12px auto;
+            display: block;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid #374151;
+            background: #1e293b;
+            color: #e5e7eb;
+        }
+
+        #searchUser::placeholder {
+            color: #9ca3af;
+        }
+
+        /* ===== CONVERSATION ===== */
+        .conversation {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid #1f2937;
+            cursor: pointer;
+            text-decoration: none;
+            color: #e5e7eb;
+            transition: 0.2s;
+        }
+
+        .conversation:hover {
+            background: #1e293b;
+        }
+
+        .conversation.active {
+            background: linear-gradient(135deg, #6d28d9, #7c3aed);
+        }
+
+        .conversation img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .info {
+            flex: 1;
+        }
+
+        .info .name {
+            font-weight: 600;
+        }
+
+        .info .preview {
+            font-size: 0.85rem;
+            color: #9ca3af;
+        }
+
+        /* ===== BADGE ===== */
+        .unread-badge {
+            background: #ef4444;
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 999px;
+        }
+
+        .conversation .time {
+            color: #9ca3af;
+            margin-left: auto;
+            font-size: 12px;
+        }
+
+        /* ===== CHAT WINDOW ===== */
+        .chat-window {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            background: #020617;
+        }
+
+        /* ===== HEADER ===== */
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 15px;
+            background: #0f172a;
+            border-bottom: 1px solid #1f2937;
+            flex-shrink: 0;
+        }
+
+        .chat-header img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+        }
+
+        .chat-name {
+            font-weight: 600;
+            color: #f9fafb;
+        }
+
+        .chat-status {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        /* ===== MESSAGES ===== */
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== MESSAGE ===== */
+        .message {
+            max-width: 60%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-bottom: 8px;
+            word-wrap: break-word;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* RECEIVED */
+        .message.received {
+            background: #1e293b;
+            color: #e5e7eb;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+
+        /* SENT */
+        .message.sent {
+            background: linear-gradient(135deg, #6d28d9, #7c3aed);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+
+        .timestamp {
+            font-size: 0.7rem;
+            color: #9ca3af;
+            margin-top: 3px;
+            text-align: right;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            background: #0f172a;
+            border-top: 1px solid #1f2937;
+            flex-shrink: 0;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: none;
+            background: #1e293b;
+            color: #e5e7eb;
+        }
+
+        .chat-input input::placeholder {
+            color: #9ca3af;
+        }
+
+        .chat-input button {
+            width: 40px;
+            height: 40px;
+            margin-left: 10px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #6d28d9, #7c3aed);
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .chat-input button:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+
+        <aside class="vertical-sidebar">
+            <input type="checkbox" id="sidebar-toggle" class="checkbox-input" checked>
+            <nav>
+                <header>
+                    <div class="sidebar__toggle-container">
+                        <label for="sidebar-toggle" class="nav__toggle" tabindex="0">
+                            <span class="toggle--icons">
+                                <i class="bi bi-list toggle--open"></i><i class="bi bi-x-lg toggle--close"></i>
+                            </span>
+                        </label>
+                    </div>
+                    <figure>
+                        <img class="codepen-logo" th:src="@{/images/admin-avatar.png}" alt="Admin">
+                        <figcaption>
+                            <p class="user-id" th:text="${username}">Admin</p>
+                            <p class="user-role">Administrator</p>
+                        </figcaption>
+                    </figure>
+                </header>
+
+                <section class="sidebar__wrapper">
+                    <ul class="sidebar__list">
+                        <li class="sidebar__item item--heading">
+                            <h2 class="sidebar__item--heading">General</h2>
+                        </li>
+
+                        <li class="sidebar__item"><a th:href="@{/admin-dashboard}">
+                                <i class="bi bi-speedometer2"></i><span>Dashboard</span></a></li>
+                        <li class="sidebar__item"><a th:href="@{/manage-students}">
+                                <i class="bi bi-people"></i><span>Student Management</span></a></li>
+                        <li class="sidebar__item"><a th:href="@{/manage-teachers}">
+                                <i class="bi bi-person-badge"></i><span>Instructor Management</span></a></li>
+                        <li class="sidebar__item"><a th:href="@{/manage-courses}">
+                                <i class="bi bi-book"></i><span>Course Management</span></a></li>
+                        <li class="sidebar__item"><a th:href="@{/manage-internships}">
+                                <i class="bi bi-kanban"></i><span>Internship Management</span></a></li>
+                        <li class="sidebar__item"><a th:href="@{/admin-post-internships}">
+                                <i class="bi bi-plus-circle"></i><span>Post Internships </span></a></li>
+                        <li class="sidebar__item"><a th:href="@{/admin-chat}" class="active">
+                                <i class="bi bi-chat-dots"></i><span>Chat System</span></a></li>
+                        <li class="sidebar__item"><a th:href="@{/admin-announcement}">
+                                <i class="bi bi-briefcase"></i><span>Announcements</span></a></li>
+                        <li class="sidebar__item"><a th:href="@{/admin-design}"><i
+                                    class="bi bi-layout-text-window"></i><span>Certificate Design</span></a></li>
+                        <li class="sidebar__item"><a th:href="@{/admin-feedback}">
+                                <i class="bi bi-bar-chart"></i><span>Feedback</span> </a></li>
+                        <li class="sidebar__item"><a th:href="@{/admin-settings}">
+                                <i class="bi bi-gear"></i><span>Settings</span></a></li>
+                        <li class="sidebar__item"><a th:href="@{/admin-logout}">
+                                <i class="bi bi-box-arrow-right"></i><span>Logout</span></a></li>
+
+                    </ul>
+                </section>
+            </nav>
+        </aside>
+        <div class="content-area">
+            <header class="topbar">
+                <span class="page-title"></span>
+                <div class="topbar-right">
+                    <button class="profile-btn dropdown-toggle" data-bs-toggle="dropdown">
+                        <img th:src="@{/images/admin-avatar.png}" alt="Admin" class="avatar">
+                        <span th:text="${username}">Admin</span>
+                    </button>
+                </div>
+            </header>
+
+            <main class="home-section">
+
+                <div class="main" id="main">
+
+                    <div class="chat-container">
+                        <div class="chat-bar" id="chatBar">
+                            <input type="text" id="searchUser" placeholder="🔍 Search users...">
+                            <a href="#" class="conversation">
+
+                                <img src="https://via.placeholder.com/40" alt="Profile">
+
+                                <div class="info">
+                                    <div class="name d-flex justify-content-between align-items-center">
+                                        <span>
+                                            Dishank
+                                        </span>
+
+                                        <span class="unread-badge">
+                                            3 unread
+                                        </span>
+                                        <span class="time" style="font-size:12px; opacity:0.7;">
+                                            time
+                                        </span>
+
+                                    </div>
+
+                                    <div class="preview">
+                                        last message preview goes here and it will be truncated if it's too long
+                                    </div>
+                                </div>
+
+                            </a>
+
+                            <a href="#" class="conversation">
+
+                                <img src="https://via.placeholder.com/40" alt="Profile">
+
+                                <div class="info">
+                                    <div class="name d-flex justify-content-between align-items-center">
+                                        <span>
+                                            Nivya
+                                        </span>
+
+                                        <span class="unread-badge">
+                                            3 unread
+                                        </span>
+                                        <span class="time" style="font-size:12px; opacity:0.7;">
+                                            time
+                                        </span>
+
+                                    </div>
+
+                                    <div class="preview">
+                                        last message preview goes here and it will be truncated if it's too long
+                                    </div>
+                                </div>
+
+                            </a>
+                        </div>
+
+                        <div class="chat-window">
+                            <div class="chat-header">
+                                <img src="https://via.placeholder.com/40" alt="Profile">
+                                <div class="chat-header-info">
+                                    <div class="chat-name">
+
+                                    </div>
+                                    <div class="chat-status"></div>
+                                </div>
+                                <div class="chat-name">Select a user to start chatting</div>
+                            </div>
+                            <div class="messages" id="messages">
+
+                                <div style="text-align:center; margin:10px 0; font-size:12px; opacity:0.7;">
+                                    Today
+                                </div>
+
+                                <div class="message received">
+                                    Hey bro 👋
+                                    <div class="timestamp">10:30</div>
+                                </div>
+
+                                <div class="message sent">
+                                    Hello! What's up?
+                                    <div class="timestamp">10:32</div>
+                                </div>
+
+                                <div class="message received">
+                                    Nothing much, just testing UI 😄
+                                    <div class="timestamp">10:33</div>
+                                </div>
+
+                            </div>
+
+                            <form method="POST" class="chat-input">
+                                <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off"
+                                    required>
+                                <button type="button" onclick="sendMessage()">
+                                    <i class="bi bi-send"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        // Search filter
+        document.getElementById('searchUser').addEventListener('keyup', function () {
+            const filter = this.value.toLowerCase();
+            document.querySelectorAll('.conversation').forEach(user => {
+                const name = user.querySelector('.info .name').textContent.toLowerCase();
+                const preview = user.querySelector('.info .preview').textContent.toLowerCase();
+                user.style.display = (name.includes(filter) || preview.includes(filter)) ? 'flex' : 'none';
+            });
+        });
+    </script>
+    <script>
+        function sendMessage() {
+            const input = document.getElementById("messageInput");
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            const msgBox = document.getElementById("messages");
+
+            const msg = document.createElement("div");
+            msg.className = "message sent";
+            msg.innerHTML = `
+        ${text}
+        <div class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+    `;
+
+            msgBox.appendChild(msg);
+
+            input.value = "";
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }
+    </script>
+</body>
+
+</html>

@@ -74,7 +74,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            border-bottom: 1px solid var(--sidebar-border);
+            border-bottom: 1px solid #e5e7eb;
             cursor: pointer;
             text-decoration: none;
             color: inherit;
@@ -273,12 +273,12 @@
 
         <nav class="sidebar-menu">
             <a th:href="@{/teacher-dashboard}"><i class="bi bi-speedometer2"></i><span> Dashboard </span></a>
-            <a th:href="@{/teacher-course}" class="active"><i class="bi bi-journal-text"></i><span>Course
+            <a th:href="@{/teacher-course}"><i class="bi bi-journal-text"></i><span>Course
                     Management</span></a>
             <a th:href="@{/teacher-creates-course}"><i class="bi bi-journal-plus"></i><span>Create Course</span></a>
             <a th:href="@{/teacher-activity}"><i class="bi bi-pencil-square"></i><span>Genereal Activities</span></a>
             <a th:href="@{/teacher-students}"><i class="bi bi-people"></i><span>Students</span></a>
-            <a th:href="@{/teacher-chat}"><i class="bi bi-chat-dots"></i><span>Communication</span></a>
+            <a th:href="@{/teacher-chat}" class="active"><i class="bi bi-chat-dots"></i><span>Communication</span></a>
             <a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback & Ratings</span></a>
             <a th:href="@{/teacher-profile}"><i class="bi bi-gear"></i><span>Profile</span></a>
             <a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
@@ -398,7 +398,6 @@
                         <div class="timestamp">10:30</div>
                     </div>
 
-                    <!-- SENT MESSAGE -->
                     <div class="message sent">
                         Hello! What's up?
                         <div class="timestamp">10:32</div>
@@ -430,6 +429,40 @@
         });
     </script>
 
+    <script>
+
+        // Search filter
+        document.getElementById('searchUser').addEventListener('keyup', function () {
+            const filter = this.value.toLowerCase();
+            document.querySelectorAll('.conversation').forEach(user => {
+                const name = user.querySelector('.info .name').textContent.toLowerCase();
+                const preview = user.querySelector('.info .preview').textContent.toLowerCase();
+                user.style.display = (name.includes(filter) || preview.includes(filter)) ? 'flex' : 'none';
+            });
+        });
+    </script>
+    <script>
+        function sendMessage() {
+            const input = document.getElementById("messageInput");
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            const msgBox = document.getElementById("messages");
+
+            const msg = document.createElement("div");
+            msg.className = "message sent";
+            msg.innerHTML = `
+        ${text}
+        <div class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+    `;
+
+            msgBox.appendChild(msg);
+
+            input.value = "";
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }
+    </script>
 </body>
 
 </html>
