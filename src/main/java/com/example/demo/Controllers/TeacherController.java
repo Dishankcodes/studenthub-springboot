@@ -99,11 +99,6 @@ public class TeacherController {
 		return "teacher-students";
 	}
 
-	// ===== COMMUNICATION =====
-	@GetMapping("/teacher-communication")
-	public String communicationPage() {
-		return "teacher-communication";
-	}
 
 	@GetMapping("/teacher-feedback")
 	public String teacherFeedback(HttpSession session, Model model) {

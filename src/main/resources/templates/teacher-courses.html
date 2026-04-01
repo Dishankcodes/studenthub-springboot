@@ -273,12 +273,11 @@
 
         <nav class="sidebar-menu">
             <a th:href="@{/teacher-dashboard}"><i class="bi bi-speedometer2"></i><span> Dashboard </span></a>
-            <a th:href="@{/teacher-course}" class="active"><i class="bi bi-journal-text"></i><span>Course
-                    Management</span></a>
+            <a th:href="@{/teacher-course}" class="active"><i class="bi bi-journal-text"></i><span>Course Management</span></a>
             <a th:href="@{/teacher-creates-course}"><i class="bi bi-journal-plus"></i><span>Create Course</span></a>
             <a th:href="@{/teacher-activity}"><i class="bi bi-pencil-square"></i><span>Genereal Activities</span></a>
             <a th:href="@{/teacher-students}"><i class="bi bi-people"></i><span>Students</span></a>
-            <a th:href="@{/teacher-communication}"><i class="bi bi-chat-dots"></i><span>Communication</span></a>
+            <a th:href="@{/teacher-chat}"><i class="bi bi-chat-dots"></i><span>Communication</span></a>
             <a th:href="@{/teacher-feedback}"><i class="bi bi-star"></i><span>Feedback & Ratings</span></a>
             <a th:href="@{/teacher-profile}"><i class="bi bi-gear"></i><span>Profile</span></a>
             <a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
@@ -347,7 +346,7 @@
             <div class="course-card" th:each="course : ${courses} ">
                 <div class="course-thumb">
                     <img th:if="${course.thumbnailURL != null}" th:src="${course.thumbnailURL}">
-                    <span th:if="${course.thumbnailURL == null}">  <i class="bi bi-book"></i> </span>
+                    <span th:if="${course.thumbnailURL == null}"> <i class="bi bi-book"></i> </span>
                 </div>
 
                 <div class="course-body">

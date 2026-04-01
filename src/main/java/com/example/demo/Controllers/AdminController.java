@@ -165,6 +165,8 @@ public class AdminController {
 		return "admin-settings";
 	}
 
+	
+	
 	@GetMapping("/admin-logout")
 	public String adminLogout(HttpSession session) {
 		session.invalidate();
