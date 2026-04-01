@@ -1,434 +1,451 @@
 @charset "UTF-8";
-
+:root {
+  --primary: #f6a623;
+  /* bright orange */
+  --primary-dark: #d48821;
+  /* darker orange for hover */
+  --bg: #fffdf8;
+  /* light cream background */
+  --card-bg: #ffffff;
+  /* 333 cards */
+  --text-dark: #333;
+  /* main text */
+  --text-muted: #666;
+  /* muted text */
+}
 /* ===============================
    NOTES UPLOAD CARD
 ================================ */
 .notes-upload-card {
-	background: #2a2a4a;
-	padding: 30px;
-	border-radius: 16px;
-	max-width: 600px;
-	margin-top: 20px;
-	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  background: #2a2a4a;
+  padding: 30px;
+  border-radius: 16px;
+  max-width: 600px;
+  margin-top: 20px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+  color: #fffdf8;
 }
 
 .notes-upload-card h3 {
-	font-size: 20px;
-	font-weight: 600;
-	margin-bottom: 20px;
-	color: #ffffff;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #ffffff;
 }
 
 /* ===============================
    FORM LAYOUT
 ================================ */
 .notes-upload-card form {
-	display: flex;
-	flex-direction: column;
-	gap: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.notes-upload-card input[type="text"], .notes-upload-card textarea,
-	.notes-upload-card select {
-	background: #1f1f35;
-	border: 1px solid #3c3c5c;
-	color: #ffffff;
-	padding: 12px 14px;
-	border-radius: 10px;
-	font-size: 14px;
+.notes-upload-card input[type="text"],
+.notes-upload-card textarea,
+.notes-upload-card select {
+  background: #1f1f35;
+  border: 1px solid #3c3c5c;
+  color: #ffffff;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
 }
 
 .notes-upload-card textarea {
-	min-height: 90px;
-	resize: vertical;
+  min-height: 90px;
+  resize: vertical;
 }
 
-.notes-upload-card input::placeholder, .notes-upload-card textarea::placeholder
-	{
-	color: #9ca3af;
+.notes-upload-card input::placeholder,
+.notes-upload-card textarea::placeholder {
+  color: #9ca3af;
 }
 
-.notes-upload-card input:focus, .notes-upload-card textarea:focus,
-	.notes-upload-card select:focus {
-	outline: none;
-	border-color: #f6a623;
-	box-shadow: 0 0 0 3px rgba(246, 166, 35, 0.25);
+.notes-upload-card input:focus,
+.notes-upload-card textarea:focus,
+.notes-upload-card select:focus {
+  outline: none;
+  border-color: #f6a623;
+  box-shadow: 0 0 0 3px rgba(246, 166, 35, 0.25);
 }
 
 /* ===============================
    FILE INPUT
 ================================ */
 .notes-upload-card input[type="file"] {
-	background: #1f1f35;
-	color: #9ca3af;
-	padding: 10px;
-	border-radius: 10px;
-	border: 1px dashed #3c3c5c;
-	cursor: pointer;
+  background: #1f1f35;
+  color: #9ca3af;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px dashed #3c3c5c;
+  cursor: pointer;
 }
 
 /* ===============================
    UPLOAD BUTTON
 ================================ */
 .notes-upload-card button {
-	background: #f6a623;
-	color: #1f1f2e;
-	border: none;
-	padding: 12px 18px;
-	border-radius: 12px;
-	font-size: 15px;
-	font-weight: 600;
-	cursor: pointer;
-	display: inline-flex;
-	align-items: center;
-	gap: 8px;
-	width: fit-content;
+  background: #f6a623;
+  color: #1f1f2e;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
 }
 
 .notes-upload-card button:hover {
-	background: #ffb84d;
+  background: #ffb84d;
 }
 
 /* ===============================
    STATUS BADGES
 ================================ */
 .status-badge {
-	display: inline-block;
-	margin-top: 10px;
-	padding: 6px 12px;
-	border-radius: 999px;
-	font-size: 13px;
-	font-weight: 500;
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .status-pending {
-	background: rgba(246, 166, 35, 0.2);
-	color: #f6a623;
+  background: rgba(246, 166, 35, 0.2);
+  color: #f6a623;
 }
 
 .status-approved {
-	background: rgba(34, 197, 94, 0.2);
-	color: #22c55e;
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
 }
 
 .status-rejected {
-	background: rgba(239, 68, 68, 0.2);
-	color: #ef4444;
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
 }
 
 /* ===============================
    INFO MESSAGE
 ================================ */
 .info {
-	background: rgba(34, 197, 94, 0.15);
-	color: #22c55e;
-	padding: 14px 18px;
-	border-radius: 12px;
-	margin-bottom: 20px;
-	font-size: 14px;
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 14px;
 }
 
 /* ===============================
    DASHBOARD TWO COLUMN LAYOUT
 ================================ */
 .notes-layout {
-	display: grid;
-	grid-template-columns: 380px 1fr;
-	gap: 30px;
-	align-items: start;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 30px;
+  align-items: start;
 }
 
-@media ( max-width : 1100px) {
-	.notes-layout {
-		grid-template-columns: 1fr;
-	}
+@media (max-width: 1100px) {
+  .notes-layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ===============================
    UPLOADED NOTES GRID
 ================================ */
 .uploaded-notes {
-	background: transparent;
+  background: transparent;
 }
 
 .uploaded-notes h3 {
-	margin-bottom: 16px;
-	font-size: 22px;
-	font-weight: 600;
+  margin-bottom: 16px;
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .notes-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-	gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
 }
 
 .note-item {
-	background: #2a2a4a;
-	border-radius: 14px;
-	padding: 20px;
-	box-shadow: 0 12px 30px rgba(0, 0, 0, .25);
-	display: flex;
-	flex-direction: column;
+  background: #2a2a4a;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
 }
 
 .note-item h4 {
-	font-size: 16px;
-	font-weight: 600;
-	margin-bottom: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
 }
 
 .note-item p {
-	font-size: 13px;
-	opacity: .85;
+  font-size: 13px;
+  opacity: 0.85;
 }
 
 .note-item .meta {
-	margin-top: auto;
-	font-size: 12px;
-	opacity: .7;
+  margin-top: auto;
+  font-size: 12px;
+  opacity: 0.7;
 }
 
 .note-actions {
-	display: flex;
-	gap: 10px;
-	margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
 }
 
 .note-actions a {
-	flex: 1;
-	text-align: center;
-	padding: 8px;
-	border-radius: 10px;
-	background: #1f1f35;
-	color: white;
-	text-decoration: none;
-	font-size: 13px;
+  flex: 1;
+  text-align: center;
+  padding: 8px;
+  border-radius: 10px;
+  background: #1f1f35;
+  color: white;
+  text-decoration: none;
+  font-size: 13px;
 }
 
 .note-actions a:hover {
-	background: #f6a623;
-	color: #1f1f2e;
+  background: #f6a623;
+  color: #1f1f2e;
 }
 
-.announcement-form input, .announcement-form textarea,
-	.announcement-form select {
-	width: 100%;
-	margin-bottom: 10px;
-	padding: 10px;
-	border-radius: 6px;
-	border: 1px solid #ddd;
+.announcement-form input,
+.announcement-form textarea,
+.announcement-form select {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
 }
 
 .announcement-form button {
-	padding: 10px 16px;
-	background: #4f46e5;
-	color: white;
-	border: none;
-	border-radius: 6px;
+  padding: 10px 16px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
 }
 
 .announcement-card {
-	background: #2a2a4a;
-	padding: 18px;
-	margin-bottom: 16px;
-	border-radius: 12px;
-	border: 1px solid rgba(255, 255, 255, 0.05);
-	transition: 0.25s;
-	position: relative;
+  background: #2a2a4a;
+  padding: 18px;
+  margin-bottom: 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: 0.25s;
+  position: relative;
 }
 
 .announcement-card:hover {
-	transform: translateY(-3px);
-	box-shadow: 0 16px 35px rgba(0, 0, 0, 0.35);
+  transform: translateY(-3px);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.35);
 }
 
 /* PINNED */
 .announcement-card.pinned {
-	border-left: 3px solid #f6a623;
-	background: #32325d;
+  border-left: 3px solid #f6a623;
+  background: #32325d;
 }
 
 /* TITLE */
 .announcement-card h4 {
-	font-size: 15px;
-	font-weight: 600;
-	margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
 }
 
 /* META */
 .announcement-meta {
-	font-size: 11px;
-	opacity: 0.6;
-	margin-bottom: 8px;
+  font-size: 11px;
+  opacity: 0.6;
+  margin-bottom: 8px;
 }
 
 /* MESSAGE */
 .announcement-message {
-	font-size: 13px;
-	line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 /* ATTACHMENT */
 .attachment {
-	margin-top: 10px;
-	background: #1f1f35;
-	padding: 6px 10px;
-	border-radius: 6px;
-	font-size: 12px;
-	display: inline-flex;
-	align-items: center;
-	gap: 6px;
+  margin-top: 10px;
+  background: #1f1f35;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .attachment a {
-	color: #f6a623;
-	text-decoration: none;
+  color: #f6a623;
+  text-decoration: none;
 }
 
 .attachment a:hover {
-	text-decoration: underline;
+  text-decoration: underline;
 }
 
 .delete-btn {
-	margin-top: 10px;
-	background: #ef4444;
-	color: white;
-	border: none;
-	padding: 6px 12px;
-	border-radius: 6px;
+  margin-top: 10px;
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
 }
 
 /* ===============================
    SECTION SPACING IMPROVEMENT
 ================================ */
 .section-wrapper {
-	margin-top: 40px;
+  margin-top: 40px;
 }
 
 .section-divider {
-	margin: 40px 0;
-	opacity: 0.3;
-	border: none;
-	height: 1px;
-	background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+  margin: 40px 0;
+  opacity: 0.3;
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #e5e7eb, transparent);
 }
 
 /* ===============================
    CREATE ANNOUNCEMENT CARD
 ================================ */
 .create-announcement-card {
-    background: #2a2a4a;
-    padding: 18px 20px; /* tighter */
-    border-radius: 14px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-    margin-bottom: 25px; /* reduce gap below */
+  background: #2a2a4a;
+  padding: 18px 20px; /* tighter */
+  border-radius: 14px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+  margin-bottom: 25px; /* reduce gap below */
 }
 
 /* TOP ROW */
 .announcement-form-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 8px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
 }
 
 .announcement-form-row select {
-    flex: 1;
+  flex: 1;
 }
 
 .announcement-form-row input {
-    flex: 2;
+  flex: 2;
 }
 
 /* TEXTAREA FULL WIDTH */
 .create-announcement-card textarea {
-    width: 100%;
-    min-height: 90px;
-    resize: none;
-    margin-bottom: 10px;
+  width: 100%;
+  min-height: 90px;
+  resize: none;
+  margin-bottom: 10px;
 }
 
 /* INPUTS */
 .create-announcement-card input,
 .create-announcement-card select,
 .create-announcement-card textarea {
-    background: #1f1f35;
-    border: 1px solid #3c3c5c;
-    color: white;
-    padding: 10px 12px;
-    border-radius: 8px;
-    font-size: 13px;
+  background: #1f1f35;
+  border: 1px solid #3c3c5c;
+  color: white;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
 }
 
 /* BOTTOM ROW */
 .announcement-form-bottom {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 /* FILE INPUT FIX */
 .announcement-form-bottom input[type="file"] {
-    font-size: 12px;
-    color: #9ca3af;
+  font-size: 12px;
+  color: #9ca3af;
 }
 
 /* BUTTON */
 .create-announcement-card button {
-    background: #f6a623;
-    color: #1f1f2e;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    width: auto; /* 🔥 KEY FIX */
+  background: #f6a623;
+  color: #1f1f2e;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  width: auto; /* 🔥 KEY FIX */
 }
 
 .create-announcement-card button:hover {
-    background: #ffb84d;
+  background: #ffb84d;
 }
 .tabs {
-	display: flex;
-	gap: 20px;
-	margin-bottom: 20px;
-	border-bottom: 1px solid #3c3c5c;
+  display: flex;
+  gap: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #3c3c5c;
 }
 
 .tab-btn {
-	background: none;
-	border: none;
-	padding: 10px 0;
-	font-size: 14px;
-	color: #9ca3af;
-	cursor: pointer;
-	position: relative;
+  background: none;
+  border: none;
+  padding: 10px 0;
+  font-size: 14px;
+  color: #9ca3af;
+  cursor: pointer;
+  position: relative;
 }
 
 .tab-btn.active {
-	color: #f6a623;
-	font-weight: 600;
+  color: #f6a623;
+  font-weight: 600;
 }
 
 .tab-btn.active::after {
-	content: "";
-	position: absolute;
-	bottom: -1px;
-	left: 0;
-	width: 100%;
-	height: 2px;
-	background: #f6a623;
-	border-radius: 2px;
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #f6a623;
+  border-radius: 2px;
 }
 
 .tab-content {
-	display: none;
+  display: none;
 }
 
 .tab-content.active {
-	display: block;
+  display: block;
 }
