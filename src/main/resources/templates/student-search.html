@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
-    
+
     <style>
         * {
             margin: 0;
@@ -100,7 +100,35 @@
         </div>
     </div>
     <div class="main">
+        <div th:each="r : ${results}" class="conversation">
 
+            <img th:src="${r.user.profileImage != null ? r.user.profileImage : '/images/default.jpg'}">
+
+            <div>
+                <div th:text="${r.user.name}"></div>
+
+                <div>
+
+                    <!-- FOLLOW -->
+                    <form th:if="${r.status == 'FOLLOW'}" action="/chat/follow" method="post">
+                        <input type="hidden" name="receiverId" th:value="${r.user.id}">
+                        <button>Follow</button>
+                    </form>
+
+                    <!-- PENDING -->
+                    <span th:if="${r.status == 'PENDING'}">
+                        Requested
+                    </span>
+
+                    <!-- CHAT -->
+                    <a th:if="${r.status == 'CHAT'}" th:href="@{/student-chat(userId=${r.user.id})}">
+                        Chat
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
     </div>
 
     <script>

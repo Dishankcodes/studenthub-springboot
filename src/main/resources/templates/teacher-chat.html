@@ -318,101 +318,63 @@
         <div class="chat-container">
             <div class="chat-bar" id="chatBar">
                 <input type="text" id="searchUser" placeholder="🔍 Search users...">
-                <a href="#" class="conversation">
+                <div th:each="user : ${users}" class="conversation">
 
-                    <img src="https://via.placeholder.com/40" alt="Profile">
+                    <a th:href="@{/teacher-chat(userId=${user.id})}"
+                        style="display:flex; gap:10px; text-decoration:none; color:inherit; width:100%;">
 
-                    <div class="info">
-                        <div class="name d-flex justify-content-between align-items-center">
-                            <span>
-                                Fellow Teacher
-                            </span>
+                        <img th:src="${user.profileImage != null ? user.profileImage : '/images/default.jpg'}">
 
-                            <span class="unread-badge">
-                                3 unread
-                            </span>
-                            <span class="time" style="font-size:12px; opacity:0.7;">
-                                time
-                            </span>
-
+                        <div class="info">
+                            <div class="name" th:text="${user.name}"></div>
                         </div>
 
-                        <div class="preview">
-                            last message preview goes here and it will be truncated if it's too long
-                        </div>
-                    </div>
+                    </a>
+                </div>
 
-                </a>
-
-                <a href="#" class="conversation">
-
-                    <img src="https://via.placeholder.com/40" alt="Profile">
-
-                    <div class="info">
-                        <div class="name d-flex justify-content-between align-items-center">
-                            <span>
-                                Enroll Student
-                            </span>
-
-                            <span class="unread-badge">
-                                3 unread
-                            </span>
-                            <span class="time" style="font-size:12px; opacity:0.7;">
-                                time
-                            </span>
-
-                        </div>
-
-                        <div class="preview">
-                            last message preview goes here and it will be truncated if it's too long
-                        </div>
-                    </div>
-
-                </a>
             </div>
 
             <div class="chat-window">
-                <div class="chat-header">
-                    <img src="https://via.placeholder.com/40" alt="Profile">
+
+                <div th:if="${selectedUser != null}" class="chat-header">
+                    <img
+                        th:src="${selectedUser.profileImage != null ? selectedUser.profileImage : '/images/default.jpg'}">
+
                     <div class="chat-header-info">
-                        <div class="chat-name">
-
-                        </div>
-                        <div class="chat-status"></div>
+                        <div class="chat-name" th:text="${selectedUser.name}"></div>
+                        <div class="chat-status">Student</div>
                     </div>
+                </div>
+
+                <div th:if="${selectedUser == null}" class="chat-header">
                     <div class="chat-name">Select a user to start chatting</div>
+                </div>
+
+                <div class="messages">
+
+                    <div th:if="${messages == null or #lists.isEmpty(messages)}"
+                        style="text-align:center; opacity:0.6;">
+                        No messages yet
+                    </div>
+
+                    <div th:each="msg : ${messages}"
+                        th:class="'message ' + (${msg.sender.id} == ${session.chatUserId} ? 'sent' : 'received')}">
+
+                        <span th:text="${msg.content}"></span>
+
+                        <div class="timestamp" th:text="${#temporals.format(msg.timestamp, 'HH:mm')}"></div>
+                    </div>
 
                 </div>
 
+                <form th:if="${roomId != null}" method="POST" action="/chat/send" class="chat-input">
 
-                <div class="messages" id="messages">
+                    <input type="hidden" name="roomId" th:value="${roomId}">
+                    <input type="text" name="content" placeholder="Type a message..." required>
 
-                    <!-- Date separator -->
-                    <div style="text-align:center; margin:10px 0; font-size:12px; opacity:0.7;">
-                        Today
-                    </div>
-
-                    <!-- RECEIVED MESSAGE -->
-                    <div class="message received">
-                        Hey bro 👋
-                        <div class="timestamp">10:30</div>
-                    </div>
-
-                    <div class="message sent">
-                        Hello! What's up?
-                        <div class="timestamp">10:32</div>
-                    </div>
-
-                    <div class="message received">
-                        Nothing much, just testing teacher side UI 😄
-                        <div class="timestamp">10:33</div>
-                    </div>
-
-                </div>
-                <form method="POST" class="chat-input">
-                    <input type="text" id="messageInput" placeholder="Type a message..." autocomplete="off" required>
-                    <button type="button" onclick="sendMessage()">
-                        <i class="bi bi-send"></i></button>
+                    <button type="submit">
+                        <i class="bi bi-send"></i>
+                    </button>
                 </form>
             </div>
         </div>

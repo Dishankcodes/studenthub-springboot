@@ -20,4 +20,6 @@ public interface ConnectionRepository extends JpaRepository<Connection, Integer>
     List<Connection> findBySenderIdAndStatusOrReceiverIdAndStatus(
             Integer senderId, ConnectionStatus status1,
             Integer receiverId, ConnectionStatus status2);
+
+	List<Connection> findByReceiverIdAndStatus(Integer id, ConnectionStatus pending);
 }

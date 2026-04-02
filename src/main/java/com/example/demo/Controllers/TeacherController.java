@@ -306,7 +306,7 @@ public class TeacherController {
 
 		// simulate logged-in teacher (TESTING ONLY)
 		session.setAttribute("TEACHER_LOGGED_IN", true);
-		session.setAttribute("teacherId", 2); // must exist in DB
+		session.setAttribute("teacherId", 1); // must exist in DB
 		session.setAttribute("teacherName", "Test Teacher");
 
 		return "redirect:/teacher-dashboard";
