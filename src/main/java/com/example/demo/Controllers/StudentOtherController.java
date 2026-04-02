@@ -2,6 +2,10 @@ package com.example.demo.Controllers;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,11 +15,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.demo.entity.ChatUser;
 import com.example.demo.entity.InternshipApplication;
 import com.example.demo.entity.InternshipCertificate;
 import com.example.demo.entity.Internships;
 import com.example.demo.enums.ApplicationStatus;
+import com.example.demo.enums.UserType;
 import com.example.demo.repository.ApplicationRepository;
+import com.example.demo.repository.ChatUserRepository;
 import com.example.demo.repository.InternshipCertificateRepository;
 import com.example.demo.repository.InternshipRepository;
 
@@ -34,6 +41,7 @@ public class StudentOtherController {
 	@Autowired
 	private InternshipRepository internshipRepo;
 
+	
 	@GetMapping("/student/next-step")
 	public String nextStep(@RequestParam Integer internshipId,
 	                       Model model,

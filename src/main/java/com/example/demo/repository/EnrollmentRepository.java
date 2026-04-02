@@ -56,4 +56,6 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
 			AND e.completedAt IS NOT NULL
 			""")
 	List<Integer> findCompletedCourses(Integer studentId);
+
+	boolean existsByStudentStudid(Integer refId);
 }

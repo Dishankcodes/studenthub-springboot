@@ -197,10 +197,7 @@ public class StudentController {
 		return "student-stuff";
 	}
 
-	@GetMapping("/student-chat")
-	public String student_chat() {
-		return "student-chat";
-	}
+	
 
 	@GetMapping("/student-notification")
 	public String student_notifi() {

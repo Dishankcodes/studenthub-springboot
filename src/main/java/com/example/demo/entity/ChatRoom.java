@@ -19,7 +19,21 @@ public class ChatRoom {
 	@JoinColumn(name = "user2_id")
 	private ChatUser user2;
 
+	@ManyToOne
+	@JoinColumn(name = "course_id")
+	private Course course;
+	
+	
 	private LocalDateTime createdAt = LocalDateTime.now();
+
+	
+	public Course getCourse() {
+		return course;
+	}
+
+	public void setCourse(Course course) {
+		this.course = course;
+	}
 
 	public Integer getId() {
 		return id;

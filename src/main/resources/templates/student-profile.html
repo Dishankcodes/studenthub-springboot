@@ -459,6 +459,7 @@
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
             max-width: 500px;
             margin-top: 10px;
+            margin-left: 30%;
         }
 
         .empty-icon {
@@ -506,6 +507,7 @@
         <a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
         <a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
         <a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
+        <a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a> 
         <a th:href="@{/student-profile}" class="active"><i class="bi bi-person-circle"></i><span>Profile</span></a>
         <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
@@ -535,28 +537,24 @@
     </div>
     <div class="main">
         <div class="profile-section">
-
-
-
             <div th:if="${#lists.isEmpty(completedInternships)}">
-                <center>
-                    <div class="empty-card">
-                        <div class="empty-icon">
-                            <i class="bi bi-award"></i>
-                        </div>
-                        <h4>No Achievements Yet</h4>
-                        <p>
-                            You haven't completed any internships yet.
-                            Start learning and unlock achievements here.
-                        </p>
-                        <a href="/student-internships" class="btn btn-primary">
-                            <i class="bi bi-briefcase"></i>
-                            Explore Internships
-                        </a>
-                    </div>
-            </div>
-            </center>
 
+                <div class="empty-card">
+                    <div class="empty-icon">
+                        <i class="bi bi-award"></i>
+                    </div>
+                    <h4>No Achievements Yet</h4>
+                    <p>
+                        You haven't completed any internships yet.
+                        Start learning and unlock achievements here.
+                    </p>
+                    <a href="/student-internships" class="btn btn-primary">
+                        <i class="bi bi-briefcase"></i>
+                        Explore Internships
+                    </a>
+                </div>
+
+            </div>
             <div th:each="app : ${completedInternships}" class="internship-card">
                 <h3 class="section-title">
                     <i class="bi bi-award"></i>
