@@ -507,7 +507,7 @@
         <a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
         <a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
         <a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
-        <a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a> 
+        <a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a>
         <a th:href="@{/student-profile}" class="active"><i class="bi bi-person-circle"></i><span>Profile</span></a>
         <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
@@ -577,6 +577,34 @@
                     Download Certificate
                 </a>
             </div>
+        </div>
+
+        <div style="margin-top:30px;">
+
+            <h4>👥 Connections</h4>
+
+            <div th:if="${connections == null or #lists.isEmpty(connections)}" style="opacity:0.6;">
+                No connections yet
+            </div>
+
+            <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:10px;">
+
+                <div th:each="c : ${connections}"
+                    style="background:#fff; padding:10px; border-radius:10px; width:180px; display:flex; align-items:center; gap:10px;">
+
+                    <img th:src="${c.profileImage != null ? c.profileImage : '/images/default.jpg'}"
+                        style="width:40px; height:40px; border-radius:50%;">
+
+                    <div>
+                        <div style="font-size:14px; font-weight:600;" th:text="${c.name}"></div>
+
+                        <div style="font-size:12px; color:gray;" th:text="${c.type}"></div>
+                    </div>
+
+                </div>
+
+            </div>
+
         </div>
         <div class="profile-card">
             <div class="profile-header">

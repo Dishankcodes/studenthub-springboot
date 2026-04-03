@@ -154,7 +154,11 @@ public class ChatController {
 	@PostMapping("/student/send")
 	public String send(@RequestParam Integer roomId, @RequestParam String content, HttpSession session) {
 
-		Integer studentId = (Integer) session.getAttribute("studentId");
+		 Integer studentId = (Integer) session.getAttribute("studentId");
+
+		    if (studentId == null) {
+		        return "redirect:/student-login";
+		    }
 
 		ChatUser sender = getOrCreate(studentId, UserType.STUDENT);
 		ChatRoom room = chatRoomRepo.findById(roomId).orElseThrow();
@@ -177,7 +181,11 @@ public class ChatController {
 	@PostMapping("/chat/follow")
 	public String follow(@RequestParam Integer receiverId, HttpSession session) {
 
-		Integer studentId = (Integer) session.getAttribute("studentId");
+		 Integer studentId = (Integer) session.getAttribute("studentId");
+
+		    if (studentId == null) {
+		        return "redirect:/student-login";
+		    }
 
 		ChatUser sender = getOrCreate(studentId, UserType.STUDENT);
 		ChatUser receiver = chatUserRepo.findById(receiverId).orElseThrow();
@@ -196,7 +204,11 @@ public class ChatController {
 	@GetMapping("/student-notifications")
 	public String notifications(HttpSession session, Model model) {
 
-		Integer studentId = (Integer) session.getAttribute("studentId");
+		 Integer studentId = (Integer) session.getAttribute("studentId");
+
+		    if (studentId == null) {
+		        return "redirect:/student-login";
+		    }
 
 		ChatUser me = getOrCreate(studentId, UserType.STUDENT);
 
@@ -230,7 +242,11 @@ public class ChatController {
 	@GetMapping("/student-search")
 	public String searchUsers(@RequestParam(required = false) String keyword, HttpSession session, Model model) {
 
-		Integer studentId = (Integer) session.getAttribute("studentId");
+		 Integer studentId = (Integer) session.getAttribute("studentId");
+
+		    if (studentId == null) {
+		        return "redirect:/student-login";
+		    }
 
 		ChatUser me = getOrCreate(studentId, UserType.STUDENT);
 

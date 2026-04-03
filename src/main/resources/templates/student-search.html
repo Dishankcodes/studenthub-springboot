@@ -100,43 +100,63 @@
         </div>
     </div>
     <div class="main">
-        <div th:each="r : ${results}" class="conversation"
-     style="background:#fff; margin-bottom:10px; border-radius:10px; padding:12px;">
 
-    <img th:src="${r.user.profileImage != null ? r.user.profileImage : '/images/default.jpg'}">
+        <!-- 🔍 SEARCH BAR -->
+        <form method="GET" action="/student-search" style="margin-bottom:20px;">
+            <div style="display:flex; gap:10px;">
+                <input type="text" name="keyword" placeholder="Search students, teachers..."
+                    style="flex:1; padding:10px 15px; border-radius:10px; border:1px solid #ddd;">
 
-    <div style="flex:1;">
-        
-        <div style="font-weight:600;">
-            <span th:text="${r.user.name != null ? r.user.name : 'Unknown'}"></span>
+                <button style="padding:10px 18px; border:none; border-radius:10px; background:#6d28d9; color:#fff;">
+                    Search
+                </button>
+            </div>
+        </form>
 
-            <i th:if="${r.user.type.name() == 'TEACHER'}" class="bi bi-person-badge"></i>
-            <i th:if="${r.user.type.name() == 'STUDENT'}" class="bi bi-mortarboard"></i>
+        <!-- 👥 RESULTS -->
+        <div th:if="${results == null or #lists.isEmpty(results)}" style="text-align:center; opacity:0.6;">
+            No users found
         </div>
 
-        <div style="margin-top:6px;">
+        <div th:each="r : ${results}" class="conversation"
+            style="background:#fff; margin-bottom:12px; border-radius:12px; padding:14px; display:flex; gap:12px; align-items:center;">
 
-            <!-- FOLLOW -->
-            <form th:if="${r.status == 'FOLLOW'}" action="/chat/follow" method="post">
-                <input type="hidden" name="receiverId" th:value="${r.user.id}">
-                <button class="btn btn-sm btn-primary">Follow</button>
-            </form>
+            <!-- PROFILE -->
+            <img th:src="${r.user.profileImage != null ? r.user.profileImage : '/images/default.jpg'}"
+                style="width:50px; height:50px; border-radius:50%;">
 
-            <!-- PENDING -->
-            <span th:if="${r.status == 'PENDING'}" style="color:orange;">
-                Requested
-            </span>
+            <!-- INFO -->
+            <div style="flex:1;">
+                <div style="font-weight:600; font-size:15px;">
+                    <span th:text="${r.user.name != null ? r.user.name : 'Unknown'}"></span>
 
-            <!-- CHAT -->
-            <a th:if="${r.status == 'CHAT'}"
-               th:href="@{/student-chat(userId=${r.user.id})}"
-               class="btn btn-sm btn-success">
-               Chat
-            </a>
+                    <!-- ROLE BADGE -->
+                    <span style="font-size:12px; margin-left:6px; color:#6d28d9;" th:text="${r.user.type}"></span>
+                </div>
 
+                <!-- ACTION -->
+                <div style="margin-top:6px;">
+
+                    <!-- FOLLOW -->
+                    <form th:if="${r.status == 'FOLLOW'}" action="/chat/follow" method="post">
+                        <input type="hidden" name="receiverId" th:value="${r.user.id}">
+                        <button class="btn btn-sm btn-primary">Follow</button>
+                    </form>
+
+                    <!-- PENDING -->
+                    <span th:if="${r.status == 'PENDING'}" style="color:#f59e0b; font-size:13px;">
+                        Request Sent
+                    </span>
+
+                    <!-- CHAT -->
+                    <a th:if="${r.status == 'CHAT'}" th:href="@{/student-chat(userId=${r.user.id})}"
+                        class="btn btn-sm btn-success">
+                        Chat
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-</div>    </div>
 
     <script>
         const sidebar = document.getElementById("sidebar");

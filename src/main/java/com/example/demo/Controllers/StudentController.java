@@ -1,5 +1,6 @@
 package com.example.demo.Controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.demo.entity.Announcement;
+import com.example.demo.entity.ChatUser;
+import com.example.demo.entity.Connection;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseCertificate;
 import com.example.demo.entity.CourseFeedback;
@@ -20,8 +23,11 @@ import com.example.demo.entity.Enrollment;
 import com.example.demo.entity.InstructorFeedback;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherNotes;
+import com.example.demo.enums.ConnectionStatus;
 import com.example.demo.enums.CourseStatus;
 import com.example.demo.repository.AnnouncementRepository;
+import com.example.demo.repository.ChatUserRepository;
+import com.example.demo.repository.ConnectionRepository;
 import com.example.demo.repository.CourseCertificateRepository;
 import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
@@ -71,6 +77,12 @@ public class StudentController {
 	@Autowired
 	private LessonProgressRepository lessonProgressRepo;
 
+	@Autowired
+	private ConnectionRepository connectionRepo;
+	
+	@Autowired
+	private ChatUserRepository chatUserRepo;
+	
 	@GetMapping("/student-dashboard")
 	public String student_dashboard(HttpSession session, Model model) {
 
@@ -111,19 +123,43 @@ public class StudentController {
 		int certificateCount = certificates.size();
 		int inProgressCount = inProgressCourses.size();
 
-		// ===== WEEKLY ACTIVITY =====
+		// ===== WEEKLY ACTIVITY ====
 		List<Long> weeklyActivity = lessonProgressRepo.getWeeklyActivity(studentId);
 
 		if (weeklyActivity == null || weeklyActivity.size() != 7) {
 			weeklyActivity = List.of(0L, 0L, 0L, 0L, 0L, 0L, 0L);
 		}
 
-		// ===== MODEL =====
+		
+		ChatUser me = chatUserRepo
+		        .findByRefIdAndType(studentId, com.example.demo.enums.UserType.STUDENT)
+		        .orElse(null);
+
+		List<ChatUser> list = new ArrayList<>();
+
+		if (me != null) {
+
+		    List<Connection> connections =
+		            connectionRepo.findBySenderIdAndStatusOrReceiverIdAndStatus(
+		                    me.getId(), ConnectionStatus.ACCEPTED,
+		                    me.getId(), ConnectionStatus.ACCEPTED
+		            );
+
+		    for (Connection c : connections) {
+
+		        ChatUser other = c.getSender().getId().equals(me.getId())
+		                ? c.getReceiver()
+		                : c.getSender();
+
+		        list.add(other);
+		    }
+		}
+		
+		
 		model.addAttribute("enrolledCount", enrolledCount);
 		model.addAttribute("completedCount", completedCount);
 		model.addAttribute("certificateCount", certificateCount);
 		model.addAttribute("inProgressCount", inProgressCount);
-
 		model.addAttribute("continueCourses", inProgressCourses);
 		model.addAttribute("announcements", announcements);
 		model.addAttribute("recentNotes", notes);
@@ -196,8 +232,6 @@ public class StudentController {
 
 		return "student-stuff";
 	}
-
-	
 
 	@GetMapping("/student-notification")
 	public String student_notifi() {

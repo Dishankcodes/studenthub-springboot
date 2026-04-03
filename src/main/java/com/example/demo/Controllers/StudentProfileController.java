@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.entity.ChatUser;
+import com.example.demo.entity.Connection;
 import com.example.demo.entity.InternshipApplication;
 import com.example.demo.entity.Student;
 import com.example.demo.enums.ApplicationStatus;
+import com.example.demo.enums.ConnectionStatus;
 import com.example.demo.repository.ApplicationRepository;
+import com.example.demo.repository.ChatUserRepository;
+import com.example.demo.repository.ConnectionRepository;
 import com.example.demo.repository.StudentRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -33,6 +39,12 @@ public class StudentProfileController {
 
 	@Autowired
 	private ApplicationRepository applicationRepo;
+	
+	@Autowired
+	private ConnectionRepository connectionRepo;
+	
+	@Autowired
+	private ChatUserRepository chatUserRepo;
 
 	@GetMapping("/student-profile")
 	public String studentProfile(HttpSession session, Model model, @RequestParam(required = false) Boolean edit) {
@@ -46,6 +58,31 @@ public class StudentProfileController {
 		List<InternshipApplication> completedInternships = applicationRepo.findByStudent_Studid(studentId).stream()
 				.filter(app -> app.getStatus() == ApplicationStatus.COMPLETED).toList();
 
+		ChatUser me = chatUserRepo
+		        .findByRefIdAndType(studentId, com.example.demo.enums.UserType.STUDENT)
+		        .orElse(null);
+
+		List<ChatUser> list = new ArrayList<>();
+
+		if (me != null) {
+
+		    List<Connection> connections =
+		            connectionRepo.findBySenderIdAndStatusOrReceiverIdAndStatus(
+		                    me.getId(), ConnectionStatus.ACCEPTED,
+		                    me.getId(), ConnectionStatus.ACCEPTED
+		            );
+
+		    for (Connection c : connections) {
+
+		        ChatUser other = c.getSender().getId().equals(me.getId())
+		                ? c.getReceiver()
+		                : c.getSender();
+
+		        list.add(other);
+		    }
+		}
+
+		model.addAttribute("connections", list);
 		model.addAttribute("completedInternships", completedInternships);
 		model.addAttribute("student", student);
 		model.addAttribute("editMode", edit != null && edit);

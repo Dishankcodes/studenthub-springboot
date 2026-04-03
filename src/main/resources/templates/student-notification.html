@@ -1,28 +1,64 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
-    <title>Insert title here</title>
+    <title>Notification</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background: #f4f7ff;
+        }
+
+        .main {
+            margin-left: 240px;
+            margin-top: 56px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+    </style>
 </head>
 
 <body>
-    <div th:each="r : ${requests}" class="conversation">
+    <div class="main">
 
-        <img th:src="${r.sender.profileImage}">
+        <h3 style="margin-bottom:15px;">🔔 Connection Requests</h3>
 
-        <div>
-            <div th:text="${r.sender.name}"></div>
+        <div th:if="${requests == null or #lists.isEmpty(requests)}" style="text-align:center; opacity:0.6;">
+            No pending requests
+        </div>
 
-            <form action="/chat/accept" method="post">
-                <input type="hidden" name="id" th:value="${r.id}">
-                <button>Accept</button>
+        <div th:each="req : ${requests}"
+            style="background:#fff; padding:12px; border-radius:10px; margin-bottom:10px; display:flex; align-items:center; gap:12px;">
+
+            <img th:src="${req.sender.profileImage != null ? req.sender.profileImage : '/images/default.jpg'}"
+                style="width:45px; height:45px; border-radius:50%;">
+
+            <div style="flex:1;">
+                <div style="font-weight:600;" th:text="${req.sender.name != null ? req.sender.name : 'Unknown'}"></div>
+
+                <div style="font-size:12px; color:gray;">
+                    wants to connect with you
+                </div>
+            </div>
+
+            <!-- ACTIONS -->
+            <form action="/chat/accept" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${req.id}">
+                <button class="btn btn-success btn-sm">Accept</button>
             </form>
 
-            <form action="/chat/reject" method="post">
-                <input type="hidden" name="id" th:value="${r.id}">
-                <button>Reject</button>
+            <form action="/chat/reject" method="post" style="display:inline;">
+                <input type="hidden" name="id" th:value="${req.id}">
+                <button class="btn btn-danger btn-sm">Reject</button>
             </form>
+
         </div>
 
     </div>
