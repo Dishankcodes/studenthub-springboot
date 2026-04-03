@@ -10,16 +10,20 @@ import com.example.demo.enums.ConnectionStatus;
 
 public interface ConnectionRepository extends JpaRepository<Connection, Integer> {
 
-    // 🔍 find connection between two users
-    Optional<Connection> findBySenderIdAndReceiverId(Integer sender, Integer receiver);
+	// 🔍 find connection between two users
 
-    Optional<Connection> findBySenderIdAndReceiverIdOrSenderIdAndReceiverId(
-            Integer s1, Integer r1, Integer s2, Integer r2);
+	Optional<Connection> findBySenderIdAndReceiverIdOrSenderIdAndReceiverId(Integer s1, Integer r1, Integer s2,
+			Integer r2);
 
-    // 👥 get all accepted connections
-    List<Connection> findBySenderIdAndStatusOrReceiverIdAndStatus(
-            Integer senderId, ConnectionStatus status1,
-            Integer receiverId, ConnectionStatus status2);
+	// 👥 get all accepted connections
+	List<Connection> findBySenderIdAndStatusOrReceiverIdAndStatus(Integer senderId, ConnectionStatus status1,
+			Integer receiverId, ConnectionStatus status2);
 
-	List<Connection> findByReceiverIdAndStatus(Integer id, ConnectionStatus pending);
+	Optional<Connection> findBySenderIdAndReceiverId(Integer senderId, Integer receiverId);
+
+	Optional<Connection> findByReceiverIdAndSenderId(Integer receiverId, Integer senderId);
+
+	List<Connection> findByReceiverIdAndStatus(Integer receiverId, ConnectionStatus status);
+
+	List<Connection> findBySenderIdAndStatus(Integer senderId, ConnectionStatus status);
 }

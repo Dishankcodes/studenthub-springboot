@@ -52,8 +52,10 @@ public class ChatController {
 
 	@Autowired
 	private StudentRepository studentRepo;
+	
 	@Autowired
 	private TeacherRepository teacherRepo;
+	
 	@Autowired
 	private TeacherProfileRepo teacherProfileRepo;
 
@@ -198,80 +200,6 @@ public class ChatController {
 		connectionRepo.save(conn);
 
 		return "redirect:/student-chat";
-	}
-
-	// ================= NOTIFICATIONS =================
-	@GetMapping("/student-notifications")
-	public String notifications(HttpSession session, Model model) {
-
-		 Integer studentId = (Integer) session.getAttribute("studentId");
-
-		    if (studentId == null) {
-		        return "redirect:/student-login";
-		    }
-
-		ChatUser me = getOrCreate(studentId, UserType.STUDENT);
-
-		List<Connection> requests = connectionRepo.findByReceiverIdAndStatus(me.getId(), ConnectionStatus.PENDING);
-
-		model.addAttribute("requests", requests);
-
-		return "student-notifications";
-	}
-
-	// ================= ACCEPT =================
-	@PostMapping("/chat/accept")
-	public String accept(@RequestParam Integer id) {
-
-		Connection c = connectionRepo.findById(id).orElseThrow();
-		c.setStatus(ConnectionStatus.ACCEPTED);
-		connectionRepo.save(c);
-
-		return "redirect:/student-notifications";
-	}
-
-	// ================= REJECT =================
-	@PostMapping("/chat/reject")
-	public String reject(@RequestParam Integer id) {
-
-		connectionRepo.deleteById(id);
-		return "redirect:/student-notifications";
-	}
-
-	// ================= SEARCH =================
-	@GetMapping("/student-search")
-	public String searchUsers(@RequestParam(required = false) String keyword, HttpSession session, Model model) {
-
-		 Integer studentId = (Integer) session.getAttribute("studentId");
-
-		    if (studentId == null) {
-		        return "redirect:/student-login";
-		    }
-
-		ChatUser me = getOrCreate(studentId, UserType.STUDENT);
-
-		List<Map<String, Object>> result = new ArrayList<>();
-
-		if (keyword != null && !keyword.isEmpty()) {
-
-			List<ChatUser> users = chatUserRepo.findByNameContainingIgnoreCase(keyword);
-
-			for (ChatUser u : users) {
-
-				if (u.getId().equals(me.getId()))
-					continue;
-
-				Map<String, Object> map = new HashMap<>();
-				map.put("user", u);
-				map.put("status", getStatus(me, u));
-
-				result.add(map);
-			}
-		}
-
-		model.addAttribute("results", result);
-
-		return "student-search";
 	}
 
 	// ================= HELPERS =================

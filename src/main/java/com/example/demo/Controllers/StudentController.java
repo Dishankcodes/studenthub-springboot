@@ -233,10 +233,7 @@ public class StudentController {
 		return "student-stuff";
 	}
 
-	@GetMapping("/student-notification")
-	public String student_notifi() {
-		return "student-notification";
-	}
+	
 
 	@GetMapping("/student-feedback")
 	public String studentFeedback(HttpSession session, Model model) {

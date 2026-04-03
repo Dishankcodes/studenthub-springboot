@@ -121,39 +121,45 @@
         <div th:each="r : ${results}" class="conversation"
             style="background:#fff; margin-bottom:12px; border-radius:12px; padding:14px; display:flex; gap:12px; align-items:center;">
 
-            <!-- PROFILE -->
-            <img th:src="${r.user.profileImage != null ? r.user.profileImage : '/images/default.jpg'}"
+            <img th:src="${r.image != null ? r.image : '/images/default.jpg'}"
                 style="width:50px; height:50px; border-radius:50%;">
 
-            <!-- INFO -->
             <div style="flex:1;">
-                <div style="font-weight:600; font-size:15px;">
-                    <span th:text="${r.user.name != null ? r.user.name : 'Unknown'}"></span>
+                <div style="font-weight:600;">
+                    <span th:text="${r.name}"></span>
 
-                    <!-- ROLE BADGE -->
-                    <span style="font-size:12px; margin-left:6px; color:#6d28d9;" th:text="${r.user.type}"></span>
+                    <span style="font-size:12px; color:#6d28d9; margin-left:6px;" th:text="${r.type}"></span>
                 </div>
 
-                <!-- ACTION -->
-                <div style="margin-top:6px;">
+               <div style="margin-top:6px;">
 
-                    <!-- FOLLOW -->
-                    <form th:if="${r.status == 'FOLLOW'}" action="/chat/follow" method="post">
-                        <input type="hidden" name="receiverId" th:value="${r.user.id}">
-                        <button class="btn btn-sm btn-primary">Follow</button>
-                    </form>
+    <!-- FOLLOW -->
+    <form th:if="${r.status == 'FOLLOW'}" action="/connection/send" method="post">
+        <input type="hidden" name="receiverId" th:value="${r.id}">
+        <button class="btn btn-sm btn-primary">Connect</button>
+    </form>
 
-                    <!-- PENDING -->
-                    <span th:if="${r.status == 'PENDING'}" style="color:#f59e0b; font-size:13px;">
-                        Request Sent
-                    </span>
+    <!-- PENDING -->
+    <span th:if="${r.status == 'PENDING'}"
+          style="color:#f59e0b; font-size:13px;">
+        Request Sent
+    </span>
 
-                    <!-- CHAT -->
-                    <a th:if="${r.status == 'CHAT'}" th:href="@{/student-chat(userId=${r.user.id})}"
-                        class="btn btn-sm btn-success">
-                        Chat
-                    </a>
-                </div>
+    <!-- RECEIVED -->
+    <a th:if="${r.status == 'REQUEST_RECEIVED'}"
+       th:href="@{/student-notification}"
+       style="color:#2563eb; font-size:13px;">
+        Accept Request
+    </a>
+
+    <!-- CHAT -->
+    <a th:if="${r.status == 'CHAT'}"
+       th:href="@{/student-chat(userId=${r.id})}"
+       class="btn btn-sm btn-success">
+        Chat
+    </a>
+
+</div>
             </div>
         </div>
     </div>

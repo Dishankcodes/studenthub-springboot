@@ -15,16 +15,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.entity.ChatUser;
 import com.example.demo.entity.InternshipApplication;
 import com.example.demo.entity.InternshipCertificate;
 import com.example.demo.entity.Internships;
+import com.example.demo.entity.Student;
+import com.example.demo.entity.Teacher;
 import com.example.demo.enums.ApplicationStatus;
-import com.example.demo.enums.UserType;
 import com.example.demo.repository.ApplicationRepository;
-import com.example.demo.repository.ChatUserRepository;
 import com.example.demo.repository.InternshipCertificateRepository;
 import com.example.demo.repository.InternshipRepository;
+import com.example.demo.repository.StudentRepository;
+import com.example.demo.repository.TeacherProfileRepo;
+import com.example.demo.repository.TeacherRepository;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -37,36 +39,41 @@ public class StudentOtherController {
 
 	@Autowired
 	private InternshipCertificateRepository internshipCertRepo;
-	
+
 	@Autowired
 	private InternshipRepository internshipRepo;
 
-	
+	@Autowired
+	private StudentRepository studentRepo;
+
+	@Autowired
+	private TeacherRepository teacherRepo;
+
+	@Autowired
+	private TeacherProfileRepo teacherProfileRepo;
+
 	@GetMapping("/student/next-step")
-	public String nextStep(@RequestParam Integer internshipId,
-	                       Model model,
-	                       HttpSession session) {
+	public String nextStep(@RequestParam Integer internshipId, Model model, HttpSession session) {
 
-	    Integer studentId = (Integer) session.getAttribute("studentId");
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-	    if (studentId == null) {
-	        return "redirect:/student-login";
-	    }
+		if (studentId == null) {
+			return "redirect:/student-login";
+		}
 
-	    Internships internship = internshipRepo.findById(internshipId).orElse(null);
+		Internships internship = internshipRepo.findById(internshipId).orElse(null);
 
-	    InternshipApplication app =
-	        applicationRepo.findByStudent_StudidAndInternship_Id(studentId, internshipId)
-	        .orElse(null);
+		InternshipApplication app = applicationRepo.findByStudent_StudidAndInternship_Id(studentId, internshipId)
+				.orElse(null);
 
-	    if (internship == null || app == null) {
-	        return "redirect:/student-internships";
-	    }
+		if (internship == null || app == null) {
+			return "redirect:/student-internships";
+		}
 
-	    model.addAttribute("internship", internship);
-	    model.addAttribute("app", app);
+		model.addAttribute("internship", internship);
+		model.addAttribute("app", app);
 
-	    return "student-next-step";
+		return "student-next-step";
 	}
 
 	@PostMapping("/student/reapply")
@@ -96,28 +103,23 @@ public class StudentOtherController {
 				.orElse(null);
 
 		if (cert == null) {
-		    response.sendError(404, "Certificate not found");
-		    return;
+			response.sendError(404, "Certificate not found");
+			return;
 		}
 		File file = new File(System.getProperty("user.dir") + "/" + cert.getPdfPath());
-		
-		response.setContentType("application/pdf");
-		String studentName = cert.getStudent().getFullname()
-		        .replaceAll("[^a-zA-Z0-9 ]", "")
-		        .trim()
-		        .replace(" ", "_");
 
-		String internshipName = cert.getInternship().getTitle()
-		        .replaceAll("[^a-zA-Z0-9 ]", "")
-		        .trim()
-		        .replace(" ", "_");
+		response.setContentType("application/pdf");
+		String studentName = cert.getStudent().getFullname().replaceAll("[^a-zA-Z0-9 ]", "").trim().replace(" ", "_");
+
+		String internshipName = cert.getInternship().getTitle().replaceAll("[^a-zA-Z0-9 ]", "").trim().replace(" ",
+				"_");
 
 		String fileName = studentName + "-" + internshipName + "-Certificate.pdf";
 
 		response.setHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
 		if (!file.exists()) {
-		    response.sendError(404, "Certificate file not found");
-		    return;
+			response.sendError(404, "Certificate file not found");
+			return;
 		}
 		Files.copy(file.toPath(), response.getOutputStream());
 		response.getOutputStream().flush();

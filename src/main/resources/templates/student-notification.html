@@ -28,40 +28,71 @@
 <body>
     <div class="main">
 
-        <h3 style="margin-bottom:15px;">🔔 Connection Requests</h3>
+    <!-- 🔔 INCOMING -->
+    <h3 style="margin-bottom:15px;">📥 Incoming Requests</h3>
 
-        <div th:if="${requests == null or #lists.isEmpty(requests)}" style="text-align:center; opacity:0.6;">
-            No pending requests
-        </div>
+    <div th:if="${receivedRequests == null or #lists.isEmpty(receivedRequests)}"
+         style="text-align:center; opacity:0.6;">
+        No incoming requests
+    </div>
 
-        <div th:each="req : ${requests}"
-            style="background:#fff; padding:12px; border-radius:10px; margin-bottom:10px; display:flex; align-items:center; gap:12px;">
+    <div th:each="req : ${receivedRequests}"
+         style="background:#fff; padding:12px; border-radius:10px; margin-bottom:10px; display:flex; align-items:center; gap:12px;">
 
-            <img th:src="${req.sender.profileImage != null ? req.sender.profileImage : '/images/default.jpg'}"
-                style="width:45px; height:45px; border-radius:50%;">
+        <img th:src="${req.sender.profileImage != null ? req.sender.profileImage : '/images/default.jpg'}"
+             style="width:45px; height:45px; border-radius:50%;">
 
-            <div style="flex:1;">
-                <div style="font-weight:600;" th:text="${req.sender.name != null ? req.sender.name : 'Unknown'}"></div>
-
-                <div style="font-size:12px; color:gray;">
-                    wants to connect with you
-                </div>
+        <div style="flex:1;">
+            <div style="font-weight:600;" th:text="${req.sender.name}"></div>
+            <div style="font-size:12px; color:gray;">
+                wants to connect with you
             </div>
-
-            <!-- ACTIONS -->
-            <form action="/chat/accept" method="post" style="display:inline;">
-                <input type="hidden" name="id" th:value="${req.id}">
-                <button class="btn btn-success btn-sm">Accept</button>
-            </form>
-
-            <form action="/chat/reject" method="post" style="display:inline;">
-                <input type="hidden" name="id" th:value="${req.id}">
-                <button class="btn btn-danger btn-sm">Reject</button>
-            </form>
-
         </div>
+
+        <!-- ACCEPT -->
+        <form action="/connection/accept" method="post">
+            <input type="hidden" name="id" th:value="${req.id}">
+            <button class="btn btn-success btn-sm">Accept</button>
+        </form>
+
+        <!-- REJECT -->
+        <form action="/connection/reject" method="post">
+            <input type="hidden" name="id" th:value="${req.id}">
+            <button class="btn btn-danger btn-sm">Reject</button>
+        </form>
 
     </div>
+
+    <!-- 📤 SENT -->
+    <h3 style="margin:25px 0 15px;">📤 Sent Requests</h3>
+
+    <div th:if="${sentRequests == null or #lists.isEmpty(sentRequests)}"
+         style="text-align:center; opacity:0.6;">
+        No sent requests
+    </div>
+
+    <div th:each="req : ${sentRequests}"
+         style="background:#fff; padding:12px; border-radius:10px; margin-bottom:10px; display:flex; align-items:center; gap:12px;">
+
+        <img th:src="${req.receiver.profileImage != null ? req.receiver.profileImage : '/images/default.jpg'}"
+             style="width:45px; height:45px; border-radius:50%;">
+
+        <div style="flex:1;">
+            <div style="font-weight:600;" th:text="${req.receiver.name}"></div>
+            <div style="font-size:12px; color:#f59e0b;">
+                Request Sent
+            </div>
+        </div>
+
+        <!-- CANCEL -->
+        <form action="/connection/cancel" method="post">
+            <input type="hidden" name="id" th:value="${req.id}">
+            <button class="btn btn-secondary btn-sm">Cancel</button>
+        </form>
+
+    </div>
+
+</div>
 </body>
 
 </html>
