@@ -314,7 +314,11 @@
 
                         <div class="info">
                             <div class="name">
-                                <span th:text="${user.name}">Name</span>
+<span th:text="${user.name != null ? user.name : 'Unknown'}"></span>
+<span class="unread-badge"
+      th:if="${unreadMap[user.id] > 0}"
+      th:text="${unreadMap[user.id]}">
+</span>
                             </div>
 
                             <div class="preview">
@@ -354,7 +358,7 @@
                     </div>
 
                     <div th:each="msg : ${messages}"
-                        th:class="'message ' + (${msg.sender.id} == ${session.studentId} ? 'sent' : 'received')">
+                        th:class="'message ' + (${msg.sender.id} == ${session.chatUserId} ? 'sent' : 'received')">
 
                         <span th:text="${msg.content}"></span>
 
@@ -363,7 +367,7 @@
 
                 </div>
 
-                <form th:if="${canChat}" method="POST" action="/chat/send" class="chat-input">
+                <form th:if="${canChat}" method="POST" th:action="@{/student/send}" class="chat-input">
 
                     <input type="hidden" name="roomId" th:value="${roomId}">
 

@@ -100,36 +100,43 @@
         </div>
     </div>
     <div class="main">
-        <div th:each="r : ${results}" class="conversation">
+        <div th:each="r : ${results}" class="conversation"
+     style="background:#fff; margin-bottom:10px; border-radius:10px; padding:12px;">
 
-            <img th:src="${r.user.profileImage != null ? r.user.profileImage : '/images/default.jpg'}">
+    <img th:src="${r.user.profileImage != null ? r.user.profileImage : '/images/default.jpg'}">
 
-            <div>
-                <div th:text="${r.user.name}"></div>
+    <div style="flex:1;">
+        
+        <div style="font-weight:600;">
+            <span th:text="${r.user.name != null ? r.user.name : 'Unknown'}"></span>
 
-                <div>
+            <i th:if="${r.user.type.name() == 'TEACHER'}" class="bi bi-person-badge"></i>
+            <i th:if="${r.user.type.name() == 'STUDENT'}" class="bi bi-mortarboard"></i>
+        </div>
 
-                    <!-- FOLLOW -->
-                    <form th:if="${r.status == 'FOLLOW'}" action="/chat/follow" method="post">
-                        <input type="hidden" name="receiverId" th:value="${r.user.id}">
-                        <button>Follow</button>
-                    </form>
+        <div style="margin-top:6px;">
 
-                    <!-- PENDING -->
-                    <span th:if="${r.status == 'PENDING'}">
-                        Requested
-                    </span>
+            <!-- FOLLOW -->
+            <form th:if="${r.status == 'FOLLOW'}" action="/chat/follow" method="post">
+                <input type="hidden" name="receiverId" th:value="${r.user.id}">
+                <button class="btn btn-sm btn-primary">Follow</button>
+            </form>
 
-                    <!-- CHAT -->
-                    <a th:if="${r.status == 'CHAT'}" th:href="@{/student-chat(userId=${r.user.id})}">
-                        Chat
-                    </a>
+            <!-- PENDING -->
+            <span th:if="${r.status == 'PENDING'}" style="color:orange;">
+                Requested
+            </span>
 
-                </div>
-            </div>
+            <!-- CHAT -->
+            <a th:if="${r.status == 'CHAT'}"
+               th:href="@{/student-chat(userId=${r.user.id})}"
+               class="btn btn-sm btn-success">
+               Chat
+            </a>
 
         </div>
     </div>
+</div>    </div>
 
     <script>
         const sidebar = document.getElementById("sidebar");

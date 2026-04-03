@@ -1,26 +1,15 @@
 package com.example.demo.Controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.entity.ChatMessage;
-import com.example.demo.entity.ChatRoom;
-import com.example.demo.entity.ChatUser;
-import com.example.demo.entity.Enrollment;
-import com.example.demo.entity.Teacher;
+import com.example.demo.entity.*;
 import com.example.demo.enums.UserType;
-import com.example.demo.repository.ChatMessageRepository;
-import com.example.demo.repository.ChatRoomRepository;
-import com.example.demo.repository.ChatUserRepository;
-import com.example.demo.repository.EnrollmentRepository;
-import com.example.demo.repository.TeacherRepository;
+import com.example.demo.repository.*;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -42,30 +31,43 @@ public class TeacherChatController {
 	@Autowired
 	private TeacherRepository teacherRepo;
 
+	// ===== CHAT PAGE =====
 	@GetMapping("/teacher-chat")
-	public String teacherChat(@RequestParam(required = false) Integer userId, HttpSession session, Model model) {
+	public String teacherChat(@RequestParam(required = false) Integer userId, Model model, HttpSession session) {
 
-		Integer teacherId = (Integer) session.getAttribute("teacherId");
-		
+		Integer teacherId = 1;
+//		Integer teacherId = (Integer) session.getAttribute("teacherId");
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
-		if (teacher == null) {
-			session.invalidate();
-			return "redirect:/teacher-auth";
-		}
 
-		if (teacherId == null)
-			return "redirect:/teacher-auth";
+		if (teacher == null)
+			return "redirect:/teacher-login";
 
-		ChatUser me = chatUserRepo.findByRefIdAndType(teacherId, UserType.TEACHER).orElseThrow();
+		ChatUser me = getOrCreateTeacher(teacherId);
+		session.setAttribute("chatUserId", me.getId());
 
 		List<ChatUser> users = new ArrayList<>();
 
-		List<Enrollment> enrollments = enrollmentRepo.findByTeacherId(teacherId);
+		enrollmentRepo.findByTeacherId(teacherId).forEach(e -> {
+			ChatUser u = chatUserRepo.findByRefIdAndType(e.getStudent().getStudid(), UserType.STUDENT).orElseGet(() -> {
+				ChatUser newUser = new ChatUser();
+				newUser.setRefId(e.getStudent().getStudid());
+				newUser.setType(UserType.STUDENT);
+				newUser.setName(e.getStudent().getFullname());
+				return chatUserRepo.save(newUser);
+			});
+			if (u != null && u.getId() != null)
+				users.add(u);
+		});
 
-		for (Enrollment e : enrollments) {
+		// add admin
+		ChatUser admin = chatUserRepo.findByRefIdAndType(1, UserType.ADMIN).orElse(null);
+		if (admin != null)
+			users.add(admin);
 
-			chatUserRepo.findByRefIdAndType(e.getStudent().getStudid(), UserType.STUDENT).ifPresent(users::add);
-		}
+		users.forEach(u -> {
+			if (u.getName() == null)
+				u.setName("Unknown");
+		});
 
 		ChatUser selectedUser = null;
 		List<ChatMessage> messages = new ArrayList<>();
@@ -77,25 +79,40 @@ public class TeacherChatController {
 
 			if (selectedUser != null) {
 
-				Optional<ChatRoom> existingRoom = chatRoomRepo.findChatRoom(me.getId(), selectedUser.getId());
-
-				ChatRoom room;
-
-				if (existingRoom.isPresent()) {
-					room = existingRoom.get();
-				} else {
-					room = new ChatRoom();
-					room.setUser1(me);
-					room.setUser2(selectedUser);
-					room = chatRoomRepo.save(room);
-				}
-
+				ChatRoom room = getRoom(me, selectedUser);
 				roomId = room.getId();
 
 				messages = messageRepo.findByChatRoomIdOrderByTimestampAsc(roomId);
 			}
 		}
 
+		if (roomId != null) {
+			for (ChatMessage msg : messages) {
+				if (!msg.isSeen() && !msg.getSender().getId().equals(me.getId())) {
+					msg.setSeen(true);
+				}
+			}
+			messageRepo.saveAll(messages);
+		}
+
+		Map<Integer, Long> unreadMap = new HashMap<>();
+
+		for (ChatUser u : users) {
+
+			Optional<ChatRoom> roomOpt = chatRoomRepo.findChatRoom(me.getId(), u.getId());
+
+			if (roomOpt.isPresent()) {
+				Integer rId = roomOpt.get().getId();
+
+				long count = messageRepo.countByChatRoomIdAndSeenFalseAndSenderIdNot(rId, me.getId());
+
+				unreadMap.put(u.getId(), count);
+			} else {
+				unreadMap.put(u.getId(), 0L);
+			}
+		}
+
+		model.addAttribute("unreadMap", unreadMap);
 		model.addAttribute("teacher", teacher);
 		model.addAttribute("users", users);
 		model.addAttribute("selectedUser", selectedUser);
@@ -103,5 +120,50 @@ public class TeacherChatController {
 		model.addAttribute("roomId", roomId);
 
 		return "teacher-chat";
+	}
+
+	// ===== SEND MESSAGE =====
+	@PostMapping("/teacher/send")
+	public String sendTeacher(@RequestParam Integer roomId, @RequestParam String content, HttpSession session) {
+
+		Integer senderId = (Integer) session.getAttribute("chatUserId");
+
+		ChatUser sender = chatUserRepo.findById(senderId).orElse(null);
+		ChatRoom room = chatRoomRepo.findById(roomId).orElse(null);
+
+		if (sender == null || room == null)
+			return "redirect:/teacher-chat";
+
+		ChatMessage msg = new ChatMessage();
+		msg.setChatRoom(room);
+		msg.setSender(sender);
+		msg.setContent(content);
+		msg.setTimestamp(java.time.LocalDateTime.now());
+
+		messageRepo.save(msg);
+
+		Integer otherId = room.getUser1().getId().equals(senderId) ? room.getUser2().getId() : room.getUser1().getId();
+
+		return "redirect:/teacher-chat?userId=" + otherId;
+	}
+
+	// ===== HELPERS =====
+	private ChatUser getOrCreateTeacher(Integer id) {
+		return chatUserRepo.findByRefIdAndType(id, UserType.TEACHER).orElseGet(() -> {
+			ChatUser u = new ChatUser();
+			u.setRefId(id);
+			u.setType(UserType.TEACHER);
+			u.setName("Teacher");
+			return chatUserRepo.save(u);
+		});
+	}
+
+	private ChatRoom getRoom(ChatUser a, ChatUser b) {
+		return chatRoomRepo.findChatRoom(a.getId(), b.getId()).orElseGet(() -> {
+			ChatRoom r = new ChatRoom();
+			r.setUser1(a);
+			r.setUser2(b);
+			return chatRoomRepo.save(r);
+		});
 	}
 }

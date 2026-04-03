@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.demo.entity.ChatMessage;
 
+import jakarta.mail.Message;
+
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Integer> {
 
     List<ChatMessage> findByChatRoomIdOrderByTimestampAsc(Integer chatRoomId);

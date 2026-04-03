@@ -326,7 +326,13 @@
                         <img th:src="${user.profileImage != null ? user.profileImage : '/images/default.jpg'}">
 
                         <div class="info">
-                            <div class="name" th:text="${user.name}"></div>
+                            <div class="name">
+                                <span th:text="${user.name != null ? user.name : 'Unknown'}"></span>
+                               <span class="unread-badge"
+      th:if="${unreadMap[user.id] > 0}"
+      th:text="${unreadMap[user.id]}">
+</span>
+                            </div>
                         </div>
 
                     </a>
@@ -342,7 +348,10 @@
 
                     <div class="chat-header-info">
                         <div class="chat-name" th:text="${selectedUser.name}"></div>
-                        <div class="chat-status">Student</div>
+                        <div class="chat-status">
+    <span th:if="${selectedUser.type.name() == 'STUDENT'}">Student</span>
+    <span th:if="${selectedUser.type.name() == 'TEACHER'}">Teacher</span>
+</div>
                     </div>
                 </div>
 
@@ -358,7 +367,7 @@
                     </div>
 
                     <div th:each="msg : ${messages}"
-                        th:class="'message ' + (${msg.sender.id} == ${session.chatUserId} ? 'sent' : 'received')}">
+                        th:class="'message ' + (${msg.sender.id == session.chatUserId} ? 'sent' : 'received')">
 
                         <span th:text="${msg.content}"></span>
 
@@ -367,7 +376,7 @@
 
                 </div>
 
-                <form th:if="${roomId != null}" method="POST" action="/chat/send" class="chat-input">
+                <form th:if="${roomId != null}" method="POST" th:action="@{/teacher/send}" class="chat-input">
 
                     <input type="hidden" name="roomId" th:value="${roomId}">
                     <input type="text" name="content" placeholder="Type a message..." required>
