@@ -43,8 +43,8 @@ public class AdminChatController {
 		users.removeIf(u -> u.getType() == UserType.ADMIN);
 
 		users.forEach(u -> {
-			if (u.getName() == null)
-				u.setName("Unknown");
+		    if (u.getName() == null) u.setName("Unknown");
+		    if (u.getProfileImage() == null) u.setProfileImage("/images/default.jpg"); 
 		});
 
 		ChatUser selectedUser = null;
@@ -100,6 +100,7 @@ public class AdminChatController {
 		}
 
 		Map<Integer, String> lastMessageMap = new HashMap<>();
+		Map<Integer, String> timeMap = new HashMap<>();
 
 		for (ChatUser u : users) {
 
@@ -109,22 +110,33 @@ public class AdminChatController {
 		    if (roomOpt.isPresent()) {
 
 		        List<ChatMessage> msgs =
-		            messageRepo.findTop1ByChatRoomIdOrderByTimestampDesc(
-		                roomOpt.get().getId()
-		            );
+		                messageRepo.findTop1ByChatRoomIdOrderByTimestampDesc(
+		                        roomOpt.get().getId()
+		                );
 
 		        if (!msgs.isEmpty()) {
-		            lastMessageMap.put(u.getId(), msgs.get(0).getContent());
+
+		            ChatMessage m = msgs.get(0);
+
+		            lastMessageMap.put(u.getId(), m.getContent());
+
+		            timeMap.put(u.getId(),
+		                    m.getTimestamp().toLocalTime().toString().substring(0, 5)
+		            );
+
 		        } else {
 		            lastMessageMap.put(u.getId(), "Start chat...");
+		            timeMap.put(u.getId(), "");
 		        }
 
 		    } else {
 		        lastMessageMap.put(u.getId(), "Start chat...");
+		        timeMap.put(u.getId(), "");
 		    }
 		}
 
 		model.addAttribute("lastMessageMap", lastMessageMap);
+		model.addAttribute("timeMap", timeMap);
 		model.addAttribute("unreadMap", unreadMap);
 		model.addAttribute("users", users);
 		model.addAttribute("selectedUser", selectedUser);

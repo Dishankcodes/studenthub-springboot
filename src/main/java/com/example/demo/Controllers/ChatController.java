@@ -146,8 +146,9 @@ public class ChatController {
 
 		if (admin != null)
 			users.add(admin);
-		
+
 		Map<Integer, String> lastMessageMap = new HashMap<>();
+		Map<Integer, String> timeMap = new HashMap<>();
 
 		for (ChatUser u : users) {
 
@@ -157,22 +158,33 @@ public class ChatController {
 		    if (roomOpt.isPresent()) {
 
 		        List<ChatMessage> msgs =
-		            messageRepo.findTop1ByChatRoomIdOrderByTimestampDesc(
-		                roomOpt.get().getId()
-		            );
+		                messageRepo.findTop1ByChatRoomIdOrderByTimestampDesc(
+		                        roomOpt.get().getId()
+		                );
 
 		        if (!msgs.isEmpty()) {
-		            lastMessageMap.put(u.getId(), msgs.get(0).getContent());
+
+		            ChatMessage m = msgs.get(0);
+
+		            lastMessageMap.put(u.getId(), m.getContent());
+
+		            timeMap.put(u.getId(),
+		                    m.getTimestamp().toLocalTime().toString().substring(0, 5)
+		            );
+
 		        } else {
 		            lastMessageMap.put(u.getId(), "Start chat...");
+		            timeMap.put(u.getId(), "");
 		        }
 
 		    } else {
 		        lastMessageMap.put(u.getId(), "Start chat...");
+		        timeMap.put(u.getId(), "");
 		    }
 		}
 
 		model.addAttribute("lastMessageMap", lastMessageMap);
+		model.addAttribute("timeMap", timeMap);
 		model.addAttribute("unreadMap", unreadMap);
 		session.setAttribute("chatUserId", me.getId());
 		model.addAttribute("selectedUser", selectedUser);
@@ -265,9 +277,10 @@ public class ChatController {
 				}
 			}
 
-			if (type == UserType.ADMIN) {
-				u.setName("Admin");
-			}
+			 if (type == UserType.ADMIN) {
+			        u.setName("Support Admin");
+			        u.setProfileImage("/images/admin-avatar.png"); 
+			    }
 
 			return chatUserRepo.save(u);
 		});
@@ -289,23 +302,31 @@ public class ChatController {
 
 	private boolean isAllowed(ChatUser me, ChatUser other) {
 
-		if (other.getType() == UserType.TEACHER)
+		// ✅ ALLOW ADMIN CHAT ALWAYS
+		if (other.getType() == UserType.ADMIN) {
 			return true;
+		}
 
+		// ✅ STUDENT → TEACHER (only if enrolled)
+		if (other.getType() == UserType.TEACHER) {
+			return enrollmentRepo.existsByStudentStudidAndCourseCourseId(me.getRefId(), other.getRefId());
+		}
+
+		// ✅ STUDENT ↔ STUDENT (only if accepted)
 		return connectionRepo.findBySenderIdAndReceiverIdOrSenderIdAndReceiverId(me.getId(), other.getId(),
 				other.getId(), me.getId()).map(c -> c.getStatus() == ConnectionStatus.ACCEPTED).orElse(false);
 	}
-
-	private String getStatus(ChatUser me, ChatUser other) {
-
-		Optional<Connection> c = connectionRepo.findBySenderIdAndReceiverIdOrSenderIdAndReceiverId(me.getId(),
-				other.getId(), other.getId(), me.getId());
-
-		if (c.isEmpty())
-			return "FOLLOW";
-		if (c.get().getStatus() == ConnectionStatus.PENDING)
-			return "PENDING";
-
-		return "CHAT";
-	}
+//
+//	private String getStatus(ChatUser me, ChatUser other) {
+//
+//		Optional<Connection> c = connectionRepo.findBySenderIdAndReceiverIdOrSenderIdAndReceiverId(me.getId(),
+//				other.getId(), other.getId(), me.getId());
+//
+//		if (c.isEmpty())
+//			return "FOLLOW";
+//		if (c.get().getStatus() == ConnectionStatus.PENDING)
+//			return "PENDING";
+//
+//		return "CHAT";
+//	}
 }

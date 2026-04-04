@@ -35,7 +35,7 @@ public class TeacherChatController {
 	@GetMapping("/teacher-chat")
 	public String teacherChat(@RequestParam(required = false) Integer userId, Model model, HttpSession session) {
 
-		Integer teacherId = 2;
+		Integer teacherId = 1;
 //		Integer teacherId = (Integer) session.getAttribute("teacherId");
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
@@ -53,6 +53,7 @@ public class TeacherChatController {
 				newUser.setRefId(e.getStudent().getStudid());
 				newUser.setType(UserType.STUDENT);
 				newUser.setName(e.getStudent().getFullname());
+				newUser.setProfileImage(e.getStudent().getProfileImage());
 				return chatUserRepo.save(newUser);
 			});
 			if (u != null && u.getId() != null)
@@ -113,6 +114,7 @@ public class TeacherChatController {
 		}
 
 		Map<Integer, String> lastMessageMap = new HashMap<>();
+		Map<Integer, String> timeMap = new HashMap<>();
 
 		for (ChatUser u : users) {
 
@@ -122,22 +124,33 @@ public class TeacherChatController {
 		    if (roomOpt.isPresent()) {
 
 		        List<ChatMessage> msgs =
-		            messageRepo.findTop1ByChatRoomIdOrderByTimestampDesc(
-		                roomOpt.get().getId()
-		            );
+		                messageRepo.findTop1ByChatRoomIdOrderByTimestampDesc(
+		                        roomOpt.get().getId()
+		                );
 
 		        if (!msgs.isEmpty()) {
-		            lastMessageMap.put(u.getId(), msgs.get(0).getContent());
+
+		            ChatMessage m = msgs.get(0);
+
+		            lastMessageMap.put(u.getId(), m.getContent());
+
+		            timeMap.put(u.getId(),
+		                    m.getTimestamp().toLocalTime().toString().substring(0, 5)
+		            );
+
 		        } else {
 		            lastMessageMap.put(u.getId(), "Start chat...");
+		            timeMap.put(u.getId(), "");
 		        }
 
 		    } else {
 		        lastMessageMap.put(u.getId(), "Start chat...");
+		        timeMap.put(u.getId(), "");
 		    }
 		}
 
 		model.addAttribute("lastMessageMap", lastMessageMap);
+		model.addAttribute("timeMap", timeMap);
 		model.addAttribute("unreadMap", unreadMap);
 		model.addAttribute("teacher", teacher);
 		model.addAttribute("users", users);
