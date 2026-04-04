@@ -52,10 +52,10 @@ public class ChatController {
 
 	@Autowired
 	private StudentRepository studentRepo;
-	
+
 	@Autowired
 	private TeacherRepository teacherRepo;
-	
+
 	@Autowired
 	private TeacherProfileRepo teacherProfileRepo;
 
@@ -142,6 +142,37 @@ public class ChatController {
 			}
 		}
 
+		ChatUser admin = chatUserRepo.findByRefIdAndType(1, UserType.ADMIN).orElse(null);
+
+		if (admin != null)
+			users.add(admin);
+		
+		Map<Integer, String> lastMessageMap = new HashMap<>();
+
+		for (ChatUser u : users) {
+
+		    Optional<ChatRoom> roomOpt =
+		            chatRoomRepo.findChatRoom(me.getId(), u.getId());
+
+		    if (roomOpt.isPresent()) {
+
+		        List<ChatMessage> msgs =
+		            messageRepo.findTop1ByChatRoomIdOrderByTimestampDesc(
+		                roomOpt.get().getId()
+		            );
+
+		        if (!msgs.isEmpty()) {
+		            lastMessageMap.put(u.getId(), msgs.get(0).getContent());
+		        } else {
+		            lastMessageMap.put(u.getId(), "Start chat...");
+		        }
+
+		    } else {
+		        lastMessageMap.put(u.getId(), "Start chat...");
+		    }
+		}
+
+		model.addAttribute("lastMessageMap", lastMessageMap);
 		model.addAttribute("unreadMap", unreadMap);
 		session.setAttribute("chatUserId", me.getId());
 		model.addAttribute("selectedUser", selectedUser);
@@ -156,11 +187,11 @@ public class ChatController {
 	@PostMapping("/student/send")
 	public String send(@RequestParam Integer roomId, @RequestParam String content, HttpSession session) {
 
-		 Integer studentId = (Integer) session.getAttribute("studentId");
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-		    if (studentId == null) {
-		        return "redirect:/student-login";
-		    }
+		if (studentId == null) {
+			return "redirect:/student-login";
+		}
 
 		ChatUser sender = getOrCreate(studentId, UserType.STUDENT);
 		ChatRoom room = chatRoomRepo.findById(roomId).orElseThrow();
@@ -183,11 +214,11 @@ public class ChatController {
 	@PostMapping("/chat/follow")
 	public String follow(@RequestParam Integer receiverId, HttpSession session) {
 
-		 Integer studentId = (Integer) session.getAttribute("studentId");
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-		    if (studentId == null) {
-		        return "redirect:/student-login";
-		    }
+		if (studentId == null) {
+			return "redirect:/student-login";
+		}
 
 		ChatUser sender = getOrCreate(studentId, UserType.STUDENT);
 		ChatUser receiver = chatUserRepo.findById(receiverId).orElseThrow();
@@ -224,9 +255,13 @@ public class ChatController {
 				Teacher t = teacherRepo.findById(refId).orElse(null);
 				if (t != null) {
 					u.setName(t.getFirstname() + " " + t.getLastname());
+
 					TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(refId);
-					if (p != null)
+					if (p != null && p.getProfileImage() != null) {
 						u.setProfileImage(p.getProfileImage());
+					}
+				} else {
+					u.setName("Unknown Teacher");
 				}
 			}
 

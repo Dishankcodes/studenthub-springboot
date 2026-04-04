@@ -35,7 +35,7 @@ public class TeacherChatController {
 	@GetMapping("/teacher-chat")
 	public String teacherChat(@RequestParam(required = false) Integer userId, Model model, HttpSession session) {
 
-		Integer teacherId = 1;
+		Integer teacherId = 2;
 //		Integer teacherId = (Integer) session.getAttribute("teacherId");
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
@@ -112,6 +112,32 @@ public class TeacherChatController {
 			}
 		}
 
+		Map<Integer, String> lastMessageMap = new HashMap<>();
+
+		for (ChatUser u : users) {
+
+		    Optional<ChatRoom> roomOpt =
+		            chatRoomRepo.findChatRoom(me.getId(), u.getId());
+
+		    if (roomOpt.isPresent()) {
+
+		        List<ChatMessage> msgs =
+		            messageRepo.findTop1ByChatRoomIdOrderByTimestampDesc(
+		                roomOpt.get().getId()
+		            );
+
+		        if (!msgs.isEmpty()) {
+		            lastMessageMap.put(u.getId(), msgs.get(0).getContent());
+		        } else {
+		            lastMessageMap.put(u.getId(), "Start chat...");
+		        }
+
+		    } else {
+		        lastMessageMap.put(u.getId(), "Start chat...");
+		    }
+		}
+
+		model.addAttribute("lastMessageMap", lastMessageMap);
 		model.addAttribute("unreadMap", unreadMap);
 		model.addAttribute("teacher", teacher);
 		model.addAttribute("users", users);
@@ -147,13 +173,22 @@ public class TeacherChatController {
 		return "redirect:/teacher-chat?userId=" + otherId;
 	}
 
-	// ===== HELPERS =====
 	private ChatUser getOrCreateTeacher(Integer id) {
+
 		return chatUserRepo.findByRefIdAndType(id, UserType.TEACHER).orElseGet(() -> {
+
+			Teacher t = teacherRepo.findById(id).orElse(null);
+
 			ChatUser u = new ChatUser();
 			u.setRefId(id);
 			u.setType(UserType.TEACHER);
-			u.setName("Teacher");
+
+			if (t != null) {
+				u.setName(t.getFirstname() + " " + t.getLastname());
+			} else {
+				u.setName("Unknown Teacher"); 
+			}
+
 			return chatUserRepo.save(u);
 		});
 	}

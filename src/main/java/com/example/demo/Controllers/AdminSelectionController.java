@@ -120,19 +120,22 @@ public class AdminSelectionController {
 
 	    String pdfPath = baseDir + "/internship-certificate.pdf";
 
-	    Document document = new Document(PageSize.A4);
+	    // ✅ Landscape page
+	    com.lowagie.text.Rectangle pageSize = PageSize.A4.rotate();
+
+	    Document document = new Document(pageSize);
 	    PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
 
 	    document.open();
 
-	    /* Background */
+	    /* ================= BACKGROUND ================= */
 	    if (template.getBackgroundImage() != null) {
 	        String bgPath = System.getProperty("user.dir") + template.getBackgroundImage();
 	        File bgFile = new File(bgPath);
 
 	        if (bgFile.exists()) {
 	            Image bg = Image.getInstance(bgPath);
-	            bg.scaleAbsolute(PageSize.A4.getWidth(), PageSize.A4.getHeight());
+	            bg.scaleAbsolute(pageSize.getWidth(), pageSize.getHeight());
 	            bg.setAbsolutePosition(0, 0);
 	            writer.getDirectContentUnder().addImage(bg);
 	        }
@@ -143,44 +146,47 @@ public class AdminSelectionController {
 	    BaseFont bold = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
 	    BaseFont normal = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
-	    /* STUDENT NAME */
+	    // ✅ Center positions
+	    float centerX = pageSize.getWidth() / 2;
+	    float centerY = pageSize.getHeight() / 2;
+
+	    /* ================= STUDENT NAME ================= */
 	    text.beginText();
-	    text.setFontAndSize(bold, 30);
+	    text.setFontAndSize(bold, 34);
 	    text.showTextAligned(Element.ALIGN_CENTER,
 	            student.getFullname().toUpperCase(),
-	            PageSize.A4.getWidth() / 2, 420, 0);
+	            centerX, centerY + 20, 0);
 	    text.endText();
 
-	    /* INTERNSHIP TITLE */
-	    text.beginText();
-	    text.setFontAndSize(normal, 20);
-	    text.showTextAligned(Element.ALIGN_CENTER,
-	            internship.getTitle(),
-	            PageSize.A4.getWidth() / 2, 370, 0);
-	    text.endText();
-
-	    /* ROLE */
+	    /* ================= DESCRIPTION ================= */
 	    text.beginText();
 	    text.setFontAndSize(normal, 16);
 	    text.showTextAligned(Element.ALIGN_CENTER,
-	            "Role: " + internship.getRole(),
-	            PageSize.A4.getWidth() / 2, 340, 0);
+	            "has successfully completed the Internship Program as " + internship.getRole(),
+	            centerX, centerY - 40, 0);
 	    text.endText();
 
-	    /* DATE */
+	    /* ================= DATE ================= */
 	    text.beginText();
 	    text.setFontAndSize(normal, 12);
-	    text.showTextAligned(Element.ALIGN_CENTER,
+	    text.showTextAligned(Element.ALIGN_LEFT,
 	            "Issued on: " + LocalDate.now(),
-	            PageSize.A4.getWidth() / 2, 300, 0);
+	            pageSize.getWidth() - 150, 100, 0);
 	    text.endText();
 
-	    /* Signature */
+	    /* ================= SIGNATURE ================= */
 	    if (template.getSignatureImage() != null) {
-	        Image sign = Image.getInstance(System.getProperty("user.dir") + template.getSignatureImage());
-	        sign.scaleToFit(120, 60);
-	        sign.setAbsolutePosition(400, 150);
-	        document.add(sign);
+	        String signPath = System.getProperty("user.dir") + template.getSignatureImage();
+	        File signFile = new File(signPath);
+
+	        if (signFile.exists()) {
+	            Image sign = Image.getInstance(signPath);
+	            sign.scaleToFit(150, 80);
+
+	            // Bottom-right alignment
+	            sign.setAbsolutePosition(pageSize.getWidth() - 200, 120);
+	            document.add(sign);
+	        }
 	    }
 
 	    document.close();
@@ -189,7 +195,6 @@ public class AdminSelectionController {
 	            + "/internship-" + internship.getId()
 	            + "/internship-certificate.pdf";
 	}
-
 	
 	@PostMapping("/admin/give-certificate")
 	public String giveCertificate(@RequestParam Integer appId,

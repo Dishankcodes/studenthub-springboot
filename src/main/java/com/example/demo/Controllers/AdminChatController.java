@@ -99,6 +99,32 @@ public class AdminChatController {
 		    }
 		}
 
+		Map<Integer, String> lastMessageMap = new HashMap<>();
+
+		for (ChatUser u : users) {
+
+		    Optional<ChatRoom> roomOpt =
+		            chatRoomRepo.findChatRoom(me.getId(), u.getId());
+
+		    if (roomOpt.isPresent()) {
+
+		        List<ChatMessage> msgs =
+		            messageRepo.findTop1ByChatRoomIdOrderByTimestampDesc(
+		                roomOpt.get().getId()
+		            );
+
+		        if (!msgs.isEmpty()) {
+		            lastMessageMap.put(u.getId(), msgs.get(0).getContent());
+		        } else {
+		            lastMessageMap.put(u.getId(), "Start chat...");
+		        }
+
+		    } else {
+		        lastMessageMap.put(u.getId(), "Start chat...");
+		    }
+		}
+
+		model.addAttribute("lastMessageMap", lastMessageMap);
 		model.addAttribute("unreadMap", unreadMap);
 		model.addAttribute("users", users);
 		model.addAttribute("selectedUser", selectedUser);
