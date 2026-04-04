@@ -1,217 +1,261 @@
 package com.example.demo.Controllers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.entity.*;
+import com.example.demo.entity.ChatUser;
+import com.example.demo.entity.Connection;
+import com.example.demo.entity.Student;
+import com.example.demo.entity.Teacher;
+import com.example.demo.entity.TeacherProfile;
 import com.example.demo.enums.ConnectionStatus;
 import com.example.demo.enums.UserType;
-import com.example.demo.repository.*;
+import com.example.demo.repository.ChatUserRepository;
+import com.example.demo.repository.ConnectionRepository;
+import com.example.demo.repository.StudentRepository;
+import com.example.demo.repository.TeacherProfileRepo;
+import com.example.demo.repository.TeacherRepository;
 
 import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class StudentConnectionController {
 
-    @Autowired private ChatUserRepository chatUserRepo;
-    @Autowired private ConnectionRepository connectionRepo;
-    @Autowired private StudentRepository studentRepo;
-    @Autowired private TeacherRepository teacherRepo;
-    @Autowired private TeacherProfileRepo teacherProfileRepo;
+	@Autowired
+	private ChatUserRepository chatUserRepo;
+	
+	@Autowired
+	private ConnectionRepository connectionRepo;
+	
+	@Autowired
+	private StudentRepository studentRepo;
+	
+	@Autowired
+	private TeacherRepository teacherRepo;
+	
+	@Autowired
+	private TeacherProfileRepo teacherProfileRepo;
 
-    // ================= 🔍 SEARCH =================
-    @GetMapping("/student-search")
-    public String searchUsers(@RequestParam(required = false) String keyword,
-                              HttpSession session,
-                              Model model) {
+	// ================= 🔍 SEARCH =================
+	@GetMapping("/student-search")
+	public String searchUsers(@RequestParam(required = false) String keyword, HttpSession session, Model model) {
 
-        Integer studentId = (Integer) session.getAttribute("studentId");
-        if (studentId == null) return "redirect:/student-login";
+		Integer studentId = (Integer) session.getAttribute("studentId");
+		if (studentId == null)
+			return "redirect:/student-login";
 
-        ChatUser me = getOrCreate(studentId, UserType.STUDENT);
+		ChatUser me = getOrCreate(studentId, UserType.STUDENT);
 
-        List<Map<String, Object>> results = new ArrayList<>();
+		List<Map<String, Object>> results = new ArrayList<>();
 
-        if (keyword != null && !keyword.trim().isEmpty()) {
+		if (keyword == null || keyword.trim().isEmpty()) {
 
-            // ===== STUDENTS =====
-            List<Student> students = studentRepo.findByFullnameContainingIgnoreCase(keyword);
+			List<Student> students = studentRepo.findAll().stream().limit(5).toList();
+			List<Teacher> teachers = teacherRepo.findAll().stream().limit(5).toList();
 
-            for (Student s : students) {
+			// students
+			for (Student s : students) {
 
-                if (s.getStudid().equals(studentId)) continue;
+				if (s.getStudid().equals(studentId))
+					continue;
 
-                ChatUser u = getOrCreate(s.getStudid(), UserType.STUDENT);
+				ChatUser u = getOrCreate(s.getStudid(), UserType.STUDENT);
 
-                Map<String, Object> map = new HashMap<>();
-                map.put("id", u.getId());
-                map.put("name", u.getName());
-                map.put("type", "STUDENT");
-                map.put("image", u.getProfileImage());
-                map.put("status", getConnectionStatus(me, u));
+				Map<String, Object> map = new HashMap<>();
+				map.put("id", u.getId());
+				map.put("name", s.getFullname());
+				map.put("type", "STUDENT");
+				map.put("image", s.getProfileImage());
+				map.put("status", getConnectionStatus(me, u));
 
-                results.add(map);
-            }
+				results.add(map);
+			}
 
-            // ===== TEACHERS =====
-            List<Teacher> teachers =
-                    teacherRepo.findByFirstnameContainingIgnoreCaseOrLastnameContainingIgnoreCase(keyword, keyword);
+			// teachers
+			for (Teacher t : teachers) {
 
-            for (Teacher t : teachers) {
+				ChatUser u = getOrCreate(t.getTeacherId(), UserType.TEACHER);
 
-                ChatUser u = getOrCreate(t.getTeacherId(), UserType.TEACHER);
+				TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(t.getTeacherId());
 
-                Map<String, Object> map = new HashMap<>();
-                map.put("id", u.getId());
-                map.put("name", u.getName());
-                map.put("type", "TEACHER");
-                map.put("image", u.getProfileImage());
-                map.put("status", getConnectionStatus(me, u));
+				Map<String, Object> map = new HashMap<>();
+				map.put("id", u.getId());
+				map.put("name", t.getFirstname() + " " + t.getLastname());
+				map.put("type", "TEACHER");
+				map.put("image", p != null ? p.getProfileImage() : null);
+				map.put("status", getConnectionStatus(me, u));
 
-                results.add(map);
-            }
-        }
+				results.add(map);
+			}
+		}
 
-        model.addAttribute("results", results);
-        return "student-search";
-    }
+		// 🔍 SEARCH MODE
+		else {
 
-    // ================= ➕ SEND REQUEST =================
-    @PostMapping("/connection/send")
-    public String sendRequest(@RequestParam Integer receiverId,
-                              HttpSession session) {
+			List<Student> students = studentRepo.findByFullnameContainingIgnoreCase(keyword);
 
-        Integer studentId = (Integer) session.getAttribute("studentId");
-        if (studentId == null) return "redirect:/student-login";
+			for (Student s : students) {
 
-        ChatUser sender = getOrCreate(studentId, UserType.STUDENT);
-        ChatUser receiver = chatUserRepo.findById(receiverId).orElseThrow();
+				if (s.getStudid().equals(studentId))
+					continue;
 
-        // prevent duplicate
-        Optional<Connection> existing =
-                connectionRepo.findBySenderIdAndReceiverId(sender.getId(), receiver.getId());
+				ChatUser u = getOrCreate(s.getStudid(), UserType.STUDENT);
 
-        if (existing.isPresent()) return "redirect:/student-search";
+				Map<String, Object> map = new HashMap<>();
+				map.put("id", u.getId());
+				map.put("name", s.getFullname());
+				map.put("type", "STUDENT");
+				map.put("image", s.getProfileImage());
+				map.put("status", getConnectionStatus(me, u));
 
-        Connection c = new Connection();
-        c.setSender(sender);
-        c.setReceiver(receiver);
-        c.setStatus(ConnectionStatus.PENDING);
+				results.add(map);
+			}
 
-        connectionRepo.save(c);
+			List<Teacher> teachers = teacherRepo
+					.findByFirstnameContainingIgnoreCaseOrLastnameContainingIgnoreCase(keyword, keyword);
 
-        return "redirect:/student-search";
-    }
+			for (Teacher t : teachers) {
 
-    // ================= 🔔 NOTIFICATIONS =================
-    @GetMapping("/student-notification")
-    public String notifications(HttpSession session, Model model) {
+				ChatUser u = getOrCreate(t.getTeacherId(), UserType.TEACHER);
 
-        Integer studentId = (Integer) session.getAttribute("studentId");
-        if (studentId == null) return "redirect:/student-login";
+				TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(t.getTeacherId());
 
-        ChatUser me = getOrCreate(studentId, UserType.STUDENT);
+				Map<String, Object> map = new HashMap<>();
+				map.put("id", u.getId());
+				map.put("name", t.getFirstname() + " " + t.getLastname());
+				map.put("type", "TEACHER");
+				map.put("image", p != null ? p.getProfileImage() : null);
+				map.put("status", getConnectionStatus(me, u));
 
-        // 🔹 Incoming requests
-        List<Connection> received =
-                connectionRepo.findByReceiverIdAndStatus(me.getId(), ConnectionStatus.PENDING);
+				results.add(map);
+			}
+		}
 
-        // 🔹 Sent requests
-        List<Connection> sent =
-                connectionRepo.findBySenderIdAndStatus(me.getId(), ConnectionStatus.PENDING);
+		model.addAttribute("results", results);
 
-        model.addAttribute("receivedRequests", received);
-        model.addAttribute("sentRequests", sent);
+		return "student-search";
+	}
 
-        return "student-notification";
-    }
+	// ================= ➕ SEND REQUEST =================
+	@PostMapping("/connection/send")
+	public String sendRequest(@RequestParam Integer receiverId, HttpSession session) {
 
-    @PostMapping("/connection/cancel")
-    public String cancel(@RequestParam Integer id) {
+		Integer studentId = (Integer) session.getAttribute("studentId");
+		if (studentId == null)
+			return "redirect:/student-login";
 
-        connectionRepo.deleteById(id);
+		ChatUser sender = getOrCreate(studentId, UserType.STUDENT);
+		ChatUser receiver = chatUserRepo.findById(receiverId).orElseThrow();
 
-        return "redirect:/student-notification";
-    }
-    // ================= ✅ ACCEPT =================
-    @PostMapping("/connection/accept")
-    public String accept(@RequestParam Integer id) {
+		// prevent duplicate
+		Optional<Connection> existing = connectionRepo.findBySenderIdAndReceiverId(sender.getId(), receiver.getId());
 
-        Connection c = connectionRepo.findById(id).orElseThrow();
-        c.setStatus(ConnectionStatus.ACCEPTED);
-        connectionRepo.save(c);
+		if (existing.isPresent())
+			return "redirect:/student-search";
 
-        return "redirect:/student-notification";
-    }
+		Connection c = new Connection();
+		c.setSender(sender);
+		c.setReceiver(receiver);
+		c.setStatus(ConnectionStatus.PENDING);
 
-    // ================= ❌ REJECT =================
-    @PostMapping("/connection/reject")
-    public String reject(@RequestParam Integer id) {
+		connectionRepo.save(c);
 
-        connectionRepo.deleteById(id);
-        return "redirect:/student-notification";
-    }
+		return "redirect:/student-search";
+	}
 
-    // ================= 🧠 STATUS LOGIC =================
-    private String getConnectionStatus(ChatUser me, ChatUser other) {
+	// ================= 🔔 NOTIFICATIONS =================
+	@GetMapping("/student-notification")
+	public String notifications(HttpSession session, Model model) {
 
-        Optional<Connection> sent =
-                connectionRepo.findBySenderIdAndReceiverId(me.getId(), other.getId());
+		Integer studentId = (Integer) session.getAttribute("studentId");
+		if (studentId == null)
+			return "redirect:/student-login";
 
-        Optional<Connection> received =
-                connectionRepo.findByReceiverIdAndSenderId(me.getId(), other.getId());
+		ChatUser me = getOrCreate(studentId, UserType.STUDENT);
 
-        if (sent.isPresent()) {
-            if (sent.get().getStatus() == ConnectionStatus.PENDING)
-                return "PENDING";
-            if (sent.get().getStatus() == ConnectionStatus.ACCEPTED)
-                return "CHAT";
-        }
+		// 🔹 Incoming requests
+		List<Connection> received = connectionRepo.findByReceiverIdAndStatus(me.getId(), ConnectionStatus.PENDING);
 
-        if (received.isPresent()) {
-            if (received.get().getStatus() == ConnectionStatus.PENDING)
-                return "REQUEST_RECEIVED";
-            if (received.get().getStatus() == ConnectionStatus.ACCEPTED)
-                return "CHAT";
-        }
+		// 🔹 Sent requests
+		List<Connection> sent = connectionRepo.findBySenderIdAndStatus(me.getId(), ConnectionStatus.PENDING);
 
-        return "FOLLOW";
-    }
+		model.addAttribute("receivedRequests", received);
+		model.addAttribute("sentRequests", sent);
 
-    // ================= 🧩 GET OR CREATE =================
-    private ChatUser getOrCreate(Integer refId, UserType type) {
+		return "student-notification";
+	}
 
-        return chatUserRepo.findByRefIdAndType(refId, type).orElseGet(() -> {
+	@PostMapping("/connection/cancel")
+	public String cancel(@RequestParam Integer id) {
 
-            ChatUser u = new ChatUser();
-            u.setRefId(refId);
-            u.setType(type);
+		connectionRepo.deleteById(id);
 
-            if (type == UserType.STUDENT) {
-                Student s = studentRepo.findById(refId).orElse(null);
-                if (s != null) {
-                    u.setName(s.getFullname());
-                    u.setProfileImage(s.getProfileImage());
-                }
-            }
+		return "redirect:/student-notification";
+	}
 
-            if (type == UserType.TEACHER) {
-                Teacher t = teacherRepo.findById(refId).orElse(null);
-                if (t != null) {
-                    u.setName(t.getFirstname() + " " + t.getLastname());
+	// ================= ✅ ACCEPT =================
+	@PostMapping("/connection/accept")
+	public String accept(@RequestParam Integer id) {
 
-                    TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(refId);
-                    if (p != null) {
-                        u.setProfileImage(p.getProfileImage());
-                    }
-                }
-            }
+		Connection c = connectionRepo.findById(id).orElseThrow();
+		c.setStatus(ConnectionStatus.ACCEPTED);
+		connectionRepo.save(c);
 
-            return chatUserRepo.save(u);
-        });
-    }
+		return "redirect:/student-notification";
+	}
+
+	// ================= ❌ REJECT =================
+	@PostMapping("/connection/reject")
+	public String reject(@RequestParam Integer id) {
+
+		connectionRepo.deleteById(id);
+		return "redirect:/student-notification";
+	}
+
+	// ================= 🧠 STATUS LOGIC =================
+	private String getConnectionStatus(ChatUser me, ChatUser other) {
+
+		Optional<Connection> sent = connectionRepo.findBySenderIdAndReceiverId(me.getId(), other.getId());
+
+		Optional<Connection> received = connectionRepo.findByReceiverIdAndSenderId(me.getId(), other.getId());
+
+		if (sent.isPresent()) {
+			if (sent.get().getStatus() == ConnectionStatus.PENDING)
+				return "PENDING";
+			if (sent.get().getStatus() == ConnectionStatus.ACCEPTED)
+				return "CHAT";
+		}
+
+		if (received.isPresent()) {
+			if (received.get().getStatus() == ConnectionStatus.PENDING)
+				return "REQUEST_RECEIVED";
+			if (received.get().getStatus() == ConnectionStatus.ACCEPTED)
+				return "CHAT";
+		}
+
+		return "FOLLOW";
+	}
+
+	private ChatUser getOrCreate(Integer refId, UserType type) {
+
+		return chatUserRepo.findByRefIdAndType(refId, type).orElseGet(() -> {
+
+			ChatUser u = new ChatUser();
+			u.setRefId(refId);
+			u.setType(type);
+
+			return chatUserRepo.save(u);
+		});
+	}
+
 }

@@ -1,15 +1,31 @@
 package com.example.demo.Controllers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.entity.*;
+import com.example.demo.entity.ChatMessage;
+import com.example.demo.entity.ChatRoom;
+import com.example.demo.entity.ChatUser;
+import com.example.demo.entity.Student;
+import com.example.demo.entity.Teacher;
+import com.example.demo.entity.TeacherProfile;
 import com.example.demo.enums.UserType;
-import com.example.demo.repository.*;
+import com.example.demo.repository.ChatMessageRepository;
+import com.example.demo.repository.ChatRoomRepository;
+import com.example.demo.repository.ChatUserRepository;
+import com.example.demo.repository.StudentRepository;
+import com.example.demo.repository.TeacherProfileRepo;
+import com.example.demo.repository.TeacherRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -18,17 +34,27 @@ public class AdminChatController {
 
 	@Autowired
 	private ChatUserRepository chatUserRepo;
+	
 	@Autowired
 	private ChatRoomRepository chatRoomRepo;
+	
 	@Autowired
 	private ChatMessageRepository messageRepo;
+	
+	@Autowired
+	private StudentRepository studentRepo;
+	
+	@Autowired
+	private TeacherRepository teacherRepo;
+	
+	@Autowired
+	private TeacherProfileRepo teacherProfileRepo;
 
 	private ChatUser getAdmin() {
 		return chatUserRepo.findByRefIdAndType(1, UserType.ADMIN).orElseGet(() -> {
 			ChatUser u = new ChatUser();
 			u.setRefId(1);
 			u.setType(UserType.ADMIN);
-			u.setName("Admin");
 			return chatUserRepo.save(u);
 		});
 	}
@@ -42,88 +68,88 @@ public class AdminChatController {
 		List<ChatUser> users = chatUserRepo.findAll();
 		users.removeIf(u -> u.getType() == UserType.ADMIN);
 
-		users.forEach(u -> {
-		    if (u.getName() == null) u.setName("Unknown");
-		    if (u.getProfileImage() == null) u.setProfileImage("/images/default.jpg"); 
-		});
+		// 🔥 MAP
+		Map<Integer, String> nameMap = new HashMap<>();
+		Map<Integer, String> imageMap = new HashMap<>();
+
+		for (ChatUser u : users) {
+
+			if (u.getType() == UserType.STUDENT) {
+				Student s = studentRepo.findById(u.getRefId()).orElse(null);
+				if (s != null) {
+					nameMap.put(u.getId(), s.getFullname());
+					imageMap.put(u.getId(), s.getProfileImage());
+				}
+			}
+
+			else if (u.getType() == UserType.TEACHER) {
+				Teacher t = teacherRepo.findById(u.getRefId()).orElse(null);
+				if (t != null) {
+					nameMap.put(u.getId(), t.getFirstname() + " " + t.getLastname());
+
+					TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(u.getRefId());
+					if (p != null)
+						imageMap.put(u.getId(), p.getProfileImage());
+				}
+			}
+		}
+
+		model.addAttribute("nameMap", nameMap);
+		model.addAttribute("imageMap", imageMap);
 
 		ChatUser selectedUser = null;
 		List<ChatMessage> messages = new ArrayList<>();
 		Integer roomId = null;
 
+		String selectedName = null;
+		String selectedImage = null;
+
 		if (userId != null) {
 
-			ChatUser tempUser = chatUserRepo.findById(userId).orElse(null);
+		    ChatUser tempUser = chatUserRepo.findById(userId).orElse(null);
 
-			if (tempUser != null) {
+		    if (tempUser != null) {
 
-				selectedUser = tempUser;
-				
-				ChatRoom room = chatRoomRepo.findChatRoom(me.getId(), tempUser.getId()).orElseGet(() -> {
-					ChatRoom r = new ChatRoom();
-					r.setUser1(me);
-					r.setUser2(tempUser);
-					return chatRoomRepo.save(r);
-				});
+		        selectedUser = tempUser; // ✅ assign once
 
-				roomId = room.getId();
-				messages = messageRepo.findByChatRoomIdOrderByTimestampAsc(roomId);
-			}
-		}
+		        // 🔥 FIXED ROOM LOGIC (NO LAMBDA)
+		        ChatRoom room;
+		        Optional<ChatRoom> roomOpt = chatRoomRepo.findChatRoom(me.getId(), selectedUser.getId());
 
-		if (roomId != null) {
-		    for (ChatMessage msg : messages) {
-		        if (!msg.isSeen() && !msg.getSender().getId().equals(me.getId())) {
-		            msg.setSeen(true);
+		        if (roomOpt.isPresent()) {
+		            room = roomOpt.get();
+		        } else {
+		            room = new ChatRoom();
+		            room.setUser1(me);
+		            room.setUser2(selectedUser);
+		            room = chatRoomRepo.save(room);
 		        }
+
+		        roomId = room.getId();
+		        messages = messageRepo.findByChatRoomIdOrderByTimestampAsc(roomId);
+
+		        selectedName = nameMap.get(selectedUser.getId());
+		        selectedImage = imageMap.get(selectedUser.getId());
 		    }
-		    messageRepo.saveAll(messages);
 		}
 		
-		Map<Integer, Long> unreadMap = new HashMap<>();
+		Map<Integer, String> lastMessageMap = new HashMap<>();
+		Map<Integer, String> timeMap = new HashMap<>();
 
 		for (ChatUser u : users) {
 
 		    Optional<ChatRoom> roomOpt = chatRoomRepo.findChatRoom(me.getId(), u.getId());
 
 		    if (roomOpt.isPresent()) {
-		        Integer rId = roomOpt.get().getId();
 
-		        long count = messageRepo.countByChatRoomIdAndSeenFalseAndSenderIdNot(
-		                rId, me.getId()
-		        );
+		        ChatMessage m = messageRepo
+		                .findTop1ByChatRoomIdOrderByTimestampDesc(roomOpt.get().getId());
 
-		        unreadMap.put(u.getId(), count);
-		    } else {
-		        unreadMap.put(u.getId(), 0L);
-		    }
-		}
-
-		Map<Integer, String> lastMessageMap = new HashMap<>();
-		Map<Integer, String> timeMap = new HashMap<>();
-
-		for (ChatUser u : users) {
-
-		    Optional<ChatRoom> roomOpt =
-		            chatRoomRepo.findChatRoom(me.getId(), u.getId());
-
-		    if (roomOpt.isPresent()) {
-
-		        List<ChatMessage> msgs =
-		                messageRepo.findTop1ByChatRoomIdOrderByTimestampDesc(
-		                        roomOpt.get().getId()
-		                );
-
-		        if (!msgs.isEmpty()) {
-
-		            ChatMessage m = msgs.get(0);
-
+		        if (m != null) {
 		            lastMessageMap.put(u.getId(), m.getContent());
 
 		            timeMap.put(u.getId(),
-		                    m.getTimestamp().toLocalTime().toString().substring(0, 5)
-		            );
-
+		                    m.getTimestamp().toLocalTime().toString().substring(0, 5));
 		        } else {
 		            lastMessageMap.put(u.getId(), "Start chat...");
 		            timeMap.put(u.getId(), "");
@@ -134,19 +160,39 @@ public class AdminChatController {
 		        timeMap.put(u.getId(), "");
 		    }
 		}
+		Map<Integer, Long> unreadMap = new HashMap<>();
 
+		for (ChatUser u : users) {
+
+		    Optional<ChatRoom> roomOpt = chatRoomRepo.findChatRoom(me.getId(), u.getId());
+
+		    if (roomOpt.isPresent()) {
+
+		        Long count = messageRepo.countByChatRoomIdAndSeenFalseAndSenderIdNot(
+		                roomOpt.get().getId(),
+		                me.getId()
+		        );
+
+		        unreadMap.put(u.getId(), count);
+
+		    } else {
+		        unreadMap.put(u.getId(), 0L);
+		    }
+		}
+
+		model.addAttribute("unreadMap", unreadMap);
 		model.addAttribute("lastMessageMap", lastMessageMap);
 		model.addAttribute("timeMap", timeMap);
-		model.addAttribute("unreadMap", unreadMap);
 		model.addAttribute("users", users);
 		model.addAttribute("selectedUser", selectedUser);
+		model.addAttribute("selectedName", selectedName);
+		model.addAttribute("selectedImage", selectedImage);
 		model.addAttribute("messages", messages);
 		model.addAttribute("roomId", roomId);
 
 		return "admin-chat";
 	}
 
-	// ===== SEND =====
 	@PostMapping("/admin/send")
 	public String sendAdmin(@RequestParam Integer roomId, @RequestParam String content, HttpSession session) {
 

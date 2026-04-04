@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.UserType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -19,16 +21,8 @@ public class ChatUser {
 	private Integer refId;
 
 	@Enumerated(EnumType.STRING)
-	private com.example.demo.enums.UserType type; // STUDENT / TEACHER / ADMIN
+	private UserType type; // STUDENT / TEACHER / ADMIN
 
-	private String name;
-
-	private String email;
-
-	private String profileImage;
-
-	
-	
 	public Integer getId() {
 		return id;
 	}
@@ -45,37 +39,12 @@ public class ChatUser {
 		this.refId = refId;
 	}
 
-	
-	public com.example.demo.enums.UserType getType() {
+	public UserType getType() {
 		return type;
 	}
 
-	public void setType(com.example.demo.enums.UserType type) {
+	public void setType(UserType type) {
 		this.type = type;
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getProfileImage() {
-		return profileImage;
-	}
-
-	public void setProfileImage(String profileImage) {
-		this.profileImage = profileImage;
-	}
-
+	
 }

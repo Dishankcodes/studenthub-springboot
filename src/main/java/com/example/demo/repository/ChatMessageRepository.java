@@ -12,5 +12,7 @@ public interface ChatMessageRepository extends JpaRepository<ChatMessage, Intege
 
     List<ChatMessage> findByChatRoomIdOrderByTimestampAsc(Integer chatRoomId);
     long countByChatRoomIdAndSeenFalseAndSenderIdNot(Integer chatRoomId, Integer myId);
-	List<ChatMessage> findTop1ByChatRoomIdOrderByTimestampDesc(Integer id);
+	
+	
+	ChatMessage findTop1ByChatRoomIdOrderByTimestampDesc(Integer chatRoomId);
 }

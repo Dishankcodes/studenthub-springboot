@@ -322,13 +322,12 @@
 								<a th:href="@{/admin-chat(userId=${user.id})}"
 									style="display:flex; gap:10px; text-decoration:none; color:inherit; width:100%;">
 
-									<img
-										th:src="${user.profileImage != null ? user.profileImage : '/images/default.jpg'}">
+									<img th:src="${imageMap[user.id] != null ? imageMap[user.id] : '/images/default.jpg'}">
 
 									<div class="info">
 										<div class="name">
 
-											<span th:text="${user.name != null ? user.name : 'Unknown'}"></span>
+											<span th:text="${nameMap[user.id] != null ? nameMap[user.id] : 'Unknown'}"></span>
 
 											<!-- ICONS -->
 											<i th:if="${user.type.name() == 'TEACHER'}" class="bi bi-person-badge"
@@ -358,11 +357,10 @@
 							<!-- HEADER -->
 							<div th:if="${selectedUser != null}" class="chat-header">
 
-								<img
-									th:src="${selectedUser.profileImage != null ? selectedUser.profileImage : '/images/default.jpg'}">
+								<img th:src="${selectedImage != null ? selectedImage : '/images/default.jpg'}">
 
 								<div class="chat-header-info">
-									<div class="chat-name" th:text="${selectedUser.name}"></div>
+									<div class="chat-name" th:text="${selectedName != null ? selectedName : 'Unknown'}"></div>
 									<div class="chat-status" th:text="${selectedUser.type}"></div>
 								</div>
 							</div>
