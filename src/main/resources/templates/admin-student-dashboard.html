@@ -2,446 +2,447 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Student Dashboard | Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            background: linear-gradient(135deg, #0b0b1f, #14142f);
-            font-family: 'Poppins', sans-serif;
-            color: #eaeaf0;
-        }
+	<meta charset="UTF-8">
+	<title>Student Dashboard | Admin</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet">
+	<style>
+		body {
+			margin: 0;
+			background: linear-gradient(135deg, #0b0b1f, #14142f);
+			font-family: 'Poppins', sans-serif;
+			color: #eaeaf0;
+		}
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 18px 30px;
-            background: rgba(26, 26, 61, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
+		.header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 18px 30px;
+			background: rgba(26, 26, 61, 0.8);
+			backdrop-filter: blur(12px);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+		}
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+		.header-left {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
 
-        .title {
-            font-size: 20px;
-            font-weight: 600;
-        }
+		.title {
+			font-size: 20px;
+			font-weight: 600;
+		}
 
-        .header-actions {
-            display: flex;
-            gap: 10px;
-        }
+		.header-actions {
+			display: flex;
+			gap: 10px;
+		}
 
-        .btn {
-            padding: 8px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            border: none;
-            cursor: pointer;
-        }
+		.btn {
+			padding: 8px 14px;
+			border-radius: 10px;
+			font-size: 13px;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			border: none;
+			cursor: pointer;
+		}
 
-        .btn-outline {
-            background: rgba(255, 255, 255, 0.05);
-            color: #fff;
-        }
+		.btn-outline {
+			background: rgba(255, 255, 255, 0.05);
+			color: #fff;
+		}
 
-        .btn-outline:hover {
-            background: #6366f1;
-        }
+		.btn-outline:hover {
+			background: #6366f1;
+		}
 
-        .btn-primary {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: #fff;
-        }
+		.btn-primary {
+			background: linear-gradient(135deg, #6366f1, #8b5cf6);
+			color: #fff;
+		}
 
-        .btn-primary:hover {
-            transform: scale(1.05);
-        }
+		.btn-primary:hover {
+			transform: scale(1.05);
+		}
 
-        .container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 20px;
-        }
+		.container {
+			max-width: 1100px;
+			margin: 30px auto;
+			padding: 20px;
+		}
 
-        .profile-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            margin-bottom: 25px;
-            backdrop-filter: blur(10px);
-        }
+		.profile-card {
+			background: rgba(255, 255, 255, 0.05);
+			border-radius: 16px;
+			padding: 20px;
+			display: flex;
+			align-items: center;
+			gap: 18px;
+			margin-bottom: 25px;
+			backdrop-filter: blur(10px);
+		}
 
-        .profile-card img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-        }
+		.profile-card img {
+			width: 70px;
+			height: 70px;
+			border-radius: 50%;
+		}
 
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
+		.stats {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+			gap: 15px;
+			margin-bottom: 25px;
+		}
 
-        .stat-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 14px;
-            padding: 15px;
-            text-align: center;
-            transition: 0.2s;
-        }
+		.stat-card {
+			background: rgba(255, 255, 255, 0.05);
+			border-radius: 14px;
+			padding: 15px;
+			text-align: center;
+			transition: 0.2s;
+		}
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
-        }
+		.stat-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+		}
 
-        .stat-card h2 {
-            margin: 5px 0;
-            font-size: 22px;
-        }
+		.stat-card h2 {
+			margin: 5px 0;
+			font-size: 22px;
+		}
 
-        .stat-card p {
-            font-size: 12px;
-            color: #9ca3af;
-        }
+		.stat-card p {
+			font-size: 12px;
+			color: #9ca3af;
+		}
 
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            overflow: hidden;
-        }
+		.table {
+			width: 100%;
+			border-collapse: collapse;
+			background: rgba(255, 255, 255, 0.03);
+			border-radius: 12px;
+			overflow: hidden;
+		}
 
-        .table thead {
-            background: rgba(255, 255, 255, 0.06);
-        }
+		.table thead {
+			background: rgba(255, 255, 255, 0.06);
+		}
 
-        .table th,
-        .table td {
-            padding: 12px;
-            font-size: 13px;
-            text-align: left;
-        }
+		.table th,
+		.table td {
+			padding: 12px;
+			font-size: 13px;
+			text-align: left;
+		}
 
-        .table th {
-            color: #9ca3af;
-        }
+		.table th {
+			color: #9ca3af;
+		}
 
-        .table tr:hover {
-            background: rgba(99, 102, 241, 0.08);
-        }
+		.table tr:hover {
+			background: rgba(99, 102, 241, 0.08);
+		}
 
-        .badge {
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 11px;
-        }
+		.badge {
+			padding: 4px 10px;
+			border-radius: 999px;
+			font-size: 11px;
+		}
 
-        .accepted {
-            background: #22c55e33;
-            color: #22c55e;
-        }
+		.accepted {
+			background: #22c55e33;
+			color: #22c55e;
+		}
 
-        .rejected {
-            background: #ef444433;
-            color: #ef4444;
-        }
+		.rejected {
+			background: #ef444433;
+			color: #ef4444;
+		}
 
-        .pending {
-            background: #f59e0b33;
-            color: #f59e0b;
-        }
+		.pending {
+			background: #f59e0b33;
+			color: #f59e0b;
+		}
 
-        body {
-            margin: 0;
-            background: linear-gradient(135deg, #0b0b1f, #14142f);
-            font-family: 'Poppins', sans-serif;
-            color: #e5e7eb;
-            letter-spacing: 0.2px;
-        }
+		body {
+			margin: 0;
+			background: linear-gradient(135deg, #0b0b1f, #14142f);
+			font-family: 'Poppins', sans-serif;
+			color: #e5e7eb;
+			letter-spacing: 0.2px;
+		}
 
-        h1,
-        h2,
-        h3 {
-            font-weight: 600;
-            letter-spacing: 0.3px;
-        }
+		h1,
+		h2,
+		h3 {
+			font-weight: 600;
+			letter-spacing: 0.3px;
+		}
 
-        p {
-            font-size: 13px;
-            color: #9ca3af;
-            font-weight: 400;
-        }
+		p {
+			font-size: 13px;
+			color: #9ca3af;
+			font-weight: 400;
+		}
 
-        .table th {
-            font-size: 12px;
-            font-weight: 500;
-            color: #9ca3af;
-        }
+		.table th {
+			font-size: 12px;
+			font-weight: 500;
+			color: #9ca3af;
+		}
 
-        .table td {
-            font-size: 13px;
-            font-weight: 400;
-            color: #e5e7eb;
-        }
-
-
-        .btn {
-            font-weight: 500;
-            letter-spacing: 0.2px;
-        }
-
-        .stat-card h2 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #ffffff;
-        }
-
-        .stat-card p {
-            font-size: 12px;
-            font-weight: 400;
-            color: #9ca3af;
-        }
+		.table td {
+			font-size: 13px;
+			font-weight: 400;
+			color: #e5e7eb;
+		}
 
 
-        .profile-card h2 {
-            font-size: 18px;
-            font-weight: 600;
-            color: #fff;
-        }
+		.btn {
+			font-weight: 500;
+			letter-spacing: 0.2px;
+		}
+
+		.stat-card h2 {
+			font-size: 24px;
+			font-weight: 600;
+			color: #ffffff;
+		}
+
+		.stat-card p {
+			font-size: 12px;
+			font-weight: 400;
+			color: #9ca3af;
+		}
 
 
-        .title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-
-        .stat-card i {
-            font-size: 18px;
-            color: #6366f1;
-        }
-
-        .table tr {
-            transition: 0.2s ease;
-        }
-
-        .table tr:hover {
-            transform: scale(1.01);
-        }
-
-        .btn-header {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 16px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: 0.25s ease;
-            backdrop-filter: blur(8px);
-        }
+		.profile-card h2 {
+			font-size: 18px;
+			font-weight: 600;
+			color: #fff;
+		}
 
 
-        .btn-active {
-            background: linear-gradient(135deg, #6366f1, #8b5cf6);
-            color: #fff;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-        }
+		.title {
+			font-size: 18px;
+			font-weight: 600;
+		}
 
-        .btn-active:hover {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
-        }
+		.stat-card i {
+			font-size: 18px;
+			color: #6366f1;
+		}
+
+		.table tr {
+			transition: 0.2s ease;
+		}
+
+		.table tr:hover {
+			transform: scale(1.01);
+		}
+
+		.btn-header {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding: 10px 16px;
+			border-radius: 12px;
+			font-size: 13px;
+			font-weight: 500;
+			text-decoration: none;
+			transition: 0.25s ease;
+			backdrop-filter: blur(8px);
+		}
 
 
-        .btn-disabled {
-            background: rgba(255, 255, 255, 0.05);
-            color: #9ca3af;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            cursor: not-allowed;
-            opacity: 0.8;
-        }
+		.btn-active {
+			background: linear-gradient(135deg, #6366f1, #8b5cf6);
+			color: #fff;
+			box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+		}
+
+		.btn-active:hover {
+			transform: translateY(-2px) scale(1.03);
+			box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
+		}
 
 
-        .btn-header i {
-            font-size: 14px;
-        }
+		.btn-disabled {
+			background: rgba(255, 255, 255, 0.05);
+			color: #9ca3af;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+			cursor: not-allowed;
+			opacity: 0.8;
+		}
 
-        .btn-header {
-            position: relative;
-            overflow: hidden;
-        }
 
-        .btn-active::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            opacity: 0;
-            transition: 0.4s;
-        }
+		.btn-header i {
+			font-size: 14px;
+		}
 
-        .btn-active:hover::after {
-            opacity: 1;
-        }
-    </style>
+		.btn-header {
+			position: relative;
+			overflow: hidden;
+		}
+
+		.btn-active::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+			opacity: 0;
+			transition: 0.4s;
+		}
+
+		.btn-active:hover::after {
+			opacity: 1;
+		}
+	</style>
 </head>
 
 <body>
 
-    <div class="header">
-        <div class="header-left">
-            <span class="title">
-                <i class="bi bi-person-circle"></i> Student Dashboard
-            </span>
-        </div>
+	<div class="header">
+		<div class="header-left">
+			<span class="title">
+				<i class="bi bi-person-circle"></i> Student Dashboard
+			</span>
+		</div>
 
-        <div class="header-actions">
+		<div class="header-actions">
 
-            <a href="/manage-students" class="btn btn-outline">
-                <i class="bi bi-arrow-left"></i> Manage Students
-            </a>
+			<a href="/manage-students" class="btn btn-outline">
+				<i class="bi bi-arrow-left"></i> Manage Students
+			</a>
 
-            <a th:if="${!#lists.isEmpty(applications)}"
-                th:href="@{'/admin-applicants?id=' + ${applications[0].internship.id}}" class="btn-header btn-active">
-                <i class="bi bi-people"></i> Applicants
-            </a>
+			<a th:if="${!#lists.isEmpty(applications)}"
+				th:href="@{'/admin-applicants?id=' + ${applications[0].internship.id}}" class="btn-header btn-active">
+				<i class="bi bi-people"></i> Applicants
+			</a>
 
-            <button th:if="${#lists.isEmpty(applications)}" class="btn-header btn-disabled" disabled>
-                <i class="bi bi-people"></i> No Applicants
-            </button>
-        </div>
-    </div>
-    <div class="container">
+			<button th:if="${#lists.isEmpty(applications)}" class="btn-header btn-disabled" disabled>
+				<i class="bi bi-people"></i> No Applicants
+			</button>
+		</div>
+	</div>
+	<div class="container">
 
-        <div class="profile-card">
-            <img th:src="${student.profileImage != null ? student.profileImage : '/images/default.jpg'}">
+		<div class="profile-card">
+			<img th:src="${student.profileImage != null ? student.profileImage : '/images/default.jpg'}">
 
-            <div>
-                <h2 th:text="${student.fullname}"></h2>
-                <p th:text="${student.email}"></p>
-                <p><b th:text="${student.college}"></b></p>
-            </div>
-        </div>
+			<div>
+				<h2 th:text="${student.fullname}"></h2>
+				<p th:text="${student.email}"></p>
+				<p><b th:text="${student.college}"></b></p>
+			</div>
+		</div>
 
-        <div class="stats">
+		<div class="stats">
 
-            <div class="stat-card">
-                <i class="bi bi-briefcase"></i>
-                <h2 th:text="${totalInternships}"></h2>
-                <p>Total Internships</p>
-            </div>
-            <div class="stat-card">
-                <i class="bi bi-check-circle"></i>
-                <h2 th:text="${completedInternships}"></h2>
-                <p>Completed</p>
-            </div>
-            <div class="stat-card">
-                <i class="bi bi-book"></i>
-                <h2 th:text="${enrolledCourses}"></h2>
-                <p>Courses</p>
-            </div>
+			<div class="stat-card">
+				<i class="bi bi-briefcase"></i>
+				<h2 th:text="${totalInternships}"></h2>
+				<p>Total Internships</p>
+			</div>
+			<div class="stat-card">
+				<i class="bi bi-check-circle"></i>
+				<h2 th:text="${completedInternships}"></h2>
+				<p>Completed</p>
+			</div>
+			<div class="stat-card">
+				<i class="bi bi-book"></i>
+				<h2 th:text="${enrolledCourses}"></h2>
+				<p>Courses</p>
+			</div>
 
-            <div class="stat-card">
-                <i class="bi bi-award"></i>
-                <h2 th:text="${completedCourses}"></h2>
-                <p>Completed Courses</p>
-            </div>
-            <div class="stat-card">
-                <i class="bi bi-patch-check"></i>
-                <h2 th:text="${certificateCount}"></h2>
-                <p>Certificates</p>
-            </div>
-        </div>
-        <h3 style="margin-top:30px;">
-            <i class="bi bi-journal-bookmark"></i> Course History
-        </h3>
+			<div class="stat-card">
+				<i class="bi bi-award"></i>
+				<h2 th:text="${completedCourses}"></h2>
+				<p>Completed Courses</p>
+			</div>
+			<div class="stat-card">
+				<i class="bi bi-patch-check"></i>
+				<h2 th:text="${certificateCount}"></h2>
+				<p>Certificates</p>
+			</div>
+		</div>
+		<h3 style="margin-top:30px;">
+			<i class="bi bi-journal-bookmark"></i> Course History
+		</h3>
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Course</th>
-                    <th>Status</th>
-                    <th>Completion</th>
-                    <th>Duration</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="enroll, stat : ${enrollments}">
-                    <td th:text="${stat.index+1}"></td>
-                    <td>
-                        <span th:text="${enroll.course.title}"></span>
-                    </td>
-                    <td>
-                        <span class="badge" th:classappend="${enroll.completedAt != null ? 'accepted' : 'pending'}">
-                            <span th:text="${enroll.completedAt != null ? 'Completed' : 'In Progress'}"></span>
-                        </span>
-                    </td>
-                    <td>
-                        <span th:if="${enroll.completedAt != null}"
-                            th:text="${#temporals.format(enroll.completedAt, 'dd MMM yyyy')}">
-                        </span>
-                        <span th:if="${enroll.completedAt == null}" style="color:#f59e0b;">
-                            Ongoing
-                        </span>
-                    </td>
-                    <td>
-                        <span th:if="${enroll.completedAt != null}"
-                            th:text="${courseDurationMap[enroll.course.courseId]} + ' days'">
-                        </span>
-                        <span th:if="${enroll.completedAt == null}" style="color:#9ca3af;">
-                            —
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <h3><i class="bi bi-kanban"></i> Internship History</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Internship</th>
-                    <th>Status</th>
-                    <th>Phone</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="app, stat : ${applications}">
-                    <td th:text="${stat.index+1}"></td>
-                    <td th:text="${app.internship.title}"></td>
-                    <td>
-                        <span class="badge" th:classappend="${app.status.name() == 'ACCEPTED' ? 'accepted' :
+		<table class="table">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Course</th>
+					<th>Status</th>
+					<th>Completion</th>
+					<th>Duration</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="enroll, stat : ${enrollments}">
+					<td th:text="${stat.index+1}"></td>
+					<td>
+						<span th:text="${enroll.course.title}"></span>
+					</td>
+					<td>
+						<span class="badge" th:classappend="${enroll.completedAt != null ? 'accepted' : 'pending'}">
+							<span th:text="${enroll.completedAt != null ? 'Completed' : 'In Progress'}"></span>
+						</span>
+					</td>
+					<td>
+						<span th:if="${enroll.completedAt != null}"
+							th:text="${#temporals.format(enroll.completedAt, 'dd MMM yyyy')}">
+						</span>
+						<span th:if="${enroll.completedAt == null}" style="color:#f59e0b;">
+							Ongoing
+						</span>
+					</td>
+					<td>
+						<span th:if="${enroll.completedAt != null}"
+							th:text="${courseDurationMap[enroll.course.courseId]} + ' days'">
+						</span>
+						<span th:if="${enroll.completedAt == null}" style="color:#9ca3af;">
+							—
+						</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<h3><i class="bi bi-kanban"></i> Internship History</h3>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Internship</th>
+					<th>Status</th>
+					<th>Phone</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="app, stat : ${applications}">
+					<td th:text="${stat.index+1}"></td>
+					<td th:text="${app.internship.title}"></td>
+					<td>
+						<span class="badge" th:classappend="${app.status.name() == 'ACCEPTED' ? 'accepted' :
                               (app.status.name() == 'REJECTED' ? 'rejected' : 'pending')}">
-                            <span th:text="${app.status}"></span>
-                        </span>
-                    </td>
-                    <td th:text="${app.phone}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+							<span th:text="${app.status}"></span>
+						</span>
+					</td>
+					<td th:text="${app.phone}"></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </body>
+
 </html>

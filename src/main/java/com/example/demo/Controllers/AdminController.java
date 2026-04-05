@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.entity.ChatUser;
+import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseCertificate;
 import com.example.demo.entity.Enrollment;
 import com.example.demo.entity.InstructorFeedback;
@@ -21,9 +23,13 @@ import com.example.demo.entity.InternshipApplication;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherProfile;
+import com.example.demo.enums.CourseStatus;
 import com.example.demo.enums.TeacherStatus;
+import com.example.demo.enums.UserType;
 import com.example.demo.repository.ApplicationRepository;
+import com.example.demo.repository.ChatUserRepository;
 import com.example.demo.repository.CourseCertificateRepository;
+import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.EnrollmentRepository;
 import com.example.demo.repository.InstructorFeedbackRepository;
 import com.example.demo.repository.StudentRepository;
@@ -55,6 +61,12 @@ public class AdminController {
 	
 	@Autowired
 	private ApplicationRepository applicationRepo;
+	
+	@Autowired
+	private ChatUserRepository chatUserRepo;
+	
+	@Autowired
+	private CourseRepository courseRepo;
 
 
 	@GetMapping("/admin-dashboard")
@@ -116,27 +128,63 @@ public class AdminController {
 	@GetMapping("/admin-instructor-view/{teacherId}")
 	public String viewInstructorAndFeedback(@PathVariable Integer teacherId, Model model, HttpSession session) {
 
-		if (session.getAttribute("adminEmail") == null) {
-			return "redirect:/admin-login";
-		}
+	    if (session.getAttribute("adminEmail") == null) {
+	        return "redirect:/admin-login";
+	    }
 
-		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
-		TeacherProfile profile = teacherProfileRepo.findByTeacherTeacherId(teacherId);
+	    Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
-		List<InstructorFeedback> feedbacks = instructorFeedbackRepo.findByTeacherTeacherId(teacherId);
+	    if (teacher == null) {
+	        return "redirect:/manage-teachers";
+	    }
 
-		double avgRating = instructorFeedbackRepo.getAverageRating(teacherId);
+	    TeacherProfile profile = teacherProfileRepo.findByTeacherTeacherId(teacherId);
 
-		Long totalRatings = instructorFeedbackRepo.getTotalRatings(teacherId);
+	    List<InstructorFeedback> feedbacks =
+	            instructorFeedbackRepo.findByTeacherTeacherId(teacherId);
 
-		model.addAttribute("teacher", teacher);
-		model.addAttribute("profile", profile);
-		model.addAttribute("feedbacks", feedbacks);
-		model.addAttribute("avgRating", avgRating);
-		model.addAttribute("totalRatings", totalRatings);
-		model.addAttribute("username", session.getAttribute("adminUsername"));
+	    double avgRating = instructorFeedbackRepo.getAverageRating(teacherId);
+	    Long totalRatings = instructorFeedbackRepo.getTotalRatings(teacherId);
 
-		return "admin-instructor-view";
+	    if (avgRating == 0) avgRating = 0.0;
+	    if (totalRatings == null) totalRatings = 0L;
+
+	    // 🔥 COURSES
+	    List<Course> courses = courseRepo.findByTeacherTeacherIdAndStatusNot(
+	            teacherId, CourseStatus.DELETED
+	    );
+
+	    if (courses == null) courses = List.of();
+
+	    long totalCourses = courses.size();
+
+	    long publishedCourses = courses.stream()
+	            .filter(c -> c.getStatus() == CourseStatus.PUBLISHED)
+	            .count();
+
+	    Map<Integer, Long> courseStudentCount = new HashMap<>();
+
+	    for (Course c : courses) {
+	        long count = (c.getEnrollments() != null)
+	                ? c.getEnrollments().size()
+	                : 0;
+
+	        courseStudentCount.put(c.getCourseId(), count);
+	    }
+
+	    model.addAttribute("teacher", teacher);
+	    model.addAttribute("profile", profile);
+	    model.addAttribute("feedbacks", feedbacks != null ? feedbacks : List.of());
+	    model.addAttribute("avgRating", avgRating);
+	    model.addAttribute("totalRatings", totalRatings);
+	    model.addAttribute("courses", courses);
+	    model.addAttribute("totalCourses", totalCourses);
+	    model.addAttribute("publishedCourses", publishedCourses);
+	    model.addAttribute("courseStudentCount", courseStudentCount);
+
+	    model.addAttribute("username", session.getAttribute("adminUsername"));
+
+	    return "admin-instructor-view";
 	}
 
 	@PostMapping("/manage-instructor/status/{id}")
@@ -243,5 +291,34 @@ public class AdminController {
 	    model.addAttribute("certificateCount", certificateCount);
 
 	    return "admin-student-dashboard";
+	}
+	
+	@GetMapping("/admin/view-profile")
+	public String viewUserProfile(@RequestParam Integer userId, Model model) {
+
+	    // 🔥 Get ChatUser
+	    ChatUser user = chatUserRepo.findById(userId).orElse(null);
+
+	    if (user == null) {
+	        return "redirect:/admin-chat";
+	    }
+
+	    // ✅ IF STUDENT
+	    if (user.getType() == UserType.STUDENT) {
+
+	        Integer studentId = user.getRefId();
+
+	        return "redirect:/admin-student-dashboard?id=" + studentId;
+	    }
+
+	    // ✅ IF TEACHER
+	    else if (user.getType() == UserType.TEACHER) {
+
+	        Integer teacherId = user.getRefId();
+
+	        return "redirect:/admin-instructor-view/" + teacherId;
+	    }
+
+	    return "redirect:/admin-chat";
 	}
 }

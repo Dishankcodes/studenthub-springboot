@@ -2,467 +2,434 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Admin | View Course</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<title>Admin | View Course</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        :root {
-            --expanded: 16.875rem;
-            --collapsed: 3.25rem;
-            --bg-primary: linear-gradient(135deg, #0b0b1f, #14142f);
-            --bg-content: #1a1a3d;
-            /* slightly lighter than topbar */
-            --accent: #3b82f6;
-            --text-light: #eaeaf0;
-            --text-muted: #9ca3af;
-            --shadow-topbar: rgba(0, 0, 0, 0.4);
-        }
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+	<style>
+		:root {
+			--expanded: 16.875rem;
+			--collapsed: 3.25rem;
+			--bg-primary: linear-gradient(135deg, #0b0b1f, #14142f);
+			--bg-content: #1a1a3d;
+			--accent: #3b82f6;
+			--text-light: #eaeaf0;
+			--text-muted: #9ca3af;
+			--shadow-topbar: rgba(0, 0, 0, 0.4);
+		}
 
-        /* ===== PAGE BACKGROUND ===== */
-        body {
-            background: var(--bg-content);
-            color: var(--text-light);
-        }
+		body {
+			background: var(--bg-content);
+			color: var(--text-light);
+		}
 
-        .feedback-title {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+		.feedback-title {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			font-size: 18px;
+			font-weight: 600;
+			color: #e5e7eb;
+		}
 
-            font-size: 18px;
-            font-weight: 600;
+		.feedback-title i {
+			color: #60a5fa;
+			font-size: 18px;
+		}
 
-            color: #e5e7eb;
-            /* 🔥 brighter white */
-        }
+		.container>.d-flex {
+			padding-bottom: 12px;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+		}
 
-        /* ICON COLOR */
-        .feedback-title i {
-            color: #60a5fa;
-            /* subtle blue highlight */
-            font-size: 18px;
-        }
+		.container h3 {
+			color: var(--text-light);
+		}
 
-        /* ===== HEADER ===== */
-        .container>.d-flex {
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
+		.btn-secondary {
+			background: #2a2a55;
+			border: none;
+		}
 
-        .container h3 {
-            color: var(--text-light);
-        }
+		.btn-secondary:hover {
+			background: #34346a;
+		}
 
-        .btn-secondary {
-            background: #2a2a55;
-            border: none;
-        }
+		.card.shadow-sm.mb-4 {
+			background: #1f1f46;
+			border: none;
+			border-radius: 16px;
+		}
 
-        .btn-secondary:hover {
-            background: #34346a;
-        }
+		.card.shadow-sm.mb-4 p {
+			color: var(--text-muted);
+		}
 
-        /* ===== COURSE INFO CARD ===== */
-        .card.shadow-sm.mb-4 {
-            background: #1f1f46;
-            border: none;
-            border-radius: 16px;
-        }
+		.badge.bg-info {
+			background: rgba(59, 130, 246, 0.2) !important;
+			color: #93c5fd;
+		}
 
-        .card.shadow-sm.mb-4 p {
-            color: var(--text-muted);
-        }
+		.badge.bg-primary {
+			background: var(--accent) !important;
+		}
 
-        /* ===== BADGES ===== */
-        .badge.bg-info {
-            background: rgba(59, 130, 246, 0.2) !important;
-            color: #93c5fd;
-        }
+		.card.mb-3.shadow-sm {
+			background: #1f1f46;
+			border: none;
+			border-radius: 14px;
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+		}
 
-        .badge.bg-primary {
-            background: var(--accent) !important;
-        }
+		.card-header.bg-dark {
+			background: var(--bg-primary) !important;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+		}
 
-        /* ===== MODULE CARD ===== */
-        .card.mb-3.shadow-sm {
-            background: #1f1f46;
-            border: none;
-            border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-        }
+		.card-body .border.rounded {
+			background: #2a2a5c;
+			border: none !important;
+			border-radius: 10px;
+		}
 
-        /* ===== MODULE HEADER ===== */
-        .card-header.bg-dark {
-            background: var(--bg-primary) !important;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
+		.card-body h6 {
+			color: var(--text-light);
+		}
 
-        /* ===== LESSON BLOCK ===== */
-        .card-body .border.rounded {
-            background: #2a2a5c;
-            border: none !important;
-            border-radius: 10px;
-        }
+		.list-group-item {
+			background: transparent;
+			color: var(--text-muted);
+			border-color: rgba(255, 255, 255, 0.06);
+		}
 
-        /* ===== LESSON TITLE ===== */
-        .card-body h6 {
-            color: var(--text-light);
-        }
+		.list-group-item i {
+			color: var(--accent);
+		}
 
-        /* ===== QUIZ SECTION ===== */
-        .list-group-item {
-            background: transparent;
-            color: var(--text-muted);
-            border-color: rgba(255, 255, 255, 0.06);
-        }
+		.alert-warning {
+			background: rgba(251, 191, 36, 0.15);
+			border: none;
+			color: #fde68a;
+		}
 
-        .list-group-item i {
-            color: var(--accent);
-        }
+		.text-muted {
+			color: var(--text-muted) !important;
+		}
 
-        /* ===== EMPTY STATES ===== */
-        .alert-warning {
-            background: rgba(251, 191, 36, 0.15);
-            border: none;
-            color: #fde68a;
-        }
+		.instructor-link {
+			color: #93c5fd;
+			font-weight: 600;
+			text-decoration: none;
+			transition: 0.2s;
+		}
 
-        .text-muted {
-            color: var(--text-muted) !important;
-        }
+		.instructor-link:hover {
+			color: #e0f2fe;
+			text-decoration: underline;
+		}
 
-        .instructor-link {
-            color: #93c5fd;
-            font-weight: 600;
-            text-decoration: none;
-            transition: 0.2s;
-        }
+		.rating-stars {
+			color: #facc15;
+			margin-right: 4px;
+		}
 
-        .instructor-link:hover {
-            color: #e0f2fe;
-            text-decoration: underline;
-        }
+		.feedback-card {
+			background: #1f1f46;
+			border-radius: 12px;
+			padding: 16px;
+			border: 1px solid rgba(255, 255, 255, 0.06);
+			transition: 0.2s;
+		}
 
-        .rating-stars {
-            color: #facc15;
-            margin-right: 4px;
-        }
+		.feedback-card:hover {
+			background: #26265a;
+		}
 
-        .feedback-card {
-            background: #1f1f46;
-            border-radius: 12px;
-            padding: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: 0.2s;
-        }
 
-        .feedback-card:hover {
-            background: #26265a;
-        }
+		.course-meta {
+			display: flex;
+			gap: 8px;
+			align-items: center;
+			flex-wrap: wrap;
+		}
 
-        /* =====================
-   TYPE / PRICE PILLS
-===================== */
+		.card.mb-3.shadow-sm {
+			background: #1f1f46;
+			border-radius: 14px;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			transition: 0.2s;
+		}
 
-        .course-meta {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
+		.card.mb-3.shadow-sm:hover {
+			transform: translateY(-3px);
+		}
 
-        .card.mb-3.shadow-sm {
-            background: #1f1f46;
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: 0.2s;
-        }
+		.card-body .border.rounded {
+			background: #2a2a5c;
+			border-radius: 10px;
+			padding: 14px;
+			transition: 0.2s;
+		}
 
-        .card.mb-3.shadow-sm:hover {
-            transform: translateY(-3px);
-        }
+		.card-body .border.rounded:hover {
+			background: #32326b;
+		}
 
-        .card-body .border.rounded {
-            background: #2a2a5c;
-            border-radius: 10px;
-            padding: 14px;
-            transition: 0.2s;
-        }
+		.type-pill {
+			background: rgba(59, 130, 246, 0.2);
+			color: #93c5fd;
+			padding: 5px 12px;
+			border-radius: 20px;
+			font-size: 13px;
+			font-weight: 600;
+		}
 
-        .card-body .border.rounded:hover {
-            background: #32326b;
-        }
+		.price-pill {
+			background: rgba(34, 197, 94, 0.15);
+			color: #4ade80;
+			padding: 5px 12px;
+			border-radius: 20px;
+			font-size: 13px;
+			font-weight: 600;
+		}
 
-        .type-pill {
-            background: rgba(59, 130, 246, 0.2);
-            color: #93c5fd;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-        }
 
-        .price-pill {
-            background: rgba(34, 197, 94, 0.15);
-            color: #4ade80;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-        }
+		.rating-pill {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			background: rgba(250, 204, 21, 0.15);
+			color: #facc15;
+			padding: 6px 12px;
+			border-radius: 20px;
+			font-weight: 600;
+			font-size: 14px;
+		}
 
-        /* =====================
-   COURSE RATING
-===================== */
+		.rating-pill i {
+			color: #facc15;
+		}
 
-        .rating-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(250, 204, 21, 0.15);
-            color: #facc15;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
-        }
+		.rating-count {
+			color: #9ca3af;
+			font-weight: 400;
+			margin-left: 4px;
+		}
 
-        .rating-pill i {
-            color: #facc15;
-        }
 
-        .rating-count {
-            color: #9ca3af;
-            font-weight: 400;
-            margin-left: 4px;
-        }
+		.card.shadow-sm.mb-4 h4 {
+			color: var(--text-light);
+			font-size: 1.4rem;
+			letter-spacing: 0.3px;
+		}
 
-        /* ===== COURSE TITLE FIX ===== */
+		.view-profile-text {
+			font-size: 12px;
+			color: #9ca3af;
+			margin-left: 6px;
+			font-weight: 400;
+		}
 
-        .card.shadow-sm.mb-4 h4 {
-            color: var(--text-light);
-            font-size: 1.4rem;
-            letter-spacing: 0.3px;
-        }
+		.instructor-link:hover .view-profile-text {
+			color: #e0f2fe;
+		}
 
-        .view-profile-text {
-            font-size: 12px;
-            color: #9ca3af;
-            margin-left: 6px;
-            font-weight: 400;
-        }
+		.card.shadow-sm.mb-4 {
+			background: #1f1f46;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			border-radius: 16px;
+			padding: 4px;
+			transition: 0.25s;
+		}
 
-        .instructor-link:hover .view-profile-text {
-            color: #e0f2fe;
-        }
+		.card.shadow-sm.mb-4:hover {
+			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+		}
 
-        .card.shadow-sm.mb-4 {
-            background: #1f1f46;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
-            padding: 4px;
-            transition: 0.25s;
-        }
+		.card.shadow-sm.mb-4 h4 {
+			font-size: 1.5rem;
+			font-weight: 600;
+			margin-bottom: 6px;
+		}
 
-        .card.shadow-sm.mb-4:hover {
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-        }
+		.feedback-card {
+			background: #1f1f46;
+			border-radius: 12px;
+			padding: 14px;
+			border: 1px solid rgba(255, 255, 255, 0.05);
+			transition: 0.2s;
+		}
 
-        .card.shadow-sm.mb-4 h4 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 6px;
-        }
+		.feedback-card:hover {
+			background: #26265a;
+			transform: translateY(-2px);
+		}
 
-        .feedback-card {
-            background: #1f1f46;
-            border-radius: 12px;
-            padding: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: 0.2s;
-        }
+		.btn-secondary {
+			padding: 6px 12px;
+			font-size: 13px;
+		}
 
-        .feedback-card:hover {
-            background: #26265a;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            padding: 6px 12px;
-            font-size: 13px;
-        }
-
-        .container {
-            max-width: 1100px;
-        }
-    </style>
+		.container {
+			max-width: 1100px;
+		}
+	</style>
 </head>
 
 <body class="bg-dark">
 
-    <div class="container my-4">
+	<div class="container my-4">
 
-        <!-- ===== HEADER ===== -->
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="fw-bold">
-                <i class="bi bi-book"></i>
-                Course Overview
-            </h3>
+		<div class="d-flex justify-content-between align-items-center mb-3">
+			<h3 class="fw-bold">
+				<i class="bi bi-book"></i>
+				Course Overview
+			</h3>
 
-            <a href="/manage-courses" class="btn btn-secondary btn-sm">
-                <i class="bi bi-arrow-left"></i> Back
-            </a>
-        </div>
+			<a href="/manage-courses" class="btn btn-secondary btn-sm">
+				<i class="bi bi-arrow-left"></i> Back
+			</a>
+		</div>
 
-        <!-- ===== COURSE INFO ===== -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
+		<div class="card shadow-sm mb-4">
+			<div class="card-body">
 
-                <!-- Course Title -->
-                <h4 class="fw-bold mb-2" th:text="${course.title}">
-                    Course Title
-                </h4>
+				<h4 class="fw-bold mb-2" th:text="${course.title}">
+					Course Title
+				</h4>
 
-                <p class="mb-1 text-muted">
-                    Instructor:
-                    <a th:if="${course.teacher != null}"
-                        th:href="@{/admin-instructor-view/{id}(id=${course.teacher.teacherId})}"
-                        class="instructor-link">
+				<p class="mb-1 text-muted">
+					Instructor:
+					<a th:if="${course.teacher != null}"
+						th:href="@{/admin-instructor-view/{id}(id=${course.teacher.teacherId})}"
+						class="instructor-link">
 
-                        <span th:text="${course.teacher.firstname + ' ' + course.teacher.lastname}"></span>
+						<span th:text="${course.teacher.firstname + ' ' + course.teacher.lastname}"></span>
 
-                    </a>
+					</a>
 
-                    <span th:if="${course.teacher == null}">
-                        Not Assigned
-                    </span>
-                </p>
+					<span th:if="${course.teacher == null}">
+						Not Assigned
+					</span>
+				</p>
 
-                <p>
-                    <strong>Instructor Rating:</strong>
-                    <span class="rating-stars">
-                        <i class="bi bi-star-fill"></i>
-                    </span>
-                    <span th:text="${#numbers.formatDecimal(avgInstructorRating,1,1)}"></span>
-                    (<span th:text="${totalInstructorReviews}"></span> reviews)
-                </p>
+				<p>
+					<strong>Instructor Rating:</strong>
+					<span class="rating-stars">
+						<i class="bi bi-star-fill"></i>
+					</span>
+					<span th:text="${#numbers.formatDecimal(avgInstructorRating,1,1)}"></span>
+					(<span th:text="${totalInstructorReviews}"></span> reviews)
+				</p>
 
-                <!-- Status -->
-                <p class="mb-1">
-                    Status:
-                    <span class="badge bg-info text-dark" th:text="${course.status}">
-                        ACTIVE
-                    </span>
-                </p>
+				<p class="mb-1">
+					Status:
+					<span class="badge bg-info text-dark" th:text="${course.status}">
+						ACTIVE
+					</span>
+				</p>
 
-                <!-- Type & Price -->
-                <div class="course-meta mt-2">
+				<div class="course-meta mt-2">
 
-                    <span class="pill type-pill" th:text="${course.type}">
-                        FREE
-                    </span>
+					<span class="pill type-pill" th:text="${course.type}">
+						FREE
+					</span>
 
-                    <span class="price-pill" th:if="${course.type != null and course.type.name() == 'PAID'}">
+					<span class="price-pill" th:if="${course.type != null and course.type.name() == 'PAID'}">
 
-                        ₹ <span th:text="${course.price}">0</span>
+						₹ <span th:text="${course.price}">0</span>
 
-                    </span>
-                </div>
+					</span>
+				</div>
 
-                <div class="rating-pill mt-2">
+				<div class="rating-pill mt-2">
 
-                    <i class="bi bi-star-fill"></i>
+					<i class="bi bi-star-fill"></i>
 
-                    <span th:text="${#numbers.formatDecimal(avgRating,1,1)}"></span>
+					<span th:text="${#numbers.formatDecimal(avgRating,1,1)}"></span>
 
-                    <span class="rating-count">
-                        (<span th:text="${reviewCount}"></span> reviews)
-                    </span>
+					<span class="rating-count">
+						(<span th:text="${reviewCount}"></span> reviews)
+					</span>
 
-                </div>
+				</div>
+			</div>
+		</div>
 
-            </div>
-        </div>
+		<div th:if="${course.modules == null or #lists.isEmpty(course.modules)}" class="alert alert-warning">
+			No modules added to this course.
+		</div>
 
-        <div th:if="${course.modules == null or #lists.isEmpty(course.modules)}" class="alert alert-warning">
-            No modules added to this course.
-        </div>
-        
-        <div th:each="module, mStat : ${course.modules}" class="card mb-3 shadow-sm">
+		<div th:each="module, mStat : ${course.modules}" class="card mb-3 shadow-sm">
 
-            <div class="card-header bg-dark text-white">
-                <strong>
-                    Module <span th:text="${mStat.index + 1}">1</span>:
-                    <span th:text="${module.title}">Module Title</span>
-                </strong>
-            </div>
+			<div class="card-header bg-dark text-white">
+				<strong>
+					Module <span th:text="${mStat.index + 1}">1</span>:
+					<span th:text="${module.title}">Module Title</span>
+				</strong>
+			</div>
 
-            <div class="card-body">
+			<div class="card-body">
 
-                <div th:if="${module.lessons == null or #lists.isEmpty(module.lessons)}" class="text-muted">
-                    No lessons in this module.
-                </div>
-                
-                <div th:each="lesson, lStat : ${module.lessons}" class="border rounded p-3 mb-3">
-                    <h6 class="fw-semibold mb-2">
-                        Lesson <span th:text="${lStat.index + 1}">1</span>:
-                        <span th:text="${lesson.title}">Lesson Title</span>
-                    </h6>
-                    <div th:if="${lesson.quiz != null}" class="list-group list-group-flush mt-2">
+				<div th:if="${module.lessons == null or #lists.isEmpty(module.lessons)}" class="text-muted">
+					No lessons in this module.
+				</div>
 
-                        <div class="list-group-item">
-                            <i class="bi bi-question-circle"></i>
-                            Quiz:
-                        </div>
-                    </div>
-                </div>
-            </div>
+				<div th:each="lesson, lStat : ${module.lessons}" class="border rounded p-3 mb-3">
+					<h6 class="fw-semibold mb-2">
+						Lesson <span th:text="${lStat.index + 1}">1</span>:
+						<span th:text="${lesson.title}">Lesson Title</span>
+					</h6>
+					<div th:if="${lesson.quiz != null}" class="list-group list-group-flush mt-2">
 
-        </div>
-        <!-- ===== COURSE FEEDBACK ===== -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-                <h5 class="feedback-title">
-                    <i class="bi bi-chat-dots"></i>
-                    Course Feedback
+						<div class="list-group-item">
+							<i class="bi bi-question-circle"></i>
+							Quiz:
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-                    <span class="rating-pill ms-2">
-                        <i class="bi bi-star-fill"></i>
-                        <span th:text="${#numbers.formatDecimal(avgRating,1,1)}"></span>
-                    </span>
+		<div class="card shadow-sm mb-4">
+			<div class="card-body">
+				<h5 class="feedback-title">
+					<i class="bi bi-chat-dots"></i>
+					Course Feedback
 
-                    <span class="review-count">
-                        (<span th:text="${reviewCount}"></span> reviews)
-                    </span>
-                </h5>
+					<span class="rating-pill ms-2">
+						<i class="bi bi-star-fill"></i>
+						<span th:text="${#numbers.formatDecimal(avgRating,1,1)}"></span>
+					</span>
 
-                <div th:if="${feedbacks.isEmpty()}" class="text-muted mt-2">
-                    No student feedback yet.
-                </div>
+					<span class="review-count">
+						(<span th:text="${reviewCount}"></span> reviews)
+					</span>
+				</h5>
 
-                <div th:each="f : ${feedbacks}" class="feedback-card mt-3">
-                    <div>
-                        <span class="rating-stars">
-                            <i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1,f.rating)}"></i>
-                        </span>
-                    </div>
+				<div th:if="${feedbacks.isEmpty()}" class="text-muted mt-2">
+					No student feedback yet.
+				</div>
 
-                    <p class="mb-1" th:text="${f.comment}"></p>
+				<div th:each="f : ${feedbacks}" class="feedback-card mt-3">
+					<div>
+						<span class="rating-stars">
+							<i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1,f.rating)}"></i>
+						</span>
+					</div>
 
-                    <small class="text-muted">
-                        — <span th:text="${f.student.fullname}"></span>
-                    </small>
-                </div>
-            </div>
-        </div>
-    </div>
+					<p class="mb-1" th:text="${f.comment}"></p>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+					<small class="text-muted">
+						— <span th:text="${f.student.fullname}"></span>
+					</small>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

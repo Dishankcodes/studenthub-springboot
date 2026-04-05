@@ -322,12 +322,14 @@
 								<a th:href="@{/admin-chat(userId=${user.id})}"
 									style="display:flex; gap:10px; text-decoration:none; color:inherit; width:100%;">
 
-									<img th:src="${imageMap[user.id] != null ? imageMap[user.id] : '/images/default.jpg'}">
+									<img
+										th:src="${imageMap[user.id] != null ? imageMap[user.id] : '/images/default.jpg'}">
 
 									<div class="info">
 										<div class="name">
 
-											<span th:text="${nameMap[user.id] != null ? nameMap[user.id] : 'Unknown'}"></span>
+											<span
+												th:text="${nameMap[user.id] != null ? nameMap[user.id] : 'Unknown'}"></span>
 
 											<!-- ICONS -->
 											<i th:if="${user.type.name() == 'TEACHER'}" class="bi bi-person-badge"
@@ -355,15 +357,17 @@
 						<div class="chat-window">
 
 							<!-- HEADER -->
-							<div th:if="${selectedUser != null}" class="chat-header">
-
+							<a th:if="${selectedUser != null}"
+								th:href="@{/admin/view-profile(userId=${selectedUser.id})}" class="chat-header"
+								style="text-decoration:none; color:inherit; cursor:pointer;">
 								<img th:src="${selectedImage != null ? selectedImage : '/images/default.jpg'}">
 
 								<div class="chat-header-info">
-									<div class="chat-name" th:text="${selectedName != null ? selectedName : 'Unknown'}"></div>
+									<div class="chat-name" th:text="${selectedName != null ? selectedName : 'Unknown'}">
+									</div>
 									<div class="chat-status" th:text="${selectedUser.type}"></div>
 								</div>
-							</div>
+							</a>
 
 							<div th:if="${selectedUser == null}" class="chat-header">
 								<div class="chat-name">Select a user to start chatting</div>
