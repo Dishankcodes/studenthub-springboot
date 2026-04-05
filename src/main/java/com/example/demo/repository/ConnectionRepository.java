@@ -26,4 +26,6 @@ public interface ConnectionRepository extends JpaRepository<Connection, Integer>
 	List<Connection> findByReceiverIdAndStatus(Integer receiverId, ConnectionStatus status);
 
 	List<Connection> findBySenderIdAndStatus(Integer senderId, ConnectionStatus status);
+
+	Long countByReceiverIdAndStatus(Integer id, ConnectionStatus pending);
 }

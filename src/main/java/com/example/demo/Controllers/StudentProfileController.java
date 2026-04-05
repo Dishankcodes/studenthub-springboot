@@ -6,7 +6,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,12 +22,17 @@ import com.example.demo.entity.ChatUser;
 import com.example.demo.entity.Connection;
 import com.example.demo.entity.InternshipApplication;
 import com.example.demo.entity.Student;
+import com.example.demo.entity.Teacher;
+import com.example.demo.entity.TeacherProfile;
 import com.example.demo.enums.ApplicationStatus;
 import com.example.demo.enums.ConnectionStatus;
+import com.example.demo.enums.UserType;
 import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.ChatUserRepository;
 import com.example.demo.repository.ConnectionRepository;
 import com.example.demo.repository.StudentRepository;
+import com.example.demo.repository.TeacherProfileRepo;
+import com.example.demo.repository.TeacherRepository;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -45,6 +52,12 @@ public class StudentProfileController {
 	
 	@Autowired
 	private ChatUserRepository chatUserRepo;
+	
+	@Autowired
+	private TeacherRepository teacherRepo;
+
+	@Autowired
+	private TeacherProfileRepo teacherProfileRepo;
 
 	@GetMapping("/student-profile")
 	public String studentProfile(HttpSession session, Model model, @RequestParam(required = false) Boolean edit) {
@@ -81,7 +94,34 @@ public class StudentProfileController {
 		        list.add(other);
 		    }
 		}
+		
+		Map<Integer, String> nameMap = new HashMap<>();
+		Map<Integer, String> imageMap = new HashMap<>();
 
+		for (ChatUser u : list) {
+
+		    if (u.getType() == UserType.STUDENT) {
+		        Student s = studentRepo.findById(u.getRefId()).orElse(null);
+		        if (s != null) {
+		            nameMap.put(u.getId(), s.getFullname());
+		            imageMap.put(u.getId(), s.getProfileImage());
+		        }
+		    }
+
+		    else if (u.getType() == UserType.TEACHER) {
+		        Teacher t = teacherRepo.findById(u.getRefId()).orElse(null);
+		        if (t != null) {
+		            nameMap.put(u.getId(), t.getFirstname() + " " + t.getLastname());
+
+		            TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(u.getRefId());
+		            if (p != null)
+		                imageMap.put(u.getId(), p.getProfileImage());
+		        }
+		    }
+		}
+
+		model.addAttribute("nameMap", nameMap);
+		model.addAttribute("imageMap", imageMap);
 		model.addAttribute("connections", list);
 		model.addAttribute("completedInternships", completedInternships);
 		model.addAttribute("student", student);

@@ -4,7 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
+import com.example.demo.entity.ChatUser;
 import com.example.demo.entity.Student;
+import com.example.demo.enums.ConnectionStatus;
+import com.example.demo.enums.UserType;
+import com.example.demo.repository.ChatUserRepository;
+import com.example.demo.repository.ConnectionRepository;
 import com.example.demo.repository.StudentRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -14,6 +19,13 @@ public class StudentGlobalModel {
 
 	@Autowired
 	private StudentRepository studentRepo;
+	
+	@Autowired
+	private ChatUserRepository chatUserRepo;
+	
+	@Autowired
+	private ConnectionRepository connectionRepo;
+	
 
 	@ModelAttribute("loggedStudent")
 	public Student loggedStudent(HttpSession session) {
@@ -23,5 +35,22 @@ public class StudentGlobalModel {
 			return null;
 
 		return studentRepo.findById(studentId).orElse(null);
+	}
+	
+	@ModelAttribute("notifCount")
+	public Long notificationCount(HttpSession session) {
+
+		Integer studentId = (Integer) session.getAttribute("studentId");
+		if (studentId == null)
+			return 0L;
+
+		ChatUser me = chatUserRepo.findByRefIdAndType(studentId, UserType.STUDENT).orElse(null);
+		if (me == null)
+			return 0L;
+
+		return connectionRepo.countByReceiverIdAndStatus(
+				me.getId(),
+				ConnectionStatus.PENDING
+		);
 	}
 }

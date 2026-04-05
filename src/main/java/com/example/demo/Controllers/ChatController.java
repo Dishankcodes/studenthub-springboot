@@ -41,12 +41,16 @@ public class ChatController {
 
 	@Autowired
 	private ChatUserRepository chatUserRepo;
+	
 	@Autowired
 	private ChatRoomRepository chatRoomRepo;
+	
 	@Autowired
 	private ChatMessageRepository messageRepo;
+	
 	@Autowired
 	private ConnectionRepository connectionRepo;
+	
 	@Autowired
 	private EnrollmentRepository enrollmentRepo;
 
@@ -159,6 +163,16 @@ public class ChatController {
 		model.addAttribute("roomId", roomId);
 		model.addAttribute("canChat", canChat);
 
+		if (roomId != null) {
+            for (ChatMessage msg : messages) {
+                if (!msg.isSeen() && !msg.getSender().getId().equals(me.getId())) {
+                    msg.setSeen(true);
+                }
+            }
+            messageRepo.saveAll(messages);
+        }
+
+		
 		Map<Integer, Long> unreadMap = new HashMap<>();
 
 		for (ChatUser u : users) {
@@ -202,16 +216,13 @@ public class ChatController {
 
 		model.addAttribute("lastMessageMap", lastMessageMap);
 		model.addAttribute("timeMap", timeMap);
-
 		model.addAttribute("unreadMap", unreadMap);
 		model.addAttribute("users", users);
-
 		session.setAttribute("chatUserId", me.getId());
 
 		return "student-chat";
 	}
 
-	// ================= SEND MESSAGE =================
 	@PostMapping("/student/send")
 	public String send(@RequestParam Integer roomId, @RequestParam String content, HttpSession session) {
 
@@ -238,7 +249,6 @@ public class ChatController {
 		return "redirect:/student-chat?userId=" + otherId;
 	}
 
-	// ================= FOLLOW =================
 	@PostMapping("/chat/follow")
 	public String follow(@RequestParam Integer receiverId, HttpSession session) {
 
@@ -261,7 +271,6 @@ public class ChatController {
 		return "redirect:/student-chat";
 	}
 
-	// ================= HELPERS =================
 	private ChatUser getOrCreate(Integer refId, UserType type) {
 
 		return chatUserRepo.findByRefIdAndType(refId, type).orElseGet(() -> {
@@ -288,12 +297,10 @@ public class ChatController {
 
 	private boolean isAllowed(ChatUser me, ChatUser other) {
 
-		// ✅ ALLOW ADMIN CHAT ALWAYS
 		if (other.getType() == UserType.ADMIN) {
 			return true;
 		}
 
-		// ✅ STUDENT → TEACHER (only if enrolled)
 		if (other.getType() == UserType.TEACHER) {
 			return enrollmentRepo.existsByStudentStudidAndCourseCourseId(me.getRefId(), other.getRefId());
 		}

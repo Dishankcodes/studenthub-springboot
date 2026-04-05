@@ -160,6 +160,16 @@ public class AdminChatController {
 		        timeMap.put(u.getId(), "");
 		    }
 		}
+
+		if (roomId != null) {
+            for (ChatMessage msg : messages) {
+                if (!msg.isSeen() && !msg.getSender().getId().equals(me.getId())) {
+                    msg.setSeen(true);
+                }
+            }
+            messageRepo.saveAll(messages);
+        }
+
 		Map<Integer, Long> unreadMap = new HashMap<>();
 
 		for (ChatUser u : users) {

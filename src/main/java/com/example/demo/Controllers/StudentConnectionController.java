@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.entity.ChatUser;
 import com.example.demo.entity.Connection;
@@ -189,6 +190,57 @@ public class StudentConnectionController {
 		// 🔹 Sent requests
 		List<Connection> sent = connectionRepo.findBySenderIdAndStatus(me.getId(), ConnectionStatus.PENDING);
 
+		Map<Integer, String> nameMap = new HashMap<>();
+		Map<Integer, String> imageMap = new HashMap<>();
+
+		// for received
+		for (Connection c : received) {
+
+		    ChatUser u = c.getSender();
+
+		    if (u.getType() == UserType.STUDENT) {
+		        Student s = studentRepo.findById(u.getRefId()).orElse(null);
+		        if (s != null) {
+		            nameMap.put(u.getId(), s.getFullname());
+		            imageMap.put(u.getId(), s.getProfileImage());
+		        }
+		    } else {
+		        Teacher t = teacherRepo.findById(u.getRefId()).orElse(null);
+		        if (t != null) {
+		            nameMap.put(u.getId(), t.getFirstname() + " " + t.getLastname());
+
+		            TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(u.getRefId());
+		            if (p != null)
+		                imageMap.put(u.getId(), p.getProfileImage());
+		        }
+		    }
+		}
+
+		// for sent
+		for (Connection c : sent) {
+
+		    ChatUser u = c.getReceiver();
+
+		    if (u.getType() == UserType.STUDENT) {
+		        Student s = studentRepo.findById(u.getRefId()).orElse(null);
+		        if (s != null) {
+		            nameMap.put(u.getId(), s.getFullname());
+		            imageMap.put(u.getId(), s.getProfileImage());
+		        }
+		    } else {
+		        Teacher t = teacherRepo.findById(u.getRefId()).orElse(null);
+		        if (t != null) {
+		            nameMap.put(u.getId(), t.getFirstname() + " " + t.getLastname());
+
+		            TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(u.getRefId());
+		            if (p != null)
+		                imageMap.put(u.getId(), p.getProfileImage());
+		        }
+		    }
+		}
+
+		model.addAttribute("nameMap", nameMap);
+		model.addAttribute("imageMap", imageMap);
 		model.addAttribute("receivedRequests", received);
 		model.addAttribute("sentRequests", sent);
 
@@ -256,6 +308,51 @@ public class StudentConnectionController {
 
 			return chatUserRepo.save(u);
 		});
+	}
+	
+	@GetMapping("/student-search-ajax")
+	@ResponseBody
+	public List<Map<String, Object>> searchAjax(@RequestParam String keyword, HttpSession session) {
+	    Integer studentId = (Integer) session.getAttribute("studentId");
+	    if (studentId == null) return new ArrayList<>();
+
+	    ChatUser me = getOrCreate(studentId, UserType.STUDENT);
+	    List<Map<String, Object>> results = new ArrayList<>();
+
+	    List<Student> students = studentRepo.findByFullnameContainingIgnoreCase(keyword);
+	    for (Student s : students) {
+	        if (s.getStudid().equals(studentId)) continue;
+
+	        ChatUser u = getOrCreate(s.getStudid(), UserType.STUDENT);
+
+	        Map<String, Object> map = new HashMap<>();
+	        map.put("id", u.getId());
+	        map.put("name", s.getFullname());
+	        map.put("type", "STUDENT");
+	        map.put("image", s.getProfileImage());
+	        map.put("status", getConnectionStatus(me, u));
+
+	        results.add(map);
+	    }
+
+	    List<Teacher> teachers = teacherRepo
+	            .findByFirstnameContainingIgnoreCaseOrLastnameContainingIgnoreCase(keyword, keyword);
+
+	    for (Teacher t : teachers) {
+	        ChatUser u = getOrCreate(t.getTeacherId(), UserType.TEACHER);
+	        TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(t.getTeacherId());
+
+	        Map<String, Object> map = new HashMap<>();
+	        map.put("id", u.getId());
+	        map.put("name", t.getFirstname() + " " + t.getLastname());
+	        map.put("type", "TEACHER");
+	        map.put("image", p != null ? p.getProfileImage() : null);
+	        map.put("status", getConnectionStatus(me, u));
+
+	        results.add(map);
+	    }
+
+	    return results;
 	}
 
 }
