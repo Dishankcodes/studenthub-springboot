@@ -12,4 +12,6 @@ public interface ChatUserRepository extends JpaRepository<ChatUser, Integer> {
 
     Optional<ChatUser> findByRefIdAndType(Integer refId, UserType type);
 //    List<ChatUser> findByNameContainingIgnoreCase(String name);
+    
+    
 }

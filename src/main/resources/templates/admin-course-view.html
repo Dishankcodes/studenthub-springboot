@@ -8,182 +8,72 @@
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+		rel="stylesheet">
 	<style>
-		:root {
-			--expanded: 16.875rem;
-			--collapsed: 3.25rem;
-			--bg-primary: linear-gradient(135deg, #0b0b1f, #14142f);
-			--bg-content: #1a1a3d;
-			--accent: #3b82f6;
-			--text-light: #eaeaf0;
-			--text-muted: #9ca3af;
-			--shadow-topbar: rgba(0, 0, 0, 0.4);
-		}
-
 		body {
-			background: var(--bg-content);
-			color: var(--text-light);
-		}
-
-		.feedback-title {
-			display: flex;
-			align-items: center;
-			gap: 8px;
-			font-size: 18px;
-			font-weight: 600;
+			margin: 0;
+			background: linear-gradient(135deg, #0b0b1f, #14142f);
+			font-family: 'Poppins', sans-serif;
 			color: #e5e7eb;
 		}
 
-		.feedback-title i {
-			color: #60a5fa;
-			font-size: 18px;
-		}
-
-		.container>.d-flex {
-			padding-bottom: 12px;
-			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-		}
-
-		.container h3 {
-			color: var(--text-light);
-		}
-
-		.btn-secondary {
-			background: #2a2a55;
-			border: none;
-		}
-
-		.btn-secondary:hover {
-			background: #34346a;
-		}
-
-		.card.shadow-sm.mb-4 {
-			background: #1f1f46;
-			border: none;
-			border-radius: 16px;
-		}
-
-		.card.shadow-sm.mb-4 p {
-			color: var(--text-muted);
-		}
-
-		.badge.bg-info {
-			background: rgba(59, 130, 246, 0.2) !important;
-			color: #93c5fd;
-		}
-
-		.badge.bg-primary {
-			background: var(--accent) !important;
-		}
-
-		.card.mb-3.shadow-sm {
-			background: #1f1f46;
-			border: none;
-			border-radius: 14px;
-			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-		}
-
-		.card-header.bg-dark {
-			background: var(--bg-primary) !important;
-			border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-		}
-
-		.card-body .border.rounded {
-			background: #2a2a5c;
-			border: none !important;
-			border-radius: 10px;
-		}
-
-		.card-body h6 {
-			color: var(--text-light);
-		}
-
-		.list-group-item {
-			background: transparent;
-			color: var(--text-muted);
-			border-color: rgba(255, 255, 255, 0.06);
-		}
-
-		.list-group-item i {
-			color: var(--accent);
-		}
-
-		.alert-warning {
-			background: rgba(251, 191, 36, 0.15);
-			border: none;
-			color: #fde68a;
-		}
-
-		.text-muted {
-			color: var(--text-muted) !important;
-		}
-
-		.instructor-link {
-			color: #93c5fd;
-			font-weight: 600;
-			text-decoration: none;
-			transition: 0.2s;
-		}
-
-		.instructor-link:hover {
-			color: #e0f2fe;
-			text-decoration: underline;
-		}
-
-		.rating-stars {
-			color: #facc15;
-			margin-right: 4px;
-		}
-
-		.feedback-card {
-			background: #1f1f46;
-			border-radius: 12px;
-			padding: 16px;
-			border: 1px solid rgba(255, 255, 255, 0.06);
-			transition: 0.2s;
-		}
-
-		.feedback-card:hover {
-			background: #26265a;
-		}
-
-
-		.course-meta {
+		/* ===== HEADER ===== */
+		.page-header {
 			display: flex;
-			gap: 8px;
+			justify-content: space-between;
 			align-items: center;
-			flex-wrap: wrap;
+			margin-bottom: 20px;
 		}
 
-		.card.mb-3.shadow-sm {
-			background: #1f1f46;
-			border-radius: 14px;
-			border: 1px solid rgba(255, 255, 255, 0.05);
-			transition: 0.2s;
+		.page-title {
+			font-size: 22px;
+			font-weight: 600;
 		}
 
-		.card.mb-3.shadow-sm:hover {
-			transform: translateY(-3px);
-		}
-
-		.card-body .border.rounded {
-			background: #2a2a5c;
+		/* ===== BUTTON ===== */
+		.btn-back {
+			background: rgba(255, 255, 255, 0.05);
 			border-radius: 10px;
-			padding: 14px;
+			padding: 8px 14px;
+			font-size: 13px;
+			color: #fff;
+			border: none;
 			transition: 0.2s;
 		}
 
-		.card-body .border.rounded:hover {
-			background: #32326b;
+		.btn-back:hover {
+			background: #6366f1;
 		}
 
+		/* ===== GLASS CARD ===== */
+		.glass-card {
+			background: rgba(255, 255, 255, 0.05);
+			border-radius: 16px;
+			padding: 18px;
+			backdrop-filter: blur(10px);
+			border: 1px solid rgba(255, 255, 255, 0.06);
+			transition: 0.25s;
+		}
+
+		.glass-card:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+		}
+
+		/* ===== COURSE TITLE ===== */
+		.course-title {
+			font-size: 22px;
+			font-weight: 600;
+		}
+
+		/* ===== PILLS ===== */
 		.type-pill {
 			background: rgba(59, 130, 246, 0.2);
 			color: #93c5fd;
 			padding: 5px 12px;
 			border-radius: 20px;
-			font-size: 13px;
-			font-weight: 600;
+			font-size: 12px;
 		}
 
 		.price-pill {
@@ -191,10 +81,8 @@
 			color: #4ade80;
 			padding: 5px 12px;
 			border-radius: 20px;
-			font-size: 13px;
-			font-weight: 600;
+			font-size: 12px;
 		}
-
 
 		.rating-pill {
 			display: inline-flex;
@@ -204,76 +92,222 @@
 			color: #facc15;
 			padding: 6px 12px;
 			border-radius: 20px;
-			font-weight: 600;
-			font-size: 14px;
+			font-size: 13px;
 		}
 
-		.rating-pill i {
-			color: #facc15;
-		}
-
-		.rating-count {
-			color: #9ca3af;
-			font-weight: 400;
-			margin-left: 4px;
-		}
-
-
-		.card.shadow-sm.mb-4 h4 {
-			color: var(--text-light);
-			font-size: 1.4rem;
-			letter-spacing: 0.3px;
-		}
-
-		.view-profile-text {
-			font-size: 12px;
-			color: #9ca3af;
-			margin-left: 6px;
-			font-weight: 400;
-		}
-
-		.instructor-link:hover .view-profile-text {
-			color: #e0f2fe;
-		}
-
-		.card.shadow-sm.mb-4 {
-			background: #1f1f46;
+		/* ===== MODULE CARD ===== */
+		.module-card {
+			background: rgba(255, 255, 255, 0.04);
+			border-radius: 14px;
+			padding: 14px;
+			margin-bottom: 15px;
 			border: 1px solid rgba(255, 255, 255, 0.05);
-			border-radius: 16px;
-			padding: 4px;
-			transition: 0.25s;
 		}
 
-		.card.shadow-sm.mb-4:hover {
-			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+		/* ===== LESSON CARD ===== */
+		.lesson-card {
+			background: rgba(255, 255, 255, 0.05);
+			border-radius: 10px;
+			padding: 12px;
+			margin-top: 10px;
+			transition: 0.2s;
 		}
 
-		.card.shadow-sm.mb-4 h4 {
-			font-size: 1.5rem;
-			font-weight: 600;
-			margin-bottom: 6px;
+		.lesson-card:hover {
+			background: rgba(255, 255, 255, 0.08);
 		}
 
+		/* ===== FEEDBACK ===== */
 		.feedback-card {
-			background: #1f1f46;
+			background: rgba(255, 255, 255, 0.05);
 			border-radius: 12px;
 			padding: 14px;
+			margin-top: 12px;
 			border: 1px solid rgba(255, 255, 255, 0.05);
 			transition: 0.2s;
 		}
 
 		.feedback-card:hover {
-			background: #26265a;
-			transform: translateY(-2px);
+			background: rgba(255, 255, 255, 0.08);
 		}
 
-		.btn-secondary {
-			padding: 6px 12px;
-			font-size: 13px;
+		/* ===== TEXT ===== */
+		.text-muted {
+			color: #9ca3af !important;
 		}
 
+		/* ===== LINK ===== */
+		.instructor-link {
+			color: #93c5fd;
+			font-weight: 500;
+			text-decoration: none;
+		}
+
+		.instructor-link:hover {
+			color: #e0f2fe;
+		}
+
+		/* ===== CONTAINER SPACING ===== */
 		.container {
 			max-width: 1100px;
+			margin: 40px auto;
+			padding: 0 10px;
+		}
+
+		/* ===== HEADER ===== */
+		.page-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 28px;
+		}
+
+		/* ===== MAIN CARD ===== */
+		.glass-card {
+			padding: 22px;
+			margin-bottom: 28px;
+		}
+
+		/* ===== TEXT SPACING ===== */
+		.glass-card p {
+			margin-bottom: 8px;
+		}
+
+		/* ===== COURSE META ===== */
+		.course-meta {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+			margin-top: 10px;
+		}
+
+		/* ===== MODULE CARD ===== */
+		.module-card {
+			padding: 18px;
+			margin-bottom: 22px;
+		}
+
+		/* MODULE HEADER */
+		.module-card .card-header {
+			margin-bottom: 12px;
+			font-size: 15px;
+			font-weight: 500;
+		}
+
+		/* ===== LESSON CARD ===== */
+		.lesson-card {
+			padding: 14px;
+			margin-top: 12px;
+		}
+
+		/* FIX YOUR CURRENT LESSON DIV */
+		.module-card .border.rounded {
+			padding: 14px;
+			margin-top: 12px;
+			border-radius: 10px !important;
+			background: rgba(255, 255, 255, 0.05);
+			border: 1px solid rgba(255, 255, 255, 0.05) !important;
+		}
+
+		/* ===== FEEDBACK SECTION ===== */
+		.feedback-card {
+			padding: 18px;
+			margin-top: 28px;
+		}
+
+		/* INNER FEEDBACK ITEMS */
+		.feedback-card .feedback-card {
+			margin-top: 14px;
+			padding: 14px;
+		}
+
+		/* ===== TITLE SPACING ===== */
+		.course-title {
+			margin-bottom: 10px;
+		}
+
+		/* ===== RATING ===== */
+		.rating-pill {
+			margin-top: 12px;
+		}
+
+		/* ===== ALERT ===== */
+		.alert-warning {
+			margin-bottom: 22px;
+			border-radius: 10px;
+		}
+
+		/* ===== SMALL FIXES ===== */
+		h5,
+		h4 {
+			margin-bottom: 10px;
+		}
+
+		small {
+			display: block;
+			margin-top: 4px;
+		}
+
+		.module-card:hover {
+			box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
+		}
+
+		/* HEADER FIX */
+		.page-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 30px;
+		}
+
+		/* LEFT */
+		.header-left {
+			display: flex;
+			align-items: center;
+		}
+
+		/* RIGHT BUTTON GROUP */
+		.header-actions {
+			display: flex;
+			gap: 12px;
+		}
+
+		/* BUTTON BASE */
+		.btn-header {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding: 9px 16px;
+			border-radius: 12px;
+			font-size: 13px;
+			font-weight: 500;
+			text-decoration: none;
+			transition: 0.25s ease;
+			backdrop-filter: blur(8px);
+		}
+
+		/* OUTLINE BUTTON */
+		.btn-outline {
+			background: rgba(255, 255, 255, 0.05);
+			color: #e5e7eb;
+			border: 1px solid rgba(255, 255, 255, 0.08);
+		}
+
+		.btn-outline:hover {
+			background: #6366f1;
+			color: #fff;
+		}
+
+		/* PRIMARY BUTTON */
+		.btn-primary {
+			background: linear-gradient(135deg, #6366f1, #8b5cf6);
+			color: #fff;
+			box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+		}
+
+		.btn-primary:hover {
+			transform: translateY(-2px) scale(1.03);
+			box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
 		}
 	</style>
 </head>
@@ -282,23 +316,30 @@
 
 	<div class="container my-4">
 
-		<div class="d-flex justify-content-between align-items-center mb-3">
-			<h3 class="fw-bold">
-				<i class="bi bi-book"></i>
-				Course Overview
-			</h3>
+		<div class="page-header">
+			<div class="header-left">
+				<span class="page-title">
+					<i class="bi bi-book"></i> Course Overview
+				</span>
+			</div>
 
-			<a href="/manage-courses" class="btn btn-secondary btn-sm">
-				<i class="bi bi-arrow-left"></i> Back
-			</a>
+			<div class="header-actions">
+				<a th:href="@{/manage-courses}" class="btn-header btn-outline">
+					<i class="bi bi-arrow-left"></i> Manage Courses
+				</a>
+
+				<a th:if="${course.teacher != null}"
+					th:href="@{/admin-instructor-view/{id}(id=${course.teacher.teacherId})}"
+					class="btn-header btn-primary">
+					<i class="bi bi-person"></i> Publisher Profile
+				</a>
+			</div>
 		</div>
 
-		<div class="card shadow-sm mb-4">
+		<div class="glass-card mb-4">
 			<div class="card-body">
 
-				<h4 class="fw-bold mb-2" th:text="${course.title}">
-					Course Title
-				</h4>
+				<h4 class="course-title mb-2" th:text="${course.title}"></h4>
 
 				<p class="mb-1 text-muted">
 					Instructor:
@@ -362,7 +403,7 @@
 			No modules added to this course.
 		</div>
 
-		<div th:each="module, mStat : ${course.modules}" class="card mb-3 shadow-sm">
+		<div th:each="module, mStat : ${course.modules}" class="module-card">
 
 			<div class="card-header bg-dark text-white">
 				<strong>
@@ -377,7 +418,7 @@
 					No lessons in this module.
 				</div>
 
-				<div th:each="lesson, lStat : ${module.lessons}" class="border rounded p-3 mb-3">
+				<div th:each="lesson, lStat : ${module.lessons}" class="lesson-card">
 					<h6 class="fw-semibold mb-2">
 						Lesson <span th:text="${lStat.index + 1}">1</span>:
 						<span th:text="${lesson.title}">Lesson Title</span>
@@ -393,7 +434,7 @@
 			</div>
 		</div>
 
-		<div class="card shadow-sm mb-4">
+		<div class="feedback-card">
 			<div class="card-body">
 				<h5 class="feedback-title">
 					<i class="bi bi-chat-dots"></i>

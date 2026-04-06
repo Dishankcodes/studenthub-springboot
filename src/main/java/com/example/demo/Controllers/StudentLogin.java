@@ -25,7 +25,7 @@ public class StudentLogin {
 		this.repo = repo;
 	}
 
-	// ================== LOGIN + SIGNUP PAGE ==================
+	
 	@GetMapping("/student-login")
 	public String student_login(Model model, @RequestParam(required = false) String success) {
 
@@ -37,7 +37,6 @@ public class StudentLogin {
 		return "student-login";
 	}
 
-	// ================== SIGNUP ==================
 	@PostMapping("/student-login")
 	public String registerStudent(@ModelAttribute Student student, Model model) {
 
@@ -67,12 +66,11 @@ public class StudentLogin {
 			return "student-login";
 		}
 
-		// ✅ SAME STYLE AS ADMIN
-		session.setAttribute("studentId", opt.get().getStudid()); // or getStudentId()
+		
+		session.setAttribute("studentId", opt.get().getStudid()); 
 		session.setAttribute("studentEmail", opt.get().getEmail());
 
 		return "redirect:/student-dashboard";
 	}
-	
-	
+
 }

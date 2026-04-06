@@ -1,21 +1,14 @@
 @charset "UTF-8";
+
 :root {
   --primary: #f6a623;
-  /* bright orange */
   --primary-dark: #d48821;
-  /* darker orange for hover */
   --bg: #fffdf8;
-  /* light cream background */
   --card-bg: #ffffff;
-  /* 333 cards */
   --text-dark: #333;
-  /* main text */
   --text-muted: #666;
-  /* muted text */
 }
-/* ===============================
-   NOTES UPLOAD CARD
-================================ */
+
 .notes-upload-card {
   background: #2a2a4a;
   padding: 30px;
@@ -33,9 +26,6 @@
   color: #ffffff;
 }
 
-/* ===============================
-   FORM LAYOUT
-================================ */
 .notes-upload-card form {
   display: flex;
   flex-direction: column;
@@ -51,6 +41,7 @@
   padding: 12px 14px;
   border-radius: 10px;
   font-size: 14px;
+  margin: 5px;
 }
 
 .notes-upload-card textarea {
@@ -71,9 +62,7 @@
   box-shadow: 0 0 0 3px rgba(246, 166, 35, 0.25);
 }
 
-/* ===============================
-   FILE INPUT
-================================ */
+
 .notes-upload-card input[type="file"] {
   background: #1f1f35;
   color: #9ca3af;
@@ -83,9 +72,6 @@
   cursor: pointer;
 }
 
-/* ===============================
-   UPLOAD BUTTON
-================================ */
 .notes-upload-card button {
   background: #f6a623;
   color: #1f1f2e;
@@ -105,9 +91,6 @@
   background: #ffb84d;
 }
 
-/* ===============================
-   STATUS BADGES
-================================ */
 .status-badge {
   display: inline-block;
   margin-top: 10px;
@@ -132,9 +115,6 @@
   color: #ef4444;
 }
 
-/* ===============================
-   INFO MESSAGE
-================================ */
 .info {
   background: rgba(34, 197, 94, 0.15);
   color: #22c55e;
@@ -144,9 +124,6 @@
   font-size: 14px;
 }
 
-/* ===============================
-   DASHBOARD TWO COLUMN LAYOUT
-================================ */
 .notes-layout {
   display: grid;
   grid-template-columns: 380px 1fr;
@@ -160,9 +137,6 @@
   }
 }
 
-/* ===============================
-   UPLOADED NOTES GRID
-================================ */
 .uploaded-notes {
   background: transparent;
 }
@@ -204,7 +178,6 @@
   font-size: 12px;
   opacity: 0.7;
 }
-
 .note-actions {
   display: flex;
   gap: 10px;
@@ -260,33 +233,28 @@
   box-shadow: 0 16px 35px rgba(0, 0, 0, 0.35);
 }
 
-/* PINNED */
 .announcement-card.pinned {
   border-left: 3px solid #f6a623;
   background: #32325d;
 }
 
-/* TITLE */
 .announcement-card h4 {
   font-size: 15px;
   font-weight: 600;
   margin-bottom: 4px;
 }
 
-/* META */
 .announcement-meta {
   font-size: 11px;
   opacity: 0.6;
   margin-bottom: 8px;
 }
 
-/* MESSAGE */
 .announcement-message {
   font-size: 13px;
   line-height: 1.5;
 }
 
-/* ATTACHMENT */
 .attachment {
   margin-top: 10px;
   background: #1f1f35;
@@ -295,6 +263,7 @@
   font-size: 12px;
   display: inline-flex;
   align-items: center;
+
   gap: 6px;
 }
 
@@ -316,9 +285,6 @@
   border-radius: 6px;
 }
 
-/* ===============================
-   SECTION SPACING IMPROVEMENT
-================================ */
 .section-wrapper {
   margin-top: 40px;
 }
@@ -331,18 +297,14 @@
   background: linear-gradient(to right, transparent, #e5e7eb, transparent);
 }
 
-/* ===============================
-   CREATE ANNOUNCEMENT CARD
-================================ */
 .create-announcement-card {
   background: #2a2a4a;
-  padding: 18px 20px; /* tighter */
+  padding: 18px 20px;
   border-radius: 14px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
   margin-bottom: 25px; /* reduce gap below */
 }
 
-/* TOP ROW */
 .announcement-form-row {
   display: flex;
   gap: 10px;
@@ -357,7 +319,6 @@
   flex: 2;
 }
 
-/* TEXTAREA FULL WIDTH */
 .create-announcement-card textarea {
   width: 100%;
   min-height: 90px;
@@ -365,7 +326,6 @@
   margin-bottom: 10px;
 }
 
-/* INPUTS */
 .create-announcement-card input,
 .create-announcement-card select,
 .create-announcement-card textarea {
@@ -377,20 +337,17 @@
   font-size: 13px;
 }
 
-/* BOTTOM ROW */
 .announcement-form-bottom {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-/* FILE INPUT FIX */
 .announcement-form-bottom input[type="file"] {
   font-size: 12px;
   color: #9ca3af;
 }
 
-/* BUTTON */
 .create-announcement-card button {
   background: #f6a623;
   color: #1f1f2e;
@@ -401,14 +358,18 @@
   font-weight: 600;
   display: flex;
   align-items: center;
+
   gap: 6px;
+
   cursor: pointer;
+
   width: auto; /* 🔥 KEY FIX */
 }
 
 .create-announcement-card button:hover {
   background: #ffb84d;
 }
+
 .tabs {
   display: flex;
   gap: 20px;

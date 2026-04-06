@@ -325,9 +325,7 @@
 				<i class="bi bi-arrow-left"></i> Manage Teachers
 			</a>
 
-			<a th:href="@{/admin-chat(userId=${teacher.teacherId}, type='teacher')}" class="btn btn-outline">
-				<i class="bi bi-chat-dots"></i> Message Teacher
-			</a>
+
 		</div>
 	</div>
 
@@ -337,13 +335,25 @@
 			<img
 				th:src="${profile != null && profile.profileImage != null ? profile.profileImage : '/images/default.jpg'}">
 
-			<div>
-				<h2 th:text="${teacher.firstname + ' ' + teacher.lastname}"></h2>
-				<p th:text="${teacher.email}"></p>
+			<div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
 
-				<p th:if="${profile != null}">
-					<b th:text="${profile.qualification}"></b>
-				</p>
+				<div>
+					<h2 style="margin-bottom:4px;">
+						<span th:text="${teacher.firstname + ' ' + teacher.lastname}"></span>
+					</h2>
+
+					<p th:text="${teacher.email}"></p>
+
+					<p th:if="${profile != null}">
+						<b th:text="${profile.qualification}"></b>
+					</p>
+				</div>
+
+
+				<a th:if="${chatUser != null}" th:href="@{/admin-chat(userId=${chatUser.id})}" class="btn-btn outline">
+					<i class="bi bi-chat-dots"></i> Message Teacher
+				</a>
+
 			</div>
 		</div>
 		<div class="profile-card" style="flex-direction:column; align-items:flex-start;">
@@ -394,7 +404,7 @@
 				<form th:action="@{/manage-instructor/status/{id}(id=${teacher.teacherId})}" method="post">
 					<input type="hidden" name="status" value="BLOCKED" />
 					<button class="btn-header btn-disabled">
-						<i class="bi bi-pause-circle"></i> Block
+						<i class="bi bi-slash-circle"></i> Block
 					</button>
 				</form>
 
@@ -429,7 +439,7 @@
 
 		</div>
 
-		<!-- 🔥 COURSE HISTORY -->
+	
 		<h3 style="margin-top:30px;">
 			<i class="bi bi-journal-bookmark"></i> Course History
 		</h3>
@@ -507,7 +517,6 @@
 			</tbody>
 		</table>
 	</div>
-
 </body>
 
 </html>

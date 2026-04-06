@@ -52,22 +52,21 @@ public class AdminController {
 
 	@Autowired
 	private InstructorFeedbackRepository instructorFeedbackRepo;
-	
+
 	@Autowired
 	private CourseCertificateRepository certificateRepo;
 
 	@Autowired
 	private EnrollmentRepository enrollmentRepo;
-	
+
 	@Autowired
 	private ApplicationRepository applicationRepo;
-	
+
 	@Autowired
 	private ChatUserRepository chatUserRepo;
-	
+
 	@Autowired
 	private CourseRepository courseRepo;
-
 
 	@GetMapping("/admin-dashboard")
 	public String admin_dashboard(HttpSession session, Model model) {
@@ -102,7 +101,7 @@ public class AdminController {
 			return "redirect:/admin-login";
 		}
 
-		studentRepo.deleteById(studId); // 🔥 cascades automatically
+		studentRepo.deleteById(studId);
 
 		ra.addFlashAttribute("success", "✅ Student deleted permanently");
 
@@ -128,77 +127,83 @@ public class AdminController {
 	@GetMapping("/admin-instructor-view/{teacherId}")
 	public String viewInstructorAndFeedback(@PathVariable Integer teacherId, Model model, HttpSession session) {
 
-	    if (session.getAttribute("adminEmail") == null) {
-	        return "redirect:/admin-login";
-	    }
+		if (session.getAttribute("adminEmail") == null) {
+			return "redirect:/admin-login";
+		}
 
-	    Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
-	    if (teacher == null) {
-	        return "redirect:/manage-teachers";
-	    }
+		if (teacher == null) {
+			return "redirect:/manage-teachers";
+		}
 
-	    TeacherProfile profile = teacherProfileRepo.findByTeacherTeacherId(teacherId);
+		TeacherProfile profile = teacherProfileRepo.findByTeacherTeacherId(teacherId);
 
-	    List<InstructorFeedback> feedbacks =
-	            instructorFeedbackRepo.findByTeacherTeacherId(teacherId);
+		List<InstructorFeedback> feedbacks = instructorFeedbackRepo.findByTeacherTeacherId(teacherId);
 
-	    double avgRating = instructorFeedbackRepo.getAverageRating(teacherId);
-	    Long totalRatings = instructorFeedbackRepo.getTotalRatings(teacherId);
+		double avgRating = instructorFeedbackRepo.getAverageRating(teacherId);
+		Long totalRatings = instructorFeedbackRepo.getTotalRatings(teacherId);
 
-	    if (avgRating == 0) avgRating = 0.0;
-	    if (totalRatings == null) totalRatings = 0L;
+		if (avgRating == 0)
+			avgRating = 0.0;
+		if (totalRatings == null)
+			totalRatings = 0L;
 
-	    // 🔥 COURSES
-	    List<Course> courses = courseRepo.findByTeacherTeacherIdAndStatusNot(
-	            teacherId, CourseStatus.DELETED
-	    );
+		// 🔥 COURSES
+		List<Course> courses = courseRepo.findByTeacherTeacherIdAndStatusNot(teacherId, CourseStatus.DELETED);
 
-	    if (courses == null) courses = List.of();
+		if (courses == null)
+			courses = List.of();
 
-	    long totalCourses = courses.size();
+		long totalCourses = courses.size();
 
-	    long publishedCourses = courses.stream()
-	            .filter(c -> c.getStatus() == CourseStatus.PUBLISHED)
-	            .count();
+		long publishedCourses = courses.stream().filter(c -> c.getStatus() == CourseStatus.PUBLISHED).count();
 
-	    Map<Integer, Long> courseStudentCount = new HashMap<>();
+		Map<Integer, Long> courseStudentCount = new HashMap<>();
 
-	    for (Course c : courses) {
-	        long count = (c.getEnrollments() != null)
-	                ? c.getEnrollments().size()
-	                : 0;
+		for (Course c : courses) {
+			long count = (c.getEnrollments() != null) ? c.getEnrollments().size() : 0;
 
-	        courseStudentCount.put(c.getCourseId(), count);
-	    }
+			courseStudentCount.put(c.getCourseId(), count);
+		}
 
-	    model.addAttribute("teacher", teacher);
-	    model.addAttribute("profile", profile);
-	    model.addAttribute("feedbacks", feedbacks != null ? feedbacks : List.of());
-	    model.addAttribute("avgRating", avgRating);
-	    model.addAttribute("totalRatings", totalRatings);
-	    model.addAttribute("courses", courses);
-	    model.addAttribute("totalCourses", totalCourses);
-	    model.addAttribute("publishedCourses", publishedCourses);
-	    model.addAttribute("courseStudentCount", courseStudentCount);
+		ChatUser chatUser = chatUserRepo.findByRefIdAndType(teacherId, UserType.TEACHER).orElse(null);
 
-	    model.addAttribute("username", session.getAttribute("adminUsername"));
+		model.addAttribute("chatUser", chatUser);
+		model.addAttribute("teacher", teacher);
+		model.addAttribute("profile", profile);
+		model.addAttribute("feedbacks", feedbacks != null ? feedbacks : List.of());
+		model.addAttribute("avgRating", avgRating);
+		model.addAttribute("totalRatings", totalRatings);
+		model.addAttribute("courses", courses);
+		model.addAttribute("totalCourses", totalCourses);
+		model.addAttribute("publishedCourses", publishedCourses);
+		model.addAttribute("courseStudentCount", courseStudentCount);
 
-	    return "admin-instructor-view";
+		model.addAttribute("username", session.getAttribute("adminUsername"));
+
+		return "admin-instructor-view";
 	}
 
 	@PostMapping("/manage-instructor/status/{id}")
-	public String updateTeacherStatus(@PathVariable Integer id, @RequestParam TeacherStatus status) {
+	public String updateTeacherStatus(@PathVariable Integer id, @RequestParam TeacherStatus status,
+			RedirectAttributes ra) {
+
 		Teacher teacher = teacherRepo.findById(id).orElse(null);
 
 		if (teacher == null) {
-			return "redirect:/manage-instructor";
+			return "redirect:/manage-teachers";
 		}
 
 		teacher.setStatus(status);
 		teacherRepo.save(teacher);
 
-		return "redirect:/manage-teachers#instructor-" + id;
+		String name = teacher.getFirstname() + " " + teacher.getLastname();
+
+		ra.addFlashAttribute("statusMessage", name + " is now " + status.name());
+		ra.addFlashAttribute("highlightId", id);
+
+		return "redirect:/manage-teachers";
 	}
 
 	@GetMapping("/admin-feedback")
@@ -213,112 +218,97 @@ public class AdminController {
 		return "admin-settings";
 	}
 
-	
-	
 	@GetMapping("/admin-logout")
 	public String adminLogout(HttpSession session) {
 		session.invalidate();
 		return "redirect:/admin-login";
 	}
-	
+
 	@GetMapping("/admin-student-dashboard")
 	public String studentDashboard(@RequestParam Integer id, Model model) {
 
-	    Student student = studentRepo.findById(id).orElse(null);
+		Student student = studentRepo.findById(id).orElse(null);
 
-	    if (student == null) {
-	        model.addAttribute("error", "Student not found");
-	        return "admin-student-dashboard";
-	    }
+		if (student == null) {
+			model.addAttribute("error", "Student not found");
+			return "admin-student-dashboard";
+		}
 
-	    // ===== INTERNSHIPS =====
-	    List<InternshipApplication> apps =
-	            applicationRepo.findByStudent_Studid(id);
+		// ===== INTERNSHIPS =====
+		List<InternshipApplication> apps = applicationRepo.findByStudent_Studid(id);
 
-	    long totalInternships = apps.size();
+		long totalInternships = apps.size();
 
-	    long completedInternships = apps.stream()
-	            .filter(a -> a.getStatus().name().equals("SELECTED"))
-	            .count();
+		long completedInternships = apps.stream().filter(a -> a.getStatus().name().equals("SELECTED")).count();
 
-	    long acceptedInternships = apps.stream()
-	            .filter(a -> a.getStatus().name().equals("ACCEPTED"))
-	            .count();
+		long acceptedInternships = apps.stream().filter(a -> a.getStatus().name().equals("ACCEPTED")).count();
 
-	   
-	    List<Enrollment> enrollments = enrollmentRepo.findByStudentStudid(id);
+		List<Enrollment> enrollments = enrollmentRepo.findByStudentStudid(id);
 
-	  
-	    Map<Integer, Long> courseDurationMap = new HashMap<>();
+		Map<Integer, Long> courseDurationMap = new HashMap<>();
 
-	    for (Enrollment e : enrollments) {
+		for (Enrollment e : enrollments) {
 
-	        if (e.getCompletedAt() != null && e.getEnrolledAt() != null) {
+			if (e.getCompletedAt() != null && e.getEnrolledAt() != null) {
 
-	            long days = ChronoUnit.DAYS.between(
-	                    e.getEnrolledAt(),
-	                    e.getCompletedAt()
-	            );
+				long days = ChronoUnit.DAYS.between(e.getEnrolledAt(), e.getCompletedAt());
 
-	            courseDurationMap.put(e.getCourse().getCourseId(), days);
-	        }
-	    }
+				courseDurationMap.put(e.getCourse().getCourseId(), days);
+			}
+		}
 
-	    model.addAttribute("enrollments", enrollments);
-	    model.addAttribute("courseDurationMap", courseDurationMap);
-	    long enrolledCourses = enrollments.size();
+		model.addAttribute("enrollments", enrollments);
+		model.addAttribute("courseDurationMap", courseDurationMap);
+		long enrolledCourses = enrollments.size();
 
-	    long completedCourses = enrollments.stream()
-	            .filter(e -> e.getCompletedAt() != null)
-	            .count();
+		long completedCourses = enrollments.stream().filter(e -> e.getCompletedAt() != null).count();
 
-	    // ===== CERTIFICATES =====
-	    List<CourseCertificate> certificates =
-	            certificateRepo.findByStudentStudid(id);
+		// ===== CERTIFICATES =====
+		List<CourseCertificate> certificates = certificateRepo.findByStudentStudid(id);
 
-	    long certificateCount = certificates.size();
+		long certificateCount = certificates.size();
 
-	    // ===== MODEL =====
-	    model.addAttribute("student", student);
-	    model.addAttribute("applications", apps);
+		// ===== MODEL =====
+		model.addAttribute("student", student);
+		model.addAttribute("applications", apps);
 
-	    model.addAttribute("totalInternships", totalInternships);
-	    model.addAttribute("completedInternships", completedInternships);
-	    model.addAttribute("acceptedInternships", acceptedInternships);
+		model.addAttribute("totalInternships", totalInternships);
+		model.addAttribute("completedInternships", completedInternships);
+		model.addAttribute("acceptedInternships", acceptedInternships);
 
-	    model.addAttribute("enrolledCourses", enrolledCourses);
-	    model.addAttribute("completedCourses", completedCourses);
-	    model.addAttribute("certificateCount", certificateCount);
+		model.addAttribute("enrolledCourses", enrolledCourses);
+		model.addAttribute("completedCourses", completedCourses);
+		model.addAttribute("certificateCount", certificateCount);
 
-	    return "admin-student-dashboard";
+		return "admin-student-dashboard";
 	}
-	
+
 	@GetMapping("/admin/view-profile")
 	public String viewUserProfile(@RequestParam Integer userId, Model model) {
 
-	    // 🔥 Get ChatUser
-	    ChatUser user = chatUserRepo.findById(userId).orElse(null);
+		// 🔥 Get ChatUser
+		ChatUser user = chatUserRepo.findById(userId).orElse(null);
 
-	    if (user == null) {
-	        return "redirect:/admin-chat";
-	    }
+		if (user == null) {
+			return "redirect:/admin-chat";
+		}
 
-	    // ✅ IF STUDENT
-	    if (user.getType() == UserType.STUDENT) {
+		// ✅ IF STUDENT
+		if (user.getType() == UserType.STUDENT) {
 
-	        Integer studentId = user.getRefId();
+			Integer studentId = user.getRefId();
 
-	        return "redirect:/admin-student-dashboard?id=" + studentId;
-	    }
+			return "redirect:/admin-student-dashboard?id=" + studentId;
+		}
 
-	    // ✅ IF TEACHER
-	    else if (user.getType() == UserType.TEACHER) {
+		// ✅ IF TEACHER
+		else if (user.getType() == UserType.TEACHER) {
 
-	        Integer teacherId = user.getRefId();
+			Integer teacherId = user.getRefId();
 
-	        return "redirect:/admin-instructor-view/" + teacherId;
-	    }
+			return "redirect:/admin-instructor-view/" + teacherId;
+		}
 
-	    return "redirect:/admin-chat";
+		return "redirect:/admin-chat";
 	}
 }

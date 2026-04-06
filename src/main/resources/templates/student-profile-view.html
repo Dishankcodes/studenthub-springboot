@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Student Profile</title>
+
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+	<link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+
+	<style>
+		body {
+			background: #f4f7ff;
+			font-family: "Inter", sans-serif;
+		}
+
+		/* MAIN */
+		.main {
+			margin-left: 240px;
+			margin-top: 60px;
+			padding: 20px;
+		}
+
+		/* CARD */
+		.profile-card {
+			background: #fff;
+			border-radius: 18px;
+			padding: 30px;
+			max-width: 850px;
+			margin: auto;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+		}
+
+		/* HEADER */
+		.profile-header {
+			display: flex;
+			align-items: center;
+			gap: 20px;
+			border-bottom: 1px solid #eee;
+			padding-bottom: 20px;
+		}
+
+		.profile-header img {
+			width: 110px;
+			height: 110px;
+			border-radius: 50%;
+			object-fit: cover;
+		}
+
+		/* INFO GRID */
+		.profile-info {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+			gap: 15px;
+			margin-top: 20px;
+		}
+
+		.info-box {
+			background: #f8faff;
+			padding: 15px;
+			border-radius: 12px;
+			border: 1px solid #e5e7eb;
+		}
+
+		.info-box span {
+			font-size: 12px;
+			color: #6b7280;
+		}
+
+		.info-box strong {
+			display: block;
+			margin-top: 5px;
+			font-size: 15px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div class="main">
+
+		<div class="profile-card">
+
+			<!-- HEADER -->
+			<div class="profile-header">
+
+				<img th:src="${student.profileImage != null ? student.profileImage : '/images/default.jpg'}">
+
+				<div>
+					<h3 th:text="${student.fullname}"></h3>
+					<p th:text="${student.college}"></p>
+				</div>
+
+			</div>
+
+			<!-- INFO -->
+			<div class="profile-info">
+
+				<div class="info-box">
+					<span>Degree</span>
+					<strong th:text="${student.degree}"></strong>
+				</div>
+
+				<div class="info-box">
+					<span>Email</span>
+					<strong th:text="${student.email}"></strong>
+				</div>
+
+				<div class="info-box">
+					<span>Interests</span>
+					<strong th:text="${student.interests}"></strong>
+				</div>
+
+				<div class="info-box">
+					<span>Joined</span>
+					<strong th:text="${#temporals.format(student.joinedOn,'dd MMM yyyy')}"></strong>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+</body>
+
+</html>

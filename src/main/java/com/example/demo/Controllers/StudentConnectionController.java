@@ -34,16 +34,16 @@ public class StudentConnectionController {
 
 	@Autowired
 	private ChatUserRepository chatUserRepo;
-	
+
 	@Autowired
 	private ConnectionRepository connectionRepo;
-	
+
 	@Autowired
 	private StudentRepository studentRepo;
-	
+
 	@Autowired
 	private TeacherRepository teacherRepo;
-	
+
 	@Autowired
 	private TeacherProfileRepo teacherProfileRepo;
 
@@ -196,47 +196,47 @@ public class StudentConnectionController {
 		// for received
 		for (Connection c : received) {
 
-		    ChatUser u = c.getSender();
+			ChatUser u = c.getSender();
 
-		    if (u.getType() == UserType.STUDENT) {
-		        Student s = studentRepo.findById(u.getRefId()).orElse(null);
-		        if (s != null) {
-		            nameMap.put(u.getId(), s.getFullname());
-		            imageMap.put(u.getId(), s.getProfileImage());
-		        }
-		    } else {
-		        Teacher t = teacherRepo.findById(u.getRefId()).orElse(null);
-		        if (t != null) {
-		            nameMap.put(u.getId(), t.getFirstname() + " " + t.getLastname());
+			if (u.getType() == UserType.STUDENT) {
+				Student s = studentRepo.findById(u.getRefId()).orElse(null);
+				if (s != null) {
+					nameMap.put(u.getId(), s.getFullname());
+					imageMap.put(u.getId(), s.getProfileImage());
+				}
+			} else {
+				Teacher t = teacherRepo.findById(u.getRefId()).orElse(null);
+				if (t != null) {
+					nameMap.put(u.getId(), t.getFirstname() + " " + t.getLastname());
 
-		            TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(u.getRefId());
-		            if (p != null)
-		                imageMap.put(u.getId(), p.getProfileImage());
-		        }
-		    }
+					TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(u.getRefId());
+					if (p != null)
+						imageMap.put(u.getId(), p.getProfileImage());
+				}
+			}
 		}
 
 		// for sent
 		for (Connection c : sent) {
 
-		    ChatUser u = c.getReceiver();
+			ChatUser u = c.getReceiver();
 
-		    if (u.getType() == UserType.STUDENT) {
-		        Student s = studentRepo.findById(u.getRefId()).orElse(null);
-		        if (s != null) {
-		            nameMap.put(u.getId(), s.getFullname());
-		            imageMap.put(u.getId(), s.getProfileImage());
-		        }
-		    } else {
-		        Teacher t = teacherRepo.findById(u.getRefId()).orElse(null);
-		        if (t != null) {
-		            nameMap.put(u.getId(), t.getFirstname() + " " + t.getLastname());
+			if (u.getType() == UserType.STUDENT) {
+				Student s = studentRepo.findById(u.getRefId()).orElse(null);
+				if (s != null) {
+					nameMap.put(u.getId(), s.getFullname());
+					imageMap.put(u.getId(), s.getProfileImage());
+				}
+			} else {
+				Teacher t = teacherRepo.findById(u.getRefId()).orElse(null);
+				if (t != null) {
+					nameMap.put(u.getId(), t.getFirstname() + " " + t.getLastname());
 
-		            TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(u.getRefId());
-		            if (p != null)
-		                imageMap.put(u.getId(), p.getProfileImage());
-		        }
-		    }
+					TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(u.getRefId());
+					if (p != null)
+						imageMap.put(u.getId(), p.getProfileImage());
+				}
+			}
 		}
 
 		model.addAttribute("nameMap", nameMap);
@@ -309,50 +309,82 @@ public class StudentConnectionController {
 			return chatUserRepo.save(u);
 		});
 	}
-	
+
 	@GetMapping("/student-search-ajax")
 	@ResponseBody
 	public List<Map<String, Object>> searchAjax(@RequestParam String keyword, HttpSession session) {
-	    Integer studentId = (Integer) session.getAttribute("studentId");
-	    if (studentId == null) return new ArrayList<>();
+		Integer studentId = (Integer) session.getAttribute("studentId");
+		if (studentId == null)
+			return new ArrayList<>();
 
-	    ChatUser me = getOrCreate(studentId, UserType.STUDENT);
-	    List<Map<String, Object>> results = new ArrayList<>();
+		ChatUser me = getOrCreate(studentId, UserType.STUDENT);
+		List<Map<String, Object>> results = new ArrayList<>();
 
-	    List<Student> students = studentRepo.findByFullnameContainingIgnoreCase(keyword);
-	    for (Student s : students) {
-	        if (s.getStudid().equals(studentId)) continue;
+		List<Student> students = studentRepo.findByFullnameContainingIgnoreCase(keyword);
+		for (Student s : students) {
+			if (s.getStudid().equals(studentId))
+				continue;
 
-	        ChatUser u = getOrCreate(s.getStudid(), UserType.STUDENT);
+			ChatUser u = getOrCreate(s.getStudid(), UserType.STUDENT);
 
-	        Map<String, Object> map = new HashMap<>();
-	        map.put("id", u.getId());
-	        map.put("name", s.getFullname());
-	        map.put("type", "STUDENT");
-	        map.put("image", s.getProfileImage());
-	        map.put("status", getConnectionStatus(me, u));
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", u.getId());
+			map.put("name", s.getFullname());
+			map.put("type", "STUDENT");
+			map.put("image", s.getProfileImage());
+			map.put("status", getConnectionStatus(me, u));
 
-	        results.add(map);
-	    }
+			results.add(map);
+		}
 
-	    List<Teacher> teachers = teacherRepo
-	            .findByFirstnameContainingIgnoreCaseOrLastnameContainingIgnoreCase(keyword, keyword);
+		List<Teacher> teachers = teacherRepo.findByFirstnameContainingIgnoreCaseOrLastnameContainingIgnoreCase(keyword,
+				keyword);
 
-	    for (Teacher t : teachers) {
-	        ChatUser u = getOrCreate(t.getTeacherId(), UserType.TEACHER);
-	        TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(t.getTeacherId());
+		for (Teacher t : teachers) {
+			ChatUser u = getOrCreate(t.getTeacherId(), UserType.TEACHER);
+			TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(t.getTeacherId());
 
-	        Map<String, Object> map = new HashMap<>();
-	        map.put("id", u.getId());
-	        map.put("name", t.getFirstname() + " " + t.getLastname());
-	        map.put("type", "TEACHER");
-	        map.put("image", p != null ? p.getProfileImage() : null);
-	        map.put("status", getConnectionStatus(me, u));
+			Map<String, Object> map = new HashMap<>();
+			map.put("id", u.getId());
+			map.put("name", t.getFirstname() + " " + t.getLastname());
+			map.put("type", "TEACHER");
+			map.put("image", p != null ? p.getProfileImage() : null);
+			map.put("status", getConnectionStatus(me, u));
 
-	        results.add(map);
-	    }
+			results.add(map);
+		}
 
-	    return results;
+		return results;
+	}
+
+	@GetMapping("/student-profile-view")
+	public String viewStudentProfile(@RequestParam Integer id, HttpSession session, Model model) {
+
+		Integer myId = (Integer) session.getAttribute("studentId");
+		if (myId == null)
+			return "redirect:/student-login";
+
+		Student student = studentRepo.findById(id).orElse(null);
+		if (student == null)
+			return "redirect:/student-search";
+
+		ChatUser me = chatUserRepo.findByRefIdAndType(myId, UserType.STUDENT).orElse(null);
+		ChatUser other = chatUserRepo.findByRefIdAndType(id, UserType.STUDENT).orElse(null);
+
+		String status = "FOLLOW";
+
+		if (me != null && other != null) {
+			status = getConnectionStatus(me, other);
+		}
+
+		long connectionCount = connectionRepo.countBySenderRefIdOrReceiverRefId(id, id);
+
+		model.addAttribute("student", student);
+		model.addAttribute("status", status);
+		model.addAttribute("connectionCount", connectionCount);
+		model.addAttribute("chatUser", other);
+
+		return "student-profile-view";
 	}
 
 }
