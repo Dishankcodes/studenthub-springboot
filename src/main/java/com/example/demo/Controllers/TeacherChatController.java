@@ -31,203 +31,210 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class TeacherChatController {
 
-    @Autowired private ChatUserRepository chatUserRepo;
-    @Autowired private ChatRoomRepository chatRoomRepo;
-    @Autowired private ChatMessageRepository messageRepo;
-    @Autowired private EnrollmentRepository enrollmentRepo;
-    @Autowired private TeacherRepository teacherRepo;
-    @Autowired private StudentRepository studentRepo;
+	@Autowired
+	private ChatUserRepository chatUserRepo;
 
-    @GetMapping("/teacher-chat")
-    public String teacherChat(@RequestParam(required = false) Integer userId,
-                              Model model,
-                              HttpSession session) {
+	@Autowired
+	private ChatRoomRepository chatRoomRepo;
 
-        Integer teacherId = 1; // replace with session later
-        Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+	@Autowired
+	private ChatMessageRepository messageRepo;
 
-        if (teacher == null) return "redirect:/teacher-login";
+	@Autowired
+	private EnrollmentRepository enrollmentRepo;
 
-        ChatUser me = getOrCreateTeacher(teacherId);
-        session.setAttribute("chatUserId", me.getId());
+	@Autowired
+	private TeacherRepository teacherRepo;
 
-        List<ChatUser> users = new ArrayList<>();
+	@Autowired
+	private StudentRepository studentRepo;
 
-        // students from enrollment
-        enrollmentRepo.findByTeacherId(teacherId).forEach(e -> {
-            ChatUser u = chatUserRepo
-                    .findByRefIdAndType(e.getStudent().getStudid(), UserType.STUDENT)
-                    .orElseGet(() -> {
-                        ChatUser newUser = new ChatUser();
-                        newUser.setRefId(e.getStudent().getStudid());
-                        newUser.setType(UserType.STUDENT);
-                        return chatUserRepo.save(newUser);
-                    });
-            users.add(u);
-        });
+	@GetMapping("/teacher-chat")
+	public String teacherChat(@RequestParam(required = false) Integer userId, Model model, HttpSession session) {
 
-        // admin
-        ChatUser admin = chatUserRepo.findByRefIdAndType(1, UserType.ADMIN).orElse(null);
-        if (admin != null) users.add(admin);
+		Integer teacherId = 2; // replace with session later
+		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
-        // 🔥 NAME + IMAGE MAP
-        Map<Integer, String> nameMap = new HashMap<>();
-        Map<Integer, String> imageMap = new HashMap<>();
+		if (teacher == null)
+			return "redirect:/teacher-login";
 
-        for (ChatUser u : users) {
+		ChatUser me = getOrCreateTeacher(teacherId);
+		session.setAttribute("chatUserId", me.getId());
 
-            if (u.getType() == UserType.STUDENT) {
-                Student s = studentRepo.findById(u.getRefId()).orElse(null);
-                if (s != null) {
-                    nameMap.put(u.getId(), s.getFullname());
-                    imageMap.put(u.getId(), s.getProfileImage());
-                }
-            }
+		List<ChatUser> users = new ArrayList<>();
 
-            else if (u.getType() == UserType.ADMIN) {
-                nameMap.put(u.getId(), "Support Admin");
-                imageMap.put(u.getId(), "/images/admin-avatar.png");
-            }
-        }
+		for (var e : enrollmentRepo.findByTeacherId(teacherId)) {
 
-        model.addAttribute("nameMap", nameMap);
-        model.addAttribute("imageMap", imageMap);
+			ChatUser u = chatUserRepo.findByRefIdAndType(e.getStudent().getStudid(), UserType.STUDENT).orElseGet(() -> {
+				ChatUser newUser = new ChatUser();
+				newUser.setRefId(e.getStudent().getStudid());
+				newUser.setType(UserType.STUDENT);
+				return chatUserRepo.save(newUser);
+			});
 
-        // ===== CHAT =====
-        ChatUser selectedUser = null;
-        List<ChatMessage> messages = new ArrayList<>();
-        Integer roomId = null;
+			users.add(u);
+		}
 
-        String selectedName = null;
-        String selectedImage = null;
+		ChatUser admin = chatUserRepo.findByRefIdAndType(1, UserType.ADMIN).orElse(null);
+		if (admin != null)
+			users.add(admin);
 
-        if (userId != null) {
+		users = new ArrayList<>(new java.util.LinkedHashSet<>(users));
+		Map<Integer, String> nameMap = new HashMap<>();
+		Map<Integer, String> imageMap = new HashMap<>();
 
-            selectedUser = chatUserRepo.findById(userId).orElse(null);
+		for (ChatUser u : users) {
 
-            if (selectedUser != null) {
+			if (u.getType() == UserType.STUDENT) {
+				Student s = studentRepo.findById(u.getRefId()).orElse(null);
+				if (s != null) {
+					nameMap.put(u.getId(), s.getFullname());
+					imageMap.put(u.getId(), s.getProfileImage());
+				}
+			}
 
-                ChatRoom room = getRoom(me, selectedUser);
-                roomId = room.getId();
+			else if (u.getType() == UserType.ADMIN) {
+				nameMap.put(u.getId(), "Support Admin");
+				imageMap.put(u.getId(), "/images/admin-avatar.png");
+			}
+		}
 
-                messages = messageRepo.findByChatRoomIdOrderByTimestampAsc(roomId);
+			List<ChatRoom> rooms = chatRoomRepo.findByUser1IdOrUser2Id(me.getId(), me.getId());
 
-                selectedName = nameMap.get(selectedUser.getId());
-                selectedImage = imageMap.get(selectedUser.getId());
-            }
-        }
+		for (ChatRoom r : rooms) {
 
-        // mark seen
-        if (roomId != null) {
-            for (ChatMessage msg : messages) {
-                if (!msg.isSeen() && !msg.getSender().getId().equals(me.getId())) {
-                    msg.setSeen(true);
-                }
-            }
-            messageRepo.saveAll(messages);
-        }
+			ChatUser other = r.getUser1().getId().equals(me.getId()) ? r.getUser2() : r.getUser1();
 
-        // unread
-        Map<Integer, Long> unreadMap = new HashMap<>();
+			users.add(other);
+		}
 
-        for (ChatUser u : users) {
-            Optional<ChatRoom> roomOpt = chatRoomRepo.findChatRoom(me.getId(), u.getId());
+		model.addAttribute("nameMap", nameMap);
+		model.addAttribute("imageMap", imageMap);
 
-            if (roomOpt.isPresent()) {
-                long count = messageRepo.countByChatRoomIdAndSeenFalseAndSenderIdNot(
-                        roomOpt.get().getId(), me.getId());
-                unreadMap.put(u.getId(), count);
-            } else {
-                unreadMap.put(u.getId(), 0L);
-            }
-        }
-        
-        Map<Integer, String> lastMessageMap = new HashMap<>();
-        Map<Integer, String> timeMap = new HashMap<>();
+		ChatUser selectedUser = null;
+		List<ChatMessage> messages = new ArrayList<>();
+		Integer roomId = null;
 
-        for (ChatUser u : users) {
+		String selectedName = null;
+		String selectedImage = null;
 
-            Optional<ChatRoom> roomOpt = chatRoomRepo.findChatRoom(me.getId(), u.getId());
+		if (userId != null) {
 
-            if (roomOpt.isPresent()) {
+			selectedUser = chatUserRepo.findById(userId).orElse(null);
 
-                ChatMessage m = messageRepo
-                        .findTop1ByChatRoomIdOrderByTimestampDesc(roomOpt.get().getId());
+			if (selectedUser != null) {
 
-                if (m != null) {
-                    lastMessageMap.put(u.getId(), m.getContent());
+				ChatRoom room = getRoom(me, selectedUser);
+				roomId = room.getId();
 
-                    timeMap.put(u.getId(),
-                            m.getTimestamp().toLocalTime().toString().substring(0, 5));
-                } else {
-                    lastMessageMap.put(u.getId(), "Start chat...");
-                    timeMap.put(u.getId(), "");
-                }
+				messages = messageRepo.findByChatRoomIdOrderByTimestampAsc(roomId);
 
-            } else {
-                lastMessageMap.put(u.getId(), "Start chat...");
-                timeMap.put(u.getId(), "");
-            }
-        }
+				selectedName = nameMap.get(selectedUser.getId());
+				selectedImage = imageMap.get(selectedUser.getId());
+			}
+		}
 
-        model.addAttribute("lastMessageMap", lastMessageMap);
-        model.addAttribute("timeMap", timeMap);
-        model.addAttribute("unreadMap", unreadMap);
-        model.addAttribute("teacher", teacher);
-        model.addAttribute("users", users);
-        model.addAttribute("selectedUser", selectedUser);
-        model.addAttribute("selectedName", selectedName);
-        model.addAttribute("selectedImage", selectedImage);
-        model.addAttribute("messages", messages);
-        model.addAttribute("roomId", roomId);
+		if (roomId != null) {
+			for (ChatMessage msg : messages) {
+				if (!msg.isSeen() && !msg.getSender().getId().equals(me.getId())) {
+					msg.setSeen(true);
+				}
+			}
+			messageRepo.saveAll(messages);
+		}
 
-        return "teacher-chat";
-    }
+		Map<Integer, Long> unreadMap = new HashMap<>();
 
-    @PostMapping("/teacher/send")
-    public String sendTeacher(@RequestParam Integer roomId,
-                              @RequestParam String content,
-                              HttpSession session) {
+		for (ChatUser u : users) {
+			Optional<ChatRoom> roomOpt = chatRoomRepo.findChatRoom(me.getId(), u.getId());
 
-        Integer senderId = (Integer) session.getAttribute("chatUserId");
+			if (roomOpt.isPresent()) {
+				long count = messageRepo.countByChatRoomIdAndSeenFalseAndSenderIdNot(roomOpt.get().getId(), me.getId());
+				unreadMap.put(u.getId(), count);
+			} else {
+				unreadMap.put(u.getId(), 0L);
+			}
+		}
 
-        ChatUser sender = chatUserRepo.findById(senderId).orElse(null);
-        ChatRoom room = chatRoomRepo.findById(roomId).orElse(null);
+		Map<Integer, String> lastMessageMap = new HashMap<>();
+		Map<Integer, String> timeMap = new HashMap<>();
 
-        if (sender == null || room == null)
-            return "redirect:/teacher-chat";
+		for (ChatUser u : users) {
 
-        ChatMessage msg = new ChatMessage();
-        msg.setChatRoom(room);
-        msg.setSender(sender);
-        msg.setContent(content);
-        msg.setTimestamp(java.time.LocalDateTime.now());
+			Optional<ChatRoom> roomOpt = chatRoomRepo.findChatRoom(me.getId(), u.getId());
 
-        messageRepo.save(msg);
+			if (roomOpt.isPresent()) {
 
-        Integer otherId = room.getUser1().getId().equals(senderId)
-                ? room.getUser2().getId()
-                : room.getUser1().getId();
+				ChatMessage m = messageRepo.findTop1ByChatRoomIdOrderByTimestampDesc(roomOpt.get().getId());
 
-        return "redirect:/teacher-chat?userId=" + otherId;
-    }
+				if (m != null) {
+					lastMessageMap.put(u.getId(), m.getContent());
 
-    private ChatUser getOrCreateTeacher(Integer id) {
-        return chatUserRepo.findByRefIdAndType(id, UserType.TEACHER)
-                .orElseGet(() -> {
-                    ChatUser u = new ChatUser();
-                    u.setRefId(id);
-                    u.setType(UserType.TEACHER);
-                    return chatUserRepo.save(u);
-                });
-    }
+					timeMap.put(u.getId(), m.getTimestamp().toLocalTime().toString().substring(0, 5));
+				} else {
+					lastMessageMap.put(u.getId(), "Start chat...");
+					timeMap.put(u.getId(), "");
+				}
 
-    private ChatRoom getRoom(ChatUser a, ChatUser b) {
-        return chatRoomRepo.findChatRoom(a.getId(), b.getId()).orElseGet(() -> {
-            ChatRoom r = new ChatRoom();
-            r.setUser1(a);
-            r.setUser2(b);
-            return chatRoomRepo.save(r);
-        });
-    }
+			} else {
+				lastMessageMap.put(u.getId(), "Start chat...");
+				timeMap.put(u.getId(), "");
+			}
+		}
+
+		model.addAttribute("lastMessageMap", lastMessageMap);
+		model.addAttribute("timeMap", timeMap);
+		model.addAttribute("unreadMap", unreadMap);
+		model.addAttribute("teacher", teacher);
+		model.addAttribute("users", users);
+		model.addAttribute("selectedUser", selectedUser);
+		model.addAttribute("selectedName", selectedName);
+		model.addAttribute("selectedImage", selectedImage);
+		model.addAttribute("messages", messages);
+		model.addAttribute("roomId", roomId);
+
+		return "teacher-chat";
+	}
+
+	@PostMapping("/teacher/send")
+	public String sendTeacher(@RequestParam Integer roomId, @RequestParam String content, HttpSession session) {
+
+		Integer senderId = (Integer) session.getAttribute("chatUserId");
+
+		ChatUser sender = chatUserRepo.findById(senderId).orElse(null);
+		ChatRoom room = chatRoomRepo.findById(roomId).orElse(null);
+
+		if (sender == null || room == null)
+			return "redirect:/teacher-chat";
+
+		ChatMessage msg = new ChatMessage();
+		msg.setChatRoom(room);
+		msg.setSender(sender);
+		msg.setContent(content);
+		msg.setTimestamp(java.time.LocalDateTime.now());
+
+		messageRepo.save(msg);
+
+		Integer otherId = room.getUser1().getId().equals(senderId) ? room.getUser2().getId() : room.getUser1().getId();
+
+		return "redirect:/teacher-chat?userId=" + otherId;
+	}
+
+	private ChatUser getOrCreateTeacher(Integer id) {
+		return chatUserRepo.findByRefIdAndType(id, UserType.TEACHER).orElseGet(() -> {
+			ChatUser u = new ChatUser();
+			u.setRefId(id);
+			u.setType(UserType.TEACHER);
+			return chatUserRepo.save(u);
+		});
+	}
+
+	private ChatRoom getRoom(ChatUser a, ChatUser b) {
+		return chatRoomRepo.findChatRoom(a.getId(), b.getId()).orElseGet(() -> {
+			ChatRoom r = new ChatRoom();
+			r.setUser1(a);
+			r.setUser2(b);
+			return chatRoomRepo.save(r);
+		});
+	}
 }

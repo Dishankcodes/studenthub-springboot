@@ -58,4 +58,6 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
 	List<Integer> findCompletedCourses(Integer studentId);
 
 	boolean existsByStudentStudid(Integer refId);
+
+	boolean existsByStudentStudidAndCourseTeacherTeacherId(Integer studentId, Integer refId);
 }

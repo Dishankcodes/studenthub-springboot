@@ -50,95 +50,131 @@
 			display: flex;
 			align-items: center;
 			gap: 10px;
-			background: #fff;
-			padding: 14px 16px;
+			background: white;
+			padding: 16px;
 			border-radius: 14px;
 			border: 1px solid #e5e7eb;
 			margin-bottom: 20px;
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
 		}
 
 		.search-box input {
 			border: none;
 			outline: none;
 			width: 100%;
+			font-size: 14px;
 		}
 
-		.search-hint {
+		.hint {
 			font-size: 13px;
 			color: #6b7280;
-			margin-bottom: 15px;
+			margin-bottom: 20px;
 		}
 
-		
+		/* CARD */
 		.user-card {
-			background: #fff;
-			padding: 14px;
-			border-radius: 14px;
+			background: white;
+			padding: 16px;
+			border-radius: 16px;
 			display: flex;
 			align-items: center;
-			gap: 14px;
-			margin-bottom: 12px;
+			gap: 15px;
+			margin-bottom: 14px;
 			border: 1px solid #eee;
-			transition: 0.2s;
+			transition: 0.25s;
 		}
 
 		.user-card:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+			transform: translateY(-3px);
+			box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 		}
 
 		.user-card img {
-			width: 50px;
-			height: 50px;
+			width: 55px;
+			height: 55px;
 			border-radius: 50%;
+			object-fit: cover;
+		}
+
+		.user-info {
+			flex: 1;
 		}
 
 		.user-name {
 			font-weight: 600;
+			font-size: 15px;
 		}
 
-		.user-type {
+		.badge {
 			font-size: 11px;
+			padding: 2px 8px;
+			border-radius: 999px;
+			margin-left: 8px;
+		}
+
+		.student-badge {
+			background: #ede9fe;
 			color: #6d28d9;
-			margin-left: 6px;
+		}
+
+		.teacher-badge {
+			background: #dbeafe;
+			color: #2563eb;
+		}
+
+		/* BUTTON GROUP */
+		.actions {
+			display: flex;
+			gap: 8px;
+		}
+
+		.btn {
+			border: none;
+			padding: 7px 14px;
+			border-radius: 10px;
+			font-size: 13px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			gap: 5px;
+			transition: 0.2s;
+		}
+
+		.btn:hover {
+			transform: translateY(-2px);
 		}
 
 		.btn-connect {
 			background: #6d28d9;
 			color: white;
-			padding: 6px 14px;
-			border-radius: 8px;
-			border: none;
 		}
 
 		.btn-chat {
 			background: #10b981;
 			color: white;
-			padding: 6px 14px;
-			border-radius: 8px;
+		}
+
+		.btn-profile {
+			background: #2563eb;
+			color: white;
+		}
+
+		.status-text {
+			font-size: 13px;
 		}
 
 		.pending {
 			color: #f59e0b;
-			font-size: 13px;
 		}
 
 		.received {
 			color: #2563eb;
-			font-size: 13px;
 		}
 
-		.empty-box {
+		.empty {
 			text-align: center;
 			padding: 40px;
 			color: #6b7280;
-		}
-
-		@media(max-width:768px) {
-			.main {
-				margin-left: 0;
-				padding: 15px;
-			}
 		}
 	</style>
 </head>
@@ -196,54 +232,79 @@
 	</div>
 	<div class="main">
 
+		<!-- SEARCH -->
 		<div class="search-box">
 			<i class="bi bi-search"></i>
-			<input type="text" id="searchInput" placeholder="Search students, teachers...">
+			<input type="text" id="searchInput" placeholder="Search students or teachers...">
 		</div>
 
-		<div class="search-hint">
-			Start typing to find students or teachers instantly 👀
+		<div class="hint">
+			Search students to connect 🤝 or teachers to view & chat 🎓
 		</div>
 
 		<div id="resultsContainer">
 
-			<div th:if="${results != null}">
-				<div th:each="r : ${results}" class="user-card">
+			<div th:each="r : ${results}" class="user-card">
 
-					<img th:src="${r.image != null ? r.image : '/images/default.jpg'}">
+				<img th:src="${r.image != null ? r.image : '/images/default.jpg'}">
 
-					<div style="flex:1;">
-						<div class="user-name">
-							<span th:text="${r.name}"></span>
-							<span class="user-type" th:text="${r.type}"></span>
-						</div>
+				<div class="user-info">
+					<div class="user-name">
+						<span th:text="${r.name}"></span>
+
+						<span th:if="${r.type == 'STUDENT'}" class="badge student-badge">
+							Student
+						</span>
+
+						<span th:if="${r.type == 'TEACHER'}" class="badge teacher-badge">
+							Teacher
+						</span>
 					</div>
+				</div>
+				<div class="actions">
 
-					<div>
+					<div th:if="${r.type == 'TEACHER'}" style="display:flex; gap:8px;">
+
+						<a th:href="@{/student-teacher-view(id=${r.refId})}" class="btn btn-profile">
+							<i class="bi bi-person"></i>
+						</a>
+
+						<a th:href="@{/student-chat(userId=${r.id})}" class="btn btn-chat">
+							<i class="bi bi-chat-dots"></i>
+						</a>
+
+					</div>
+					<div th:if="${r.type == 'STUDENT'}">
+
 						<form th:if="${r.status == 'FOLLOW'}" action="/connection/send" method="post">
 							<input type="hidden" name="receiverId" th:value="${r.id}">
-							<button class="btn-connect">Connect</button>
+							<button class="btn btn-connect">
+								<i class="bi bi-person-plus"></i> Connect
+							</button>
 						</form>
 
-						<span th:if="${r.status == 'PENDING'}" class="pending">
-							Request Sent ✓
+						<span th:if="${r.status == 'PENDING'}" class="status-text pending">
+							⏳ Request Sent
 						</span>
 
 						<a th:if="${r.status == 'REQUEST_RECEIVED'}" th:href="@{/student-notification}"
-							class="received">
-							Accept
+							class="status-text received">
+							Accept Request
 						</a>
 
-						<a th:if="${r.status == 'CHAT'}" th:href="@{/student-chat(userId=${r.id})}" class="btn-chat">
-							Chat
+						<a th:if="${r.status == 'CHAT'}" th:href="@{/student-chat(userId=${r.id})}"
+							class="btn btn-chat">
+							<i class="bi bi-chat"></i> Chat
 						</a>
+
 					</div>
 				</div>
 			</div>
 
-			<div th:if="${results == null or #lists.isEmpty(results)}" class="empty-box">
-				🔍 Search for students or teachers to connect and start chatting
+			<div th:if="${#lists.isEmpty(results)}" class="empty">
+				No users found 😕
 			</div>
+
 		</div>
 	</div>
 
@@ -310,4 +371,5 @@
 		}
 	</script>
 </body>
+
 </html>

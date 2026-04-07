@@ -70,42 +70,43 @@ public class AdminController {
 	@Autowired
 	private CourseRepository courseRepo;
 
-	@Autowired 
+	@Autowired
 	private InternshipRepository internshipRepo;
-	
+
 	@Autowired
 	private CourseFeedbackRepository feedbackRepo;
-	
+
 	@GetMapping("/admin-dashboard")
 	public String admin_dashboard(HttpSession session, Model model) {
 
-	    if (session.getAttribute("adminEmail") == null) {
-	        return "redirect:/admin-login";
-	    }
+		if (session.getAttribute("adminEmail") == null) {
+			return "redirect:/admin-login";
+		}
 
-	    String username = (String) session.getAttribute("adminUsername");
+		String username = (String) session.getAttribute("adminUsername");
 
-	    // ===== COUNTS =====
-	    long totalStudents = studentRepo.count();
-	    long totalTeachers = teacherRepo.count();
-	    long totalCourses = courseRepo.count();
-	    long totalInternships = internshipRepo.count();
-	    long totalEnrollments = enrollmentRepo.count();
-	    long totalApplications = applicationRepo.count();
-	    long totalFeedback = feedbackRepo.count();
+		// ===== COUNTS =====
+		long totalStudents = studentRepo.count();
+		long totalTeachers = teacherRepo.count();
+		long totalCourses = courseRepo.count();
+		long totalInternships = internshipRepo.count();
+		long totalEnrollments = enrollmentRepo.count();
+		long totalApplications = applicationRepo.count();
+		long totalFeedback = feedbackRepo.count();
 
-	    // ===== SEND =====
-	    model.addAttribute("username", username);
-	    model.addAttribute("totalStudents", totalStudents);
-	    model.addAttribute("totalTeachers", totalTeachers);
-	    model.addAttribute("totalCourses", totalCourses);
-	    model.addAttribute("totalInternships", totalInternships);
-	    model.addAttribute("totalEnrollments", totalEnrollments);
-	    model.addAttribute("totalApplications", totalApplications);
-	    model.addAttribute("totalFeedback", totalFeedback);
+		// ===== SEND =====
+		model.addAttribute("username", username);
+		model.addAttribute("totalStudents", totalStudents);
+		model.addAttribute("totalTeachers", totalTeachers);
+		model.addAttribute("totalCourses", totalCourses);
+		model.addAttribute("totalInternships", totalInternships);
+		model.addAttribute("totalEnrollments", totalEnrollments);
+		model.addAttribute("totalApplications", totalApplications);
+		model.addAttribute("totalFeedback", totalFeedback);
 
-	    return "admin-dashboard";
+		return "admin-dashboard";
 	}
+
 	@GetMapping("/manage-students")
 	public String admin_student(HttpSession session, Model model) {
 

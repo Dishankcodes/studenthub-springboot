@@ -41,16 +41,16 @@ public class ChatController {
 
 	@Autowired
 	private ChatUserRepository chatUserRepo;
-	
+
 	@Autowired
 	private ChatRoomRepository chatRoomRepo;
-	
+
 	@Autowired
 	private ChatMessageRepository messageRepo;
-	
+
 	@Autowired
 	private ConnectionRepository connectionRepo;
-	
+
 	@Autowired
 	private EnrollmentRepository enrollmentRepo;
 
@@ -74,14 +74,23 @@ public class ChatController {
 
 		List<ChatUser> users = new ArrayList<>();
 
-		// enrolled teachers
 		List<Enrollment> enrollments = enrollmentRepo.findByStudentStudid(studentId);
 		for (Enrollment e : enrollments) {
 			ChatUser t = getOrCreate(e.getCourse().getTeacher().getTeacherId(), UserType.TEACHER);
 			users.add(t);
 		}
+		
+		List<ChatRoom> rooms = chatRoomRepo.findByUser1IdOrUser2Id(me.getId(), me.getId());
 
-		// connections
+		for (ChatRoom r : rooms) {
+
+		    ChatUser other = r.getUser1().getId().equals(me.getId())
+		            ? r.getUser2()
+		            : r.getUser1();
+
+		    users.add(other);
+		}
+
 		List<Connection> connections = connectionRepo.findBySenderIdAndStatusOrReceiverIdAndStatus(me.getId(),
 				ConnectionStatus.ACCEPTED, me.getId(), ConnectionStatus.ACCEPTED);
 
@@ -90,12 +99,12 @@ public class ChatController {
 			users.add(other);
 		}
 
-		// add admin
 		ChatUser admin = chatUserRepo.findByRefIdAndType(1, UserType.ADMIN).orElse(null);
 		if (admin != null)
 			users.add(admin);
 
-		// 🔥 NAME + IMAGE MAP
+		users = users.stream().distinct().toList();
+
 		Map<Integer, String> nameMap = new HashMap<>();
 		Map<Integer, String> imageMap = new HashMap<>();
 
@@ -141,6 +150,18 @@ public class ChatController {
 
 			selectedUser = chatUserRepo.findById(userId).orElse(null);
 
+			if (selectedUser != null && selectedUser.getType() == UserType.TEACHER) {
+
+				boolean enrolled = enrollmentRepo.existsByStudentStudidAndCourseTeacherTeacherId(studentId,
+						selectedUser.getRefId());
+
+				if (!enrolled) {
+					model.addAttribute("notEnrolled", true);
+				}
+			}
+
+			selectedUser = chatUserRepo.findById(userId).orElse(null);
+
 			if (selectedUser != null) {
 
 				canChat = isAllowed(me, selectedUser);
@@ -164,15 +185,14 @@ public class ChatController {
 		model.addAttribute("canChat", canChat);
 
 		if (roomId != null) {
-            for (ChatMessage msg : messages) {
-                if (!msg.isSeen() && !msg.getSender().getId().equals(me.getId())) {
-                    msg.setSeen(true);
-                }
-            }
-            messageRepo.saveAll(messages);
-        }
+			for (ChatMessage msg : messages) {
+				if (!msg.isSeen() && !msg.getSender().getId().equals(me.getId())) {
+					msg.setSeen(true);
+				}
+			}
+			messageRepo.saveAll(messages);
+		}
 
-		
 		Map<Integer, Long> unreadMap = new HashMap<>();
 
 		for (ChatUser u : users) {
@@ -185,33 +205,31 @@ public class ChatController {
 				unreadMap.put(u.getId(), 0L);
 			}
 		}
-		
+
 		Map<Integer, String> lastMessageMap = new HashMap<>();
 		Map<Integer, String> timeMap = new HashMap<>();
 
 		for (ChatUser u : users) {
 
-		    Optional<ChatRoom> roomOpt = chatRoomRepo.findChatRoom(me.getId(), u.getId());
+			Optional<ChatRoom> roomOpt = chatRoomRepo.findChatRoom(me.getId(), u.getId());
 
-		    if (roomOpt.isPresent()) {
+			if (roomOpt.isPresent()) {
 
-		        ChatMessage m = messageRepo
-		                .findTop1ByChatRoomIdOrderByTimestampDesc(roomOpt.get().getId());
+				ChatMessage m = messageRepo.findTop1ByChatRoomIdOrderByTimestampDesc(roomOpt.get().getId());
 
-		        if (m != null) {
-		            lastMessageMap.put(u.getId(), m.getContent());
+				if (m != null) {
+					lastMessageMap.put(u.getId(), m.getContent());
 
-		            timeMap.put(u.getId(),
-		                    m.getTimestamp().toLocalTime().toString().substring(0, 5));
-		        } else {
-		            lastMessageMap.put(u.getId(), "Start chat...");
-		            timeMap.put(u.getId(), "");
-		        }
+					timeMap.put(u.getId(), m.getTimestamp().toLocalTime().toString().substring(0, 5));
+				} else {
+					lastMessageMap.put(u.getId(), "Start chat...");
+					timeMap.put(u.getId(), "");
+				}
 
-		    } else {
-		        lastMessageMap.put(u.getId(), "Start chat...");
-		        timeMap.put(u.getId(), "");
-		    }
+			} else {
+				lastMessageMap.put(u.getId(), "Start chat...");
+				timeMap.put(u.getId(), "");
+			}
 		}
 
 		model.addAttribute("lastMessageMap", lastMessageMap);
@@ -246,6 +264,17 @@ public class ChatController {
 		Integer otherId = room.getUser1().getId().equals(sender.getId()) ? room.getUser2().getId()
 				: room.getUser1().getId();
 
+		ChatUser receiver = room.getUser1().getId().equals(sender.getId()) ? room.getUser2() : room.getUser1();
+
+		if (receiver.getType() == UserType.TEACHER) {
+
+			boolean enrolled = enrollmentRepo.existsByStudentStudidAndCourseTeacherTeacherId(studentId,
+					receiver.getRefId());
+
+			if (!enrolled) {
+				return "redirect:/student-teacher-view?id=" + receiver.getRefId();
+			}
+		}
 		return "redirect:/student-chat?userId=" + otherId;
 	}
 
@@ -297,15 +326,13 @@ public class ChatController {
 
 	private boolean isAllowed(ChatUser me, ChatUser other) {
 
-		if (other.getType() == UserType.ADMIN) {
+		if (other.getType() == UserType.ADMIN)
+			return true;
+
+		if (other.getType() == UserType.TEACHER) {
 			return true;
 		}
 
-		if (other.getType() == UserType.TEACHER) {
-			return enrollmentRepo.existsByStudentStudidAndCourseCourseId(me.getRefId(), other.getRefId());
-		}
-
-		// ✅ STUDENT ↔ STUDENT (only if accepted)
 		return connectionRepo.findBySenderIdAndReceiverIdOrSenderIdAndReceiverId(me.getId(), other.getId(),
 				other.getId(), me.getId()).map(c -> c.getStatus() == ConnectionStatus.ACCEPTED).orElse(false);
 	}

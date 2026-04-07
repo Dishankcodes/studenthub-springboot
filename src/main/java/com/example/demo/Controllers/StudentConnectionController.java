@@ -94,8 +94,8 @@ public class StudentConnectionController {
 				map.put("name", t.getFirstname() + " " + t.getLastname());
 				map.put("type", "TEACHER");
 				map.put("image", p != null ? p.getProfileImage() : null);
-				map.put("status", getConnectionStatus(me, u));
-
+				map.put("status", "TEACHER"); // 🔥 FIX
+				map.put("refId", t.getTeacherId()); // 🔥 IMPORTANT (for profile link)
 				results.add(map);
 			}
 		}
@@ -136,8 +136,8 @@ public class StudentConnectionController {
 				map.put("name", t.getFirstname() + " " + t.getLastname());
 				map.put("type", "TEACHER");
 				map.put("image", p != null ? p.getProfileImage() : null);
-				map.put("status", getConnectionStatus(me, u));
-
+				map.put("status", "TEACHER");
+				map.put("refId", t.getTeacherId());
 				results.add(map);
 			}
 		}
@@ -349,8 +349,8 @@ public class StudentConnectionController {
 			map.put("name", t.getFirstname() + " " + t.getLastname());
 			map.put("type", "TEACHER");
 			map.put("image", p != null ? p.getProfileImage() : null);
-			map.put("status", getConnectionStatus(me, u));
-
+			map.put("status", "TEACHER");
+			map.put("refId", t.getTeacherId());
 			results.add(map);
 		}
 

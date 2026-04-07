@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import java.util.Objects;
+
 import com.example.demo.enums.UserType;
 
 import jakarta.persistence.Entity;
@@ -22,6 +24,21 @@ public class ChatUser {
 
 	@Enumerated(EnumType.STRING)
 	private UserType type; // STUDENT / TEACHER / ADMIN
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (!(o instanceof ChatUser))
+			return false;
+		ChatUser other = (ChatUser) o;
+		return refId.equals(other.refId) && type == other.type;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(refId, type);
+	}
 
 	public Integer getId() {
 		return id;
@@ -46,5 +63,5 @@ public class ChatUser {
 	public void setType(UserType type) {
 		this.type = type;
 	}
-	
+
 }
