@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.demo.entity.ChatUser;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseFeedback;
 import com.example.demo.entity.Enrollment;
@@ -27,6 +28,8 @@ import com.example.demo.entity.Student;
 import com.example.demo.enums.CourseStatus;
 import com.example.demo.enums.EnrollmentStatus;
 import com.example.demo.enums.LessonType;
+import com.example.demo.enums.UserType;
+import com.example.demo.repository.ChatUserRepository;
 import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.EnrollmentRepository;
@@ -64,6 +67,9 @@ public class StudentCourseController {
 
 	@Autowired
 	private InstructorFeedbackRepository instructorFeedbackRepo;
+	
+	@Autowired
+	private ChatUserRepository chatUserRepo;
 
 	@GetMapping("/student-course")
 	public String exploreCourse(Model model, HttpSession session) {
@@ -156,6 +162,18 @@ public class StudentCourseController {
 
 		double avgRating = feedbacks.stream().mapToInt(CourseFeedback::getRating).average().orElse(0.0);
 
+		ChatUser teacherUser = chatUserRepo
+			    .findByRefIdAndType(course.getTeacher().getTeacherId(), UserType.TEACHER)
+			    .orElseGet(() -> {
+			        ChatUser u = new ChatUser();
+			        u.setRefId(course.getTeacher().getTeacherId());
+			        u.setType(UserType.TEACHER);
+			        return chatUserRepo.save(u);
+			    });
+
+			model.addAttribute("teacherChatUser", teacherUser);
+			
+			
 		model.addAttribute("instructorAvgRating", instructorAvg);
 		model.addAttribute("instructorRatingCount", instructorCount);
 		model.addAttribute("feedbacks", feedbacks);

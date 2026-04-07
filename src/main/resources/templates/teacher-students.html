@@ -388,7 +388,7 @@
 								</span>
 							</td>
 							<td>
-								<a th:href="@{/teacher-chat(userId=${e.student.studid})}" class="msg-btn">
+								<a th:href="@{/teacher-chat(userId=${chatUserMap[e.student.studid]})}" class="msg-btn">
 									<i class="bi bi-chat-dots"></i> Message
 								</a>
 							</td>

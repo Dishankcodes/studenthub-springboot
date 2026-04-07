@@ -6,12 +6,12 @@
 	<title>Student Profile</title>
 
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-	<link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
 	<style>
 		body {
 			background: #f4f7ff;
-			font-family: "Inter", sans-serif;
+			font-family: 'Poppins', sans-serif;
 		}
 
 		/* MAIN */
@@ -23,12 +23,19 @@
 
 		/* CARD */
 		.profile-card {
-			background: #fff;
+			background: white;
 			border-radius: 18px;
 			padding: 30px;
-			max-width: 850px;
+			max-width: 900px;
 			margin: auto;
 			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+		}
+
+		/* TOP BAR */
+		.top-actions {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 20px;
 		}
 
 		/* HEADER */
@@ -47,7 +54,7 @@
 			object-fit: cover;
 		}
 
-		/* INFO GRID */
+		/* INFO */
 		.profile-info {
 			display: grid;
 			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -70,9 +77,43 @@
 		.info-box strong {
 			display: block;
 			margin-top: 5px;
-			font-size: 15px;
+		}
+
+		/* BUTTONS */
+		.btn {
+			padding: 8px 14px;
+			border-radius: 10px;
+			border: none;
+			cursor: pointer;
+			font-size: 13px;
+			display: inline-flex;
+			gap: 6px;
+			align-items: center;
+		}
+
+		.btn-back {
+			background: #e5e7eb;
+		}
+
+		.btn-connect {
+			background: #6d28d9;
+			color: white;
+		}
+
+		.btn-chat {
+			background: #10b981;
+			color: white;
+		}
+
+		.status {
+			font-size: 13px;
+		}
+
+		.pending {
+			color: #f59e0b;
 		}
 	</style>
+
 </head>
 
 <body>
@@ -80,6 +121,35 @@
 	<div class="main">
 
 		<div class="profile-card">
+
+			<!-- TOP -->
+			<div class="top-actions">
+
+				<a th:href="@{/student-search}" class="btn btn-back">
+					<i class="bi bi-arrow-left"></i> Back
+				</a>
+
+				<div>
+
+					<form th:if="${status == 'FOLLOW'}" action="/connection/send" method="post">
+						<input type="hidden" name="receiverId" th:value="${chatUser.id}">
+						<button class="btn btn-connect">
+							<i class="bi bi-person-plus"></i> Connect
+						</button>
+					</form>
+
+					<span th:if="${status == 'PENDING'}" class="status pending">
+						Request Sent ✓
+					</span>
+
+					<a th:if="${status == 'CHAT'}" th:href="@{/student-chat(userId=${chatUser.id})}"
+						class="btn btn-chat">
+						<i class="bi bi-chat"></i> Chat
+					</a>
+
+				</div>
+
+			</div>
 
 			<!-- HEADER -->
 			<div class="profile-header">
@@ -121,6 +191,7 @@
 		</div>
 
 	</div>
+
 </body>
 
 </html>

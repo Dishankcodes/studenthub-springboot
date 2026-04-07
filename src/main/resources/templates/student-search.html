@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
@@ -242,72 +241,83 @@
 			Search students to connect 🤝 or teachers to view & chat 🎓
 		</div>
 
+		<!-- RESULTS -->
 		<div id="resultsContainer">
 
-			<div th:each="r : ${results}" class="user-card">
+			<!-- 🔥 STUDENTS -->
+			<div th:each="r : ${results}" th:if="${r.type == 'STUDENT'}" class="user-card clickable-card"
+				th:onclick="'window.location.href=\'/student-profile-view?id=' + ${r.refId} + '\''">
 
 				<img th:src="${r.image != null ? r.image : '/images/default.jpg'}">
 
 				<div class="user-info">
 					<div class="user-name">
 						<span th:text="${r.name}"></span>
-
-						<span th:if="${r.type == 'STUDENT'}" class="badge student-badge">
-							Student
-						</span>
-
-						<span th:if="${r.type == 'TEACHER'}" class="badge teacher-badge">
-							Teacher
-						</span>
+						<span class="badge student-badge">Student</span>
 					</div>
+					<small style="color:#6b7280;">Click to view profile</small>
 				</div>
-				<div class="actions">
 
-					<div th:if="${r.type == 'TEACHER'}" style="display:flex; gap:8px;">
+				<!-- ACTIONS -->
+				<div class="actions" onclick="event.stopPropagation()">
 
-						<a th:href="@{/student-teacher-view(id=${r.refId})}" class="btn btn-profile">
-							<i class="bi bi-person"></i>
-						</a>
+					<form th:if="${r.status == 'FOLLOW'}" action="/connection/send" method="post">
+						<input type="hidden" name="receiverId" th:value="${r.id}">
+						<button class="btn btn-connect">
+							<i class="bi bi-person-plus"></i> Connect
+						</button>
+					</form>
 
-						<a th:href="@{/student-chat(userId=${r.id})}" class="btn btn-chat">
-							<i class="bi bi-chat-dots"></i>
-						</a>
+					<span th:if="${r.status == 'PENDING'}" class="status-text pending">
+						⏳ request sent
+					</span>
 
-					</div>
-					<div th:if="${r.type == 'STUDENT'}">
+					<a th:if="${r.status == 'REQUEST_RECEIVED'}" th:href="@{/student-notification}"
+						class="status-text received">
+						Accept
+					</a>
 
-						<form th:if="${r.status == 'FOLLOW'}" action="/connection/send" method="post">
-							<input type="hidden" name="receiverId" th:value="${r.id}">
-							<button class="btn btn-connect">
-								<i class="bi bi-person-plus"></i> Connect
-							</button>
-						</form>
+					<a th:if="${r.status == 'CHAT'}" th:href="@{/student-chat(userId=${r.id})}" class="btn btn-chat">
+						<i class="bi bi-chat"></i> Message
+					</a>
 
-						<span th:if="${r.status == 'PENDING'}" class="status-text pending">
-							⏳ Request Sent
-						</span>
-
-						<a th:if="${r.status == 'REQUEST_RECEIVED'}" th:href="@{/student-notification}"
-							class="status-text received">
-							Accept Request
-						</a>
-
-						<a th:if="${r.status == 'CHAT'}" th:href="@{/student-chat(userId=${r.id})}"
-							class="btn btn-chat">
-							<i class="bi bi-chat"></i> Chat
-						</a>
-
-					</div>
 				</div>
 			</div>
 
+			<!-- 🔵 TEACHERS -->
+			<div th:each="r : ${results}" th:if="${r.type == 'TEACHER'}" class="user-card">
+
+				<img th:src="${r.image != null ? r.image : '/images/default.jpg'}">
+
+				<div class="user-info">
+					<div class="user-name">
+						<span th:text="${r.name}"></span>
+						<span class="badge teacher-badge">Teacher</span>
+					</div>
+					<small style="color:#6b7280;">View profile or start chat</small>
+				</div>
+
+				<div class="actions">
+
+					<a th:href="@{/student-teacher-view(id=${r.refId})}" class="btn btn-profile">
+						<i class="bi bi-person"></i> Instructor Profile
+					</a>
+
+					<a th:href="@{/student-chat(userId=${r.id})}" class="btn btn-chat">
+						<i class="bi bi-chat-dots"></i> Message
+					</a>
+
+				</div>
+			</div>
+
+			<!-- EMPTY -->
 			<div th:if="${#lists.isEmpty(results)}" class="empty">
 				No users found 😕
 			</div>
 
 		</div>
-	</div>
 
+	</div>
 	<script>
 		const input = document.getElementById("searchInput");
 		const container = document.getElementById("resultsContainer");

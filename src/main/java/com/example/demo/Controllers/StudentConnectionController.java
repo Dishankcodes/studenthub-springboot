@@ -78,7 +78,7 @@ public class StudentConnectionController {
 				map.put("type", "STUDENT");
 				map.put("image", s.getProfileImage());
 				map.put("status", getConnectionStatus(me, u));
-
+				map.put("refId", s.getStudid());
 				results.add(map);
 			}
 
@@ -118,6 +118,7 @@ public class StudentConnectionController {
 				map.put("type", "STUDENT");
 				map.put("image", s.getProfileImage());
 				map.put("status", getConnectionStatus(me, u));
+				map.put("refId", s.getStudid());
 
 				results.add(map);
 			}
@@ -141,6 +142,9 @@ public class StudentConnectionController {
 				results.add(map);
 			}
 		}
+		
+		
+		
 
 		model.addAttribute("results", results);
 

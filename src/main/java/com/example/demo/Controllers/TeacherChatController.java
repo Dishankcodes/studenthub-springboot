@@ -52,7 +52,7 @@ public class TeacherChatController {
 	@GetMapping("/teacher-chat")
 	public String teacherChat(@RequestParam(required = false) Integer userId, Model model, HttpSession session) {
 
-	    Integer teacherId = 2; // replace with session later
+	    Integer teacherId = 1; // replace with session later
 	    Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 
 	    if (teacher == null)
@@ -209,6 +209,15 @@ public class TeacherChatController {
 	        } else {
 	            lastMessageMap.put(u.getId(), "Start chat...");
 	            timeMap.put(u.getId(), "");
+	        }
+	    }
+	    if (userId != null) {
+
+	        selectedUser = chatUserRepo.findById(userId).orElse(null);
+
+	        // safety check
+	        if (selectedUser == null) {
+	            return "redirect:/teacher-chat";
 	        }
 	    }
 

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,12 +15,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.entity.Announcement;
+import com.example.demo.entity.ChatUser;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseFeedback;
 import com.example.demo.entity.Enrollment;
@@ -27,9 +28,10 @@ import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherProfile;
 import com.example.demo.enums.AnnouncementAudience;
 import com.example.demo.enums.AnnouncementType;
-import com.example.demo.enums.EnrollmentStatus;
 import com.example.demo.enums.TeacherStatus;
+import com.example.demo.enums.UserType;
 import com.example.demo.repository.AnnouncementRepository;
+import com.example.demo.repository.ChatUserRepository;
 import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
 import com.example.demo.repository.EnrollmentRepository;
@@ -67,6 +69,11 @@ public class TeacherController {
 	@Autowired
 	private CourseRepository courseRepo;
 
+	
+	@Autowired
+	private ChatUserRepository chatUserRepo;
+
+	
 	private boolean isBlocked(Teacher teacher) {
 		return teacher.getStatus() == TeacherStatus.BLOCKED;
 	}
@@ -75,7 +82,6 @@ public class TeacherController {
 		return teacher.getStatus() == TeacherStatus.SUSPENDED;
 	}
 
-	// ===== STUDENTS =====
 	@GetMapping("/teacher-students")
 	public String teacherStudents(HttpSession session, Model model) {
 
@@ -93,6 +99,24 @@ public class TeacherController {
 
 		List<Enrollment> enrollments = enrollmentRepo.findByTeacherId(teacherId);
 
+	
+		Map<Integer, Integer> chatUserMap = new HashMap<>();
+
+		for (var e : enrollments) {
+
+		    ChatUser u = chatUserRepo
+		        .findByRefIdAndType(e.getStudent().getStudid(), UserType.STUDENT)
+		        .orElseGet(() -> {
+		            ChatUser newUser = new ChatUser();
+		            newUser.setRefId(e.getStudent().getStudid());
+		            newUser.setType(UserType.STUDENT);
+		            return chatUserRepo.save(newUser);
+		        });
+
+		    chatUserMap.put(e.getStudent().getStudid(), u.getId());
+		}
+
+		model.addAttribute("chatUserMap", chatUserMap);
 		model.addAttribute("teacher", teacher);
 		model.addAttribute("enrollments", enrollments);
 
