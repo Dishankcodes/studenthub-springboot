@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title>Teacher Dashboard</title>
+	<title>Student Enrollment</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -29,7 +29,6 @@
 			transition: margin-left 0.3s ease;
 		}
 
-		/* When sidebar is collapsed */
 		body.sidebar-collapsed .main-content {
 			margin-left: 80px;
 		}
@@ -42,8 +41,6 @@
 			margin-left: 20px;
 		}
 
-		/* ===== PAGE HEADER ===== */
-		/* ===== Layout ===== */
 		.dashboard {
 			padding: 30px;
 		}
@@ -54,7 +51,6 @@
 			font-weight: 600;
 		}
 
-		/* ===== DASHBOARD CARD ===== */
 		.card {
 			background: #ffffff;
 			border-radius: 14px;
@@ -62,7 +58,6 @@
 			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 		}
 
-		/* ===== TABLE BASE ===== */
 		table {
 			width: 100%;
 			border-collapse: separate;
@@ -70,7 +65,6 @@
 			font-size: 14.5px;
 		}
 
-		/* ===== TABLE HEADER ===== */
 		thead th {
 			position: sticky;
 			top: 0;
@@ -84,9 +78,6 @@
 			letter-spacing: 0.4px;
 		}
 
-		/* ===============================
-   DARK TABLE THEME (FINAL)
-================================ */
 		table {
 			width: 100%;
 			border-collapse: collapse;
@@ -96,7 +87,6 @@
 			overflow: hidden;
 		}
 
-		/* ===== TABLE HEADER ===== */
 		thead th {
 			background: #1f1f35;
 			color: #ffffff;
@@ -108,7 +98,6 @@
 			border-bottom: 1px solid #3c3c5c;
 		}
 
-		/* ===== TABLE ROWS ===== */
 		tbody tr {
 			transition: background 0.2s ease;
 		}
@@ -128,12 +117,10 @@
 			color: inherit;
 		}
 
-		/* Student email */
 		td small {
 			color: #c7c7d1;
 		}
 
-		/* Completed date */
 		.status-complete {
 			color: #22c55e;
 			font-weight: 600;
@@ -167,26 +154,22 @@
 			background-size: 10px;
 		}
 
-		/* Hover */
 		select.form-select:hover {
 			border-color: #f6a623;
 		}
 
-		/* Focus */
 		select.form-select:focus {
 			outline: none;
 			border-color: #f6a623;
 			box-shadow: 0 0 0 3px rgba(246, 166, 35, 0.25);
 		}
 
-		/* Dropdown options */
 		select.form-select option {
 			background: #1f1f35;
 			color: #ffffff;
 		}
 
 
-		/* ===== RESPONSIVE ===== */
 		@media (max-width: 900px) {
 			table {
 				font-size: 13px;
@@ -198,7 +181,6 @@
 			}
 		}
 
-		/* ===== MAIN CONTENT SPACING FIX ===== */
 		.main-content {
 			margin-left: 260px;
 			padding: 0;
@@ -209,22 +191,18 @@
 			margin-left: 80px;
 		}
 
-		/* ===== DASHBOARD FULL WIDTH ===== */
 		.dashboard.full-width {
 			padding: 0;
 			margin-top: 0;
 		}
 
-		/* ===== CARD SHOULD FILL PAGE ===== */
 		.dashboard.full-width .card {
 			border-radius: 0;
 			box-shadow: none;
 			padding: 24px 30px;
 			min-height: calc(100vh - 90px);
-			/* fills screen below header */
 		}
 
-		/* ===== REMOVE EXTRA TOP GAP ===== */
 		.header-divider {
 			margin-bottom: 0;
 		}
@@ -246,6 +224,47 @@
 			background: #f8d7da;
 			color: #721c24;
 			border-left: 6px solid #dc3545;
+		}
+
+		.msg-btn {
+			background: linear-gradient(135deg, #6366f1, #8b5cf6);
+			color: #fff;
+			padding: 6px 12px;
+			border-radius: 8px;
+			font-size: 12px;
+			text-decoration: none;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			transition: 0.2s;
+		}
+
+		.msg-btn:hover {
+			transform: translateY(-2px);
+			opacity: 0.9;
+		}
+
+
+		.filter-bar {
+			display: flex;
+			gap: 12px;
+			margin-bottom: 15px;
+			align-items: center;
+		}
+
+		.search-box {
+			display: flex;
+			align-items: center;
+			background: #f1f5f9;
+			padding: 8px 12px;
+			border-radius: 10px;
+			gap: 6px;
+		}
+
+		.search-box input {
+			border: none;
+			background: transparent;
+			outline: none;
 		}
 	</style>
 </head>
@@ -270,9 +289,7 @@
 		</nav>
 	</aside>
 
-	<!-- ===== MAIN CONTENT ===== -->
 	<main class="main-content">
-		<!-- ===== TOP HEADER ===== -->
 		<header class="top-header">
 			<div class="header-left">
 				<button class="sidebar-toggle" id="sidebarToggle">
@@ -302,7 +319,6 @@
 		</header>
 
 		<hr class="header-divider">
-		<!-- ===== TEACHER STATUS MESSAGE ===== -->
 		<div th:if="${teacher.status.name() == 'SUSPENDED'}" class="status-banner suspended">
 			⚠ Your account is suspended by admin.
 			You can view students but cannot change their status.
@@ -314,6 +330,26 @@
 		</div>
 		<div class="dashboard full-width">
 
+			<div class="filter-bar">
+
+				<div class="search-box">
+					<i class="bi bi-search"></i>
+					<input type="text" placeholder="Search students...">
+				</div>
+
+				<select class="form-select">
+					<option>All Courses</option>
+					<option>Java</option>
+					<option>Web Dev</option>
+				</select>
+
+				<select class="form-select">
+					<option>All Time</option>
+					<option>Last 7 Days</option>
+					<option>Last 30 Days</option>
+				</select>
+
+			</div>
 			<div class="card" style="background:#fff;border-radius:12px;padding:20px">
 
 				<table>
@@ -330,7 +366,6 @@
 					<tbody>
 						<tr th:each="e : ${enrollments}">
 
-							<!-- Student -->
 							<td>
 								<strong th:text="${e.student.fullname}">Student Name</strong><br>
 								<small th:text="${e.student.email}" style="color:#6b7280">
@@ -338,10 +373,8 @@
 								</small>
 							</td>
 
-							<!-- Course -->
 							<td th:text="${e.course.title}">Course Title</td>
 
-							<!-- Date -->
 							<td th:text="${#temporals.format(e.enrolledAt,'dd MMM yyyy')}">
 							</td>
 
@@ -355,9 +388,10 @@
 								</span>
 							</td>
 							<td>
-								message
+								<a th:href="@{/teacher-chat(userId=${e.student.studid})}" class="msg-btn">
+									<i class="bi bi-chat-dots"></i> Message
+								</a>
 							</td>
-
 						</tr>
 
 						<tr th:if="${enrollments.isEmpty()}">
@@ -365,10 +399,8 @@
 								No students enrolled yet.
 							</td>
 						</tr>
-
 					</tbody>
 				</table>
-
 			</div>
 		</div>
 
