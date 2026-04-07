@@ -1,216 +1,239 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
-    <meta charset="UTF-8">
-    <title>Student Profile</title>
+<meta charset="UTF-8">
+<title>Student Profile | Admin</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link th:href="@{/css/admin-css/admin_sidebar.css}" rel="stylesheet">
 
-    <style>
-        body {
-            background: linear-gradient(135deg, #0b0b1f, #14142f);
-            color: #fff;
-            font-family: Poppins;
-        }
+<style>
 
-        /* HEADER */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 110px;
-            background: #1a1a3d;
-        }
+/* ===== THEME ===== */
+body{
+    background: linear-gradient(135deg,#0b0b1f,#14142f);
+    font-family: 'Poppins', sans-serif;
+    color:#e5e7eb;
+}
 
-        .logo {
-            font-size: 22px;
-            font-weight: 600;
-            color: #6c63ff;
-        }
+/* ===== CONTENT ===== */
+.content-area{
+    padding:25px;
+}
 
-        .btn-back {
-            padding: 10px 16px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-            text-decoration: none;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-        }
+/* ===== CARD ===== */
+.card{
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(14px);
+    border-radius:16px;
+    padding:22px;
+    margin-bottom:20px;
+    border:1px solid rgba(255,255,255,0.08);
+}
 
-        .btn-back:hover {
-            background: #6c63ff;
-        }
+/* ===== PROFILE ===== */
+.profile{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
 
-        /* CONTAINER */
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-        }
+.profile img{
+    width:85px;
+    height:85px;
+    border-radius:50%;
+}
 
-        /* CARD */
-        .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(14px);
-            border-radius: 16px;
-            padding: 22px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
+/* ===== INFO GRID ===== */
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:15px;
+    margin-top:15px;
+}
 
-        /* PROFILE */
-        .profile {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
+.info-box{
+    background: rgba(255,255,255,0.05);
+    padding:14px;
+    border-radius:12px;
+}
 
-        .profile img {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-        }
+.info-box span{
+    font-size:11px;
+    color:#9ca3af;
+}
 
-        /* STATUS */
-        .status {
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-        }
+.info-box p{
+    margin:5px 0 0;
+}
+p{
+	margin: 10px;
+}
+/* ===== FULL BOX ===== */
+.full-box{
+    margin-top:15px;
+    background: rgba(255,255,255,0.05);
+    padding:14px;
+    border-radius:12px;
+}
 
-        .accepted {
-            background: #22c55e33;
-            color: #22c55e;
-        }
+/* ===== STATUS ===== */
+.status{
+    padding:6px 14px;
+    border-radius:999px;
+    font-size:12px;
+}
 
-        .rejected {
-            background: #ef444433;
-            color: #ef4444;
-        }
+.pending{ background:#f59e0b33; color:#f59e0b;}
+.accepted{ background:#22c55e33; color:#22c55e;}
+.rejected{ background:#ef444433; color:#ef4444;}
 
-        .pending {
-            background: #f59e0b33;
-            color: #f59e0b;
-        }
+/* ===== BUTTONS ===== */
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:18px;
+    flex-wrap:wrap;
+}
 
-        /* BUTTONS */
-        .actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
+.btn{
+    padding:8px 14px;
+    border-radius:10px;
+    border:none;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
 
-        .btn {
-            padding: 10px 16px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            color: #fff;
-        }
+.btn-success{background:#22c55e;}
+.btn-danger{background:#ef4444;}
+.btn-primary{background:#6366f1;}
 
-        .btn-success {
-            background: #22c55e;
-        }
+/* ===== TOPBAR ===== */
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
 
-        .btn-danger {
-            background: #ef4444;
-        }
-    </style>
+.back{
+    background:rgba(255,255,255,0.08);
+    padding:8px 14px;
+    border-radius:10px;
+    color:white;
+    text-decoration:none;
+}
+
+</style>
 </head>
 
 <body>
 
-    <!-- HEADER -->
-    <div class="header">
-        <div class="logo">EduPlatform Admin</div>
+<main class="home-section">
+<div class="content-area">
 
-        <a th:href="@{'/admin-applicants?id=' + ${internship.id}}" class="btn-back">
-            <i class="bi bi-arrow-left"></i> Back
-        </a>
-    </div>
+<!-- HEADER -->
+<div class="topbar">
+    <h2>👤 Student Profile</h2>
 
-    <div class="container">
+    <a th:href="@{'/admin-applicants?id=' + ${internship.id}}" class="back">
+        ← Back
+    </a>
+</div>
 
-        <!-- ERROR -->
-        <div th:if="${error}" class="card" style="color:#ef4444;">
-            <span th:text="${error}"></span>
-        </div>
+<div class="card">
 
-        <!-- STUDENT -->
-        <div class="card">
-            <div class="profile">
-                <img th:src="${student.profileImage != null ? student.profileImage : '/images/default.jpg'}">
+    <!-- PROFILE -->
+    <div class="profile">
+        <img th:src="${student.profileImage != null ? student.profileImage : '/images/default.jpg'}">
 
-                <div>
-                    <h2 th:text="${student.fullname}"></h2>
-                    <p th:text="${student.email}"></p>
-                </div>
-                <a th:href="@{'/admin-student-dashboard?id=' + ${student.studid}}" class="btn-back">
-                    <i class="bi bi-bar-chart"></i> Full Dashboard
-                </a>
-            </div>
-
-            <hr style="margin:15px 0; opacity:0.2;">
-
-            <p><b>College:</b> <span th:text="${student.college}"></span></p>
-            <p><b>Degree:</b> <span th:text="${student.degree}"></span></p>
-        </div>
-
-        <div class="card" th:if="${app == null}" style="color:#f59e0b;">
-            <i class="bi bi-exclamation-circle"></i>
-            This student has not applied for this internship.
-        </div>
-        <!-- APPLICATION -->
-        <div class="card" th:if="${app != null}">
-
-            <h3>Application Details</h3>
-
-            <p><b>Internship:</b> <span th:text="${internship.title}"></span></p>
-            <p><b>Phone:</b> <span th:text="${app.phone}"></span></p>
-
-            <p><b>Cover Letter:</b></p>
-            <p th:text="${app.coverLetter}"></p>
-
-            <p>
-                <b>Status:</b>
-                <span class="status" th:classappend="
-        ${app.status.name() == 'APPLIED'} ? 'pending' :
-        (${app.status.name() == 'ACCEPTED'} ? 'accepted' :
-        (${app.status.name() == 'REJECTED'} ? 'rejected' :
-        (${app.status.name() == 'PASSED'} ? 'accepted' :
-        (${app.status.name() == 'FAILED'} ? 'rejected' : ''))))" th:text="${app.status}">
-                </span>
-            </p>
-
-           
-            <div class="actions" th:if="${app != null and app.status.name() == 'APPLIED'}">
-
-                <form action="/admin/application/update" method="post">
-                    <input type="hidden" name="appId" th:value="${app.id}">
-                    <input type="hidden" name="internshipId" th:value="${internship.id}">
-                    <button class="btn btn-success" name="action" value="accept">
-                        <i class="bi bi-check-lg"></i> Accept
-                    </button>
-                </form>
-
-                <form action="/admin/application/update" method="post">
-                    <input type="hidden" name="appId" th:value="${app.id}">
-                    <input type="hidden" name="internshipId" th:value="${internship.id}">
-                    <button class="btn btn-danger" name="action" value="reject">
-                        <i class="bi bi-x-lg"></i> Reject
-                    </button>
-                </form>
-                <form action="/admin/application/select" method="post">
-                    <input type="hidden" name="appId" th:value="${app.id}">
-                    <input type="hidden" name="internshipId" th:value="${internship.id}">
-
-                    <button class="btn btn-success">
-                        <i class="bi bi-award"></i> Select Candidate
-                    </button>
-                </form>
-            </div>
+        <div>
+            <h2 th:text="${student.fullname}"></h2>
+            <p th:text="${student.email}" style="color:#9ca3af;"></p>
         </div>
     </div>
+
+    <!-- INFO -->
+    <div class="info-grid">
+        <div class="info-box">
+            <span>FULL NAME</span>
+            <p th:text="${student.fullname}"></p>
+        </div>
+
+        <div class="info-box">
+            <span>COLLEGE</span>
+            <p th:text="${student.college}"></p>
+        </div>
+
+        <div class="info-box">
+            <span>DEGREE</span>
+            <p th:text="${student.degree}"></p>
+        </div>
+    </div>
+
+    <div class="full-box">
+        <span>INTERESTS</span>
+        <p th:text="${student.interests != null ? student.interests : 'No interests added'}"></p>
+    </div>
+
+    <!-- APPLICATION -->
+    <div th:if="${app != null}">
+
+        <hr style="opacity:0.2;margin:20px 0;">
+
+        <p>Internship: <span th:text="${internship.title}"></span></p>
+        <p>Phone: <span th:text="${app.phone}"></span></p>
+
+        <p>Status:
+            <span class="status"
+                th:classappend="
+                ${app.status.name() == 'APPLIED'} ? ' pending' :
+                (${app.status.name() == 'ACCEPTED'} ? ' accepted' :
+                (${app.status.name() == 'REJECTED'} ? ' rejected' : ''))"
+                th:text="${app.status}">
+            </span>
+        </p>
+
+        <p>Cover Letter:</p>
+        <p th:text="${app.coverLetter}"></p>
+
+        <!-- ACTIONS -->
+        <div class="actions" th:if="${app.status.name() == 'APPLIED'}">
+
+            <form action="/admin/application/update" method="post">
+                <input type="hidden" name="appId" th:value="${app.id}">
+                <input type="hidden" name="internshipId" th:value="${internship.id}">
+                <button class="btn btn-success">
+                    ✔ Accept
+                </button>
+            </form>
+
+            <form action="/admin/application/update" method="post">
+                <input type="hidden" name="appId" th:value="${app.id}">
+                <input type="hidden" name="internshipId" th:value="${internship.id}">
+                <button class="btn btn-danger">
+                    ✖ Reject
+                </button>
+            </form>
+
+            <form action="/admin/application/select" method="post">
+                <input type="hidden" name="appId" th:value="${app.id}">
+                <input type="hidden" name="internshipId" th:value="${internship.id}">
+                <button class="btn btn-primary">
+                    🎯 Select
+                </button>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+</main>
+
 </body>
-
 </html>
