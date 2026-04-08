@@ -5,11 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Explore Course | EduPlatform</title>
-
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
     <style>
@@ -44,7 +40,6 @@
             align-items: center;
         }
 
-        /* SEARCH BOX */
         .search-box {
             flex: 1;
             display: flex;
@@ -64,7 +59,6 @@
             font-size: 14px;
         }
 
-        /* DROPDOWN */
         .filter-select {
             background: #fff;
             border-radius: 12px;
@@ -300,12 +294,37 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px dashed #e2e8f0;
+        }
+
+        .empty-state i {
+            font-size: 60px;
+            color: #cbd5e1;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            color: #6b7280;
+            margin-top: 6px;
+        }
     </style>
 </head>
 
 <body>
 
-    <!-- ===== SIDEBAR ===== -->
     <div class="sidebar collapsed" id="sidebar">
         <button class="toggle-btn" id="toggle">
             <i class="bi bi-chevron-right"></i>
@@ -328,7 +347,7 @@
         <a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Notes</span></a>
         <a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
         <a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
-        <a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a> 
+        <a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a>
         <a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
         <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
@@ -382,7 +401,18 @@
                 </button>
 
             </div>
-            <div class="course-grid">
+
+            <div th:if="${courses == null or #lists.isEmpty(courses)}" class="empty-state">
+
+                <i class="bi bi-journal-x"></i>
+
+                <h3>No Courses Available</h3>
+
+                <p>As of now, there are no courses available. Please check back later.</p>
+
+            </div>
+
+            <div th:if="${courses != null and !#lists.isEmpty(courses)}" class="course-grid">
 
                 <!-- COURSE -->
                 <div class="course-card" th:each="course : ${courses}">
@@ -436,16 +466,10 @@
                         </div>
                     </div>
                 </div>
-
-
-
             </div>
-
         </div>
     </div>
 
-
-    <!-- ===== SCRIPT ===== -->
     <script>
         const sidebar = document.getElementById("sidebar");
         const toggle = document.getElementById("toggle");

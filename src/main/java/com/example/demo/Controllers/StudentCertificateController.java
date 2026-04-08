@@ -92,8 +92,9 @@ public class StudentCertificateController {
 			return "redirect:/student-course-player/" + courseId + "?certError=true";
 		}
 
-		/* 4️⃣ Generate PDF */
-		String pdfPath = generatePdf(student, course, template);
+		String certNumber = "CERT-" + System.currentTimeMillis();
+
+		String pdfPath = generatePdf(student, course, template, certNumber);
 
 		/* 5️⃣ Save record */
 		CourseCertificate cert = new CourseCertificate();
@@ -103,7 +104,7 @@ public class StudentCertificateController {
 		cert.setIssuedAt(LocalDate.now());
 		cert.setCertificateNumber("CERT-" + System.currentTimeMillis());
 		cert.setPdfPath(pdfPath);
-
+		cert.setCertificateNumber(certNumber);
 		certificateRepo.save(cert);
 
 		return "redirect:/student/certificate/download/" + cert.getId();
@@ -135,7 +136,7 @@ public class StudentCertificateController {
 		response.getOutputStream().flush();
 	}
 	
-	private String generatePdf(Student student, Course course, CertificateTemplate template) throws Exception {
+	private String generatePdf(Student student, Course course, CertificateTemplate template, String certNumber) throws Exception {
 
 		String baseDir = System.getProperty("user.dir") + "/uploads/certificates/student-" + student.getStudid()
 				+ "/course-" + course.getCourseId();
@@ -171,7 +172,7 @@ public class StudentCertificateController {
 		BaseFont normal = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
 		text.beginText();
-		text.setFontAndSize(bold, 32);
+		text.setFontAndSize(bold, 42);
 		text.showTextAligned(Element.ALIGN_CENTER, student.getFullname().toUpperCase(), PageSize.A4.getWidth() / 2, 430,
 				0);
 		text.endText();
@@ -192,6 +193,19 @@ public class StudentCertificateController {
 			sign.setAbsolutePosition(400, 150);
 			document.add(sign);
 		}
+		text.beginText();
+		text.setFontAndSize(normal, 12);
+		text.showTextAligned(Element.ALIGN_LEFT,
+		        "Certificate No: " + certNumber,
+		        50, 80, 0);
+		text.endText();
+
+		text.beginText();
+		text.setFontAndSize(normal, 12);
+		text.showTextAligned(Element.ALIGN_RIGHT,
+		        "Issued on: " + LocalDate.now(),
+		        PageSize.A4.getWidth() - 50, 80, 0);
+		text.endText();
 
 		document.close();
 

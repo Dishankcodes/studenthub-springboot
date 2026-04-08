@@ -91,6 +91,73 @@
             text-decoration: none;
             width: fit-content;
         }
+
+        img:hover {
+            transform: scale(1.08);
+            transition: 0.2s;
+        }
+
+        /* ===== RECENT ACTIVITY ===== */
+
+        .activity-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        .activity-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0038a8;
+            margin-bottom: 4px;
+        }
+
+        .activity-sub {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 18px;
+        }
+
+        .activity-item {
+            padding: 14px 0;
+            border-bottom: 1px solid #eef1f7;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .activity-user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .activity-user i {
+            color: #22c55e;
+            font-size: 16px;
+        }
+
+        .activity-time {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .activity-text {
+            margin-left: 24px;
+            font-size: 14px;
+            color: #374151;
+            margin-top: 4px;
+        }
     </style>
 </head>
 
@@ -181,24 +248,37 @@
             </div>
 
         </div>
+        <h2 style="margin-top:40px"><i class="bi bi-people"></i> Your Connections</h2>
 
-        <div class="cards">
+        <div class="card" style="padding:20px;">
 
-            <h5>👥 Your Connections</h5>
-
+            <!-- EMPTY -->
             <div th:if="${connections == null or #lists.isEmpty(connections)}" style="opacity:0.6;">
-                No connections yet <a href="student-search"> go here </a>
+                No connections yet
+                <a th:href="@{/student-search}" style="color:#0059ff;">Explore</a>
             </div>
 
-            <div style="display:flex; gap:10px; margin-top:10px;">
+            <!-- CONNECTION LIST -->
+            <div style="display:flex; gap:14px; margin-top:10px; align-items:center; flex-wrap:wrap;">
 
-                <div th:each="c : ${connections}" style="text-align:center;">
-                    <img th:src="${c.profileImage != null ? c.profileImage : '/images/default.jpg'}"
-                        style="width:45px; height:45px; border-radius:50%;">
+                <div th:each="c : ${connections}" style="text-align:center; cursor:pointer;"
+                    th:onclick="'window.location.href=\'/student-view-profile?userId=' + ${c.id} + '\''">
 
-                    <div style="font-size:11px;" th:text="${c.name}"></div>
+                    <img th:src="${imageMap[c.id] != null ? imageMap[c.id] : '/images/default.jpg'}"
+                        style="width:50px; height:50px; border-radius:50%; object-fit:cover; border:2px solid #e6ebff;">
+
+                    <div style="font-size:12px; margin-top:5px; font-weight:500;" th:text="${nameMap[c.id]}"></div>
                 </div>
+
             </div>
+
+            <!-- VIEW ALL BUTTON -->
+            <div style="margin-top:15px;">
+                <a th:href="@{/student-connections}" class="btn">
+                    View All
+                </a>
+            </div>
+
         </div>
         <h2 style="margin-top:40px">Continue Learning</h2>
 
@@ -259,7 +339,7 @@
                         </p>
 
                     </div>
-                </div>+
+                </div>
 
                 <a class="btn" th:href="@{/student-stuff}">
                     View All
@@ -305,33 +385,20 @@
             </div>
         </div>
 
-        <h2 style="margin-top:40px">Internship Opportunities</h2>
+        <h2 style="margin-top:40px">Internships Opportunities</h2>
         <div class="cards">
-            <div class="card">
-                <h3>Frontend Developer Intern</h3>
-                <p>Company: TechNova</p>
+            <div class="card" th:each="app : ${recentInternships}">
+                <h3 th:text="${app.internship.title}">Internship</h3>
+                <p>
+                    Status:
+                    <b th:text="${app.status}"></b>
+                </p>
 
-                <a class="btn" th:href="@{/student-internships}">
-                    View Details
+                <a th:if="${app.status.name() == 'COMPLETED'}"
+                    th:href="@{'/student-internship/certificate/' + ${app.internship.id}}" class="btn">
+                    Download Certificate
                 </a>
-            </div>
-
-            <div class="card">
-                <h3>Backend Developer Intern</h3>
-                <p>Company: CodeLabs</p>
-
-                <a class="btn" th:href="@{/student-internships}">
-                    View Details
-                </a>
-
-            </div>
-
-            <div class="card">
-
-                <h3>Data Analyst Intern</h3>
-                <p>Company: InsightAI</p>
-
-                <a class="btn" th:href="@{/student-internships}">
+                <a class="btn" th:href="@{/student-internship-detail(id=${app.internship.id})}">
                     View Details
                 </a>
             </div>
@@ -346,8 +413,11 @@
             </div>
 
             <div class="card">
-                <h3><i class="bi bi-chat-dots"></i> Ask Doubt</h3>
-                <a class="btn" th:href="@{/student-chat}">Open Chat</a>
+                <h3><i class="bi bi-headset"></i> Support Chat</h3>
+                <a class="btn" th:if="${adminUser != null}"
+th:href="@{/student-chat(userId=${adminUser.id})}">
+                    Contact Support
+                </a>
             </div>
 
             <div class="card">
@@ -360,25 +430,29 @@
                 <a class="btn" th:href="@{/student-learning}">View</a>
             </div>
         </div>
-
         <h2 style="margin-top:40px">Recent Activity</h2>
 
-        <div class="cards">
+        <div class="activity-card">
 
-            <div class="card">
-                <p>✔ You completed <b>Java Basics</b></p>
-            </div>
+            <div class="activity-title">Recent Activity</div>
+            <div class="activity-sub">Latest actions on your platform</div>
 
-            <div class="card">
-                <p>✔ Certificate issued for <b>Spring Boot</b></p>
-            </div>
+            <div th:each="a : ${activities}" class="activity-item">
 
-            <div class="card">
-                <p>✔ Instructor uploaded new classroom notes</p>
-            </div>
+                <div class="activity-top">
 
-            <div class="card">
-                <p>✔ Feedback submitted successfully</p>
+                    <div class="activity-user">
+                        <i class="bi bi-person-plus"></i>
+                        <span th:text="${loggedStudent.fullname}">User</span>
+                    </div>
+
+                    <div class="activity-time">Just now</div>
+
+                </div>
+
+                <div class="activity-text" th:text="${a}">
+                    Activity text
+                </div>
             </div>
         </div>
     </div>

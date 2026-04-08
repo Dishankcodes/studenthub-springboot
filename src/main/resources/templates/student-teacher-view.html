@@ -246,7 +246,7 @@
 						<i class="bi bi-eye"></i> View
 					</a>
 
-					<form th:action="@{/student/enroll}" method="post">
+					<form th:action="@{/student-enroll}" method="post">
 						<input type="hidden" name="courseId" th:value="${c.courseId}">
 
 						<button th:if="${!enrolledMap[c.courseId]}" class="btn btn-primary">

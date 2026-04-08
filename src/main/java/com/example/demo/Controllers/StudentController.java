@@ -21,11 +21,16 @@ import com.example.demo.entity.CourseCertificate;
 import com.example.demo.entity.CourseFeedback;
 import com.example.demo.entity.Enrollment;
 import com.example.demo.entity.InstructorFeedback;
+import com.example.demo.entity.InternshipApplication;
+import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
 import com.example.demo.entity.TeacherNotes;
+import com.example.demo.enums.AnnouncementAudience;
 import com.example.demo.enums.ConnectionStatus;
 import com.example.demo.enums.CourseStatus;
+import com.example.demo.enums.UserType;
 import com.example.demo.repository.AnnouncementRepository;
+import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.ChatUserRepository;
 import com.example.demo.repository.ConnectionRepository;
 import com.example.demo.repository.CourseCertificateRepository;
@@ -79,9 +84,13 @@ public class StudentController {
 
 	@Autowired
 	private ConnectionRepository connectionRepo;
-	
+
 	@Autowired
 	private ChatUserRepository chatUserRepo;
+
+	@Autowired
+	private ApplicationRepository applicationRepo;
+	
 	
 	@GetMapping("/student-dashboard")
 	public String student_dashboard(HttpSession session, Model model) {
@@ -92,7 +101,6 @@ public class StudentController {
 			return "redirect:/student-login";
 		}
 
-		// ===== ENROLLMENTS =====
 		List<Enrollment> enrollments = enrollmentRepo.findByStudentStudid(studentId);
 
 		List<Course> enrolledCourses = enrollments.stream().map(Enrollment::getCourse).toList();
@@ -100,7 +108,6 @@ public class StudentController {
 		List<Course> completedCourses = enrollments.stream().filter(e -> e.getCompletedAt() != null)
 				.map(Enrollment::getCourse).toList();
 
-		// ===== IN PROGRESS COURSES =====
 		List<Course> inProgressCourses = enrollments.stream().filter(e -> e.getCompletedAt() == null)
 				.map(Enrollment::getCourse).toList();
 
@@ -108,54 +115,110 @@ public class StudentController {
 			inProgressCourses = inProgressCourses.subList(0, 4);
 		}
 
-		// ===== CERTIFICATES =====
 		List<CourseCertificate> certificates = certificateRepo.findByStudentStudid(studentId);
 
-		// ===== ANNOUNCEMENTS =====
-		List<Announcement> announcements = announcementRepo.findTop5ByActiveTrueOrderByCreatedAtDesc();
 
-		// ===== CLASSROOM NOTES =====
+		
+		List<Announcement> all = announcementRepo.findByActiveTrueOrderByPinnedDescCreatedAtDesc();
+
+		List<Integer> enrolledCourseIds = enrollmentRepo
+		        .findByStudentStudid(studentId)
+		        .stream()
+		        .map(e -> e.getCourse().getCourseId())
+		        .toList();
+
+		List<Announcement> announcements = all.stream()
+		        .filter(a ->
+		            a.getAudience() == AnnouncementAudience.ALL ||
+		            a.getAudience() == AnnouncementAudience.STUDENTS ||
+		            (a.getAudience() == AnnouncementAudience.ENROLLED &&
+		             a.getCourse() != null &&
+		             enrolledCourseIds.contains(a.getCourse().getCourseId()))
+		        )
+		        .limit(5)
+		        .toList();
 		List<TeacherNotes> notes = teacherNoteRepo.findTop5ByApprovedTrueOrderByUploadedAtDesc();
 
-		// ===== DASHBOARD COUNTS =====
 		int enrolledCount = enrolledCourses.size();
 		int completedCount = completedCourses.size();
 		int certificateCount = certificates.size();
 		int inProgressCount = inProgressCourses.size();
 
-		// ===== WEEKLY ACTIVITY ====
 		List<Long> weeklyActivity = lessonProgressRepo.getWeeklyActivity(studentId);
 
 		if (weeklyActivity == null || weeklyActivity.size() != 7) {
 			weeklyActivity = List.of(0L, 0L, 0L, 0L, 0L, 0L, 0L);
 		}
 
-		
-		ChatUser me = chatUserRepo
-		        .findByRefIdAndType(studentId, com.example.demo.enums.UserType.STUDENT)
-		        .orElse(null);
+		ChatUser me = chatUserRepo.findByRefIdAndType(studentId, com.example.demo.enums.UserType.STUDENT).orElse(null);
 
 		List<ChatUser> list = new ArrayList<>();
 
 		if (me != null) {
 
-		    List<Connection> connections =
-		            connectionRepo.findBySenderIdAndStatusOrReceiverIdAndStatus(
-		                    me.getId(), ConnectionStatus.ACCEPTED,
-		                    me.getId(), ConnectionStatus.ACCEPTED
-		            );
+			List<Connection> connections = connectionRepo.findBySenderIdAndStatusOrReceiverIdAndStatus(me.getId(),
+					ConnectionStatus.ACCEPTED, me.getId(), ConnectionStatus.ACCEPTED);
 
-		    for (Connection c : connections) {
+			for (Connection c : connections) {
 
-		        ChatUser other = c.getSender().getId().equals(me.getId())
-		                ? c.getReceiver()
-		                : c.getSender();
+				ChatUser other = c.getSender().getId().equals(me.getId()) ? c.getReceiver() : c.getSender();
 
-		        list.add(other);
-		    }
+				list.add(other);
+			}
+		}
+
+		if (list.size() > 5) {
+			list = list.subList(0, 5);
+		}
+
+		Map<Integer, String> nameMap = new HashMap<>();
+		Map<Integer, String> imageMap = new HashMap<>();
+
+		for (ChatUser u : list) {
+
+			if (u.getType() == com.example.demo.enums.UserType.STUDENT) {
+				Student s = studentRepo.findById(u.getRefId()).orElse(null);
+				if (s != null) {
+					nameMap.put(u.getId(), s.getFullname());
+					imageMap.put(u.getId(), s.getProfileImage());
+				}
+			}
+
+			else if (u.getType() == com.example.demo.enums.UserType.TEACHER) {
+				Teacher t = teacherRepo.findById(u.getRefId()).orElse(null);
+				if (t != null) {
+					nameMap.put(u.getId(), t.getFirstname() + " " + t.getLastname());
+				}
+			}
 		}
 		
+		ChatUser admin = chatUserRepo
+		        .findByRefIdAndType(1, UserType.ADMIN)
+		        .orElse(null);
+
+		model.addAttribute("adminUser", admin);
 		
+		// ===== INTERNSHIP DATA =====
+		List<InternshipApplication> internshipApps =
+		        applicationRepo.findByStudent_Studid(studentId);
+
+		List<InternshipApplication> recentInternships =
+		        internshipApps.stream().limit(3).toList();
+
+		
+		List<String> activities = new ArrayList<>();
+
+		activities.add("You enrolled in a course");
+		activities.add("You completed a course");
+		activities.add("Internship application submitted");
+		activities.add("Certificate generated");
+
+		model.addAttribute("activities", activities);
+		model.addAttribute("recentInternships", recentInternships);
+
+		model.addAttribute("connections", list);
+		model.addAttribute("nameMap", nameMap);
+		model.addAttribute("imageMap", imageMap);
 		model.addAttribute("enrolledCount", enrolledCount);
 		model.addAttribute("completedCount", completedCount);
 		model.addAttribute("certificateCount", certificateCount);
@@ -164,7 +227,6 @@ public class StudentController {
 		model.addAttribute("announcements", announcements);
 		model.addAttribute("recentNotes", notes);
 		model.addAttribute("certificates", certificates);
-
 		model.addAttribute("weeklyActivity", weeklyActivity);
 
 		return "student-dashboard";
@@ -214,26 +276,45 @@ public class StudentController {
 
 	@GetMapping("/student-stuff")
 	public String student_stuff(@RequestParam(required = false) Integer category,
-			@RequestParam(required = false) String q, Model model) {
+	                           @RequestParam(required = false) String q,
+	                           Model model,
+	                           HttpSession session) {
 
-		model.addAttribute("categories", categoryRepo.findByActiveTrue());
+		Integer studentId = (Integer) session.getAttribute("studentId");
 
-		List<TeacherNotes> notes = teacherNoteRepo.search(category, q);
+		if (studentId == null)
+			return "redirect:/student-login";
 
-		boolean hasAnyNotes = teacherNoteRepo.countApprovedNotes() > 0;
+	    model.addAttribute("categories", categoryRepo.findByActiveTrue());
 
-		List<Announcement> announcements = announcementRepo.findForStudents();
+	    List<TeacherNotes> notes = teacherNoteRepo.search(category, q);
 
-		model.addAttribute("notes", notes);
-		model.addAttribute("hasAnyNotes", hasAnyNotes);
-		model.addAttribute("announcements", announcements);
-		model.addAttribute("selectedCategory", category);
-		model.addAttribute("q", q);
+	    boolean hasAnyNotes = teacherNoteRepo.countApprovedNotes() > 0;
 
-		return "student-stuff";
+	    // ✅ GET ENROLLED COURSES
+	    List<Integer> enrolledCourseIds =
+	            enrollmentRepo.findByStudentStudid(studentId)
+	                    .stream()
+	                    .map(e -> e.getCourse().getCourseId())
+	                    .toList();
+
+	    // ✅ FIXED ANNOUNCEMENTS
+	    List<Announcement> announcements;
+
+	    if (enrolledCourseIds.isEmpty()) {
+	        announcements = announcementRepo.findForStudents();
+	    } else {
+	        announcements = announcementRepo.findForStudentWithEnrollments(enrolledCourseIds);
+	    }
+
+	    model.addAttribute("notes", notes);
+	    model.addAttribute("hasAnyNotes", hasAnyNotes);
+	    model.addAttribute("announcements", announcements);
+	    model.addAttribute("selectedCategory", category);
+	    model.addAttribute("q", q);
+
+	    return "student-stuff";
 	}
-
-	
 
 	@GetMapping("/student-feedback")
 	public String studentFeedback(HttpSession session, Model model) {

@@ -2,513 +2,513 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Student Stuff | EduPlatform</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Student Stuff | EduPlatform</title>
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+	<!-- Bootstrap Icons -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+	<link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+			font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+		}
 
-        body {
-            background: #f4f7ff;
-        }
+		body {
+			background: #f4f7ff;
+		}
 
-        .main {
-            margin-left: 240px;
-            margin-top: 56px;
-            padding: 24px;
-            /* slightly improved */
-            transition: margin-left 0.3s ease;
-        }
+		.main {
+			margin-left: 240px;
+			margin-top: 56px;
+			padding: 24px;
+			/* slightly improved */
+			transition: margin-left 0.3s ease;
+		}
 
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 30px;
-        }
+		.container {
+			max-width: 1200px;
+			margin: auto;
+			padding: 30px;
+		}
 
 
-        .filters {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            background: #ffffff;
-            padding: 14px 16px;
-            border-radius: 14px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
-            margin-bottom: 24px;
-        }
+		.filters {
+			display: flex;
+			gap: 12px;
+			align-items: center;
+			background: #ffffff;
+			padding: 14px 16px;
+			border-radius: 14px;
+			box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+			margin-bottom: 24px;
+		}
 
-        .filters select,
-        .filters input {
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 1px solid #d1d5db;
-            font-size: 14px;
-            flex: 1;
-        }
+		.filters select,
+		.filters input {
+			padding: 10px 14px;
+			border-radius: 10px;
+			border: 1px solid #d1d5db;
+			font-size: 14px;
+			flex: 1;
+		}
 
-        .filters input:focus,
-        .filters select:focus {
-            outline: none;
-            border-color: #4f46e5;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-        }
+		.filters input:focus,
+		.filters select:focus {
+			outline: none;
+			border-color: #4f46e5;
+			box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+		}
 
-        .filters button {
-            background: #4f46e5;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 14px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+		.filters button {
+			background: #4f46e5;
+			color: #fff;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 10px;
+			font-size: 14px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
 
-        .filters button:hover {
-            background: #4338ca;
-        }
+		.filters button:hover {
+			background: #4338ca;
+		}
 
-        .notes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
+		.notes-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+			gap: 20px;
+		}
 
-        .note-card {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 18px 20px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-            transition: 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+		.note-card {
+			background: #ffffff;
+			border-radius: 16px;
+			padding: 18px 20px;
+			box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+			transition: 0.3s ease;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
 
-        .note-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
-        }
+		.note-card:hover {
+			transform: translateY(-4px);
+			box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+		}
 
-        .note-card h3 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #111827;
-        }
+		.note-card h3 {
+			font-size: 16px;
+			font-weight: 600;
+			color: #111827;
+		}
 
-        .note-card p {
-            font-size: 13px;
-            color: #6b7280;
-            line-height: 1.5;
-        }
+		.note-card p {
+			font-size: 13px;
+			color: #6b7280;
+			line-height: 1.5;
+		}
 
-        .badge {
-            background: #eef2ff;
-            color: #4f46e5;
-            padding: 4px 10px;
-            border-radius: 999px;
-            font-size: 12px;
-            width: fit-content;
-        }
+		.badge {
+			background: #eef2ff;
+			color: #4f46e5;
+			padding: 4px 10px;
+			border-radius: 999px;
+			font-size: 12px;
+			width: fit-content;
+		}
 
-        .note-card small {
-            font-size: 12px;
-            color: #6b7280;
-        }
+		.note-card small {
+			font-size: 12px;
+			color: #6b7280;
+		}
 
-        .actions {
-            margin-top: auto;
-            display: flex;
-            gap: 10px;
-        }
+		.actions {
+			margin-top: auto;
+			display: flex;
+			gap: 10px;
+		}
 
-        .actions a {
-            flex: 1;
-            text-align: center;
-            padding: 8px 12px;
-            border-radius: 10px;
-            font-size: 13px;
-            font-weight: 500;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-        }
+		.actions a {
+			flex: 1;
+			text-align: center;
+			padding: 8px 12px;
+			border-radius: 10px;
+			font-size: 13px;
+			font-weight: 500;
+			text-decoration: none;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 6px;
+		}
 
-        .actions a:first-child {
-            background: #4f46e5;
-            color: #ffffff;
-        }
+		.actions a:first-child {
+			background: #4f46e5;
+			color: #ffffff;
+		}
 
-        .actions a:first-child:hover {
-            background: #4338ca;
-        }
+		.actions a:first-child:hover {
+			background: #4338ca;
+		}
 
-        .actions a:last-child {
-            background: #e5e7eb;
-            color: #111827;
-        }
+		.actions a:last-child {
+			background: #e5e7eb;
+			color: #111827;
+		}
 
-        .actions a:last-child:hover {
-            background: #d1d5db;
-        }
+		.actions a:last-child:hover {
+			background: #d1d5db;
+		}
 
-        .actions a,
-        .filters button {
-            text-decoration: none;
-        }
+		.actions a,
+		.filters button {
+			text-decoration: none;
+		}
 
-        /* ===============================
+		/* ===============================
    EMPTY STATE UX
 ================================ */
-        .empty-state {
-            margin-top: 60px;
-            padding: 60px 20px;
-            text-align: center;
-            background: #ffffff;
-            border-radius: 18px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
-        }
+		.empty-state {
+			margin-top: 60px;
+			padding: 60px 20px;
+			text-align: center;
+			background: #ffffff;
+			border-radius: 18px;
+			box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+		}
 
-        .empty-icon {
-            font-size: 54px;
-            color: #6366f1;
-            margin-bottom: 16px;
-        }
+		.empty-icon {
+			font-size: 54px;
+			color: #6366f1;
+			margin-bottom: 16px;
+		}
 
-        .empty-state h3 {
-            font-size: 20px;
-            font-weight: 600;
-            color: #111827;
-            margin-bottom: 8px;
-        }
+		.empty-state h3 {
+			font-size: 20px;
+			font-weight: 600;
+			color: #111827;
+			margin-bottom: 8px;
+		}
 
-        .empty-state p {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
+		.empty-state p {
+			font-size: 14px;
+			color: #6b7280;
+			margin-bottom: 20px;
+			line-height: 1.6;
+		}
 
-        .reset-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 18px;
-            border-radius: 10px;
-            background: #4f46e5;
-            color: #fff;
-            font-size: 14px;
-            font-weight: 500;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
+		.reset-btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+			padding: 10px 18px;
+			border-radius: 10px;
+			background: #4f46e5;
+			color: #fff;
+			font-size: 14px;
+			font-weight: 500;
+			text-decoration: none;
+			transition: all 0.2s ease;
+		}
 
-        .reset-btn:hover {
-            background: #4338ca;
-            transform: translateY(-2px);
-        }
+		.reset-btn:hover {
+			background: #4338ca;
+			transform: translateY(-2px);
+		}
 
-        /* ===============================
+		/* ===============================
    SECTION HEADERS
 ================================ */
-        .section-title {
-            font-size: 22px;
-            font-weight: 600;
-            margin: 40px 0 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #111827;
-        }
+		.section-title {
+			font-size: 22px;
+			font-weight: 600;
+			margin: 40px 0 20px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			color: #111827;
+		}
 
-        .section-divider {
-            margin: 50px 0;
-            border: none;
-            height: 1px;
-            background: linear-gradient(to right, transparent, #e5e7eb, transparent);
-        }
+		.section-divider {
+			margin: 50px 0;
+			border: none;
+			height: 1px;
+			background: linear-gradient(to right, transparent, #e5e7eb, transparent);
+		}
 
-        .announcement-card {
-            background: #ffffff;
-            border-radius: 18px;
-            padding: 20px 24px;
-            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
-            margin-bottom: 20px;
-            transition: 0.3s ease;
-        }
+		.announcement-card {
+			background: #ffffff;
+			border-radius: 18px;
+			padding: 20px 24px;
+			box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
+			margin-bottom: 20px;
+			transition: 0.3s ease;
+		}
 
-        .announcement-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
-        }
+		.announcement-card:hover {
+			transform: translateY(-3px);
+			box-shadow: 0 18px 36px rgba(0, 0, 0, 0.12);
+		}
 
-        .announcement-card.pinned {
-            border-left: 5px solid #f59e0b;
-            background: #fffbeb;
-        }
+		.announcement-card.pinned {
+			border-left: 5px solid #f59e0b;
+			background: #fffbeb;
+		}
 
-        .announcement-card h4 {
-            font-size: 17px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
+		.announcement-card h4 {
+			font-size: 17px;
+			font-weight: 600;
+			margin-bottom: 8px;
+		}
 
-        .announcement-meta {
-            font-size: 13px;
-            color: #6b7280;
-            margin-bottom: 12px;
-        }
+		.announcement-meta {
+			font-size: 13px;
+			color: #6b7280;
+			margin-bottom: 12px;
+		}
 
-        .announcement-message {
-            font-size: 14px;
-            color: #374151;
-            line-height: 1.6;
-        }
+		.announcement-message {
+			font-size: 14px;
+			color: #374151;
+			line-height: 1.6;
+		}
 
-        .attachment {
-            margin-top: 14px;
-            background: #f3f4f6;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 13px;
-        }
+		.attachment {
+			margin-top: 14px;
+			background: #f3f4f6;
+			padding: 10px 14px;
+			border-radius: 10px;
+			font-size: 13px;
+		}
 
-        .note-file {
-            font-size: 12px;
-            background: #f3f4f6;
-            padding: 6px 10px;
-            border-radius: 8px;
-            width: fit-content;
-            margin-top: 6px;
-            color: #374151;
-        }
+		.note-file {
+			font-size: 12px;
+			background: #f3f4f6;
+			padding: 6px 10px;
+			border-radius: 8px;
+			width: fit-content;
+			margin-top: 6px;
+			color: #374151;
+		}
 
-        .filters {
-            position: sticky;
-            top: 70px;
-            z-index: 10;
-        }
+		.filters {
+			position: sticky;
+			top: 70px;
+			z-index: 10;
+		}
 
-        .sidebar.collapsed~.main {
-            margin-left: 80px;
-        }
+		.sidebar.collapsed~.main {
+			margin-left: 80px;
+		}
 
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100%;
-        }
-    </style>
+		.sidebar {
+			position: fixed;
+			left: 0;
+			top: 0;
+			height: 100%;
+		}
+	</style>
 </head>
 
 <body>
 
-    <div class="sidebar collapsed" id="sidebar">
-        <button class="toggle-btn" id="toggle">
-            <i class="bi bi-chevron-right"></i>
-        </button>
+	<div class="sidebar collapsed" id="sidebar">
+		<button class="toggle-btn" id="toggle">
+			<i class="bi bi-chevron-right"></i>
+		</button>
 
-        <div class="sidebar-brand">
-            <a href="/student-dashboard">
-                <img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
-            </a>
-            <h2 class="platform-name">
-                EduPlatform
-            </h2>
-        </div>
+		<div class="sidebar-brand">
+			<a href="/student-dashboard">
+				<img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
+			</a>
+			<h2 class="platform-name">
+				EduPlatform
+			</h2>
+		</div>
 
-        <a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-        <a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
-        <a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
-        <a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
-        <a th:href="@{/student-stuff}" class="active"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
-        <a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
-        <a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
-        <a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a> 
-        <a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-        <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+		<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+		<a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
+		<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
+		<a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
+		<a th:href="@{/student-stuff}" class="active"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
+		<a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
+		<a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
+		<a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a>
+		<a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+		<a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
-    </div>
+	</div>
 
-    <!-- ===== TOPBAR ===== -->
-    <div class="student-topbar">
-        <span class="page-title">Download Notes & Stuff</span>
-        <div class="topbar-right">
-            <div class="notif">
-                <a th:href="@{/student-notification}">
-                    <i class="bi bi-bell"></i>
-                    <span class="dot"></span> </a>
-            </div>
+	<!-- ===== TOPBAR ===== -->
+	<div class="student-topbar">
+		<span class="page-title">Download Notes & Stuff</span>
+		<div class="topbar-right">
+			<div class="notif">
+				<a th:href="@{/student-notification}">
+					<i class="bi bi-bell"></i>
+					<span class="dot"></span> </a>
+			</div>
 
-            <div class="profile">
-                <a th:href="@{/student-profile}" class="profile-link">
+			<div class="profile">
+				<a th:href="@{/student-profile}" class="profile-link">
 
-                    <img th:src="${loggedStudent != null and loggedStudent.profileImage != null
+					<img th:src="${loggedStudent != null and loggedStudent.profileImage != null
 					? loggedStudent.profileImage
 					: '/images/default.jpg'}" alt="Profile">
 
-                    <span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
-                        Student
-                    </span>
+					<span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
+						Student
+					</span>
 
-                </a>
-            </div>
-        </div>
+				</a>
+			</div>
+		</div>
 
 
-    </div>
+	</div>
 
-    <div class="main">
+	<div class="main">
 
-        <form class="filters">
-            <input name="q" placeholder="Search notes" th:value="${q}">
+		<form class="filters">
+			<input name="q" placeholder="Search notes" th:value="${q}">
 
-            <select name="category">
-                <option value="">All Categories</option>
-                <option th:each="c : ${categories}" th:value="${c.categoryId}"
-                    th:selected="${c.categoryId == selectedCategory}" th:text="${c.name}">
-                </option>
-            </select>
+			<select name="category">
+				<option value="">All Categories</option>
+				<option th:each="c : ${categories}" th:value="${c.categoryId}"
+					th:selected="${c.categoryId == selectedCategory}" th:text="${c.name}">
+				</option>
+			</select>
 
-            <button>
-                <i class="bi bi-funnel-fill"></i> Apply
-            </button>
-        </form>
-        <div th:if="${#lists.isEmpty(notes) and !hasAnyNotes}" class="empty-state">
+			<button>
+				<i class="bi bi-funnel-fill"></i> Apply
+			</button>
+		</form>
+		<div th:if="${#lists.isEmpty(notes) and !hasAnyNotes}" class="empty-state">
 
-            <div class="empty-icon">
-                <i class="bi bi-journal-x"></i>
-            </div>
+			<div class="empty-icon">
+				<i class="bi bi-journal-x"></i>
+			</div>
 
-            <h3>No Notes Yet</h3>
+			<h3>No Notes Yet</h3>
 
-            <p>
-                Your instructor hasn’t uploaded any study material yet.<br>
-                Please check back later for updates.
-            </p>
+			<p>
+				Your instructor hasn’t uploaded any study material yet.<br>
+				Please check back later for updates.
+			</p>
 
-        </div>
+		</div>
 
-        <div th:if="${#lists.isEmpty(notes) and hasAnyNotes}" class="empty-state">
+		<div th:if="${#lists.isEmpty(notes) and hasAnyNotes}" class="empty-state">
 
-            <div class="empty-icon">
-                <i class="bi bi-search"></i>
-            </div>
+			<div class="empty-icon">
+				<i class="bi bi-search"></i>
+			</div>
 
-            <h3>No Results Found</h3>
+			<h3>No Results Found</h3>
 
-            <p>
-                We couldn’t find any notes matching your search.<br>
-                Try adjusting filters or search keywords.
-            </p>
+			<p>
+				We couldn’t find any notes matching your search.<br>
+				Try adjusting filters or search keywords.
+			</p>
 
-            <a th:href="@{/student-stuff}" class="reset-btn">
-                <i class="bi bi-arrow-clockwise"></i> Reset Filters
-            </a>
+			<a th:href="@{/student-stuff}" class="reset-btn">
+				<i class="bi bi-arrow-clockwise"></i> Reset Filters
+			</a>
 
-        </div>
-        <div class="notes-grid" th:if="${!#lists.isEmpty(notes)}">
-            <div th:each="n : ${notes}" class="note-card">
-                <h3 th:text="${n.title}"></h3>
-                <p th:text="${n.description}"></p>
+		</div>
+		<div class="notes-grid" th:if="${!#lists.isEmpty(notes)}">
+			<div th:each="n : ${notes}" class="note-card">
+				<h3 th:text="${n.title}"></h3>
+				<p th:text="${n.description}"></p>
 
-                <span class="badge" th:text="${n.category.name}"></span>
+				<span class="badge" th:text="${n.category.name}"></span>
 
-                <small>
-                    By <span th:text="${n.teacher.firstname}"></span>
-                </small>
+				<small>
+					By <span th:text="${n.teacher.firstname}"></span>
+				</small>
 
-                <div class="note-file">
-                    <i class="bi bi-file-earmark-text"></i>
-                    <span th:text="${#strings.substringAfter(n.fileUrl,'/')}"></span>
-                </div>
+				<div class="note-file">
+					<i class="bi bi-file-earmark-text"></i>
+					<span th:text="${#strings.substringAfter(n.fileUrl,'/')}"></span>
+				</div>
 
-                <div class="actions">
-                    <a th:href="${n.fileUrl}" download>
-                        <i class="bi bi-download"></i> Download
-                    </a>
-                    <a th:href="${n.fileUrl}" target="_blank">
-                        <i class="bi bi-box-arrow-up-right"></i> Open
-                    </a>
-                </div>
-            </div>
-        </div>
+				<div class="actions">
+					<a th:href="${n.fileUrl}" download>
+						<i class="bi bi-download"></i> Download
+					</a>
+					<a th:href="${n.fileUrl}" target="_blank">
+						<i class="bi bi-box-arrow-up-right"></i> Open
+					</a>
+				</div>
+			</div>
+		</div>
 
-        <hr class="section-divider">
+		<hr class="section-divider">
 
-        <div class="section-title">
-            <i class="bi bi-megaphone-fill"></i>
-            Announcements
-        </div>
+		<div class="section-title">
+			<i class="bi bi-megaphone-fill"></i>
+			Announcements
+		</div>
 
-        <div th:if="${#lists.isEmpty(announcements)}" class="empty-state">
-            <div class="empty-icon">
-                <i class="bi bi-megaphone"></i>
-            </div>
-            <h3>No announcements yet</h3>
-            <p>Stay tuned for important updates from instructors and admin.</p>
-        </div>
+		<div th:if="${#lists.isEmpty(announcements)}" class="empty-state">
+			<div class="empty-icon">
+				<i class="bi bi-megaphone"></i>
+			</div>
+			<h3>No announcements yet</h3>
+			<p>Stay tuned for important updates from instructors and admin.</p>
+		</div>
 
-        <div th:each="a : ${announcements}" th:if="${a.active}"
-            th:class="${a.pinned ? 'announcement-card pinned' : 'announcement-card'}">
+		<div th:each="a : ${announcements}" th:if="${a.active}"
+			th:class="${a.pinned ? 'announcement-card pinned' : 'announcement-card'}">
 
-            <h4>
-                <span th:if="${a.pinned}">📌 </span>
-                <span th:text="${a.title}"></span>
-            </h4>
+			<h4>
+				<span th:if="${a.pinned}">📌 </span>
+				<span th:text="${a.title}"></span>
+			</h4>
 
-            <div class="announcement-meta">
-                <span th:text="${a.teacher != null ? 
+			<div class="announcement-meta">
+				<span th:text="${a.teacher != null ? 
                         a.teacher.firstname + ' ' + a.teacher.lastname 
                         : 'Admin'}"></span>
-                •
-                <span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
+				•
+				<span th:text="${#temporals.format(a.createdAt,'dd MMM yyyy HH:mm')}"></span>
 
-                <span th:if="${a.course != null}">
-                    • <span th:text="${a.course.title}"></span>
-                </span>
-            </div>
-            <div class="announcement-message" th:text="${a.message}">
-            </div>
-            <div th:if="${a.attachmentUrl != null}" class="attachment">
-                📎
-                <a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}"></a>
-            </div>
-        </div>
-    </div>
-    <script>
-        const sidebar = document.getElementById("sidebar");
-        const toggle = document.getElementById("toggle");
-        const icon = toggle.querySelector("i");
+				<span th:if="${a.course != null}">
+					• <span th:text="${a.course.title}"></span>
+				</span>
+			</div>
+			<div class="announcement-message" th:text="${a.message}">
+			</div>
+			<div th:if="${a.attachmentUrl != null}" class="attachment">
+				📎
+				<a th:href="${a.attachmentUrl}" target="_blank" th:text="${a.attachmentName}"></a>
+			</div>
+		</div>
+	</div>
+	<script>
+		const sidebar = document.getElementById("sidebar");
+		const toggle = document.getElementById("toggle");
+		const icon = toggle.querySelector("i");
 
-        toggle.addEventListener("click", () => {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle("mobile-show");
-            } else {
-                sidebar.classList.toggle("collapsed");
-                icon.classList.toggle("bi-chevron-right");
-                icon.classList.toggle("bi-chevron-left");
-            }
-        });
-    </script>
+		toggle.addEventListener("click", () => {
+			if (window.innerWidth <= 768) {
+				sidebar.classList.toggle("mobile-show");
+			} else {
+				sidebar.classList.toggle("collapsed");
+				icon.classList.toggle("bi-chevron-right");
+				icon.classList.toggle("bi-chevron-left");
+			}
+		});
+	</script>
 
 </body>
 

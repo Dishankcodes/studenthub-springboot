@@ -410,3 +410,31 @@
 .tab-content.active {
   display: block;
 }
+
+
+.announcement-card,
+.note-item,
+.create-announcement-card,
+.notes-upload-card {
+    color: #f1f5f9; 
+}
+
+.announcement-card h4,
+.note-item h4,
+.create-announcement-card h3 {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.announcement-meta {
+    color: #9ca3af;
+}
+
+.announcement-message {
+    color: #e5e7eb;
+}
+
+
+input, textarea, select, button {
+    font-family: 'Poppins', sans-serif;
+}

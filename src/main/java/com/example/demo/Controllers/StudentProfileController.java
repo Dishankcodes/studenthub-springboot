@@ -120,6 +120,8 @@ public class StudentProfileController {
 		    }
 		}
 
+		long connectionCount = list.size();
+		model.addAttribute("connectionCount", connectionCount);
 		model.addAttribute("nameMap", nameMap);
 		model.addAttribute("imageMap", imageMap);
 		model.addAttribute("connections", list);
@@ -224,5 +226,4 @@ public class StudentProfileController {
 
 		return "redirect:/student-profile";
 	}
-
 }

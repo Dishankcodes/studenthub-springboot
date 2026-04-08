@@ -69,11 +69,9 @@ public class TeacherController {
 	@Autowired
 	private CourseRepository courseRepo;
 
-	
 	@Autowired
 	private ChatUserRepository chatUserRepo;
 
-	
 	private boolean isBlocked(Teacher teacher) {
 		return teacher.getStatus() == TeacherStatus.BLOCKED;
 	}
@@ -99,21 +97,18 @@ public class TeacherController {
 
 		List<Enrollment> enrollments = enrollmentRepo.findByTeacherId(teacherId);
 
-	
 		Map<Integer, Integer> chatUserMap = new HashMap<>();
 
 		for (var e : enrollments) {
 
-		    ChatUser u = chatUserRepo
-		        .findByRefIdAndType(e.getStudent().getStudid(), UserType.STUDENT)
-		        .orElseGet(() -> {
-		            ChatUser newUser = new ChatUser();
-		            newUser.setRefId(e.getStudent().getStudid());
-		            newUser.setType(UserType.STUDENT);
-		            return chatUserRepo.save(newUser);
-		        });
+			ChatUser u = chatUserRepo.findByRefIdAndType(e.getStudent().getStudid(), UserType.STUDENT).orElseGet(() -> {
+				ChatUser newUser = new ChatUser();
+				newUser.setRefId(e.getStudent().getStudid());
+				newUser.setType(UserType.STUDENT);
+				return chatUserRepo.save(newUser);
+			});
 
-		    chatUserMap.put(e.getStudent().getStudid(), u.getId());
+			chatUserMap.put(e.getStudent().getStudid(), u.getId());
 		}
 
 		model.addAttribute("chatUserMap", chatUserMap);
@@ -122,7 +117,6 @@ public class TeacherController {
 
 		return "teacher-students";
 	}
-
 
 	@GetMapping("/teacher-feedback")
 	public String teacherFeedback(HttpSession session, Model model) {
@@ -263,66 +257,124 @@ public class TeacherController {
 	public String teacherNotesAndAnnoucments(Model model, HttpSession session) {
 
 		Integer teacherId = 1;
-//		Integer teacherId = (Integer) session.getAttribute("teacherId");
-//		if (teacherId == null)
-//			return "redirect:/teacher-auth";
+
 		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
+		List<Announcement> teacherAnnouncements = announcementRepo.findForTeachers();
+
+		List<Announcement> otherTeachers = announcementRepo.findOtherTeachersAnnouncements(teacherId);
+
+		List<Course> courses = courseRepo.findByTeacherTeacherId(teacherId);
+
+		model.addAttribute("courses", courses);
+		model.addAttribute("hasCourses", courses != null && !courses.isEmpty());
 		model.addAttribute("myAnnouncements",
 				announcementRepo.findByTeacherTeacherIdAndActiveTrueOrderByCreatedAtDesc(teacherId));
 
 		model.addAttribute("adminAnnouncements",
-				announcementRepo.findByTeacherIsNullAndActiveTrueOrderByCreatedAtDesc());
-		model.addAttribute("allAnnouncements", announcementRepo.findForTeachers());
+				announcementRepo.findByTeacherIsNullAndActiveTrueAndAudienceInOrderByCreatedAtDesc(
+						List.of(AnnouncementAudience.TEACHERS, AnnouncementAudience.ALL)));
+
+		model.addAttribute("courses", courseRepo.findByTeacherTeacherId(teacherId));
+
+		model.addAttribute("allAnnouncements", teacherAnnouncements);
+		model.addAttribute("otherAnnouncements", otherTeachers);
 		model.addAttribute("categories", categoryRepo.findByActiveTrue());
 		model.addAttribute("notes", teacherNoteRepo.findByTeacherTeacherId(teacherId));
 		model.addAttribute("teacher", teacher);
+
 		return "teacher-activity";
 	}
 
 	@PostMapping("/teacher-announcement/create")
 	public String createTeacherAnnouncement(@RequestParam(required = false) Integer courseId,
-			@RequestParam String title, @RequestParam String message,
+			@RequestParam String title, @RequestParam String message, @RequestParam AnnouncementAudience audience,
 			@RequestParam(required = false) MultipartFile file, HttpSession session) throws IOException {
 
 		Integer teacherId = 1;
-		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
-		if (isBlocked(teacher)) {
+		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+		if (teacher == null) {
+			return "redirect:/teacher-auth";
+		}
+
+		if (teacher.getStatus() == TeacherStatus.BLOCKED) {
 			return "redirect:/teacher-activity?error=blocked";
 		}
 
-		if (isSuspended(teacher)) {
+		if (teacher.getStatus() == TeacherStatus.SUSPENDED) {
 			return "redirect:/teacher-activity?error=suspended";
 		}
 
-		Announcement a = new Announcement();
-		a.setTitle(title);
-		a.setMessage(message);
-		a.setTeacher(teacher);
-		a.setType(AnnouncementType.GENERAL);
-		a.setAudience(AnnouncementAudience.STUDENTS);
+		if (title == null || title.trim().isEmpty()) {
+			return "redirect:/teacher-activity?error=title";
+		}
+
+		if (message == null || message.trim().isEmpty()) {
+			return "redirect:/teacher-activity?error=message";
+		}
+
+		if (audience == AnnouncementAudience.ENROLLED && courseId == null) {
+			return "redirect:/teacher-activity?error=selectCourse";
+		}
+
+		Course course = null;
 
 		if (courseId != null) {
-			Course course = courseRepo.findById(courseId).orElse(null);
-			a.setCourse(course);
+			course = courseRepo.findById(courseId).orElse(null);
+
+			if (course == null) {
+				return "redirect:/teacher-activity?error=invalidCourse";
+			}
+
+			if (!course.getTeacher().getTeacherId().equals(teacherId)) {
+				return "redirect:/teacher-activity?error=unauthorizedCourse";
+			}
 		}
+
+		Announcement a = new Announcement();
+		a.setTitle(title.trim());
+		a.setMessage(message.trim());
+		a.setTeacher(teacher);
+		a.setType(AnnouncementType.GENERAL);
+		a.setAudience(audience);
+		a.setCourse(course);
 
 		if (file != null && !file.isEmpty()) {
 
-			String dir = System.getProperty("user.dir") + "/uploads/announcements/";
-			Files.createDirectories(Paths.get(dir));
+			try {
+				String uploadDir = System.getProperty("user.dir") + "/uploads/announcements/";
+				Files.createDirectories(Paths.get(uploadDir));
 
-			String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
-			file.transferTo(new File(dir + fileName));
+				String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
 
-			a.setAttachmentUrl("/uploads/announcements/" + fileName);
-			a.setAttachmentName(file.getOriginalFilename());
+				Path filePath = Paths.get(uploadDir + fileName);
+				Files.write(filePath, file.getBytes());
+
+				a.setAttachmentUrl("/uploads/announcements/" + fileName);
+				a.setAttachmentName(file.getOriginalFilename());
+
+			} catch (Exception e) {
+				return "redirect:/teacher-activity?error=fileUpload";
+			}
 		}
+		
+		if (audience == AnnouncementAudience.ENROLLED) {
 
+		    List<Course> teacherCourses =
+		            courseRepo.findByTeacherTeacherId(teacherId);
+
+		    if (teacherCourses == null || teacherCourses.isEmpty()) {
+		        return "redirect:/teacher-activity?error=noCourses";
+		    }
+
+		    if (courseId == null) {
+		        return "redirect:/teacher-activity?error=selectCourse";
+		    }
+		}
 		announcementRepo.save(a);
 
-		return "redirect:/teacher-activity?created";
+		return "redirect:/teacher-activity?success=created";
 	}
 
 	@GetMapping("/test-teacher-login")

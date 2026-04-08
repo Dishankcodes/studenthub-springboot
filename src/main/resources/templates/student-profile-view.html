@@ -2,195 +2,288 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Student Profile</title>
+    <meta charset="UTF-8">
+    <title>Student Profile</title>
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 
-	<style>
-		body {
-			background: #f4f7ff;
-			font-family: 'Poppins', sans-serif;
-		}
+    <style>
+        body {
+            background: #f4f7ff;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+        }
 
-		/* MAIN */
-		.main {
-			margin-left: 240px;
-			margin-top: 60px;
-			padding: 20px;
-		}
+        .profile-card {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            width: 100%;
+            max-width: 1100px;
+            margin: 30px auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
 
-		/* CARD */
-		.profile-card {
-			background: white;
-			border-radius: 18px;
-			padding: 30px;
-			max-width: 900px;
-			margin: auto;
-			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-		}
+        /* TOP BAR */
+        .top-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-		/* TOP BAR */
-		.top-actions {
-			display: flex;
-			justify-content: space-between;
-			margin-bottom: 20px;
-		}
+        /* HEADER */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
 
-		/* HEADER */
-		.profile-header {
-			display: flex;
-			align-items: center;
-			gap: 20px;
-			border-bottom: 1px solid #eee;
-			padding-bottom: 20px;
-		}
+        .profile-header img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-		.profile-header img {
-			width: 110px;
-			height: 110px;
-			border-radius: 50%;
-			object-fit: cover;
-		}
+        /* INFO GRID */
+        .profile-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
 
-		/* INFO */
-		.profile-info {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-			gap: 15px;
-			margin-top: 20px;
-		}
+        .info-box {
+            background: #f8faff;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
 
-		.info-box {
-			background: #f8faff;
-			padding: 15px;
-			border-radius: 12px;
-			border: 1px solid #e5e7eb;
-		}
+        .info-box span {
+            font-size: 12px;
+            color: #6b7280;
+        }
 
-		.info-box span {
-			font-size: 12px;
-			color: #6b7280;
-		}
+        .info-box strong {
+            display: block;
+            margin-top: 5px;
+        }
 
-		.info-box strong {
-			display: block;
-			margin-top: 5px;
-		}
+        /* CONTAINER LOOK LIKE PROFILE CARD */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 28px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
 
-		/* BUTTONS */
-		.btn {
-			padding: 8px 14px;
-			border-radius: 10px;
-			border: none;
-			cursor: pointer;
-			font-size: 13px;
-			display: inline-flex;
-			gap: 6px;
-			align-items: center;
-		}
+        /* TITLE */
+        .title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
 
-		.btn-back {
-			background: #e5e7eb;
-		}
+        /* BACK BUTTON */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 15px;
+            text-decoration: none;
+            background: #e5e7eb;
+            padding: 8px 14px;
+            border-radius: 10px;
+            color: black;
+            font-size: 13px;
+            transition: 0.2s;
+        }
 
-		.btn-connect {
-			background: #6d28d9;
-			color: white;
-		}
+        .back-btn:hover {
+            background: #d1d5db;
+        }
 
-		.btn-chat {
-			background: #10b981;
-			color: white;
-		}
+        /* CARD ITEM */
+        .card {
+            background: transparent;
+            padding: 12px 10px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 10px;
+            transition: all 0.25s ease;
+            border: 1px solid transparent;
+        }
 
-		.status {
-			font-size: 13px;
-		}
+        /* HOVER EFFECT */
+        .card:hover {
+            background: #f8faff;
+            border-color: #e5e7eb;
+            transform: translateY(-2px);
+        }
 
-		.pending {
-			color: #f59e0b;
-		}
-	</style>
+        /* IMAGE */
+        .card img {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e6ebff;
+        }
+
+        /* NAME */
+        .name {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* TYPE */
+        .type {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* OPTIONAL: IF YOU HAVE BUTTONS */
+        .btn,
+        button {
+            padding: 8px 14px;
+            border-radius: 10px;
+            border: none;
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* MESSAGE BUTTON */
+        .msg-btn {
+            background: #10b981;
+            color: white;
+        }
+
+        .msg-btn:hover {
+            background: #059669;
+        }
+
+        /* CONNECT BUTTON */
+        .connect-btn {
+            background: #6d28d9;
+            color: white;
+        }
+
+        .connect-btn:hover {
+            background: #5b21b6;
+        }
+
+        /* PENDING TEXT */
+        .pending {
+            color: #f59e0b;
+            font-weight: 500;
+        }
+
+        /* EMPTY TEXT */
+        .empty {
+            text-align: center;
+            color: gray;
+            padding: 20px;
+        }
+    </style>
 
 </head>
 
 <body>
 
-	<div class="main">
 
-		<div class="profile-card">
+    <div class="profile-card">
 
-			<!-- TOP -->
-			<div class="top-actions">
+        <!-- TOP -->
+        <div class="top-actions">
 
-				<a th:href="@{/student-search}" class="btn btn-back">
-					<i class="bi bi-arrow-left"></i> Back
-				</a>
+            <a th:href="@{/student-search}" class="btn btn-back">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
 
-				<div>
+            <div>
 
-					<form th:if="${status == 'FOLLOW'}" action="/connection/send" method="post">
-						<input type="hidden" name="receiverId" th:value="${chatUser.id}">
-						<button class="btn btn-connect">
-							<i class="bi bi-person-plus"></i> Connect
-						</button>
-					</form>
+                <form th:if="${status == 'FOLLOW'}" action="/connection/send" method="post">
+                    <input type="hidden" name="receiverId" th:value="${chatUser.id}">
+                    <button class="btn btn-connect">
+                        <i class="bi bi-person-plus"></i> Connect
+                    </button>
+                </form>
 
-					<span th:if="${status == 'PENDING'}" class="status pending">
-						Request Sent ✓
-					</span>
+                <span th:if="${status == 'PENDING'}" class="status pending">
+                    Request Sent ✓
+                </span>
 
-					<a th:if="${status == 'CHAT'}" th:href="@{/student-chat(userId=${chatUser.id})}"
-						class="btn btn-chat">
-						<i class="bi bi-chat"></i> Chat
-					</a>
+                <a th:if="${status == 'CHAT'}" th:href="@{/student-chat(userId=${chatUser.id})}" class="btn btn-chat">
+                    <i class="bi bi-chat"></i> Chat
+                </a>
 
-				</div>
+            </div>
 
-			</div>
+        </div>
 
-			<!-- HEADER -->
-			<div class="profile-header">
+        <!-- HEADER -->
+        <div class="profile-header">
 
-				<img th:src="${student.profileImage != null ? student.profileImage : '/images/default.jpg'}">
+            <img th:src="${student.profileImage != null ? student.profileImage : '/images/default.jpg'}">
 
-				<div>
-					<h3 th:text="${student.fullname}"></h3>
-					<p th:text="${student.college}"></p>
-				</div>
+            <div>
+                <h3 th:text="${student.fullname}"></h3>
+                <p th:text="${student.college}"></p>
 
-			</div>
+                <!-- 🔥 CONNECTION COUNT -->
+                <a th:href="@{/student-connections-view(id=${student.studid})}" style="
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+        margin-top:6px;
+        font-size:14px;
+        font-weight:600;
+        color:#6d28d9;
+        text-decoration:none;
+    ">
+                    <i class="bi bi-people-fill"></i>
+                    <span th:text="${connectionCount}">0</span> Connections
+                </a>
+            </div>
 
-			<!-- INFO -->
-			<div class="profile-info">
+        </div>
 
-				<div class="info-box">
-					<span>Degree</span>
-					<strong th:text="${student.degree}"></strong>
-				</div>
+        <!-- INFO -->
+        <div class="profile-info">
 
-				<div class="info-box">
-					<span>Email</span>
-					<strong th:text="${student.email}"></strong>
-				</div>
+            <div class="info-box">
+                <span>Degree</span>
+                <strong th:text="${student.degree}"></strong>
+            </div>
 
-				<div class="info-box">
-					<span>Interests</span>
-					<strong th:text="${student.interests}"></strong>
-				</div>
+            <div class="info-box">
+                <span>Email</span>
+                <strong th:text="${student.email}"></strong>
+            </div>
 
-				<div class="info-box">
-					<span>Joined</span>
-					<strong th:text="${#temporals.format(student.joinedOn,'dd MMM yyyy')}"></strong>
-				</div>
+            <div class="info-box">
+                <span>Interests</span>
+                <strong th:text="${student.interests}"></strong>
+            </div>
 
-			</div>
-
-		</div>
-
-	</div>
+            <div class="info-box">
+                <span>Joined</span>
+                <strong th:text="${#temporals.format(student.joinedOn,'dd MMM yyyy')}"></strong>
+            </div>
+        </div>
+    </div>
 
 </body>
 
