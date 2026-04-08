@@ -362,7 +362,6 @@
             </div>
         </div>
 
-        <!-- FLASH -->
         <div th:if="${msg}" class="flash success">
             <i class="bi bi-check-circle"></i>
             <span th:text="${msg}"></span>
@@ -373,7 +372,6 @@
             <span th:text="${error}"></span>
         </div>
 
-        <!-- EMPTY -->
         <div th:if="${#lists.isEmpty(applications)}" class="empty-box">
             <i class="bi bi-emoji-frown" style="font-size:30px;"></i>
             <p>No eligible or selected students found</p>
@@ -385,7 +383,6 @@
             <div style="text-align:right;">Actions</div>
         </div>
 
-        <!-- CARD -->
         <div th:each="app : ${applications}" class="card">
 
             <div class="student">
@@ -424,7 +421,6 @@
                     </button>
                 </form>
 
-                <!-- CERTIFICATE -->
                 <div th:if="${!app.certificateGenerated}" class="certificate-box">
 
                     <div th:each="t : ${templates}" class="template-card">
@@ -448,7 +444,6 @@
                     </a>
                 </div>
 
-                <!-- DONE -->
                 <div th:if="${app.certificateGenerated}" class="done-box">
                     <i class="bi bi-check-circle"></i>
                     Certificate Generated + Internship Completed

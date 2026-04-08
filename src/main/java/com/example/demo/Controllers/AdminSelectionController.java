@@ -101,7 +101,7 @@ public class AdminSelectionController {
 
 	        applicationRepo.save(app);
 
-	        // ✅ MESSAGE
+	        
 	        ra.addFlashAttribute("msg",
 	                "🏆 Badge '" + badgeTitle + "' awarded to " + app.getFullName());
 	    }
@@ -128,7 +128,7 @@ public class AdminSelectionController {
 
 	    document.open();
 
-	    /* ================= BACKGROUND ================= */
+	 
 	    if (template.getBackgroundImage() != null) {
 	        String bgPath = System.getProperty("user.dir") + template.getBackgroundImage();
 	        File bgFile = new File(bgPath);
@@ -146,11 +146,10 @@ public class AdminSelectionController {
 	    BaseFont bold = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
 	    BaseFont normal = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
-	    // ✅ Center positions
 	    float centerX = pageSize.getWidth() / 2;
 	    float centerY = pageSize.getHeight() / 2;
 
-	    /* ================= STUDENT NAME ================= */
+
 	    text.beginText();
 	    text.setFontAndSize(bold, 34);
 	    text.showTextAligned(Element.ALIGN_CENTER,
@@ -158,7 +157,7 @@ public class AdminSelectionController {
 	            centerX, centerY + 20, 0);
 	    text.endText();
 
-	    /* ================= DESCRIPTION ================= */
+
 	    text.beginText();
 	    text.setFontAndSize(normal, 16);
 	    text.showTextAligned(Element.ALIGN_CENTER,
@@ -166,7 +165,6 @@ public class AdminSelectionController {
 	            centerX, centerY - 40, 0);
 	    text.endText();
 
-	    /* ================= DATE ================= */
 	    text.beginText();
 	    text.setFontAndSize(normal, 12);
 	    text.showTextAligned(Element.ALIGN_LEFT,
@@ -174,7 +172,7 @@ public class AdminSelectionController {
 	            pageSize.getWidth() - 150, 100, 0);
 	    text.endText();
 
-	    /* ================= SIGNATURE ================= */
+	    
 	    if (template.getSignatureImage() != null) {
 	        String signPath = System.getProperty("user.dir") + template.getSignatureImage();
 	        File signFile = new File(signPath);
@@ -183,7 +181,7 @@ public class AdminSelectionController {
 	            Image sign = Image.getInstance(signPath);
 	            sign.scaleToFit(150, 80);
 
-	            // Bottom-right alignment
+	  
 	            sign.setAbsolutePosition(pageSize.getWidth() - 200, 120);
 	            document.add(sign);
 	        }
@@ -232,14 +230,14 @@ public class AdminSelectionController {
 
 	    internshipCertRepo.save(cert);
 
-	    // ✅ UPDATE APPLICATION
+	
 	    app.setCertificateGenerated(true);
 	    app.setCertificateTemplateId(templateId);
 	    app.setStatus(ApplicationStatus.COMPLETED); // 🔥 IMPORTANT
 
 	    applicationRepo.save(app);
 
-	    // ✅ MESSAGE
+
 	    ra.addFlashAttribute("msg",
 	            "🎓 Internship completed & certificate generated for " + app.getFullName());
 

@@ -60,13 +60,13 @@ public class AdminInternshipTestController {
 	        return "redirect:/manage-internships";
 	    }
 
-	    // ✅ GET TEST (DO NOT AUTO CREATE)
+	   
 	    InternshipTest test = testRepo.findByInternshipId(internshipId);
 
-	    // ✅ GET QUESTIONS
+
 	    List<QuizQuestion> questions = questionRepo.findByInternshipId(internshipId);
 
-	    // ✅ PASS EVERYTHING TO UI
+
 	    model.addAttribute("test", test);
 	    model.addAttribute("internship", internship);
 	    model.addAttribute("questions", questions);
@@ -83,11 +83,11 @@ public class AdminInternshipTestController {
 	        return "redirect:/manage-internships";
 	    }
 
-	    // ✅ ENABLE TEST
+	 
 	    i.setHasTest(true);
 	    internshipRepo.save(i);
 
-	    // ✅ CREATE TEST OBJECT (IMPORTANT)
+	  
 	    InternshipTest test = testRepo.findByInternshipId(internshipId);
 
 	    if (test == null) {
@@ -112,8 +112,7 @@ public class AdminInternshipTestController {
 			@RequestParam(required = false) List<String> optionD,
 			@RequestParam(required = false) List<String> correctOption, RedirectAttributes ra) {
 
-		// ❌ no questions generated
-		if (questionText == null || questionText.isEmpty()) {
+			if (questionText == null || questionText.isEmpty()) {
 			ra.addFlashAttribute("error", "⚠️ Please generate questions before saving");
 			return "redirect:/admin-internship-test?internshipId=" + internshipId;
 		}
@@ -132,7 +131,7 @@ public class AdminInternshipTestController {
 
 			String text = questionText.get(i);
 
-			// ✅ skip empty safely
+	
 			if (text == null || text.trim().isEmpty()) {
 				continue;
 			}
@@ -150,7 +149,7 @@ public class AdminInternshipTestController {
 
 				q.setQuestionFormat(QuestionFormat.MCQ);
 
-				// ✅ safe checks for lists
+
 				q.setOptionA(getSafe(optionA, mcqIndex));
 				q.setOptionB(getSafe(optionB, mcqIndex));
 				q.setOptionC(getSafe(optionC, mcqIndex));
@@ -313,7 +312,7 @@ public class AdminInternshipTestController {
 			return "redirect:/admin-test-results?internshipId=" + internshipId;
 		}
 
-		// 🔥 Find related application
+	
 		InternshipApplication app = applicationRepo
 				.findByStudent_StudidAndInternship_Id(attempt.getStudent().getStudid(), internshipId).orElse(null);
 
@@ -321,7 +320,7 @@ public class AdminInternshipTestController {
 			return "redirect:/admin-test-results?internshipId=" + internshipId;
 		}
 
-		// ✅ AUTO DECISION (NO ADMIN CHOICE)
+
 		if (attempt.isPassed()) {
 			app.setStatus(ApplicationStatus.PASSED);
 		} else {
@@ -423,7 +422,7 @@ public class AdminInternshipTestController {
 
 	    attemptRepo.save(attempt);
 
-	    // 🔥 UPDATE APPLICATION
+	
 	    InternshipApplication app = applicationRepo
 	            .findByStudent_StudidAndInternship_Id(
 	                    attempt.getStudent().getStudid(),

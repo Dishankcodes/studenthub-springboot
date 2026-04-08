@@ -220,22 +220,22 @@ public class AdminInternshipController {
 	    }
 
 	    InternshipTest test = testRepo.findByInternshipId(internshipId);
-	    // ================= ADD TEST =================
+	  
 	    if (!i.getHasTest()) {
 	        i.setHasTest(true);
 	        internshipRepo.save(i);
 	        ra.addFlashAttribute("msg", "✅ Test enabled. Now create/manage it");
 	    }
-	    // ================= REMOVE TEST =================
+	    
 	    else {
-	        // ❗ FIRST CLICK → ASK CONFIRMATION
+	        
 	        if (confirmRemove == null || !confirmRemove) {
 	            ra.addFlashAttribute("error",
 	                    "⚠️ Are you sure you want to remove the test? Click again to confirm.");
 
 	            return "redirect:/manage-internships";
 	        }
-	        // ✅ CONFIRMED REMOVE
+
 	        if (test != null) {
 	            testRepo.delete(test);
 	        }

@@ -44,7 +44,7 @@ public class AdminDesignController {
 		java.io.File destination = new java.io.File(dir, fileName);
 		file.transferTo(destination);
 
-		// store relative path in DB
+		
 		return "/uploads/" + folderName + "/" + fileName;
 	}
 
@@ -85,7 +85,7 @@ public class AdminDesignController {
 
 		CertificateTemplate selected = templateRepo.findById(id).orElseThrow();
 
-		// deactivate only SAME TYPE templates
+		
 		templateRepo.findByType(selected.getType()).forEach(t -> {
 			t.setActive(false);
 			templateRepo.save(t);

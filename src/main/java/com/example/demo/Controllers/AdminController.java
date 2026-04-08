@@ -177,7 +177,7 @@ public class AdminController {
 		if (totalRatings == null)
 			totalRatings = 0L;
 
-		// 🔥 COURSES
+		
 		List<Course> courses = courseRepo.findByTeacherTeacherIdAndStatusNot(teacherId, CourseStatus.DELETED);
 
 		if (courses == null)
@@ -262,7 +262,7 @@ public class AdminController {
 			return "admin-student-dashboard";
 		}
 
-		// ===== INTERNSHIPS =====
+		
 		List<InternshipApplication> apps = applicationRepo.findByStudent_Studid(id);
 
 		long totalInternships = apps.size();
@@ -291,7 +291,7 @@ public class AdminController {
 
 		long completedCourses = enrollments.stream().filter(e -> e.getCompletedAt() != null).count();
 
-		// ===== CERTIFICATES =====
+	
 		List<CourseCertificate> certificates = certificateRepo.findByStudentStudid(id);
 
 		long certificateCount = certificates.size();
@@ -314,14 +314,14 @@ public class AdminController {
 	@GetMapping("/admin/view-profile")
 	public String viewUserProfile(@RequestParam Integer userId, Model model) {
 
-		// 🔥 Get ChatUser
+	
 		ChatUser user = chatUserRepo.findById(userId).orElse(null);
 
 		if (user == null) {
 			return "redirect:/admin-chat";
 		}
 
-		// ✅ IF STUDENT
+		
 		if (user.getType() == UserType.STUDENT) {
 
 			Integer studentId = user.getRefId();
@@ -329,7 +329,7 @@ public class AdminController {
 			return "redirect:/admin-student-dashboard?id=" + studentId;
 		}
 
-		// ✅ IF TEACHER
+		
 		else if (user.getType() == UserType.TEACHER) {
 
 			Integer teacherId = user.getRefId();
