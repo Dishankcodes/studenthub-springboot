@@ -44,32 +44,24 @@ public class TeacherCourseController {
 
 	private static final String UPLOAD_BASE = System.getProperty("user.dir") + File.separator + "uploads";
 
-	// ===== COURSE MANAGEMENT =====
 	@GetMapping("/teacher-course")
 	public String courseManagement(Model model, HttpSession session) {
 
-		Integer teacherId = 1;
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+		if (teacher == null) {
+			session.invalidate();
+			return "redirect:/teacher-auth";
+		}
 
-//		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-//		Integer teacherId = (Integer) session.getAttribute("teacherId");
-//
-//		if (loggedIn == null || !loggedIn || teacherId == null) {
-//		    return "redirect:/teacher-auth";
-//		}
-//
-//		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
-//		if (teacher == null) {
-//		    session.invalidate();
-//		    return "redirect:/teacher-auth";
-//		}
-
-		// ✅ ONLY fetch NON-DELETED courses
 		List<Course> courses = courseRepo.findByTeacherTeacherIdAndStatusNot(teacherId, CourseStatus.DELETED);
 
 		model.addAttribute("courses", courses);
 		model.addAttribute("teacher", teacher);
+
 		return "teacher-courses";
 	}
 
@@ -77,13 +69,18 @@ public class TeacherCourseController {
 	public String createOrEditCourse(@RequestParam(required = false) Integer courseId,
 			@RequestParam(required = false) Integer editModule, @RequestParam(required = false) Integer openModule,
 			@RequestParam(required = false) Integer openLesson, @RequestParam(required = false) Integer openQuiz,
-			Model model) {
+			Model model, HttpSession session) {
+
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
 
 		Course course;
 
 		if (courseId != null) {
 			course = courseRepo.findById(courseId).orElse(null);
-			if (course == null) {
+
+			if (course == null || !course.getTeacher().getTeacherId().equals(teacherId)) {
 				return "redirect:/teacher-course";
 			}
 		} else {
@@ -105,19 +102,15 @@ public class TeacherCourseController {
 			@RequestParam String action, @RequestParam(required = false) List<String> highlightTexts, Model model,
 			HttpSession session) throws IOException {
 
-		Integer teacherId = 1;
-//		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-//	Integer teacherId = (Integer) session.getAttribute("teacherId");
-//
-//		if (loggedIn == null || !loggedIn || teacherId == null) {
-//		    return "redirect:/teacher-auth";
-//		}
-//
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
+
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
-//		if (teacher == null) {
-//		    session.invalidate();
-//		    return "redirect:/teacher-auth";
-//		}
+		if (teacher == null) {
+			session.invalidate();
+			return "redirect:/teacher-auth";
+		}
 
 		if (teacher.getStatus() == TeacherStatus.BLOCKED) {
 			model.addAttribute("error", "You are blocked by admin. No activity allowed.");
@@ -179,24 +172,16 @@ public class TeacherCourseController {
 			course.setPrice(formCourse.getPrice());
 		}
 
-		/* ================= STATUS ================= */
-
 		course.setStatus("publish".equals(action) ? CourseStatus.PUBLISHED : CourseStatus.DRAFT);
 
-		/* ================= SAVE COURSE FIRST (NO HIGHLIGHTS) ================= */
-
-		course = courseRepo.save(course); // 🔥 ID guaranteed here
-
-		/* ================= THUMBNAIL ================= */
+		course = courseRepo.save(course);
 
 		if (thumbnail != null && !thumbnail.isEmpty()) {
 			String path = saveThumbnail(thumbnail, course.getCourseId());
 			course.setThumbnailURL(path);
 		}
 
-		/* ================= HIGHLIGHTS (SAFE & FINAL) ================= */
-
-		course.getHighlights().clear(); // orphanRemoval = true
+		course.getHighlights().clear();
 
 		if (highlightTexts != null) {
 			for (String text : highlightTexts) {
@@ -209,11 +194,7 @@ public class TeacherCourseController {
 			}
 		}
 
-		/* ================= FINAL SAVE ================= */
-
 		courseRepo.save(course);
-
-		/* ================= REDIRECT ================= */
 
 		if ("publish".equals(action)) {
 			return "redirect:/teacher-course";
@@ -224,10 +205,17 @@ public class TeacherCourseController {
 	}
 
 	@GetMapping("/teacher-course/edit/{id}")
-	public String editCourse(@PathVariable Integer id) {
+	public String editCourse(@PathVariable Integer id, HttpSession session) {
 
-		Integer teacherId = 1;
-		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
+
+		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+		if (teacher == null) {
+			session.invalidate();
+			return "redirect:/teacher-auth";
+		}
 
 		if (teacher.getStatus() == TeacherStatus.BLOCKED) {
 			return "redirect:/teacher-course?error=blocked";
@@ -244,16 +232,9 @@ public class TeacherCourseController {
 	public String deleteCourse(@PathVariable("id") Integer courseId,
 
 			HttpSession session) {
-		Integer teacherId = 1;
-//
-//		 Boolean loggedIn =
-//		            (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-//		    Integer teacherId =
-//		            (Integer) session.getAttribute("teacherId");
-//
-//		    if (loggedIn == null || !loggedIn || teacherId == null) {
-//		        return "redirect:/teacher-auth";
-//		    }
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
 
 		Course course = courseRepo.findById(courseId).orElse(null);
 
@@ -268,11 +249,17 @@ public class TeacherCourseController {
 	}
 
 	@PostMapping("/teacher-course/status")
-	public String updateCourseStatus(@RequestParam Integer courseId, @RequestParam String action) {
+	public String updateCourseStatus(@RequestParam Integer courseId, @RequestParam String action, HttpSession session) {
 
-		Integer teacherId = 1;
-		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
 
+		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+		if (teacher == null) {
+			session.invalidate();
+			return "redirect:/teacher-auth";
+		}
 		if (teacher.getStatus() == TeacherStatus.BLOCKED) {
 			return "redirect:/teacher-course?error=blocked";
 		}

@@ -72,22 +72,13 @@ public class TeacherController {
 	@Autowired
 	private ChatUserRepository chatUserRepo;
 
-	private boolean isBlocked(Teacher teacher) {
-		return teacher.getStatus() == TeacherStatus.BLOCKED;
-	}
-
-	private boolean isSuspended(Teacher teacher) {
-		return teacher.getStatus() == TeacherStatus.SUSPENDED;
-	}
-
 	@GetMapping("/teacher-students")
 	public String teacherStudents(HttpSession session, Model model) {
 
-		Integer teacherId = 1;
-//		Integer teacherId = (Integer) session.getAttribute("teacherId");
-//		if (teacherId == null) {
-//			return "redirect:/teacher-auth";
-//		}
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null) {
+			return "redirect:/teacher-auth";
+		}
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {
@@ -121,11 +112,11 @@ public class TeacherController {
 	@GetMapping("/teacher-feedback")
 	public String teacherFeedback(HttpSession session, Model model) {
 
-//		Integer teacherId = (Integer) session.getAttribute("teacherId");
-//		if (teacherId == null)
-//			return "redirect:/teacher-auth";
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
 
-		Integer teacherId = 1;
+//		Integer teacherId = 1;
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {
 			session.invalidate();
@@ -150,18 +141,12 @@ public class TeacherController {
 		return "teacher-feedback";
 	}
 
-	// ===== PROFILE =====
 	@GetMapping("/teacher-profile")
 	public String teacherProfile(HttpSession session, Model model) {
 
-//		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-//		Integer teacherId = (Integer) session.getAttribute("teacherId");
-
-		Integer teacherId = 1; // remove this when testing done
-
-//		if (loggedIn == null || !loggedIn || teacherId == null) {
-//			return "redirect:/teacher-auth";
-//		}
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {
@@ -185,13 +170,9 @@ public class TeacherController {
 	@PostMapping("/teacher-profile")
 	public String editTeacherProfile(@ModelAttribute("profile") TeacherProfile teacherProfile, HttpSession session) {
 
-		Integer teacherId = 1;// demo
-//		Boolean loggedIn = (Boolean) session.getAttribute("TEACHER_LOGGED_IN");
-//		Integer teacherId = (Integer) session.getAttribute("teacherId");
-//
-//		if (loggedIn == null || !loggedIn || teacherId == null) {
-//			return "redirect:/teacher-auth";
-//		}
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
 		if (teacher == null) {
@@ -219,11 +200,11 @@ public class TeacherController {
 	@PostMapping("/teacher-profile/upload-image")
 	public String uploadTeacherProfileImage(@RequestParam("image") MultipartFile file, HttpSession session)
 			throws Exception {
-//
-//		Integer teacherId = (Integer) session.getAttribute("teacherId");
-//		if (teacherId == null)
-//			return "redirect:/teacher-auth";
-		Integer teacherId = 1;
+
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
+
 		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
 		TeacherProfile profile = teacherProfileRepo.findByTeacherTeacherId(teacherId);
@@ -256,7 +237,9 @@ public class TeacherController {
 	@GetMapping("/teacher-activity")
 	public String teacherNotesAndAnnoucments(Model model, HttpSession session) {
 
-		Integer teacherId = 1;
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
+			return "redirect:/teacher-auth";
 
 		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
@@ -264,10 +247,6 @@ public class TeacherController {
 
 		List<Announcement> otherTeachers = announcementRepo.findOtherTeachersAnnouncements(teacherId);
 
-		List<Course> courses = courseRepo.findByTeacherTeacherId(teacherId);
-
-		model.addAttribute("courses", courses);
-		model.addAttribute("hasCourses", courses != null && !courses.isEmpty());
 		model.addAttribute("myAnnouncements",
 				announcementRepo.findByTeacherTeacherIdAndActiveTrueOrderByCreatedAtDesc(teacherId));
 
@@ -275,8 +254,10 @@ public class TeacherController {
 				announcementRepo.findByTeacherIsNullAndActiveTrueAndAudienceInOrderByCreatedAtDesc(
 						List.of(AnnouncementAudience.TEACHERS, AnnouncementAudience.ALL)));
 
-		model.addAttribute("courses", courseRepo.findByTeacherTeacherId(teacherId));
+		List<Course> courses = courseRepo.findByTeacherTeacherId(teacherId);
 
+		model.addAttribute("courses", courses);
+		model.addAttribute("hasCourses", !courses.isEmpty());
 		model.addAttribute("allAnnouncements", teacherAnnouncements);
 		model.addAttribute("otherAnnouncements", otherTeachers);
 		model.addAttribute("categories", categoryRepo.findByActiveTrue());
@@ -291,12 +272,11 @@ public class TeacherController {
 			@RequestParam String title, @RequestParam String message, @RequestParam AnnouncementAudience audience,
 			@RequestParam(required = false) MultipartFile file, HttpSession session) throws IOException {
 
-		Integer teacherId = 1;
-
-		Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
-		if (teacher == null) {
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+		if (teacherId == null)
 			return "redirect:/teacher-auth";
-		}
+
+		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
 
 		if (teacher.getStatus() == TeacherStatus.BLOCKED) {
 			return "redirect:/teacher-activity?error=blocked";
@@ -358,19 +338,18 @@ public class TeacherController {
 				return "redirect:/teacher-activity?error=fileUpload";
 			}
 		}
-		
+
 		if (audience == AnnouncementAudience.ENROLLED) {
 
-		    List<Course> teacherCourses =
-		            courseRepo.findByTeacherTeacherId(teacherId);
+			List<Course> teacherCourses = courseRepo.findByTeacherTeacherId(teacherId);
 
-		    if (teacherCourses == null || teacherCourses.isEmpty()) {
-		        return "redirect:/teacher-activity?error=noCourses";
-		    }
+			if (teacherCourses == null || teacherCourses.isEmpty()) {
+				return "redirect:/teacher-activity?error=noCourses";
+			}
 
-		    if (courseId == null) {
-		        return "redirect:/teacher-activity?error=selectCourse";
-		    }
+			if (courseId == null) {
+				return "redirect:/teacher-activity?error=selectCourse";
+			}
 		}
 		announcementRepo.save(a);
 
@@ -380,10 +359,7 @@ public class TeacherController {
 	@GetMapping("/test-teacher-login")
 	public String testTeacherLogin(HttpSession session) {
 
-		// simulate logged-in teacher (TESTING ONLY)
-		session.setAttribute("TEACHER_LOGGED_IN", true);
-		session.setAttribute("teacherId", 1); // must exist in DB
-		session.setAttribute("teacherName", "Test Teacher");
+		session.setAttribute("teacherId", 1);
 
 		return "redirect:/teacher-dashboard";
 	}
