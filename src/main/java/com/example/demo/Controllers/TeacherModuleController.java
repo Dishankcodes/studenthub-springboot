@@ -20,7 +20,7 @@ public class TeacherModuleController {
 	@Autowired
 	private CourseModuleRepository moduleRepo;
 
-	// ✅ ADD MODULE
+
 	@PostMapping("/teacher/module/add")
 	public String addModule(@RequestParam Integer courseId, @RequestParam String title, RedirectAttributes ra) {
 		Course course = courseRepo.findById(courseId).orElseThrow();
@@ -29,7 +29,7 @@ public class TeacherModuleController {
 		module.setTitle(title);
 		module.setCourse(course);
 
-		// ✅ SET POSITION
+	
 		int position = course.getModules().size() + 1;
 		module.setPosition(position);
 
@@ -40,7 +40,7 @@ public class TeacherModuleController {
 				+ "&msg=module_added" + "#module-" + module.getModuleId();
 	}
 
-	// ✅ UPDATE MODULE
+	
 	@PostMapping("/teacher/module/update")
 	public String updateModule(@RequestParam Integer moduleId, @RequestParam String title, RedirectAttributes ra) {
 		CourseModule module = moduleRepo.findById(moduleId).orElse(null);
@@ -56,7 +56,6 @@ public class TeacherModuleController {
 				+ module.getModuleId() + "&msg=module_updated" + "#module-" + module.getModuleId();
 	}
 
-	// ✅ DELETE MODULE
 	@PostMapping("/teacher/module/delete")
 	public String deleteModule(@RequestParam Integer moduleId, RedirectAttributes ra) {
 		CourseModule module = moduleRepo.findById(moduleId).orElse(null);

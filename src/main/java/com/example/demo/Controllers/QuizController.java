@@ -101,10 +101,8 @@ public class QuizController {
 				+ lesson.getLessonId();
 	}
 
-	/*
-	 * =============================== DELETE QUESTION
-	 * ===============================
-	 */
+	
+	
 	@GetMapping("/teacher/quiz/question/delete")
 	public String deleteQuestion(@RequestParam Integer questionId, RedirectAttributes ra) {
 

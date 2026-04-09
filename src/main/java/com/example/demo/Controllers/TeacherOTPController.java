@@ -25,7 +25,6 @@ public class TeacherOTPController {
 		return String.valueOf((int) (Math.random() * 900000) + 100000);
 	}
 
-	/* ================= OTP PAGE ================= */
 	@GetMapping("/teacher-otp")
 	public String otpTeacher(HttpSession session) {
 		if (session.getAttribute("OTP_EMAIL") == null) {
@@ -34,7 +33,6 @@ public class TeacherOTPController {
 		return "teacher-otp";
 	}
 
-	/* ================= SEND OTP ================= */
 	@PostMapping("/teacher-send-otp")
 	public String sendOtp(@RequestParam String email, HttpSession session, RedirectAttributes redirectAttributes) {
 
@@ -57,7 +55,6 @@ public class TeacherOTPController {
 		return "redirect:/teacher-otp";
 	}
 
-	/* ================= VERIFY OTP ================= */
 	@PostMapping("/teacher-verify-otp")
 	public String verifyOtp(@RequestParam String otp, HttpSession session, RedirectAttributes redirectAttributes) {
 
@@ -79,8 +76,6 @@ public class TeacherOTPController {
 			return "redirect:/teacher-otp";
 		}
 
-		// SUCCESS
-		// SUCCESS
 		String email = (String) session.getAttribute("OTP_EMAIL");
 
 		var teacher = teacherRepo.findByemail(email);
@@ -92,7 +87,6 @@ public class TeacherOTPController {
 		session.setAttribute("TEACHER_LOGGED_IN", true);
 		session.setAttribute("teacherId", teacher.getTeacherId());
 
-		// cleanup OTP data
 		session.removeAttribute("OTP");
 		session.removeAttribute("OTP_TIME");
 		session.removeAttribute("OTP_LAST_SENT");
@@ -102,7 +96,6 @@ public class TeacherOTPController {
 
 	}
 
-	/* ================= RESEND OTP ================= */
 	@PostMapping("/teacher-resend-otp")
 	public String resendOtp(HttpSession session, RedirectAttributes redirectAttributes) {
 

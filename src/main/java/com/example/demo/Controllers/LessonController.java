@@ -27,9 +27,7 @@ public class LessonController {
 	@Autowired
 	private QuizRepository quizRepo;
 
-	/*
-	 * =============================== ADD LESSON ===============================
-	 */
+	
 	@PostMapping("/teacher/lesson/add")
 	public String addLesson(@RequestParam Integer moduleId, @RequestParam(required = false) String title,
 			@RequestParam(required = false) LessonType type, RedirectAttributes ra) {
@@ -46,11 +44,10 @@ public class LessonController {
 
 		lessonRepo.save(lesson);
 
-		// ✅ CREATE QUIZ IF TYPE = QUIZ
 		if (lesson.getType() == LessonType.QUIZ) {
 			Quiz quiz = new Quiz();
 			quiz.setLesson(lesson);
-			quiz.setTimeLimit(10); // default
+			quiz.setTimeLimit(10); 
 			quizRepo.save(quiz);
 		}
 

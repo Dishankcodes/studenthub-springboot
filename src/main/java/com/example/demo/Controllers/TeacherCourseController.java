@@ -287,7 +287,7 @@ public class TeacherCourseController {
 
 		File dir = new File(folderPath);
 		if (!dir.exists()) {
-			dir.mkdirs(); // this WILL create full path
+			dir.mkdirs(); 
 		}
 
 		String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
@@ -296,7 +296,7 @@ public class TeacherCourseController {
 
 		file.transferTo(destination);
 
-		// what we store in DB (relative URL)
+		
 		return "/uploads/course-thumbnails/" + courseId + "/" + fileName;
 	}
 

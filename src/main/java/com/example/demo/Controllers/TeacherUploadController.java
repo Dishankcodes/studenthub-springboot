@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,8 @@ import com.example.demo.repository.LessonRepository;
 import com.example.demo.repository.NoteCategoryRepository;
 import com.example.demo.repository.TeacherNotesRepository;
 import com.example.demo.repository.TeacherRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class TeacherUploadController {
@@ -43,14 +46,12 @@ public class TeacherUploadController {
 
 		Lesson lesson = lessonRepo.findById(lessonId).orElseThrow();
 
-		// ❌ No file selected
-		if (videoFile == null || videoFile.isEmpty()) {
+	if (videoFile == null || videoFile.isEmpty()) {
 			return "redirect:/teacher-creates-course?courseId=" + lesson.getModule().getCourse().getCourseId()
 					+ "&openLesson=" + lessonId + "&msg=video_error";
 		}
 
-		// ✅ check if replacing
-		boolean alreadyExists = lesson.getContentUrl() != null;
+	boolean alreadyExists = lesson.getContentUrl() != null;
 
 		String basePath = System.getProperty("user.dir") + "/uploads/lesson-videos/" + lessonId;
 
@@ -102,16 +103,21 @@ public class TeacherUploadController {
 				+ (alreadyExists ? "notes_updated" : "notes_uploaded") + "#module-" + lesson.getModule().getModuleId();
 	}
 
-	// ===== EXAMS & QUIZZES =====
-
+	
 	@PostMapping("/teacher-notes/upload")
 	public String uploadTeacherNote(@RequestParam String title, @RequestParam(required = false) String description,
-			@RequestParam Integer categoryId, @RequestParam MultipartFile file) throws IOException {
+			@RequestParam Integer categoryId, @RequestParam MultipartFile file,HttpSession session,Model model) throws IOException {
 
-		// Integer teacherId = (Integer) session.getAttribute("teacherId");
-		Integer teacherId = 1;
-		Teacher teacher = teacherRepo.findById(teacherId).orElseThrow();
+		Integer teacherId = (Integer) session.getAttribute("teacherId");
+	    if (teacherId == null) return "redirect:/teacher-auth";
 
+	    Teacher teacher = teacherRepo.findById(teacherId).orElse(null);
+	    if (teacher == null) {
+	        session.invalidate();
+	        return "redirect:/teacher-auth";
+	    }
+
+	    model.addAttribute("teacher", teacher);
 		if (teacher.getStatus() == TeacherStatus.BLOCKED) {
 			return "redirect:/teacher-activity?error=blocked";
 		}

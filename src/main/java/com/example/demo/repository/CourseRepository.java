@@ -78,16 +78,17 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 	long countByTeacherTeacherIdAndPriceGreaterThan(Integer teacherId, Double price);
 
 	@Query("""
-			SELECT c.title, COUNT(e), AVG(f.rating)
+			SELECT c.title,
+			       COUNT(e),
+			       0,
+			       COALESCE(SUM(c.price), 0)
 			FROM Course c
-			JOIN c.enrollments e
-			LEFT JOIN CourseFeedback f ON f.course = c
+			LEFT JOIN c.enrollments e
 			WHERE c.teacher.teacherId = :teacherId
-			GROUP BY c.courseId, c.title
+			GROUP BY c.courseId, c.title, c.price
 			ORDER BY COUNT(e) DESC
 			""")
-	List<Object[]> findTopCoursesByEnrollment(Integer teacherId);
-
+			List<Object[]> findTopCoursesByEnrollment(Integer teacherId);
 	@Query("""
 			SELECT c.title,
 			       COUNT(e),
@@ -108,4 +109,21 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 			ORDER BY COUNT(e) DESC
 			""")
 	List<Course> findPopularCourses();
+	// ===== PLATFORM COUNTS =====
+	long countByStatus(CourseStatus status);
+
+	long countByPriceLessThanEqualAndStatus(double price, CourseStatus status);
+
+	long countByPriceGreaterThanAndStatus(double price, CourseStatus status);
+
+	// ===== TEACHER COUNTS =====
+
+
+	long countByTeacherTeacherIdAndStatus(Integer teacherId, CourseStatus status);
+
+	long countByTeacherTeacherIdAndPriceLessThanEqualAndStatus(
+	        Integer teacherId, double price, CourseStatus status);
+
+	long countByTeacherTeacherIdAndPriceGreaterThanAndStatus(
+	        Integer teacherId, double price, CourseStatus status);
 }
