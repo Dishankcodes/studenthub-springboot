@@ -23,30 +23,36 @@
         }
 
         body {
-            background: #fff;
-            line-height: 1.6;
+            background: #f4f7ff;
         }
 
         .main {
             margin-left: 240px;
             margin-top: 56px;
             padding: 20px;
-            transition: 0.3s ease;
-
-
+            transition: margin-left 0.3s ease;
         }
 
         .sidebar.collapsed~.main {
             margin-left: 80px;
         }
 
-        /* ===== CARDS GRID ===== */
+        html,
+        body {
+            height: 100%;
+        }
+
+        .sidebar {
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
+
         .cards {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            /* wider cards */
             gap: 28px;
-            /* more air */
         }
 
         /* ===== CARD ===== */

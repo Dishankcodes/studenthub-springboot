@@ -17,15 +17,31 @@
         }
 
         body {
-            background: #fff;
+            background: #f4f7ff;
         }
 
         .main {
             margin-left: 240px;
             margin-top: 56px;
-            padding: 30px 25px;
-            background: #f8fafc;
-            min-height: 100vh;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+
+        .sidebar.collapsed~.main {
+            margin-left: 80px;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        .sidebar {
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
         }
 
         .container {

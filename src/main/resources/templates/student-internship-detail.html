@@ -180,10 +180,20 @@
             color: #991b1b;
         }
 
-
-
         .hidden {
             display: none;
+        }
+        
+                html,
+        body {
+            height: 100%;
+        }
+
+        .sidebar {
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
         }
     </style>
 </head>
@@ -347,7 +357,7 @@
                 </p>
 
                 <a th:href="@{'/student-course-details?courseId=' + ${internship.requiredCourse.courseId}}"
-                    class="apply-btn">
+                    class="apply-btn ">
                     Go to Course
                 </a>
             </div>

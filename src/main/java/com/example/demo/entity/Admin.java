@@ -1,7 +1,11 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.AdminRole;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,6 +27,10 @@ public class Admin {
 
 	private String password;
 
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private AdminRole role;
+	
 	public Integer getAdmin_id() {
 		return admin_id;
 	}
@@ -55,4 +63,13 @@ public class Admin {
 		this.password = password;
 	}
 
+	public AdminRole getRole() {
+		return role;
+	}
+
+	public void setRole(AdminRole role) {
+		this.role = role;
+	}
+
+	
 }

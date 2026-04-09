@@ -20,20 +20,32 @@
 			font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
 		}
 
-		body {
-			background: #fff;
-			line-height: 1.6;
-		}
+        body {
+            background: #f4f7ff;
+        }
 
-		.main {
-			margin-left: 240px;
-			margin-top: 56px;
-			padding: 20px;
-			transition: 0.3s ease;
-		}
+        .main {
+            margin-left: 240px;
+            margin-top: 56px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
 
 
-		/* ===== CARD ===== */
+        .sidebar.collapsed~.main {
+            margin-left: 80px;
+        }
+        html,
+        body {
+            height: 100%;
+        }
+
+        .sidebar {
+            height: 100%;
+            position: fixed;
+            left: 0;
+            top: 0;
+        }
 
 		.feedback-card {
 			max-width: 900px;

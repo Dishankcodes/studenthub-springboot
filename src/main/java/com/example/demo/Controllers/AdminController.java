@@ -240,12 +240,6 @@ public class AdminController {
 		return "admin-feedback";
 	}
 
-	@GetMapping("/admin-settings")
-	public String admin_settings() {
-
-		return "admin-settings";
-	}
-
 	@GetMapping("/admin-logout")
 	public String adminLogout(HttpSession session) {
 		session.invalidate();
