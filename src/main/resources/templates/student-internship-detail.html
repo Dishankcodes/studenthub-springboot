@@ -19,18 +19,18 @@
             box-sizing: border-box;
             font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
-
+        
         body {
             background: #f4f7ff;
         }
-
+        
         .main {
             margin-left: 240px;
             margin-top: 56px;
             padding: 20px;
             transition: 0.3s ease;
         }
-
+        
         .detail-container {
             max-width: 900px;
             margin: auto;
@@ -38,54 +38,54 @@
             flex-direction: column;
             gap: 20px;
         }
-
         /* HEADER */
+        
         .detail-header {
             background: #fff;
             padding: 25px;
             border-radius: 15px;
         }
-
+        
         .detail-header h1 {
             font-size: 26px;
         }
-
+        
         .company {
             color: #666;
             margin-bottom: 10px;
         }
-
         /* META */
+        
         .meta {
             display: flex;
             gap: 20px;
             font-size: 14px;
         }
-
         /* SECTIONS */
+        
         .detail-section {
             background: #fff;
             padding: 20px;
             border-radius: 15px;
         }
-
+        
         .detail-section h3 {
             margin-bottom: 10px;
         }
-
         /* SKILLS */
+        
         .skills span {
             background: #eee;
             padding: 6px 12px;
             border-radius: 10px;
             margin-right: 5px;
         }
-
         /* APPLY BOX */
+        
         .apply-box {
             text-align: right;
         }
-
+        
         .apply-btn {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
             border: none;
@@ -95,7 +95,7 @@
             font-weight: bold;
             cursor: pointer;
         }
-
+        
         .import-btn {
             background: #0ea5e9;
             color: #fff;
@@ -105,7 +105,7 @@
             margin-bottom: 10px;
             cursor: pointer;
         }
-
+        
         .modal {
             position: fixed;
             inset: 0;
@@ -113,18 +113,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-
             opacity: 0;
             visibility: hidden;
             transition: 0.3s ease;
             z-index: 9999;
         }
-
+        
         .modal.show {
             opacity: 1;
             visibility: visible;
         }
-
+        
         .modal-content {
             background: #fff;
             margin: 5% auto;
@@ -133,29 +132,28 @@
             border-radius: 12px;
             animation: fadeIn 0.3s ease;
         }
-
+        
         @keyframes fadeIn {
             from {
                 transform: translateY(-20px);
                 opacity: 0;
             }
-
             to {
                 transform: translateY(0);
                 opacity: 1;
             }
         }
-
+        
         .close-btn {
             float: right;
             font-size: 20px;
             cursor: pointer;
         }
-
+        
         .form-group {
             margin-bottom: 15px;
         }
-
+        
         .form-group input,
         textarea {
             width: 100%;
@@ -163,37 +161,66 @@
             border-radius: 8px;
             border: 1px solid #ddd;
         }
-
+        
         .alert {
             padding: 14px;
             border-radius: 12px;
             font-size: 14px;
         }
-
+        
         .success {
             background: #dcfce7;
             color: #166534;
         }
-
+        
         .error {
             background: #fee2e2;
             color: #991b1b;
         }
-
+        
         .hidden {
             display: none;
         }
         
-                html,
+        html,
         body {
             height: 100%;
         }
-
+        
         .sidebar {
             height: 100%;
             position: fixed;
             left: 0;
             top: 0;
+        }
+        
+        .apply-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border: none;
+            padding: 10px 18px;
+            border-radius: 10px;
+            color: #fff;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+        
+        .apply-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
+        }
+        
+        .apply-box .apply-btn {
+            margin: 8px 6px 0 0;
+        }
+        
+        .btn-course {
+            background: linear-gradient(135deg, #0ea5e9, #0284c7);
         }
     </style>
 </head>
@@ -260,41 +287,31 @@
         <div class="detail-container">
 
             <!-- TEST SUBMITTED -->
-            <div th:if="${app != null and app.status.name() == 'TEST_SUBMITTED'}" class="alert"
-                style="background:#e0f2fe;color:#0369a1; margin-bottom:15px;">
+            <div th:if="${app != null and app.status.name() == 'TEST_SUBMITTED'}" class="alert" style="background:#e0f2fe;color:#0369a1; margin-bottom:15px;">
 
-                ⏳ <b>Test Submitted Successfully!</b><br><br>
-
-                Your responses have been recorded.<br>
-                Please wait while our team evaluates your performance.<br><br>
-
-                👉 You will be notified once results are declared.
+                <i class="bi bi-check-circle"></i> <b>Test Submitted Successfully!</b><br><br> Your responses have been recorded.
+                <br> Please wait while our team evaluates your performance.<br><br> 👉 You will be notified once results are declared.
 
             </div>
             <div th:if="${error}" class="alert error" th:text="${error}"></div>
 
-            <div th:if="${app != null and app.allowReattempt and app.status.name() == 'FAILED'}" class="alert"
-                style="background:#fef3c7;color:#92400e;">
+            <div th:if="${app != null and app.allowReattempt and app.status.name() == 'FAILED'}" class="alert" style="background:#fef3c7;color:#92400e;">
 
-                🔁 You have been granted another attempt.<br>
-                Please try again carefully. This may be your final chance.
+                <i class="bi bi-arrow-repeat"></i> You have been granted another attempt.<br> Please try again carefully. This may be your final chance.
 
             </div>
 
             <div th:if="${app != null and testAttempt != null and app.status.name() == 'FAILED'}" class="alert error">
 
-                ❌ <b>Assessment Result: Not Cleared</b><br><br>
-
-                You did not meet the required criteria for this internship.<br>
-
-                👉 We recommend improving your skills and trying again.<br><br>
+                <i class="bi bi-x-circle-fill"></i> <b>Assessment Result: Not Cleared</b><br><br> You did not meet the required criteria for this internship.
+                <br> 👉 We recommend improving your skills and trying again.<br><br>
 
                 <a href="/student-course" class="apply-btn" style="background:#0ea5e9;">
-                    📚 View Recommended Courses
+                    <i class="bi bi-book"></i> View Recommended Courses
                 </a>
 
                 <a href="/student-internships" class="apply-btn" style="margin-left:10px;">
-                    💼 Explore Other Internships
+                    <i class="bi bi-briefcase"></i> Explore Other Internships
                 </a>
 
             </div>
@@ -326,17 +343,24 @@
             <!-- DESCRIPTION -->
             <div class="detail-section">
                 <h3>About the Internship</h3>
-                <p th:text="${internship.description}"></p>
+                <p th:if="${internship.description != null and internship.description != ''}" th:text="${internship.description}"></p>
+
+                <p th:if="${internship.description == null or internship.description == ''}" style="color:#666;">
+                    No detailed description provided. You can connect with the company for more information.
+                </p>
             </div>
 
-            <!-- RESPONSIBILITIES -->
             <div class="detail-section">
                 <h3>Responsibilities</h3>
-                <ul>
-                    <li>Develop REST APIs</li>
-                    <li>Work with databases</li>
-                    <li>Fix bugs and optimize code</li>
+
+                <ul th:if="${internship.responsibilities != null and internship.responsibilities != ''}">
+                    <li th:each="r : ${#strings.arraySplit(internship.responsibilities, '\n')}" th:text="${r}"></li>
                 </ul>
+
+                <!-- IF EMPTY -->
+                <p th:if="${internship.responsibilities == null or internship.responsibilities == ''}" style="color:#666;">
+                    Responsibilities are not specified. Please contact the company for more details.
+                </p>
             </div>
 
             <!-- SKILLS -->
@@ -356,25 +380,25 @@
                     <strong th:text="${internship.requiredCourse.title}"></strong>
                 </p>
 
-                <a th:href="@{'/student-course-details?courseId=' + ${internship.requiredCourse.courseId}}"
-                    class="apply-btn ">
-                    Go to Course
-                </a>
+                <div style="margin-top:15px;">
+                    <a th:href="@{'/student-course-details?courseId=' + ${internship.requiredCourse.courseId}}" class="apply-btn btn-course">
+                        <i class="bi bi-arrow-right-circle"></i> Go to Course
+                    </a>
+                </div>
+
             </div>
             <div class="apply-box">
 
-                <!-- ================= NOT APPLIED ================= -->
                 <div th:if="${app == null}">
                     <div class="alert" style="background:#eef2ff;color:#3730a3;">
-                        📌 You haven’t applied yet. Complete your profile and apply now.
+                        <i class="bi bi-info-circle"></i> You haven’t applied yet. Complete your profile and apply now.
                     </div>
 
                     <button type="button" id="showApplyFormBtn" class="apply-btn">
-                        🚀 Apply Now
+                        <i class="bi bi-send"></i> Apply Now
                     </button>
 
-                    <form id="applyForm" class="hidden" th:action="@{/student/apply}" method="post"
-                        enctype="multipart/form-data">
+                    <form id="applyForm" class="hidden" th:action="@{/student/apply}" method="post" enctype="multipart/form-data">
 
                         <input type="hidden" name="internshipId" th:value="${internship.id}">
 
@@ -417,98 +441,84 @@
                     </form>
                 </div>
 
-
-                <!-- ================= APPLIED ================= -->
                 <div th:if="${app != null and app.status.name() == 'APPLIED'}">
                     <div class="alert" style="background:#fef3c7;color:#92400e;">
-                        ⏳ Your application is under review.
+                        <i class="bi bi-clock"></i> Your application is under review.
                     </div>
                 </div>
 
 
-                <!-- ================= ACCEPTED ================= -->
                 <div th:if="${app != null and app.status.name() == 'ACCEPTED'}">
 
                     <div class="alert success">
-                        🎉 Your application is accepted
+                        <i class="bi bi-award"></i> Your application is accepted
                         <!-- now u have to wait if your internship contains a internship test u will get
                         test option or contact your company for further process. -->
                     </div>
 
-                    <!-- TEST EXISTS -->
                     <div th:if="${test != null and test.active}">
 
-                        <!-- NOT STARTED -->
                         <div th:if="${testAttempt == null}">
                             <button onclick="startTestConfirm(this)" th:data-id="${internship.id}" class="apply-btn">
-                                ▶ Start Test
+                                <i class="bi bi-play-circle"></i> Start Test
                             </button>
                         </div>
 
                     </div>
 
-                    <!-- NO TEST -->
                     <div th:if="${test == null or !test.active}">
                         <div class="alert" style="background:#e0f2fe;color:#0369a1;">
-                            ⏳ No test required.<br>
-                            You will receive a call/email if selected.
+                            <i class="bi bi-info-circle"></i> No test required.<br> You will receive a call/email if selected.
                         </div>
                     </div>
 
                 </div>
 
 
-                <!-- ================= TEST IN PROGRESS ================= -->
                 <div th:if="${app != null and app.status.name() == 'TEST_PENDING'}">
                     <div class="alert" style="background:#e0f2fe;color:#0369a1;">
-                        📝 Your test is in progress or you already continue the test.
+                        <i class="bi bi-pencil"></i> Your test is in progress or you already continue the test.
                     </div>
                 </div>
 
 
-                <!-- ================= TEST SUBMITTED ================= -->
                 <div th:if="${app != null and app.status.name() == 'TEST_SUBMITTED'}">
                     <div class="alert" style="background:#e0f2fe;color:#0369a1;">
-                        ⏳ Test submitted. Waiting for evaluation.
+                        <i class="bi bi-clock"></i> Test submitted. Waiting for evaluation.
                     </div>
                 </div>
 
 
-                <!-- ================= PASSED ================= -->
                 <div th:if="${app != null and app.status.name() == 'PASSED'}">
 
                     <div class="alert success">
-                        🎉 You cleared the test now wait if you selected then u will get the offer letter and next
-                        information!
+                        <i class="bi bi-check-circle-fill"></i> You cleared the test now wait if you selected then u will get the offer letter and next information!
                     </div>
 
                 </div>
 
 
-                <!-- ================= FAILED ================= -->
                 <div th:if="${app != null and app.status.name() == 'FAILED'}">
 
                     <div class="alert error">
-                        ❌ You did not clear the test.
+                        <i class="bi bi-x-circle"></i> You did not clear the test.
                     </div>
 
                     <!-- REATTEMPT -->
                     <div th:if="${app.allowReattempt}">
                         <div class="alert" style="background:#fef3c7; color:#92400e;">
-                            <i class="bi bi-arrow-repeat"></i>
-                            You have been granted a re-attempt opportunity.<br>
-                            Please retry the assessment carefully. This may be your final chance.
+                            <i class="bi bi-arrow-repeat"></i> You have been granted a re-attempt opportunity.<br> Please retry the assessment carefully. This may be your final chance.
                         </div>
 
                         <button onclick="startTestConfirm(this)" th:data-id="${internship.id}" class="apply-btn">
-                            🔁 Retry Test
+                            <i class="bi bi-arrow-repeat"></i> Retry Test
                         </button>
                     </div>
 
                     <!-- NO REATTEMPT -->
                     <div th:if="${!app.allowReattempt}">
                         <a href="/student-internships" class="apply-btn">
-                            💼 Explore Internships
+                            <i class="bi bi-briefcase"></i> Explore Internships
                         </a>
                     </div>
 
@@ -519,16 +529,12 @@
                 <div th:if="${app != null and app.status.name() == 'SELECTED'}">
 
                     <div class="alert success">
-                        🏆 You are selected!
+                        <i class="bi bi-award"></i> You are selected!
                     </div>
 
-                    <a th:href="@{'/student/offer-letter?appId=' + ${app.id}}" class="apply-btn"
-                        style="background:#0ea5e9;">
-                        📄 Offer Letter
-                    </a>
 
                     <a th:href="@{'/student/next-step?internshipId=' + ${internship.id}}" class="apply-btn">
-                        Next Step
+                        <i class="bi bi-arrow-right"></i> Next Step
                     </a>
 
                 </div>
@@ -537,15 +543,19 @@
                 <!-- ================= COMPLETED ================= -->
                 <div th:if="${app != null and app.status.name() == 'COMPLETED'}">
                     <div class="alert success">
-                        🎓 Internship completed successfully!
+                        <i class="bi bi-award"></i> Internship completed successfully!
                     </div>
+
+                    <a th:href="@{'/student/next-step?internshipId=' + ${internship.id}}" class="apply-btn">
+                        <i class="bi bi-arrow-right"></i> Next Step
+                    </a>
                 </div>
 
 
                 <!-- ================= REJECTED ================= -->
                 <div th:if="${app != null and app.status.name() == 'REJECTED'}">
                     <div class="alert error">
-                        ❌ Application rejected. Try again.
+                        <i class="bi bi-arrow-clockwise"></i> Application rejected. Try again.
                     </div>
 
                     <form th:action="@{/student/reapply}" method="post">
@@ -557,30 +567,28 @@
 
             </div>
             <script>
-                document.addEventListener("DOMContentLoaded", function () {
+            document.addEventListener("DOMContentLoaded", function() {
 
-                    const showBtn = document.getElementById("showApplyFormBtn");
-                    const form = document.getElementById("applyForm");
-                    const cancelBtn = document.getElementById("cancelApply");
+                const showBtn = document.getElementById("showApplyFormBtn");
+                const form = document.getElementById("applyForm");
+                const cancelBtn = document.getElementById("cancelApply");
 
-                    if (showBtn && form) {
+                if (showBtn && form) {
 
-                        showBtn.addEventListener("click", () => {
-                            form.classList.remove("hidden");
-                            showBtn.style.display = "none";
-                        });
+                    showBtn.addEventListener("click", () => {
+                        form.classList.remove("hidden");
+                        showBtn.style.display = "none";
+                    });
 
-                        cancelBtn?.addEventListener("click", () => {
-                            form.classList.add("hidden");
-                            showBtn.style.display = "inline-block";
-                        });
-                    }
+                    cancelBtn?.addEventListener("click", () => {
+                        form.classList.add("hidden");
+                        showBtn.style.display = "inline-block";
+                    });
+                }
 
-                });
+            });
             </script>
             <script>
-
-
                 function startTestConfirm(btn) {
 
                     let id = btn.getAttribute("data-id");
@@ -596,15 +604,12 @@
 
                     if (confirmBox) {
 
-                        // 🔥 START TIMER HERE (NOT IN TEST PAGE)
                         localStorage.setItem("examStart", Date.now());
                         localStorage.setItem("examActive", "true");
 
                         window.location.href = "/student/test/start?internshipId=" + id;
                     }
                 }
-
-
             </script>
             <script th:inline="javascript">
                 function importProfile() {

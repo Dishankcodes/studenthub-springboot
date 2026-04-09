@@ -233,37 +233,22 @@
 
                         <li class="sidebar__item"><a th:href="@{/admin-dashboard}">
                                 <i class="bi bi-speedometer2"></i><span>Dashboard</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/manage-students}">
                                 <i class="bi bi-people"></i><span>Student Management</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/manage-teachers}">
                                 <i class="bi bi-person-badge"></i><span>Instructor Management</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/manage-courses}">
                                 <i class="bi bi-book"></i><span>Course Management</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/manage-internships}" class="active">
                                 <i class="bi bi-kanban"></i><span>Internship Management</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/admin-post-internships}">
                                 <i class="bi bi-plus-circle"></i><span>Post Internships </span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/admin-chat}">
                                 <i class="bi bi-chat-dots"></i><span>Chat System</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/admin-announcement}">
                                 <i class="bi bi-briefcase"></i><span>Announcements</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/admin-design}"><i
                                     class="bi bi-layout-text-window"></i><span>Certificate Design</span></a></li>
-
-                        <li class="sidebar__item"><a th:href="@{/admin-feedback}">
-                                <i class="bi bi-bar-chart"></i><span>Feedback</span> </a></li>
-
-                        <li class="sidebar__item"><a th:href="@{/admin-settings}">
-                                <i class="bi bi-gear"></i><span>Settings</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/admin-logout}">
                                 <i class="bi bi-box-arrow-right"></i><span>Logout</span></a></li>
 
@@ -272,9 +257,7 @@
             </nav>
         </aside>
 
-        <!-- ===== CONTENT AREA ===== -->
-        <div class="content-area">
-            <!-- ===== TOPBAR ===== -->
+       <div class="content-area">
             <header class="topbar">
                 <span class="page-title"></span>
                 <div class="topbar-right">
@@ -285,7 +268,6 @@
                 </div>
             </header>
 
-            <!-- ===== MAIN CONTENT ===== -->
             <main class="home-section">
                 <div class="internship-list-container">
 
@@ -314,8 +296,7 @@
                             th:value="${param.keyword}">
                     </div>
 
-                    <!-- LOCATION FILTER -->
-                    <div class="filter-group">
+                   <div class="filter-group">
                         <i class="bi bi-geo-alt"></i>
                         <input type="text" name="location" placeholder="Filter by location..."
                             th:value="${param.location}">

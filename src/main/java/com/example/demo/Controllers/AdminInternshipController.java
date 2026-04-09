@@ -19,6 +19,7 @@ import com.example.demo.entity.InternshipTest;
 import com.example.demo.entity.Internships;
 import com.example.demo.entity.Student;
 import com.example.demo.enums.ApplicationStatus;
+import com.example.demo.enums.CourseStatus;
 import com.example.demo.repository.AdminRepository;
 import com.example.demo.repository.ApplicationRepository;
 import com.example.demo.repository.CourseRepository;
@@ -72,7 +73,7 @@ public class AdminInternshipController {
 	@GetMapping("/admin-post-internships")
 	public String postInternshipPage(Model model) {
 
-		List<Course> courses = courseRepo.findAll();
+		List<Course> courses = courseRepo.findByStatus(CourseStatus.PUBLISHED);
 		model.addAttribute("courses", courses);
 
 		return "admin-post-internships";
@@ -83,6 +84,7 @@ public class AdminInternshipController {
 			@RequestParam String location, @RequestParam String skills, @RequestParam(required = false) Integer stipend,
 			@RequestParam String duration, @RequestParam(required = false) String startDate,
 			@RequestParam String description, @RequestParam(required = false) Integer courseId,
+			@RequestParam(required = false) String responsibilities,
 			@RequestParam Boolean hasTest) {
 
 		Integer adminId = 1;
@@ -101,6 +103,7 @@ public class AdminInternshipController {
 		if (startDate != null && !startDate.isEmpty()) {
 			i.setStartDate(LocalDate.parse(startDate));
 		}
+		i.setResponsibilities(responsibilities);
 		i.setDescription(description);
 		i.setAdmin(admin);
 

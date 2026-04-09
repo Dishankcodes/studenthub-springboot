@@ -26,12 +26,14 @@ public class Internships {
 
 	@Column(length = 2000)
 	private String description;
+	
+	@Column(length = 2000)
+	private String responsibilities;
 
 	@ManyToOne
 	@JoinColumn(name = "course_id", nullable = true)
 	private Course requiredCourse;
 
-	// ADMIN (company)
 	@ManyToOne
 	private Admin admin;
 
@@ -140,5 +142,15 @@ public class Internships {
 	public void setAdmin(Admin admin) {
 		this.admin = admin;
 	}
+
+	public String getResponsibilities() {
+		return responsibilities;
+	}
+
+	public void setResponsibilities(String responsibilities) {
+		this.responsibilities = responsibilities;
+	}
+	
+	
 
 }

@@ -2,449 +2,467 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Admin | View Course</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Admin | View Course</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-		rel="stylesheet">
-	<style>
-		body {
-			margin: 0;
-			background: linear-gradient(135deg, #0b0b1f, #14142f);
-			font-family: 'Poppins', sans-serif;
-			color: #e5e7eb;
-		}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0b0b1f, #14142f);
+            font-family: 'Poppins', sans-serif;
+            color: #e5e7eb;
+        }
 
-	
-		.page-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 20px;
-		}
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
 
-		.page-title {
-			font-size: 22px;
-			font-weight: 600;
-		}
+        .page-title {
+            font-size: 22px;
+            font-weight: 600;
+        }
 
+        .btn-back {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 8px 14px;
+            font-size: 13px;
+            color: #fff;
+            border: none;
+            transition: 0.2s;
+        }
 
-		.btn-back {
-			background: rgba(255, 255, 255, 0.05);
-			border-radius: 10px;
-			padding: 8px 14px;
-			font-size: 13px;
-			color: #fff;
-			border: none;
-			transition: 0.2s;
-		}
+        .btn-back:hover {
+            background: #6366f1;
+        }
 
-		.btn-back:hover {
-			background: #6366f1;
-		}
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 18px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: 0.25s;
+        }
 
+        .glass-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
 
-		.glass-card {
-			background: rgba(255, 255, 255, 0.05);
-			border-radius: 16px;
-			padding: 18px;
-			backdrop-filter: blur(10px);
-			border: 1px solid rgba(255, 255, 255, 0.06);
-			transition: 0.25s;
-		}
+        .course-title {
+            font-size: 22px;
+            font-weight: 600;
+        }
 
-		.glass-card:hover {
-			transform: translateY(-3px);
-			box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-		}
+        .type-pill {
+            background: rgba(59, 130, 246, 0.2);
+            color: #93c5fd;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
 
-	
-		.course-title {
-			font-size: 22px;
-			font-weight: 600;
-		}
+        .price-pill {
+            background: rgba(34, 197, 94, 0.15);
+            color: #4ade80;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
 
-	
-		.type-pill {
-			background: rgba(59, 130, 246, 0.2);
-			color: #93c5fd;
-			padding: 5px 12px;
-			border-radius: 20px;
-			font-size: 12px;
-		}
+        .rating-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(250, 204, 21, 0.15);
+            color: #facc15;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
 
-		.price-pill {
-			background: rgba(34, 197, 94, 0.15);
-			color: #4ade80;
-			padding: 5px 12px;
-			border-radius: 20px;
-			font-size: 12px;
-		}
+        .module-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
 
-		.rating-pill {
-			display: inline-flex;
-			align-items: center;
-			gap: 6px;
-			background: rgba(250, 204, 21, 0.15);
-			color: #facc15;
-			padding: 6px 12px;
-			border-radius: 20px;
-			font-size: 13px;
-		}
+        .lesson-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
 
-		.module-card {
-			background: rgba(255, 255, 255, 0.04);
-			border-radius: 14px;
-			padding: 14px;
-			margin-bottom: 15px;
-			border: 1px solid rgba(255, 255, 255, 0.05);
-		}
+        .lesson-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
 
-		.lesson-card {
-			background: rgba(255, 255, 255, 0.05);
-			border-radius: 10px;
-			padding: 12px;
-			margin-top: 10px;
-			transition: 0.2s;
-		}
+        .feedback-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: 0.2s;
+        }
 
-		.lesson-card:hover {
-			background: rgba(255, 255, 255, 0.08);
-		}
+        .feedback-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
 
-		.feedback-card {
-			background: rgba(255, 255, 255, 0.05);
-			border-radius: 12px;
-			padding: 14px;
-			margin-top: 12px;
-			border: 1px solid rgba(255, 255, 255, 0.05);
-			transition: 0.2s;
-		}
+        .text-muted {
+            color: #9ca3af !important;
+        }
 
-		.feedback-card:hover {
-			background: rgba(255, 255, 255, 0.08);
-		}
+        .instructor-link {
+            color: #93c5fd;
+            font-weight: 500;
+            text-decoration: none;
+        }
 
-		.text-muted {
-			color: #9ca3af !important;
-		}
+        .instructor-link:hover {
+            color: #e0f2fe;
+        }
 
-		.instructor-link {
-			color: #93c5fd;
-			font-weight: 500;
-			text-decoration: none;
-		}
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 0 10px;
+        }
 
-		.instructor-link:hover {
-			color: #e0f2fe;
-		}
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
 
-		.container {
-			max-width: 1100px;
-			margin: 40px auto;
-			padding: 0 10px;
-		}
+        .glass-card {
+            padding: 22px;
+            margin-bottom: 28px;
+        }
 
-		.page-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 28px;
-		}
+        .glass-card p {
+            margin-bottom: 8px;
+        }
 
-		.glass-card {
-			padding: 22px;
-			margin-bottom: 28px;
-		}
+        .course-meta {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
 
-		.glass-card p {
-			margin-bottom: 8px;
-		}
+        .module-card {
+            padding: 18px;
+            margin-bottom: 22px;
+        }
 
-		.course-meta {
-			display: flex;
-			gap: 10px;
-			flex-wrap: wrap;
-			margin-top: 10px;
-		}
+        .module-card .card-header {
+            margin-bottom: 12px;
+            font-size: 15px;
+            font-weight: 500;
+        }
 
-		.module-card {
-			padding: 18px;
-			margin-bottom: 22px;
-		}
+        .lesson-card {
+            padding: 14px;
+            margin-top: 12px;
+        }
 
-		.module-card .card-header {
-			margin-bottom: 12px;
-			font-size: 15px;
-			font-weight: 500;
-		}
+        .module-card .border.rounded {
+            padding: 14px;
+            margin-top: 12px;
+            border-radius: 10px !important;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.05) !important;
+        }
 
-		.lesson-card {
-			padding: 14px;
-			margin-top: 12px;
-		}
+        .feedback-card {
+            padding: 18px;
+            margin-top: 28px;
+        }
 
-		.module-card .border.rounded {
-			padding: 14px;
-			margin-top: 12px;
-			border-radius: 10px !important;
-			background: rgba(255, 255, 255, 0.05);
-			border: 1px solid rgba(255, 255, 255, 0.05) !important;
-		}
+        .feedback-card .feedback-card {
+            margin-top: 14px;
+            padding: 14px;
+        }
 
-		.feedback-card {
-			padding: 18px;
-			margin-top: 28px;
-		}
+        .course-title {
+            margin-bottom: 10px;
+        }
 
-		.feedback-card .feedback-card {
-			margin-top: 14px;
-			padding: 14px;
-		}
+        .rating-pill {
+            margin-top: 12px;
+        }
 
-		.course-title {
-			margin-bottom: 10px;
-		}
+        .alert-warning {
+            margin-bottom: 22px;
+            border-radius: 10px;
+        }
 
-		.rating-pill {
-			margin-top: 12px;
-		}
+        h5,
+        h4 {
+            margin-bottom: 10px;
+        }
 
-		.alert-warning {
-			margin-bottom: 22px;
-			border-radius: 10px;
-		}
+        small {
+            display: block;
+            margin-top: 4px;
+        }
 
-		h5,
-		h4 {
-			margin-bottom: 10px;
-		}
+        .module-card:hover {
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
+        }
 
-		small {
-			display: block;
-			margin-top: 4px;
-		}
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
 
-		.module-card:hover {
-			box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15);
-		}
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
 
-		.page-header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			margin-bottom: 30px;
-		}
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
 
-		.header-left {
-			display: flex;
-			align-items: center;
-		}
+        .btn-header {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 9px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.25s ease;
+            backdrop-filter: blur(8px);
+        }
 
-		.header-actions {
-			display: flex;
-			gap: 12px;
-		}
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.05);
+            color: #e5e7eb;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
 
-		.btn-header {
-			display: inline-flex;
-			align-items: center;
-			gap: 6px;
-			padding: 9px 16px;
-			border-radius: 12px;
-			font-size: 13px;
-			font-weight: 500;
-			text-decoration: none;
-			transition: 0.25s ease;
-			backdrop-filter: blur(8px);
-		}
+        .btn-outline:hover {
+            background: #6366f1;
+            color: #fff;
+        }
 
-		.btn-outline {
-			background: rgba(255, 255, 255, 0.05);
-			color: #e5e7eb;
-			border: 1px solid rgba(255, 255, 255, 0.08);
-		}
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
 
-		.btn-outline:hover {
-			background: #6366f1;
-			color: #fff;
-		}
+        .btn-primary:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
+        }
 
-		.btn-primary {
-			background: linear-gradient(135deg, #6366f1, #8b5cf6);
-			color: #fff;
-			box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-		}
+        .student-link {
+            color: #93c5fd;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s ease;
+        }
 
-		.btn-primary:hover {
-			transform: translateY(-2px) scale(1.03);
-			box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
-		}
-	</style>
+        .student-link:hover {
+            color: #e0f2fe;
+            text-decoration: underline;
+        }
+
+        .instructor-link i {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 
 <body class="bg-dark">
 
-	<div class="container my-4">
+    <div class="container my-4">
 
-		<div class="page-header">
-			<div class="header-left">
-				<span class="page-title">
-					<i class="bi bi-book"></i> Course Overview
-				</span>
-			</div>
+        <div class="page-header">
+            <div class="header-left">
+                <span class="page-title">
+                    <i class="bi bi-book"></i> Course Overview
+                </span>
+            </div>
 
-			<div class="header-actions">
-				<a th:href="@{/manage-courses}" class="btn-header btn-outline">
-					<i class="bi bi-arrow-left"></i> Manage Courses
-				</a>
+            <div class="header-actions">
+                <a th:href="@{/manage-courses}" class="btn-header btn-outline">
+                    <i class="bi bi-arrow-left"></i> Manage Courses
+                </a>
 
-				<a th:if="${course.teacher != null}"
-					th:href="@{/admin-instructor-view/{id}(id=${course.teacher.teacherId})}"
-					class="btn-header btn-primary">
-					<i class="bi bi-person"></i> Publisher Profile
-				</a>
-			</div>
-		</div>
+                <a th:if="${course.teacher != null}"
+                    th:href="@{/admin-instructor-view/{id}(id=${course.teacher.teacherId})}"
+                    class="btn-header btn-primary">
+                    <i class="bi bi-person"></i> Publisher Profile
+                </a>
+            </div>
+        </div>
 
-		<div class="glass-card mb-4">
-			<div class="card-body">
+        <div class="glass-card mb-4">
+            <div class="card-body">
 
-				<h4 class="course-title mb-2" th:text="${course.title}"></h4>
+                <h4 class="course-title mb-2" th:text="${course.title}"></h4>
 
-				<p class="mb-1 text-muted">
-					Instructor:
-					<a th:if="${course.teacher != null}"
-						th:href="@{/admin-instructor-view/{id}(id=${course.teacher.teacherId})}"
-						class="instructor-link">
+                <p class="mb-1 text-muted">
+                    <strong>
+                        <i class="bi bi-person-badge"></i> Instructor:
+                    </strong>
 
-						<span th:text="${course.teacher.firstname + ' ' + course.teacher.lastname}"></span>
+                    <a th:if="${course.teacher != null}"
+                        th:href="@{/admin-instructor-view/{id}(id=${course.teacher.teacherId})}"
+                        class="instructor-link">
+                        <i class="bi bi-person-circle"></i>
 
-					</a>
+                        <span th:text="${course.teacher.firstname + ' ' + course.teacher.lastname}"></span>
 
-					<span th:if="${course.teacher == null}">
-						Not Assigned
-					</span>
-				</p>
+                    </a>
 
-				<p>
-					<strong>Instructor Rating:</strong>
-					<span class="rating-stars">
-						<i class="bi bi-star-fill"></i>
-					</span>
-					<span th:text="${#numbers.formatDecimal(avgInstructorRating,1,1)}"></span>
-					(<span th:text="${totalInstructorReviews}"></span> reviews)
-				</p>
+                    <span th:if="${course.teacher == null}">
+                        Not Assigned
+                    </span>
+                </p>
 
-				<p class="mb-1">
-					Status:
-					<span class="badge bg-info text-dark" th:text="${course.status}">
-						ACTIVE
-					</span>
-				</p>
+                <p>
+                    <strong>Instructor Rating:</strong>
+                    <span class="rating-stars">
+                        <i class="bi bi-star-fill"></i>
+                    </span>
+                    <span th:text="${#numbers.formatDecimal(avgInstructorRating,1,1)}"></span> (
+                    <span th:text="${totalInstructorReviews}"></span> reviews)
+                </p>
 
-				<div class="course-meta mt-2">
+                <p class="mb-1">
+                    Status:
+                    <span class="badge bg-info text-dark" th:text="${course.status}">
+                        ACTIVE
+                    </span>
+                </p>
 
-					<span class="pill type-pill" th:text="${course.type}">
-						FREE
-					</span>
+                <div class="course-meta mt-2">
 
-					<span class="price-pill" th:if="${course.type != null and course.type.name() == 'PAID'}">
+                    <span class="pill type-pill" th:text="${course.type}">
+                        FREE
+                    </span>
 
-						₹ <span th:text="${course.price}">0</span>
+                    <span class="price-pill" th:if="${course.type != null and course.type.name() == 'PAID'}">
 
-					</span>
-				</div>
+                        ₹ <span th:text="${course.price}">0</span>
 
-				<div class="rating-pill mt-2">
+                    </span>
+                </div>
 
-					<i class="bi bi-star-fill"></i>
+                <div class="rating-pill mt-2">
 
-					<span th:text="${#numbers.formatDecimal(avgRating,1,1)}"></span>
+                    <i class="bi bi-star-fill"></i>
 
-					<span class="rating-count">
-						(<span th:text="${reviewCount}"></span> reviews)
-					</span>
+                    <span th:text="${#numbers.formatDecimal(avgRating,1,1)}"></span>
 
-				</div>
-			</div>
-		</div>
+                    <span class="rating-count">
+                        (<span th:text="${reviewCount}"></span> reviews)
+                    </span>
 
-		<div th:if="${course.modules == null or #lists.isEmpty(course.modules)}" class="alert alert-warning">
-			No modules added to this course.
-		</div>
+                </div>
+            </div>
+        </div>
 
-		<div th:each="module, mStat : ${course.modules}" class="module-card">
+        <div th:if="${course.modules == null or #lists.isEmpty(course.modules)}" class="alert alert-warning">
+            No modules added to this course.
+        </div>
 
-			<div class="card-header bg-dark text-white">
-				<strong>
-					Module <span th:text="${mStat.index + 1}">1</span>:
-					<span th:text="${module.title}">Module Title</span>
-				</strong>
-			</div>
+        <div th:each="module, mStat : ${course.modules}" class="module-card">
 
-			<div class="card-body">
+            <div class="card-header bg-dark text-white">
+                <strong>
+                    Module <span th:text="${mStat.index + 1}">1</span>:
+                    <span th:text="${module.title}">Module Title</span>
+                </strong>
+            </div>
 
-				<div th:if="${module.lessons == null or #lists.isEmpty(module.lessons)}" class="text-muted">
-					No lessons in this module.
-				</div>
+            <div class="card-body">
 
-				<div th:each="lesson, lStat : ${module.lessons}" class="lesson-card">
-					<h6 class="fw-semibold mb-2">
-						Lesson <span th:text="${lStat.index + 1}">1</span>:
-						<span th:text="${lesson.title}">Lesson Title</span>
-					</h6>
-					<div th:if="${lesson.quiz != null}" class="list-group list-group-flush mt-2">
+                <div th:if="${module.lessons == null or #lists.isEmpty(module.lessons)}" class="text-muted">
+                    No lessons in this module.
+                </div>
 
-						<div class="list-group-item">
-							<i class="bi bi-question-circle"></i>
-							Quiz:
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+                <div th:each="lesson, lStat : ${module.lessons}" class="lesson-card">
+                    <h6 class="fw-semibold mb-2">
+                        Lesson <span th:text="${lStat.index + 1}">1</span>:
+                        <span th:text="${lesson.title}">Lesson Title</span>
+                    </h6>
+                    <div th:if="${lesson.quiz != null}" class="list-group list-group-flush mt-2">
 
-		<div class="feedback-card">
-			<div class="card-body">
-				<h5 class="feedback-title">
-					<i class="bi bi-chat-dots"></i>
-					Course Feedback
+                        <div class="list-group-item">
+                            <i class="bi bi-question-circle"></i> Quiz:
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-					<span class="rating-pill ms-2">
-						<i class="bi bi-star-fill"></i>
-						<span th:text="${#numbers.formatDecimal(avgRating,1,1)}"></span>
-					</span>
+        <div class="feedback-card">
+            <div class="card-body">
+                <h5 class="feedback-title">
+                    <i class="bi bi-chat-dots"></i> Course Feedback
 
-					<span class="review-count">
-						(<span th:text="${reviewCount}"></span> reviews)
-					</span>
-				</h5>
+                    <span class="rating-pill ms-2">
+                        <i class="bi bi-star-fill"></i>
+                        <span th:text="${#numbers.formatDecimal(avgRating,1,1)}"></span>
+                    </span>
 
-				<div th:if="${feedbacks.isEmpty()}" class="text-muted mt-2">
-					No student feedback yet.
-				</div>
+                    <span class="review-count">
+                        (<span th:text="${reviewCount}"></span> reviews)
+                    </span>
+                </h5>
 
-				<div th:each="f : ${feedbacks}" class="feedback-card mt-3">
-					<div>
-						<span class="rating-stars">
-							<i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1,f.rating)}"></i>
-						</span>
-					</div>
+                <div th:if="${feedbacks.isEmpty()}" class="text-muted mt-2">
+                    No student feedback yet.
+                </div>
 
-					<p class="mb-1" th:text="${f.comment}"></p>
+                <div th:each="f : ${feedbacks}" class="feedback-card mt-3">
+                    <div>
+                        <span class="rating-stars">
+                            <i class="bi bi-star-fill" th:each="i : ${#numbers.sequence(1,f.rating)}"></i>
+                        </span>
+                    </div>
 
-					<small class="text-muted">
-						— <span th:text="${f.student.fullname}"></span>
-					</small>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                    <p class="mb-1" th:text="${f.comment}"></p>
+
+                    <small class="text-muted">
+                        —
+                        <a th:href="@{'/admin-student-dashboard?id=' + ${f.student.studid}}" class="student-link">
+                            <i class="bi bi-person-circle"></i>
+                            <span th:text="${f.student.fullname}"></span>
+
+                        </a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

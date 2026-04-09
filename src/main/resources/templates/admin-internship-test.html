@@ -281,11 +281,16 @@ HEADER BUTTON FIX
             <div class="header-actions">
                 <a th:href="@{/manage-internships}" class="btn btn-back">
                     <i class="bi bi-arrow-left"></i>
-                    Manage Innternships
+                    Manage Internships
                 </a>
                 <a th:href="@{'/admin-applicants?id=' + ${internship.id}}" class="btn btn-back">
                     <i class="bi bi-people"></i>
                     Manage Applicants
+                </a>
+
+                <a th:if="${internship.hasTest}" th:href="@{'/admin-test-results?internshipId=' + ${internship.id}}"
+                    class="btn btn-back">
+                    <i class="bi bi-bar-chart"></i>See Results
                 </a>
                 <form th:action="@{/admin-internship-test/confirm}" method="post">
                     <input type="hidden" name="internshipId" th:value="${internship.id}">

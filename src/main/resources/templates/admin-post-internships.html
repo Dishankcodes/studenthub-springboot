@@ -262,40 +262,24 @@
                         <li class="sidebar__item item--heading">
                             <h2 class="sidebar__item--heading">General</h2>
                         </li>
-
                         <li class="sidebar__item"><a th:href="@{/admin-dashboard}">
                                 <i class="bi bi-speedometer2"></i><span>Dashboard</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/manage-students}">
                                 <i class="bi bi-people"></i><span>Student Management</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/manage-teachers}">
                                 <i class="bi bi-person-badge"></i><span>Instructor Management</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/manage-courses}">
                                 <i class="bi bi-book"></i><span>Course Management</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/manage-internships}">
                                 <i class="bi bi-kanban"></i><span>Internship Management</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/admin-post-internships}" class="active">
                                 <i class="bi bi-plus-circle"></i><span>Post Internships </span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/admin-chat}">
                                 <i class="bi bi-chat-dots"></i><span>Chat System</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/admin-announcement}">
                                 <i class="bi bi-briefcase"></i><span>Announcements</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/admin-design}"><i
                                     class="bi bi-layout-text-window"></i><span>Certificate Design</span></a></li>
-
-                        <li class="sidebar__item"><a th:href="@{/admin-feedback}">
-                                <i class="bi bi-bar-chart"></i><span>Feedback</span> </a></li>
-
-                        <li class="sidebar__item"><a th:href="@{/admin-settings}">
-                                <i class="bi bi-gear"></i><span>Settings</span></a></li>
-
                         <li class="sidebar__item"><a th:href="@{/admin-logout}">
                                 <i class="bi bi-box-arrow-right"></i><span>Logout</span></a></li>
 
@@ -304,9 +288,7 @@
             </nav>
         </aside>
 
-        <!-- ===== CONTENT AREA ===== -->
         <div class="content-area">
-            <!-- ===== TOPBAR ===== -->
             <header class="topbar">
                 <span class="page-title"></span>
                 <div class="topbar-right">
@@ -317,7 +299,6 @@
                 </div>
             </header>
 
-            <!-- ===== MAIN CONTENT ===== -->
             <main class="home-section">
 
                 <div class="internship-container">
@@ -328,7 +309,6 @@
                     </div>
 
                     <form class="internship-form" th:action="@{/admin/internship/save}" method="post">
-                        <!-- BASIC INFO -->
                         <div class="form-section">
                             <h3>Basic Information</h3>
 
@@ -377,7 +357,6 @@
                             </div>
                         </div>
 
-                        <!-- SKILLS -->
                         <div class="form-section">
                             <h3>Required Skills</h3>
 
@@ -393,7 +372,6 @@
                             </div>
                         </div>
 
-                        <!-- DETAILS -->
                         <div class="form-section">
                             <h3>Internship Details</h3>
 
@@ -476,20 +454,16 @@
                             </div>
                         </div>
 
-                        <!-- ACTION -->
                         <div class="form-actions">
                             <button type="submit" class="btn-post">
                                 <i class="bi bi-send"></i>
                                 Post Internship
                             </button>
                         </div>
-
                     </form>
                 </div>
-
             </main>
         </div>
-
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
@@ -516,4 +490,5 @@
         });
     }
 </script>
+
 </html>
