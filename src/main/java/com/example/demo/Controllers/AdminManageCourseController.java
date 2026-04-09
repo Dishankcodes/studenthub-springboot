@@ -14,10 +14,12 @@ import com.example.demo.dto.AdminCourseSummaryDTO;
 import com.example.demo.entity.Admin;
 import com.example.demo.entity.Course;
 import com.example.demo.entity.CourseFeedback;
+import com.example.demo.entity.Enrollment;
 import com.example.demo.enums.CourseStatus;
 import com.example.demo.repository.AdminRepository;
 import com.example.demo.repository.CourseFeedbackRepository;
 import com.example.demo.repository.CourseRepository;
+import com.example.demo.repository.EnrollmentRepository;
 import com.example.demo.repository.InstructorFeedbackRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -37,6 +39,9 @@ public class AdminManageCourseController {
 	@Autowired
 	private InstructorFeedbackRepository instructorFeedbackRepo;
 
+	@Autowired
+	private EnrollmentRepository enrollmentRepo;
+	
 	@GetMapping("/manage-courses")
 	public String admin_courses(HttpSession session, Model model) {
 
@@ -100,12 +105,16 @@ public class AdminManageCourseController {
 
 		Long totalInstructorReviews = instructorFeedbackRepo.getTotalRatings(teacherId);
 
+		 List<Enrollment> enrollments = enrollmentRepo.findByCourseCourseId(id);
+
+		 
 		model.addAttribute("course", course);
 		model.addAttribute("feedbacks", feedbacks);
 		model.addAttribute("avgRating", avgRating);
 		model.addAttribute("reviewCount", feedbacks.size());
 		model.addAttribute("avgInstructorRating", avgInstructorRating);
 		model.addAttribute("totalInstructorReviews", totalInstructorReviews);
+		 model.addAttribute("enrollments", enrollments);
 
 		return "admin-course-view";
 	}

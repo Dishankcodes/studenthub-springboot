@@ -62,4 +62,6 @@ public interface EnrollmentRepository extends JpaRepository<Enrollment, Integer>
 	boolean existsByStudentStudidAndCourseTeacherTeacherId(Integer studentId, Integer refId);
 	@Query("SELECT COUNT(DISTINCT e.student.studid) FROM Enrollment e")
 	long countDistinctAllStudents();
+
+	List<Enrollment> findByCourseCourseId(Integer courseId);
 }

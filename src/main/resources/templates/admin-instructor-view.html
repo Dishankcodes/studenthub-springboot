@@ -2,521 +2,575 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Instructor Dashboard</title>
+    <meta charset="UTF-8">
+    <title>Instructor Dashboard</title>
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-		rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
-	<style>
-		body {
-			margin: 0;
-			background: linear-gradient(135deg, #0b0b1f, #14142f);
-			font-family: 'Poppins', sans-serif;
-			color: #eaeaf0;
-		}
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0b0b1f, #14142f);
+            font-family: 'Poppins', sans-serif;
+            color: #eaeaf0;
+        }
 
-		.header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 18px 30px;
-			background: rgba(26, 26, 61, 0.8);
-			backdrop-filter: blur(12px);
-			border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-		}
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 30px;
+            background: rgba(26, 26, 61, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
 
-		.header-left {
-			display: flex;
-			align-items: center;
-			gap: 12px;
-		}
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-		.title {
-			font-size: 20px;
-			font-weight: 600;
-		}
+        .title {
+            font-size: 20px;
+            font-weight: 600;
+        }
 
-		.header-actions {
-			display: flex;
-			gap: 10px;
-		}
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
 
-		.btn {
-			padding: 8px 14px;
-			border-radius: 10px;
-			font-size: 13px;
-			text-decoration: none;
-			display: inline-flex;
-			align-items: center;
-			gap: 6px;
-			border: none;
-			cursor: pointer;
-		}
+        .btn {
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: none;
+            cursor: pointer;
+        }
 
-		.btn-outline {
-			background: rgba(255, 255, 255, 0.05);
-			color: #fff;
-		}
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+        }
 
-		.btn-outline:hover {
-			background: #6366f1;
-		}
+        .btn-outline:hover {
+            background: #6366f1;
+        }
 
-		.btn-primary {
-			background: linear-gradient(135deg, #6366f1, #8b5cf6);
-			color: #fff;
-		}
+        .btn-primary {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+        }
 
-		.btn-primary:hover {
-			transform: scale(1.05);
-		}
+        .btn-primary:hover {
+            transform: scale(1.05);
+        }
 
-		.container {
-			max-width: 1100px;
-			margin: 30px auto;
-			padding: 20px;
-		}
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
 
-		.profile-card {
-			background: rgba(255, 255, 255, 0.05);
-			border-radius: 16px;
-			padding: 20px;
-			display: flex;
-			align-items: center;
-			gap: 18px;
-			margin-bottom: 25px;
-			backdrop-filter: blur(10px);
-		}
+        .profile-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
 
-		.profile-card img {
-			width: 70px;
-			height: 70px;
-			border-radius: 50%;
-		}
+        .profile-card img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+        }
 
-		.stats {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-			gap: 15px;
-			margin-bottom: 25px;
-		}
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
 
-		.stat-card {
-			background: rgba(255, 255, 255, 0.05);
-			border-radius: 14px;
-			padding: 15px;
-			text-align: center;
-			transition: 0.2s;
-		}
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 15px;
+            text-align: center;
+            transition: 0.2s;
+        }
 
-		.stat-card:hover {
-			transform: translateY(-5px);
-			box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
-		}
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+        }
 
-		.stat-card h2 {
-			margin: 5px 0;
-			font-size: 22px;
-		}
+        .stat-card h2 {
+            margin: 5px 0;
+            font-size: 22px;
+        }
 
-		.stat-card p {
-			font-size: 12px;
-			color: #9ca3af;
-		}
+        .stat-card p {
+            font-size: 12px;
+            color: #9ca3af;
+        }
 
-		.table {
-			width: 100%;
-			border-collapse: collapse;
-			background: rgba(255, 255, 255, 0.03);
-			border-radius: 12px;
-			overflow: hidden;
-		}
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            overflow: hidden;
+        }
 
-		.table thead {
-			background: rgba(255, 255, 255, 0.06);
-		}
+        .table thead {
+            background: rgba(255, 255, 255, 0.06);
+        }
 
-		.table th,
-		.table td {
-			padding: 12px;
-			font-size: 13px;
-			text-align: left;
-		}
+        .table th,
+        .table td {
+            padding: 12px;
+            font-size: 13px;
+            text-align: left;
+        }
 
-		.table th {
-			color: #9ca3af;
-		}
+        .table th {
+            color: #9ca3af;
+        }
 
-		.table tr:hover {
-			background: rgba(99, 102, 241, 0.08);
-		}
+        .table tr:hover {
+            background: rgba(99, 102, 241, 0.08);
+        }
 
-		.badge {
-			padding: 4px 10px;
-			border-radius: 999px;
-			font-size: 11px;
-		}
+        .badge {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+        }
 
-		.accepted {
-			background: #22c55e33;
-			color: #22c55e;
-		}
+        .accepted {
+            background: #22c55e33;
+            color: #22c55e;
+        }
 
-		.rejected {
-			background: #ef444433;
-			color: #ef4444;
-		}
+        .rejected {
+            background: #ef444433;
+            color: #ef4444;
+        }
 
-		.pending {
-			background: #f59e0b33;
-			color: #f59e0b;
-		}
+        .pending {
+            background: #f59e0b33;
+            color: #f59e0b;
+        }
 
-		body {
-			margin: 0;
-			background: linear-gradient(135deg, #0b0b1f, #14142f);
-			font-family: 'Poppins', sans-serif;
-			color: #e5e7eb;
-			letter-spacing: 0.2px;
-		}
+        body {
+            margin: 0;
+            background: linear-gradient(135deg, #0b0b1f, #14142f);
+            font-family: 'Poppins', sans-serif;
+            color: #e5e7eb;
+            letter-spacing: 0.2px;
+        }
 
-		h1,
-		h2,
-		h3 {
-			font-weight: 600;
-			letter-spacing: 0.3px;
-		}
+        h1,
+        h2,
+        h3 {
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
 
-		p {
-			font-size: 13px;
-			color: #9ca3af;
-			font-weight: 400;
-		}
+        p {
+            font-size: 13px;
+            color: #9ca3af;
+            font-weight: 400;
+        }
 
-		.table th {
-			font-size: 12px;
-			font-weight: 500;
-			color: #9ca3af;
-		}
+        .table th {
+            font-size: 12px;
+            font-weight: 500;
+            color: #9ca3af;
+        }
 
-		.table td {
-			font-size: 13px;
-			font-weight: 400;
-			color: #e5e7eb;
-		}
+        .table td {
+            font-size: 13px;
+            font-weight: 400;
+            color: #e5e7eb;
+        }
 
+        .btn {
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
 
-		.btn {
-			font-weight: 500;
-			letter-spacing: 0.2px;
-		}
+        .stat-card h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+        }
 
-		.stat-card h2 {
-			font-size: 24px;
-			font-weight: 600;
-			color: #ffffff;
-		}
+        .stat-card p {
+            font-size: 12px;
+            font-weight: 400;
+            color: #9ca3af;
+        }
 
-		.stat-card p {
-			font-size: 12px;
-			font-weight: 400;
-			color: #9ca3af;
-		}
+        .profile-card h2 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+        }
 
+        .title {
+            font-size: 18px;
+            font-weight: 600;
+        }
 
-		.profile-card h2 {
-			font-size: 18px;
-			font-weight: 600;
-			color: #fff;
-		}
+        .stat-card i {
+            font-size: 18px;
+            color: #6366f1;
+        }
 
+        .table tr {
+            transition: 0.2s ease;
+        }
 
-		.title {
-			font-size: 18px;
-			font-weight: 600;
-		}
+        .table tr:hover {
+            transform: scale(1.01);
+        }
 
-		.stat-card i {
-			font-size: 18px;
-			color: #6366f1;
-		}
+        .btn-header {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 16px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: 0.25s ease;
+            backdrop-filter: blur(8px);
+        }
 
-		.table tr {
-			transition: 0.2s ease;
-		}
+        .btn-active {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
 
-		.table tr:hover {
-			transform: scale(1.01);
-		}
+        .btn-active:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
+        }
 
-		.btn-header {
-			display: inline-flex;
-			align-items: center;
-			gap: 6px;
-			padding: 10px 16px;
-			border-radius: 12px;
-			font-size: 13px;
-			font-weight: 500;
-			text-decoration: none;
-			transition: 0.25s ease;
-			backdrop-filter: blur(8px);
-		}
+        .btn-disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: #9ca3af;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
 
+        .btn-header i {
+            font-size: 14px;
+        }
 
-		.btn-active {
-			background: linear-gradient(135deg, #6366f1, #8b5cf6);
-			color: #fff;
-			box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-		}
+        .btn-header {
+            position: relative;
+            overflow: hidden;
+        }
 
-		.btn-active:hover {
-			transform: translateY(-2px) scale(1.03);
-			box-shadow: 0 8px 25px rgba(99, 102, 241, 0.45);
-		}
+        .btn-active::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            opacity: 0;
+            transition: 0.4s;
+        }
 
+        .btn-active:hover::after {
+            opacity: 1;
+        }
 
-		.btn-disabled {
-			background: rgba(255, 255, 255, 0.05);
-			color: #9ca3af;
-			border: 1px solid rgba(255, 255, 255, 0.08);
-			cursor: not-allowed;
-			opacity: 0.8;
-		}
-
-
-		.btn-header i {
-			font-size: 14px;
-		}
-
-		.btn-header {
-			position: relative;
-			overflow: hidden;
-		}
-
-		.btn-active::after {
-			content: "";
-			position: absolute;
-			inset: 0;
-			background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-			opacity: 0;
-			transition: 0.4s;
-		}
-
-		.btn-active:hover::after {
-			opacity: 1;
-		}
-	</style>
+        .table td {
+            vertical-align: middle;
+        }
+    </style>
 </head>
 
 <body>
+    <div class="header">
+        <div class="header-left">
+            <span class="title">
+                <i class="bi bi-person-badge"></i> Instructor Dashboard
+            </span>
+        </div>
 
-	<div class="header">
-		<div class="header-left">
-			<span class="title">
-				<i class="bi bi-person-badge"></i> Instructor Dashboard
-			</span>
-		</div>
+        <div class="header-actions">
+            <a href="/manage-teachers" class="btn btn-outline">
+                <i class="bi bi-arrow-left"></i> Manage Teachers
+            </a>
+        </div>
+    </div>
 
-		<div class="header-actions">
+    <div class="container">
 
-			<a href="/manage-teachers" class="btn btn-outline">
-				<i class="bi bi-arrow-left"></i> Manage Teachers
-			</a>
+        <div class="profile-card">
+            <img
+                th:src="${profile != null && profile.profileImage != null ? profile.profileImage : '/images/default.jpg'}">
 
+            <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
 
-		</div>
-	</div>
+                <div>
+                    <h2 style="margin-bottom:4px;">
+                        <span th:text="${teacher.firstname + ' ' + teacher.lastname}"></span>
+                    </h2>
 
-	<div class="container">
+                    <p th:text="${teacher.email}"></p>
 
-		<div class="profile-card">
-			<img
-				th:src="${profile != null && profile.profileImage != null ? profile.profileImage : '/images/default.jpg'}">
-
-			<div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
-
-				<div>
-					<h2 style="margin-bottom:4px;">
-						<span th:text="${teacher.firstname + ' ' + teacher.lastname}"></span>
-					</h2>
-
-					<p th:text="${teacher.email}"></p>
-
-					<p th:if="${profile != null}">
-						<b th:text="${profile.qualification}"></b>
-					</p>
-				</div>
+                    <p th:if="${profile != null}">
+                        <b th:text="${profile.qualification}"></b>
+                    </p>
+                </div>
 
 
-				<a th:if="${chatUser != null}" th:href="@{/admin-chat(userId=${chatUser.id})}" class="btn-btn outline">
-					<i class="bi bi-chat-dots"></i> Message Teacher
-				</a>
+                <a th:if="${chatUser != null}" th:href="@{/admin-chat(userId=${chatUser.id})}" class="btn-btn outline">
+                    <i class="bi bi-chat-dots"></i> Message Teacher
+                </a>
 
-			</div>
-		</div>
-		<div class="profile-card" style="flex-direction:column; align-items:flex-start;">
+            </div>
+        </div>
+        <div class="profile-card" style="flex-direction:column; align-items:flex-start;">
 
-			<h3><i class="bi bi-person-vcard"></i> Instructor Details</h3>
+            <h3><i class="bi bi-person-vcard"></i> Instructor Details</h3>
 
-			<div
-				style="display:grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap:15px; width:100%; margin-top:10px;">
+            <div
+                style="display:grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap:15px; width:100%; margin-top:10px;">
 
-				<p><b>Phone:</b> <span th:text="${teacher.phoneno != null ? teacher.phoneno : '-'}"></span></p>
+                <p><b>Phone:</b> <span th:text="${teacher.phoneno != null ? teacher.phoneno : '-'}"></span></p>
 
-				<p th:if="${profile != null}">
-					<b>Specialist:</b>
-					<span th:text="${profile.specialist != null ? profile.specialist : '-'}"></span>
-				</p>
+                <p th:if="${profile != null}">
+                    <b>Specialist:</b>
+                    <span th:text="${profile.specialist != null ? profile.specialist : '-'}"></span>
+                </p>
 
-				<p th:if="${profile != null}">
-					<b>Experience:</b>
-					<span th:text="${profile.experience != null ? profile.experience : '0'}"></span> years
-				</p>
+                <p th:if="${profile != null}">
+                    <b>Experience:</b>
+                    <span th:text="${profile.experience != null ? profile.experience : '0'}"></span> years
+                </p>
 
-				<p th:if="${profile != null}">
-					<b>Status:</b>
-					<span th:text="${teacher.status}"></span>
-				</p>
+                <p th:if="${profile != null}">
+                    <b>Status:</b>
+                    <span th:text="${teacher.status}"></span>
+                </p>
 
-			</div>
-			<div th:if="${profile == null}" style="color:#f59e0b;">
-				Profile not completed
-			</div>
-			<div style="margin-top:15px; display:flex; gap:12px; flex-wrap:wrap;">
+            </div>
+            <div th:if="${profile == null}" style="color:#f59e0b;">
+                Profile not completed
+            </div>
+            <div style="margin-top:15px; display:flex; gap:12px; flex-wrap:wrap;">
 
-				<form th:action="@{/manage-instructor/status/{id}(id=${teacher.teacherId})}" method="post">
-					<input type="hidden" name="status" value="ACTIVE" />
-					<button class="btn-header btn-active">
-						<i class="bi bi-check-circle"></i> Active
-					</button>
-				</form>
-				<form th:action="@{/manage-instructor/status/{id}(id=${teacher.teacherId})}" method="post">
-					<input type="hidden" name="status" value="SUSPENDED" />
-					<button class="btn-header btn-disabled">
-						<i class="bi bi-pause-circle"></i> Suspend
-					</button>
-				</form>
+                <form th:action="@{/manage-instructor/status/{id}(id=${teacher.teacherId})}" method="post">
+                    <input type="hidden" name="status" value="ACTIVE" />
+                    <button class="btn-header btn-active">
+                        <i class="bi bi-check-circle"></i> Active
+                    </button>
+                </form>
+                <form th:action="@{/manage-instructor/status/{id}(id=${teacher.teacherId})}" method="post">
+                    <input type="hidden" name="status" value="SUSPENDED" />
+                    <button class="btn-header btn-disabled">
+                        <i class="bi bi-pause-circle"></i> Suspend
+                    </button>
+                </form>
 
+                <form th:action="@{/manage-instructor/status/{id}(id=${teacher.teacherId})}" method="post">
+                    <input type="hidden" name="status" value="BLOCKED" />
+                    <button class="btn-header btn-disabled">
+                        <i class="bi bi-slash-circle"></i> Block
+                    </button>
+                </form>
 
+            </div>
+        </div>
 
-				<form th:action="@{/manage-instructor/status/{id}(id=${teacher.teacherId})}" method="post">
-					<input type="hidden" name="status" value="BLOCKED" />
-					<button class="btn-header btn-disabled">
-						<i class="bi bi-slash-circle"></i> Block
-					</button>
-				</form>
+        <div class="stats">
 
-			</div>
-		</div>
+            <div class="stat-card">
+                <i class="bi bi-journal"></i>
+                <h2 th:text="${totalCourses}"></h2>
+                <p>Total Courses</p>
+            </div>
 
-		<div class="stats">
+            <div class="stat-card">
+                <i class="bi bi-check2-circle"></i>
+                <h2 th:text="${publishedCourses}"></h2>
+                <p>Published</p>
+            </div>
 
-			<div class="stat-card">
-				<i class="bi bi-journal"></i>
-				<h2 th:text="${totalCourses}"></h2>
-				<p>Total Courses</p>
-			</div>
+            <div class="stat-card">
+                <i class="bi bi-star"></i>
+                <h2 th:text="${#numbers.formatDecimal(avgRating,1,1)}"></h2>
+                <p>Rating</p>
+            </div>
 
-			<div class="stat-card">
-				<i class="bi bi-check2-circle"></i>
-				<h2 th:text="${publishedCourses}"></h2>
-				<p>Published</p>
-			</div>
+            <div class="stat-card">
+                <i class="bi bi-people"></i>
+                <h2 th:text="${totalRatings}"></h2>
+                <p>Reviews</p>
+            </div>
+        </div>
+        <h3 style="margin-top:30px;">
+            <i class="bi bi-journal-bookmark"></i> Course History
+        </h3>
 
-			<div class="stat-card">
-				<i class="bi bi-star"></i>
-				<h2 th:text="${#numbers.formatDecimal(avgRating,1,1)}"></h2>
-				<p>Rating</p>
-			</div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Course</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Students</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
 
-			<div class="stat-card">
-				<i class="bi bi-people"></i>
-				<h2 th:text="${totalRatings}"></h2>
-				<p>Reviews</p>
-			</div>
+            <tbody>
+                <tr th:each="c, stat : ${courses}">
+                    <td th:text="${stat.index+1}"></td>
 
-		</div>
+                    <td th:text="${c.title}"></td>
 
-	
-		<h3 style="margin-top:30px;">
-			<i class="bi bi-journal-bookmark"></i> Course History
-		</h3>
+                    <td>
+                        <span class="badge" th:classappend="${c.status.name() == 'PUBLISHED' ? 'accepted' : 'pending'}">
+                            <span th:text="${c.status}"></span>
+                        </span>
+                    </td>
 
-		<table class="table">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>Course</th>
-					<th>Status</th>
-					<th>Date</th>
-					<th>Students</th>
-					<th>Actions</th>
-				</tr>
-			</thead>
+                    <td>
+                        <span
+                            th:text="${c.createdAt != null ? #temporals.format(c.createdAt,'dd MMM yyyy') : '—'}"></span>
+                    </td>
 
-			<tbody>
-				<tr th:each="c, stat : ${courses}">
-					<td th:text="${stat.index+1}"></td>
+                    <td th:text="${courseStudentCount[c.courseId] != null ? courseStudentCount[c.courseId] : 0}"></td>
 
-					<td th:text="${c.title}"></td>
+                    <td>
+                        <a th:href="@{/admin-course/view/{id}(id=${c.courseId})}" class="btn-header btn-active">
+                            <i class="bi bi-eye"></i> View
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-					<td>
-						<span class="badge" th:classappend="${c.status.name() == 'PUBLISHED' ? 'accepted' : 'pending'}">
-							<span th:text="${c.status}"></span>
-						</span>
-					</td>
+        <h3>
+            <i class="bi bi-chat-dots"></i> Student Feedback
+        </h3>
 
-					<td>
-						<span
-							th:text="${c.createdAt != null ? #temporals.format(c.createdAt,'dd MMM yyyy') : '—'}"></span>
-					</td>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
 
-					<td th:text="${courseStudentCount[c.courseId] != null ? courseStudentCount[c.courseId] : 0}"></td>
+            <tbody>
+                <tr th:each="f : ${feedbacks}">
+                    <td th:text="${f.student != null ? f.student.fullname : 'Unknown'}"></td>
 
-					<td>
-						<a th:href="@{/admin-course/view/{id}(id=${c.courseId})}" class="btn-header btn-active">
-							<i class="bi bi-eye"></i> View
-						</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+                    <td>
+                        ⭐ <span th:text="${f.rating}"></span>
+                    </td>
 
-		<!-- 🔥 FEEDBACK -->
-		<h3>
-			<i class="bi bi-chat-dots"></i> Student Feedback
-		</h3>
+                    <td th:text="${f.comment != null ? f.comment : '-'}"></td>
+                </tr>
 
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Student</th>
-					<th>Rating</th>
-					<th>Comment</th>
-				</tr>
-			</thead>
+                <tr th:if="${#lists.isEmpty(feedbacks)}">
+                    <td colspan="3" class="pending">
+                        No feedback yet
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="glass-card mt-4">
 
-			<tbody>
-				<tr th:each="f : ${feedbacks}">
-					<td th:text="${f.student != null ? f.student.fullname : 'Unknown'}"></td>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
 
-					<td>
-						⭐ <span th:text="${f.rating}"></span>
-					</td>
+                <h3>
+                    <i class="bi bi-journal-text"></i> Notes History
+                </h3>
 
-					<td th:text="${f.comment != null ? f.comment : '-'}"></td>
-				</tr>
+                <a href="/admin-note-categories" class="btn-header btn-primary">
+                    <i class="bi bi-grid"></i> See Other Notes
+                </a>
 
-				<tr th:if="${#lists.isEmpty(feedbacks)}">
-					<td colspan="3" class="pending">
-						No feedback yet
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+            </div>
+
+            <div th:if="${#lists.isEmpty(notes)}" class="text-muted mt-3">
+                No notes uploaded by this instructor.
+            </div>
+
+            <div th:if="${!#lists.isEmpty(notes)}" class="table-responsive mt-3">
+
+                <table class="table table-dark table-hover align-middle">
+
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Uploaded</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="n, stat : ${notes}">
+
+                            <td th:text="${stat.index + 1}"></td>
+
+                            <td th:text="${n.title}"></td>
+                            <td>
+                                <span class="badge"
+                                    th:classappend="${n.status.name() == 'APPROVED' ? ' bg-success' : ' bg-warning'}"
+                                    th:text="${n.status}">
+                                </span>
+                            </td>
+
+                            <td th:text="${#temporals.format(n.uploadedAt,'dd MMM yyyy')}"></td>
+
+                            <td style="display:flex; gap:8px;">
+                                <a th:href="${n.fileUrl}" target="_blank" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <form th:action="@{/admin/delete-note}" method="post"
+                                    onsubmit="return confirm('Delete this note?')">
+
+                                    <input type="hidden" name="noteId" th:value="${n.noteId}">
+                                    <input type="hidden" name="teacherId" th:value="${teacher.teacherId}">
+
+                                    <button class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

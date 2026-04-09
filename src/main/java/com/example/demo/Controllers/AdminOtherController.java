@@ -47,6 +47,7 @@ public class AdminOtherController {
 
 		model.addAttribute("categories", categoryRepo.findAll());
 		model.addAttribute("pendingNotes", teacherNoteRepo.findByStatus(NoteStatus.PENDING));
+		model.addAttribute("allNotes", teacherNoteRepo.findAll());
 
 		return "admin-note-categories";
 	}

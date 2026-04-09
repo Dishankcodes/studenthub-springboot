@@ -22,6 +22,7 @@ import com.example.demo.entity.InstructorFeedback;
 import com.example.demo.entity.InternshipApplication;
 import com.example.demo.entity.Student;
 import com.example.demo.entity.Teacher;
+import com.example.demo.entity.TeacherNotes;
 import com.example.demo.entity.TeacherProfile;
 import com.example.demo.enums.CourseStatus;
 import com.example.demo.enums.TeacherStatus;
@@ -35,6 +36,7 @@ import com.example.demo.repository.EnrollmentRepository;
 import com.example.demo.repository.InstructorFeedbackRepository;
 import com.example.demo.repository.InternshipRepository;
 import com.example.demo.repository.StudentRepository;
+import com.example.demo.repository.TeacherNotesRepository;
 import com.example.demo.repository.TeacherProfileRepo;
 import com.example.demo.repository.TeacherRepository;
 
@@ -76,6 +78,9 @@ public class AdminController {
 	@Autowired
 	private CourseFeedbackRepository feedbackRepo;
 
+	@Autowired
+	private TeacherNotesRepository notesRepo;
+	
 	@GetMapping("/admin-dashboard")
 	public String admin_dashboard(HttpSession session, Model model) {
 
@@ -197,6 +202,9 @@ public class AdminController {
 
 		ChatUser chatUser = chatUserRepo.findByRefIdAndType(teacherId, UserType.TEACHER).orElse(null);
 
+		 List<TeacherNotes> notes = notesRepo.findByTeacherTeacherId(teacherId);
+
+		 model.addAttribute("notes", notes);
 		model.addAttribute("chatUser", chatUser);
 		model.addAttribute("teacher", teacher);
 		model.addAttribute("profile", profile);
@@ -211,6 +219,18 @@ public class AdminController {
 		model.addAttribute("username", session.getAttribute("adminUsername"));
 
 		return "admin-instructor-view";
+	}
+	
+	@PostMapping("/admin/delete-note")
+	public String deleteNote(@RequestParam Integer noteId,
+	                         @RequestParam Integer teacherId,
+	                         RedirectAttributes ra) {
+
+	    notesRepo.deleteById(noteId);
+
+	    ra.addFlashAttribute("msg", "Note deleted successfully");
+
+	    return "redirect:/admin-instructor-view/" + teacherId;
 	}
 
 	@PostMapping("/manage-instructor/status/{id}")

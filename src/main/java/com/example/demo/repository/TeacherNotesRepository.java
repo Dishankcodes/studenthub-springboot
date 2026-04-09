@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.example.demo.entity.TeacherNotes;
 import com.example.demo.enums.NoteStatus;
+
+import jakarta.transaction.Transactional;
 
 public interface TeacherNotesRepository extends JpaRepository<TeacherNotes, Integer> {
 
@@ -44,4 +47,23 @@ public interface TeacherNotesRepository extends JpaRepository<TeacherNotes, Inte
 
 	List<TeacherNotes> findTop5ByApprovedTrueOrderByUploadedAtDesc();
 
+	
+	@Query("""
+		    SELECT COUNT(n) > 0 FROM TeacherNotes n
+		    WHERE n.status = 'PENDING'
+		    AND n.uploadedAt <= :time
+		""")
+		boolean existsPendingBefore(LocalDateTime time);
+	
+	@Transactional
+	@Modifying
+	@Query("""
+	    UPDATE TeacherNotes n
+	    SET n.status = com.example.demo.enums.NoteStatus.APPROVED,
+	        n.approved = true,
+	        n.approvedAt = :now
+	    WHERE n.status = 'PENDING'
+	    AND n.uploadedAt <= :time
+	""")
+	int autoApproveBulk(LocalDateTime time, LocalDateTime now);
 }
