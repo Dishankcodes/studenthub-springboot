@@ -1,167 +1,157 @@
 @charset "UTF-8";
 
+/* ================= BASE ================= */
+
 .edu-footer {
-	background: linear-gradient(135deg, #0b1020, #050814);
-	color: #cfd8ff;
-	padding: 60px 20px 30px;
-	font-family: "Poppins", sans-serif;
+    background: linear-gradient(135deg, #0b1020, #050814);
+    color: #cfd8ff;
+    padding: 60px 20px 30px;
+    font-family: "Poppins", sans-serif;
 }
 
 .footer-container {
-	max-width: 1200px;
-	margin: auto;
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-	gap: 40px;
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 40px;
 }
+
+/* ================= LOGO ================= */
 
 .footer-logo {
-	font-size: 26px;
-	font-weight: 700;
-	color: #ffffff;
+    font-size: 26px;
+    font-weight: 700;
+    color: #ffffff;
 }
 
-.footer-desc {
-	margin: 15px 0;
-	font-size: 14px;
-	line-height: 1.7;
-}
+/* ================= TEXT ================= */
 
 .footer-col h4 {
-	margin-bottom: 15px;
-	color: #ffffff;
-	font-size: 18px;
+    margin-bottom: 15px;
+    color: #ffffff;
+    font-size: 18px;
 }
 
+.footer-col p {
+    font-size: 14px;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+/* ================= LINKS ================= */
+
 .footer-col a {
-	display: block;
-	color: #cfd8ff;
-	text-decoration: none;
-	font-size: 14px;
-	margin-bottom: 8px;
-	transition: 0.3s;
+    display: block;
+    color: #cfd8ff;
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 8px;
+    padding: 6px 0;
+    transition: 0.3s ease;
 }
 
 .footer-col a:hover {
-	color: #4da3ff;
-	padding-left: 4px;
+    color: #4da3ff;
+    padding-left: 5px;
+}
+
+/* ================= SOCIAL ================= */
+
+.footer-social {
+    margin-top: 12px;
 }
 
 .footer-social a {
-	display: inline-block;
-	margin-right: 12px;
-	font-size: 18px;
-	color: #cfd8ff;
-	transition: 0.3s;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.08);
+    margin-right: 10px;
+    font-size: 16px;
+    transition: 0.3s;
 }
 
 .footer-social a:hover {
-	color: #4da3ff;
+    background: #4da3ff;
+    color: #fff;
 }
 
+/* ================= BOTTOM ================= */
+
 .footer-bottom {
-	text-align: center;
-	margin-top: 40px;
-	font-size: 13px;
-	color: #9aa7ff;
+    text-align: center;
+    margin-top: 40px;
+    font-size: 13px;
+    color: #9aa7ff;
 }
 
 .footer-bottom a {
-	color: #9aa7ff;
-	text-decoration: none;
+    color: #9aa7ff;
+    text-decoration: none;
 }
 
 .footer-bottom span {
-	margin: 0 8px;
+    margin: 0 8px;
 }
 
-/* ========================= */
-/* RESPONSIVE FOOTER */
-/* ========================= */
+/* ================= TABLET ================= */
 
-/* Tablets */
 @media (max-width: 992px) {
-	.footer-container {
-		gap: 30px;
-	}
+    .footer-container {
+        gap: 30px;
+    }
 
-	.footer-logo {
-		font-size: 24px;
-	}
+    .footer-logo {
+        font-size: 24px;
+    }
 }
 
-/* Mobile */
+/* ================= MOBILE ================= */
+
 @media (max-width: 768px) {
-	.edu-footer {
-		padding: 50px 15px 25px;
-		text-align: center;
-	}
 
-	.footer-container {
-		grid-template-columns: 1fr;
-		gap: 35px;
-	}
+    .edu-footer {
+        padding: 45px 20px 25px;
+        text-align: center;
+    }
 
-	.footer-col {
-		align-items: center;
-	}
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
 
-	.footer-desc {
-		max-width: 420px;
-		margin: 12px auto;
-	}
+    .footer-col {
+        text-align: center;
+    }
 
-	.footer-col a {
-		font-size: 15px;
-		margin-bottom: 10px;
-	}
+    .footer-col a {
+        font-size: 15px;
+    }
 
-	.footer-social {
-		margin-top: 12px;
-	}
-
-	.footer-social a {
-		margin: 0 10px;
-		font-size: 20px;
-	}
-
-	.footer-bottom {
-		margin-top: 30px;
-		font-size: 14px;
-	}
+    .footer-bottom {
+        font-size: 12px;
+        margin-top: 30px;
+    }
 }
 
-/* Very Small Screens */
+/* ================= SMALL PHONES ================= */
+
 @media (max-width: 480px) {
-	.footer-logo {
-		font-size: 22px;
-	}
 
-	.footer-col h4 {
-		font-size: 17px;
-	}
+    .footer-logo {
+        font-size: 22px;
+    }
 
-	.footer-bottom span {
-		display: block;
-		margin: 6px 0;
-	}
-}
+    .footer-col h4 {
+        font-size: 16px;
+    }
 
-.footer-col a {
-	padding: 6px 0;
-}
-
-.footer-social a {
-	width: 36px;
-	height: 36px;
-	border-radius: 50%;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	background: rgba(255, 255, 255, 0.08);
-}
-
-.footer-social a:hover {
-	background: #4da3ff;
-	color: #fff;
+    .footer-bottom span {
+        display: block;
+        margin: 6px 0;
+    }
 }

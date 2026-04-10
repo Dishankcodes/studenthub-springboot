@@ -2,384 +2,525 @@
 <html lang="en" xmlns:th="www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Teachers | EduPlatform</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teachers | EduPlatform</title>
 
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-	<style>
-		:root {
-			--primary: #f6a623;
-			/* bright orange */
-			--primary-dark: #d48821;
-			/* darker orange for hover */
-			--bg: #fffdf8;
-			/* light cream background */
-			--card-bg: #ffffff;
-			/* white cards */
-			--text-dark: #333;
-			/* main text */
-			--text-muted: #666;
-			/* muted text */
-		}
+    <style>
+        :root {
+            --primary: #f6a623;
+            /* bright orange */
+            --primary-dark: #d48821;
+            /* darker orange for hover */
+            --bg: #fffdf8;
+            /* light cream background */
+            --card-bg: #ffffff;
+            /* white cards */
+            --text-dark: #333;
+            /* main text */
+            --text-muted: #666;
+            /* muted text */
+        }
 
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-			font-family: "Poppins", sans-serif;
-		}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
 
-		body {
-			background: #f6f8ff;
-			color: #222;
-		}
+        body {
+            background: #f6f8ff;
+            color: #222;
+        }
 
-		/* ================= NAVBAR ================= */
-		header {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 22px 110px;
-			background: var(--primary);
-		}
+        /* ================= NAVBAR ================= */
 
-		.logo {
-			font-size: 26px;
-			font-weight: 700;
-			color: white;
-		}
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 22px 120px;
+            background: var(--primary);
+        }
 
-		nav {
-			display: flex;
-			gap: 35px;
-		}
+        .logo {
+            font-size: 26px;
+            font-weight: 700;
+            color: white;
+        }
 
-		nav a {
-			text-decoration: none;
-			color: white;
-			font-weight: 500;
-			position: relative;
-		}
+        nav {
+            display: flex;
+            gap: 35px;
+        }
 
-		nav a::after {
-			content: "";
-			position: absolute;
-			width: 0;
-			height: 2px;
-			background: #fff3c4;
-			left: 0;
-			bottom: -6px;
-			transition: 0.3s;
-		}
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            position: relative;
+        }
 
-		nav a:hover::after {
-			width: 100%;
-		}
+        nav a::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #fff3c4;
+            left: 0;
+            bottom: -6px;
+            transition: 0.3s;
+        }
 
-		.roles {
-			display: flex;
-			gap: 10px;
-		}
+        nav a:hover::after {
+            width: 100%;
+        }
 
-		.role-btn {
-			padding: 8px 18px;
-			border-radius: 25px;
-			border: none;
-			font-weight: 600;
-			cursor: pointer;
-			transition: 0.3s;
-		}
+        .roles {
+            display: flex;
+            gap: 10px;
+        }
 
-		.student {
-			background: #fff3c4;
-			color: var(--primary);
-		}
+        .role-btn {
+            padding: 8px 18px;
+            border-radius: 25px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-		.teacher {
-			background: white;
-			color: var(--primary);
-		}
+        .student {
+            background: #fff3c4;
+            color: var(--primary);
+        }
 
-		.admin {
-			background: #2f2f55;
-			color: white;
-		}
+        .teacher {
+            background: white;
+            color: var(--primary);
+        }
 
-		.role-btn:hover {
-			transform: translateY(-2px);
-		}
+        .admin {
+            background: #2f2f55;
+            color: white;
+        }
 
-		/* ================= HERO ================= */
-		.hero {
-			padding: 120px 20px 140px;
-			text-align: center;
-			background: linear-gradient(135deg, #f6a623, #ffb347);
-			color: #fff;
-			border-bottom-left-radius: 120px;
-			border-bottom-right-radius: 120px;
-		}
+        .role-btn:hover {
+            transform: translateY(-2px);
+        }
 
-		.hero h1 {
-			font-size: 56px;
-			font-weight: 700;
-			margin-bottom: 16px;
-		}
+        /* ================= HERO ================= */
 
-		.hero p {
-			font-size: 20px;
-			opacity: 0.95;
-		}
+        .hero {
+            padding: 120px 20px 140px;
+            text-align: center;
+            background: linear-gradient(135deg, #f6a623, #ffb347);
+            color: #fff;
+            border-bottom-left-radius: 120px;
+            border-bottom-right-radius: 120px;
+        }
 
-		/* ================= SECTION ================= */
-		.section {
-			max-width: 1100px;
-			margin: 100px auto;
-			padding: 0 20px;
-		}
+        .hero h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
 
-		.section h2 {
-			font-size: 38px;
-			margin-bottom: 40px;
-			text-align: center;
-			color: #2f2f55;
-		}
+        .hero p {
+            font-size: 20px;
+            opacity: 0.95;
+        }
 
-		/* ================= CARDS ================= */
-		.card-grid {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-			gap: 30px;
-		}
+        /* ================= SECTION ================= */
 
-		.card {
-			background: #fff;
-			padding: 32px 26px;
-			border-radius: 22px;
-			box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-			transition: 0.35s;
-		}
+        .section {
+            max-width: 1100px;
+            margin: 100px auto;
+            padding: 0 20px;
+        }
 
-		.card:hover {
-			transform: translateY(-8px);
-			box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
-		}
+        .section h2 {
+            font-size: 38px;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #2f2f55;
+        }
 
-		.card h4 {
-			font-size: 20px;
-			margin-bottom: 10px;
-			color: #f6a623;
-		}
+        /* ================= CARDS ================= */
 
-		.card p {
-			font-size: 15px;
-			color: #555;
-			line-height: 1.6;
-		}
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
 
-		/* ================= STEPS ================= */
-		.steps {
-			max-width: 800px;
-			margin: auto;
-		}
+        .card {
+            background: #fff;
+            padding: 32px 26px;
+            border-radius: 22px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            transition: 0.35s;
+        }
 
-		.step {
-			background: #fff;
-			display: flex;
-			align-items: center;
-			gap: 22px;
-			padding: 22px 28px;
-			border-radius: 18px;
-			margin-bottom: 18px;
-			box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-		}
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.12);
+        }
 
-		.step span {
-			font-size: 22px;
-			font-weight: 700;
-			color: #f6a623;
-		}
+        .card h4 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #f6a623;
+        }
 
-		/* ================= QUOTES ================= */
-		.quotes {
-			display: grid;
-			grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-			gap: 25px;
-		}
+        .card p {
+            font-size: 15px;
+            color: #555;
+            line-height: 1.6;
+        }
 
-		.quote {
-			background: #fff;
-			padding: 28px;
-			border-radius: 22px;
-			font-style: italic;
-			box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
-		}
+        /* ================= STEPS ================= */
 
-		/* ================= CTA ================= */
-		.cta {
-			text-align: center;
-			margin: 120px 0;
-		}
+        .steps {
+            max-width: 800px;
+            margin: auto;
+        }
 
-		.cta a {
-			background: linear-gradient(135deg, #ff7a00, #f6a623);
-			color: #fff;
-			padding: 18px 55px;
-			border-radius: 50px;
-			font-size: 22px;
-			font-weight: 600;
-			text-decoration: none;
-			box-shadow: 0 18px 40px rgba(255, 122, 0, 0.45);
-			transition: 0.3s;
-		}
+        .step {
+            background: #fff;
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            padding: 22px 28px;
+            border-radius: 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        }
 
-		.cta a:hover {
-			transform: translateY(-4px);
-		}
+        .step span {
+            font-size: 22px;
+            font-weight: 700;
+            color: #f6a623;
+        }
 
-		/* ================= FOOTER ================= */
-		footer {
-			background: #2e3440;
-			padding: 50px 80px 25px;
-			color: #cfd8dc;
-		}
+        /* ================= QUOTES ================= */
 
-		.footer-grid {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			gap: 40px;
-			margin-bottom: 30px;
-		}
+        .quotes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+        }
 
-		footer h4 {
-			color: #fff;
-			margin-bottom: 12px;
-		}
+        .quote {
+            background: #fff;
+            padding: 28px;
+            border-radius: 22px;
+            font-style: italic;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        }
 
-		footer p {
-			font-size: 14px;
-			cursor: pointer;
-			transition: 0.3s;
-		}
+        /* ================= CTA ================= */
 
-		footer p:hover {
-			color: #f6a623;
-		}
+        .cta {
+            text-align: center;
+            margin: 120px 0;
+        }
 
-		.copy {
-			text-align: center;
-			font-size: 13px;
-			opacity: 0.7;
-			border-top: 1px solid #444;
-			padding-top: 15px;
-		}
-	</style>
+        .cta a {
+            background: linear-gradient(135deg, #ff7a00, #f6a623);
+            color: #fff;
+            padding: 18px 55px;
+            border-radius: 50px;
+            font-size: 22px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 18px 40px rgba(255, 122, 0, 0.45);
+            transition: 0.3s;
+        }
+
+        .cta a:hover {
+            transform: translateY(-4px);
+        }
+
+        /* ================= FOOTER ================= */
+
+        footer {
+            background: #2e3440;
+            padding: 50px 80px 25px;
+            color: #cfd8dc;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        footer h4 {
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        footer p {
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        footer p:hover {
+            color: #f6a623;
+        }
+
+        .copy {
+            text-align: center;
+            font-size: 13px;
+            opacity: 0.7;
+            border-top: 1px solid #444;
+            padding-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+            }
+
+            /* ================= NAVBAR ================= */
+            header {
+                flex-direction: column;
+                align-items: center;
+                padding: 15px;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .logo {
+                font-size: 22px;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 12px;
+            }
+
+            nav a {
+                font-size: 13px;
+            }
+
+            .roles {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 8px;
+            }
+
+            .role-btn {
+                font-size: 12px;
+                padding: 6px 12px;
+            }
+
+            /* ================= HERO ================= */
+            .hero {
+                padding: 60px 20px 70px;
+                border-radius: 0 0 80px 80px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+                line-height: 1.4;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            /* ================= SECTION ================= */
+            .section {
+                margin: 60px auto;
+                padding: 0 15px;
+            }
+
+            .section h2 {
+                font-size: 24px;
+            }
+
+            /* ================= CARDS ================= */
+            .card {
+                padding: 20px;
+                text-align: center;
+            }
+
+            .card h4 {
+                font-size: 16px;
+            }
+
+            .card p {
+                font-size: 13px;
+            }
+
+            /* ================= STEPS ================= */
+            .step {
+                flex-direction: column;
+                text-align: center;
+                gap: 8px;
+                padding: 16px;
+            }
+
+            .step span {
+                font-size: 18px;
+            }
+
+            /* ================= QUOTES ================= */
+            .quote {
+                font-size: 14px;
+                text-align: center;
+            }
+
+            /* ================= CTA ================= */
+            .cta {
+                margin: 60px 0;
+                padding: 0 20px;
+            }
+
+            .cta a {
+                width: 100%;
+                display: block;
+                font-size: 14px;
+                padding: 12px;
+            }
+
+            /* ================= FOOTER ================= */
+            footer {
+                padding: 40px 20px;
+                text-align: center;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            footer h4 {
+                font-size: 16px;
+            }
+
+            footer p {
+                font-size: 13px;
+            }
+
+            .copy {
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-	<header>
-		<div class="logo">EduPlatform</div>
-		<nav>
-			<a th:href="@{/teacher-homepage}">Home</a>
-			<a th:href="@{/teacher_about}">About</a>
-			<a th:href="@{/teacher-privacy}">Privacy</a>
-		</nav>
-		<div class="roles">
-			<button class="role-btn student" th:onclick="|location.href='@{index}'|">Student</button>
-			<button class="role-btn teacher">Teacher</button>
-			<button class="role-btn admin" th:onclick="|location.href='@{admin-homepage}'|">Admin</button>
-		</div>
-	</header>
+    <header>
+        <div class="logo">EduPlatform</div>
+        <nav>
+            <a th:href="@{/teacher-homepage}">Home</a>
+            <a th:href="@{/teacher_about}">About</a>
+            <a th:href="@{/teacher-privacy}">Privacy</a>
+        </nav>
+        <div class="roles">
+            <button class="role-btn student" th:onclick="|location.href='@{index}'|">Student</button>
+            <button class="role-btn teacher">Teacher</button>
+            <button class="role-btn admin" th:onclick="|location.href='@{admin-homepage}'|">Admin</button>
+        </div>
+    </header>
 
-	<section class="hero">
-		<h1>Teach. Inspire. Transform.</h1>
-		<p>Build courses that shape futures</p>
-	</section>
+    <section class="hero">
+        <h1>Teach. Inspire. Transform.</h1>
+        <p>Build courses that shape futures</p>
+    </section>
 
-	<section class="section">
-		<h2>What You Can Do</h2>
-		<div class="card-grid">
-			<div class="card">
-				<h4>Create Courses</h4>
-				<p>Design engaging structured learning experiences.</p>
-			</div>
-			<div class="card">
-				<h4>Upload Content</h4>
-				<p>Videos, notes, quizzes — all in one place.</p>
-			</div>
-			<div class="card">
-				<h4>Track Progress</h4>
-				<p>Monitor student performance in real time.</p>
-			</div>
-			<div class="card">
-				<h4>Analytics</h4>
-				<p>Understand what works with detailed insights.</p>
-			</div>
-			<div class="card">
-				<h4>Announcements</h4>
-				<p>Keep students updated instantly.</p>
-			</div>
-			<div class="card">
-				<h4>Collaboration</h4>
-				<p>Learn and grow with fellow educators.</p>
-			</div>
-		</div>
-	</section>
+    <section class="section">
+        <h2>What You Can Do</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h4>Create Courses</h4>
+                <p>Design engaging structured learning experiences.</p>
+            </div>
+            <div class="card">
+                <h4>Upload Content</h4>
+                <p>Videos, notes, quizzes — all in one place.</p>
+            </div>
+            <div class="card">
+                <h4>Track Progress</h4>
+                <p>Monitor student performance in real time.</p>
+            </div>
+            <div class="card">
+                <h4>Analytics</h4>
+                <p>Understand what works with detailed insights.</p>
+            </div>
+            <div class="card">
+                <h4>Announcements</h4>
+                <p>Keep students updated instantly.</p>
+            </div>
+            <div class="card">
+                <h4>Collaboration</h4>
+                <p>Learn and grow with fellow educators.</p>
+            </div>
+        </div>
+    </section>
 
-	<section class="section">
-		<h2>How It Works</h2>
-		<div class="steps">
-			<div class="step"><span>01</span>
-				<p>Create your teacher account</p>
-			</div>
-			<div class="step"><span>02</span>
-				<p>Add courses and materials</p>
-			</div>
-			<div class="step"><span>03</span>
-				<p>Engage & guide students</p>
-			</div>
-			<div class="step"><span>04</span>
-				<p>Track growth and improve</p>
-			</div>
-		</div>
-	</section>
+    <section class="section">
+        <h2>How It Works</h2>
+        <div class="steps">
+            <div class="step"><span>01</span>
+                <p>Create your teacher account</p>
+            </div>
+            <div class="step"><span>02</span>
+                <p>Add courses and materials</p>
+            </div>
+            <div class="step"><span>03</span>
+                <p>Engage & guide students</p>
+            </div>
+            <div class="step"><span>04</span>
+                <p>Track growth and improve</p>
+            </div>
+        </div>
+    </section>
 
-	<section class="section">
-		<h2>Teacher Voices</h2>
-		<div class="quotes">
-			<div class="quote">“Teaching here feels powerful and simple.”</div>
-			<div class="quote">“My courses finally look professional.”</div>
-			<div class="quote">“Students engage more than ever.”</div>
-		</div>
-	</section>
+    <section class="section">
+        <h2>Teacher Voices</h2>
+        <div class="quotes">
+            <div class="quote">“Teaching here feels powerful and simple.”</div>
+            <div class="quote">“My courses finally look professional.”</div>
+            <div class="quote">“Students engage more than ever.”</div>
+        </div>
+    </section>
 
-	<div class="cta">
-		<a th:href="@{teacher-auth}">Become an Instructor</a>
-	</div>
+    <div class="cta">
+        <a th:href="@{teacher-auth}">Become an Instructor</a>
+    </div>
 
-	<footer>
-		<div class="footer-grid">
-			<div>
-				<h4>EduPlatform</h4>
-				<p>Empowering educators worldwide.</p>
-			</div>
-			<div>
-				<h4>Teacher Panel</h4>
-				<p>Dashboard</p>
-				<p>Create Course</p>
-				<p>Analytics</p>
-			</div>
-			<div>
-				<h4>Support</h4>
-				<p>Help Center</p>
-				<p>Community</p>
-				<p>Policies</p>
-			</div>
-		</div>
-		<p class="copy">© 2025 EduPlatform — Teacher Interface</p>
-	</footer>
+    <footer>
+        <div class="footer-grid">
+            <div>
+                <h4>EduPlatform</h4>
+                <p>Empowering educators worldwide.</p>
+            </div>
+            <div>
+                <h4>Teacher Panel</h4>
+                <p>Dashboard</p>
+                <p>Create Course</p>
+                <p>Analytics</p>
+            </div>
+            <div>
+                <h4>Support</h4>
+                <p>Help Center</p>
+                <p>Community</p>
+                <p>Policies</p>
+            </div>
+        </div>
+        <p class="copy">© 2025 EduPlatform — Teacher Interface</p>
+    </footer>
 
 </body>
 

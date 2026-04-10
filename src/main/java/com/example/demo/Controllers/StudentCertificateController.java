@@ -135,8 +135,9 @@ public class StudentCertificateController {
 		Files.copy(file.toPath(), response.getOutputStream());
 		response.getOutputStream().flush();
 	}
-	
-	private String generatePdf(Student student, Course course, CertificateTemplate template, String certNumber) throws Exception {
+
+	private String generatePdf(Student student, Course course, CertificateTemplate template, String certNumber)
+			throws Exception {
 
 		String baseDir = System.getProperty("user.dir") + "/uploads/certificates/student-" + student.getStudid()
 				+ "/course-" + course.getCourseId();
@@ -147,64 +148,76 @@ public class StudentCertificateController {
 
 		String pdfPath = baseDir + "/certificate.pdf";
 
-		Document document = new Document(PageSize.A4);
+		com.lowagie.text.Rectangle pageSize = PageSize.A4.rotate();
+
+		Document document = new Document(pageSize);
 		PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(pdfPath));
 
 		document.open();
 
-		
 		if (template.getBackgroundImage() != null) {
 			String bgPath = System.getProperty("user.dir") + template.getBackgroundImage();
 			File bgFile = new File(bgPath);
 
 			if (bgFile.exists()) {
 				Image bg = Image.getInstance(bgPath);
-				bg.scaleAbsolute(PageSize.A4.getWidth(), PageSize.A4.getHeight());
+				bg.scaleAbsolute(pageSize.getWidth(), pageSize.getHeight());
 				bg.setAbsolutePosition(0, 0);
 				writer.getDirectContentUnder().addImage(bg);
 			}
 		}
 
-	
 		PdfContentByte text = writer.getDirectContent();
-		BaseFont bold = BaseFont.createFont(BaseFont.HELVETICA_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
 
-		BaseFont normal = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.WINANSI, BaseFont.EMBEDDED);
+		BaseFont bold = BaseFont.createFont(BaseFont.TIMES_BOLD, BaseFont.WINANSI, BaseFont.EMBEDDED);
+		BaseFont normal = BaseFont.createFont(BaseFont.TIMES_ROMAN, BaseFont.WINANSI, BaseFont.EMBEDDED);
+
+		float centerX = pageSize.getWidth() / 2;
+		float centerY = pageSize.getHeight() / 2;
 
 		text.beginText();
-		text.setFontAndSize(bold, 42);
-		text.showTextAligned(Element.ALIGN_CENTER, student.getFullname().toUpperCase(), PageSize.A4.getWidth() / 2, 430,
-				0);
+		text.setFontAndSize(bold, 46);
+		text.showTextAligned(Element.ALIGN_CENTER, student.getFullname().toUpperCase(), centerX, centerY + 60, 0);
 		text.endText();
 
 		text.beginText();
-		text.setFontAndSize(normal, 20);
-		text.showTextAligned(Element.ALIGN_CENTER, course.getTitle(), PageSize.A4.getWidth() / 2, 380, 0);
+		text.setFontAndSize(normal, 18);
+		text.showTextAligned(Element.ALIGN_CENTER, "has successfully completed the course", centerX, centerY + 10, 0);
 		text.endText();
 
-	
 		text.beginText();
-		text.setFontAndSize(normal, 13);
-		text.showTextAligned(Element.ALIGN_CENTER, "Issued on: " + LocalDate.now(), PageSize.A4.getWidth() / 2, 340, 0);
+		text.setFontAndSize(bold, 24);
+		text.showTextAligned(Element.ALIGN_CENTER, course.getTitle(), centerX, centerY - 25, 0);
 		text.endText();
+
+		float rightX = pageSize.getWidth() - 60;
+		float baseY = 100;
+
 		if (template.getSignatureImage() != null) {
-			Image sign = Image.getInstance(System.getProperty("user.dir") + template.getSignatureImage());
-			sign.scaleToFit(120, 60);
-			sign.setAbsolutePosition(400, 150);
-			document.add(sign);
+			String signPath = System.getProperty("user.dir") + template.getSignatureImage();
+			File signFile = new File(signPath);
+
+			if (signFile.exists()) {
+				Image sign = Image.getInstance(signPath);
+				sign.scaleToFit(140, 70);
+				sign.setAbsolutePosition(rightX - 140, baseY + 50);
+				document.add(sign);
+			}
 		}
+
 		text.beginText();
 		text.setFontAndSize(normal, 12);
-		text.showTextAligned(Element.ALIGN_LEFT,
-		        "Certificate No: " + certNumber,
-		        50, 80, 0);
+		text.showTextAligned(Element.ALIGN_RIGHT, "Issued on: " + LocalDate.now(), rightX, baseY, 0);
 		text.endText();
 
 		text.beginText();
 		text.setFontAndSize(normal, 12);
-		text.showTextAligned(Element.ALIGN_RIGHT,
-		        "Issued on: " + LocalDate.now(),
-		        PageSize.A4.getWidth() - 50, 80, 0);
+		text.showTextAligned(Element.ALIGN_RIGHT, "Certificate No: " + certNumber, rightX, baseY - 18, 0);
+		text.endText();
+
+		text.beginText();
+		text.setFontAndSize(normal, 10);
+		text.showTextAligned(Element.ALIGN_RIGHT, "verify/" + certNumber, rightX, baseY - 35, 0);
 		text.endText();
 
 		document.close();
@@ -212,5 +225,4 @@ public class StudentCertificateController {
 		return "/uploads/certificates/student-" + student.getStudid() + "/course-" + course.getCourseId()
 				+ "/certificate.pdf";
 	}
-	
 }
