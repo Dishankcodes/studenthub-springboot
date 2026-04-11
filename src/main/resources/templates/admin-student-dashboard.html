@@ -310,6 +310,98 @@
             color: #8b5cf6;
             text-decoration: underline;
         }
+        /* ================= MOBILE RESPONSIVE ================= */
+        
+        @media (max-width: 768px) {
+            /* HEADER */
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 15px;
+            }
+            .header-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            .header-actions a,
+            .header-actions button {
+                flex: 1;
+                justify-content: center;
+            }
+            /* CONTAINER */
+            .container {
+                padding: 15px;
+            }
+            /* PROFILE */
+            .profile-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            .profile-card img {
+                width: 60px;
+                height: 60px;
+            }
+            /* STATS */
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .stat-card {
+                padding: 12px;
+            }
+            .stat-card h2 {
+                font-size: 18px;
+            }
+            /* TABLE */
+            .table-responsive {
+                overflow-x: auto;
+            }
+            .table th,
+            .table td {
+                font-size: 12px;
+                padding: 8px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            .header-actions {
+                flex-direction: column;
+            }
+            .header-actions a,
+            .header-actions button {
+                width: 100%;
+            }
+            .title {
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .table thead {
+                display: none;
+            }
+            .table tbody tr {
+                display: block;
+                margin-bottom: 12px;
+                padding: 10px;
+                border-radius: 10px;
+                background: rgba(255, 255, 255, 0.05);
+            }
+            .table tbody td {
+                display: flex;
+                justify-content: space-between;
+                padding: 6px 0;
+                border: none;
+            }
+            .table tbody td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #9ca3af;
+            }
+        }
     </style>
 </head>
 
@@ -381,77 +473,78 @@
         <h3 style="margin-top:30px;">
             <i class="bi bi-journal-bookmark"></i> Course History
         </h3>
-
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Course</th>
-                    <th>Status</th>
-                    <th>Completion</th>
-                    <th>Duration</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="enroll, stat : ${enrollments}">
-                    <td th:text="${stat.index+1}"></td>
-                    <td>
-                        <a th:href="@{'/admin-course/view/' + ${enroll.course.courseId}}" class="link">
-                            <i class="bi bi-journal-bookmark"></i>
-                            <span th:text="${enroll.course.title}"></span>
-                        </a>
-                    </td>
-                    <td>
-                        <span class="badge" th:classappend="${enroll.completedAt != null ? 'accepted' : 'pending'}">
-                            <span th:text="${enroll.completedAt != null ? 'Completed' : 'In Progress'}"></span>
-                        </span>
-                    </td>
-                    <td>
-                        <span th:if="${enroll.completedAt != null}" th:text="${#temporals.format(enroll.completedAt, 'dd MMM yyyy')}">
-                        </span>
-                        <span th:if="${enroll.completedAt == null}" style="color:#f59e0b;">
-                            Ongoing
-                        </span>
-                    </td>
-                    <td>
-                        <span th:if="${enroll.completedAt != null}" th:text="${courseDurationMap[enroll.course.courseId]} + ' days'">
-                        </span>
-                        <span th:if="${enroll.completedAt == null}" style="color:#9ca3af;">
-                            —
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <h3><i class="bi bi-kanban"></i> Internship History</h3>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Internship</th>
-                    <th>Status</th>
-                    <th>Phone</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="app, stat : ${applications}">
-                    <td th:text="${stat.index+1}"></td>
-                    <td>
-                        <a th:href="@{'/admin-applicants?id=' + ${app.internship.id}}" class="link">
-                            <i class="bi bi-arrow-up-right"></i>
-                            <span th:text="${app.internship.title}"></span>
-                        </a>
-                    </td>
-                    <td>
-                        <span class="badge" th:classappend="${app.status.name() == 'ACCEPTED' ? 'accepted' :
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Course</th>
+                        <th>Status</th>
+                        <th>Completion</th>
+                        <th>Duration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="enroll, stat : ${enrollments}">
+                        <td th:text="${stat.index+1}"></td>
+                        <td data-label="Course">
+                            <a th:href="@{'/admin-course/view/' + ${enroll.course.courseId}}" class="link">
+                                <i class="bi bi-journal-bookmark"></i>
+                                <span th:text="${enroll.course.title}"></span>
+                            </a>
+                        </td>
+                        <td data-label="Status">
+                            <span class="badge" th:classappend="${enroll.completedAt != null ? 'accepted' : 'pending'}">
+                                <span th:text="${enroll.completedAt != null ? 'Completed' : 'In Progress'}"></span>
+                            </span>
+                        </td>
+                        <td data-label="Completion">
+                            <span th:if="${enroll.completedAt != null}" th:text="${#temporals.format(enroll.completedAt, 'dd MMM yyyy')}">
+                            </span>
+                            <span th:if="${enroll.completedAt == null}" style="color:#f59e0b;">
+                                Ongoing
+                            </span>
+                        </td>
+                        <td data-label="Duration">
+                            <span th:if="${enroll.completedAt != null}" th:text="${courseDurationMap[enroll.course.courseId]} + ' days'">
+                            </span>
+                            <span th:if="${enroll.completedAt == null}" style="color:#9ca3af;">
+                                —
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <h3><i class="bi bi-kanban"></i> Internship History</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Internship</th>
+                        <th>Status</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="app, stat : ${applications}">
+                        <td th:text="${stat.index+1}"></td>
+                        <td>
+                            <a th:href="@{'/admin-applicants?id=' + ${app.internship.id}}" class="link">
+                                <i class="bi bi-arrow-up-right"></i>
+                                <span th:text="${app.internship.title}"></span>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="badge" th:classappend="${app.status.name() == 'ACCEPTED' ? 'accepted' :
                               (app.status.name() == 'REJECTED' ? 'rejected' : 'pending')}">
-                            <span th:text="${app.status}"></span>
-                        </span>
-                    </td>
-                    <td th:text="${app.phone}"></td>
-                </tr>
-            </tbody>
-        </table>
+                                <span th:text="${app.status}"></span>
+                            </span>
+                        </td>
+                        <td th:text="${app.phone}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 

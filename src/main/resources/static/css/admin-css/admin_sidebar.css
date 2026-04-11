@@ -578,3 +578,101 @@ aside:not(:has(:checked))
   background: linear-gradient(135deg, #0b0b1f, #14142f);
   color: #eaeaf0;
 }
+/* ================= MOBILE SIDEBAR FIX ================= */
+@media (max-width: 768px) {
+
+  .layout {
+    flex-direction: column;
+  }
+
+  /* SIDEBAR → TOP NAV */
+  .vertical-sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100vh;
+    z-index: 1000;
+    transition: 0.3s;
+  }
+
+  /* WHEN OPEN */
+  #sidebar-toggle:checked ~ nav {
+    left: 0;
+  }
+
+  /* CONTENT FULL WIDTH */
+  .content-area {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    padding: 0 16px;
+  }
+
+  /* DASHBOARD PADDING */
+  .dashboard {
+    padding: 20px 12px;
+  }
+
+  /* GRID FIX */
+  .row {
+    margin: 0;
+  }
+
+  /* CARDS FULL WIDTH */
+  .col-lg-3,
+  .col-xl-3,
+  .col-md-6 {
+    width: 100%;
+  }
+}
+/* ================= MOBILE SIDEBAR (FINAL) ================= */
+@media (max-width: 768px) {
+
+  /* Sidebar hidden */
+  .vertical-sidebar {
+    position: fixed;
+    top: 0;
+    left: -260px;
+    width: 260px;
+    height: 100vh;
+    z-index: 1000;
+    transition: all 0.3s ease;
+  }
+
+  /* Show sidebar */
+  #sidebar-toggle:checked ~ nav {
+    transform: translateX(260px);
+  }
+
+  #sidebar-toggle:checked ~ .vertical-sidebar {
+    left: 0;
+  }
+
+  /* Overlay */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 900;
+    display: none;
+  }
+
+  #sidebar-toggle:checked ~ .overlay {
+    display: block;
+  }
+
+  /* Content full width */
+  .content-area {
+    margin-left: 0 !important;
+    width: 100%;
+  }
+
+  /* Topbar spacing */
+  .topbar {
+    padding: 0 16px;
+  }
+}

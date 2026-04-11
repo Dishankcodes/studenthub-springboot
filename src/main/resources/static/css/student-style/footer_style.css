@@ -97,7 +97,47 @@
 .footer-bottom span {
     margin: 0 8px;
 }
+.edu-footer {
+            background: #2c2c54;
+            color: white;
+            padding: 60px 120px 30px;
+        }
 
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: space-between;
+        }
+
+        .footer-col h4,
+        .footer-logo {
+            margin-bottom: 12px;
+        }
+
+        .footer-col a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 6px;
+            transition: 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: #ffcc66;
+        }
+
+        .footer-col p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: 13px;
+            opacity: 0.7;
+            margin-top: 30px;
+        }
 /* ================= TABLET ================= */
 
 @media (max-width: 992px) {

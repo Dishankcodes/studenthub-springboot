@@ -487,3 +487,81 @@ footer {
 	text-decoration: underline;
 	color: #004fcc;
 }
+/* ================= GLOBAL RESPONSIVE FIX ================= */
+@media (max-width: 768px) {
+
+    body {
+        overflow-x: hidden;
+    }
+
+    /* ===== HEADER ===== */
+    header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        text-align: center;
+        font-size: 18px;
+        padding: 12px;
+    }
+
+    .home-btn {
+        position: static;
+        margin-top: 8px;
+        font-size: 13px;
+        padding: 6px 12px;
+    }
+
+    /* ===== FORM AREA ===== */
+    .signin-signup {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+    form {
+        padding: 0 1.5rem;
+    }
+
+    .title {
+        font-size: 1.8rem;
+    }
+
+    .input-field {
+        height: 50px;
+    }
+
+    .input-field input {
+        font-size: 14px;
+    }
+
+    /* ===== PANELS ===== */
+    .panel {
+        flex-direction: column;
+        padding: 20px 10px;
+        text-align: center;
+    }
+
+    .panel .content {
+        padding: 0;
+    }
+
+    .panel h3 {
+        font-size: 1.2rem;
+    }
+
+    .panel p {
+        font-size: 0.8rem;
+    }
+
+    .image {
+        width: 150px;
+        margin-top: 10px;
+    }
+
+    /* ===== BUTTON ===== */
+    .btn {
+        width: 100%;
+        font-size: 14px;
+        height: 45px;
+    }
+}

@@ -2,200 +2,171 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-	<link rel="stylesheet" th:href="@{/css/student-style/stu_login_style.css}">
-	<style>
-	/* FOOTER */
-		.edu-footer {
-			background: #2c2c54;
-			color: white;
-			padding: 60px 120px 30px;
-		}
-
-		.footer-container {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 40px;
-			justify-content: space-between;
-		}
-
-		.footer-col h4,
-		.footer-logo {
-			margin-bottom: 12px;
-		}
-
-		.footer-col a {
-			display: block;
-			color: white;
-			text-decoration: none;
-			margin-bottom: 6px;
-			transition: 0.3s;
-		}
-
-		.footer-col a:hover {
-			color: #ffcc66;
-		}
-
-		.footer-col p {
-			font-size: 14px;
-			opacity: 0.9;
-		}
-
-		.footer-bottom {
-			text-align: center;
-			font-size: 13px;
-			opacity: 0.7;
-			margin-top: 30px;
-		}
-
-	
-	</style>
-	<title>Sign in / Sign up Form</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" th:href="@{/css/student-style/stu_login_style.css}">
+     <link th:href="@{/css/student-style/footer_style.css}" rel="stylesheet">
+    
+    <style>
+        /* FOOTER */
+        .main-header {
+            background: #5995fd;
+            padding: 15px;
+            color: #fff;
+            font-weight: 700;
+            font-size: 22px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+    <title>Sign in / Sign up Form</title>
 </head>
 
 <body>
-	<header style="background: #5995fd; padding:15px;  color:#fff; font-weight:700; font-size:22px;">
-		EduPlatform
-		<a th:href="@{/index}" class="home-btn"><i class="bi bi-house-door-fill"></i> Home</a>
-	</header>
+    <header class="main-header">
+        EduPlatform
+        <a th:href="@{/index}" class="home-btn">
+            <i class="bi bi-house-door-fill"></i> Home
+        </a>
+    </header>
 
-	<div class="container">
-		<div class="forms-container">
-			<div class="signin-signup">
-				<form th:action="@{/student-dashboard}" method="post" class="sign-in-form">
-					<h2 class="title">Sign in</h2>
-					<p th:if="${loginError}" style="color:red; margin-bottom:10px;" th:text="${loginError}">
-					</p>
+    <div class="container">
+        <div class="forms-container">
+            <div class="signin-signup">
+                <form th:action="@{/student-dashboard}" method="post" class="sign-in-form">
+                    <h2 class="title">Sign in</h2>
+                    <p th:if="${loginError}" style="color:red; margin-bottom:10px;" th:text="${loginError}">
+                    </p>
 
-					<div class="input-field">
-						<i class="bi bi-person"></i>
-						<input type="email" name="email" placeholder="Email" required>
-					</div>
-					<div class="input-field">
-						<i class="bi bi-lock"></i>
-						<input type="password" name="password" placeholder="Password" required>
-					</div>
-				<!--  	<div class="forgot-password">
+                    <div class="input-field">
+                        <i class="bi bi-person"></i>
+                        <input type="email" name="email" placeholder="Email" required>
+                    </div>
+                    <div class="input-field">
+                        <i class="bi bi-lock"></i>
+                        <input type="password" name="password" placeholder="Password" required>
+                    </div>
+                    <!--  	<div class="forgot-password">
 						<a th:href="@{/forgot-password}">Forgot Password?</a>
 					</div>
 -->
-					<input type="submit" value="Login" class="btn solid" />
-					<p class="social-text">Or Sign in with social platforms</p>
-					<div class="social-media">
-						<a th:href="@{/}" class="social-icon"><i class="bi bi-instagram"></i></a>
-						<a th:href="@{/}" class="social-icon"><i class="bi bi-twitter"></i></a>
-						<a th:href="@{/}" class="social-icon"><i class="bi bi-google"></i></a>
-						<a th:href="@{/}" class="social-icon"><i class="bi bi-linkedin"></i></a>
-					</div>
-				</form>
+                    <input type="submit" value="Login" class="btn solid" />
+                    <p class="social-text">Or Sign in with social platforms</p>
+                    <div class="social-media">
+                        <a th:href="@{/}" class="social-icon"><i class="bi bi-instagram"></i></a>
+                        <a th:href="@{/}" class="social-icon"><i class="bi bi-twitter"></i></a>
+                        <a th:href="@{/}" class="social-icon"><i class="bi bi-google"></i></a>
+                        <a th:href="@{/}" class="social-icon"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </form>
 
 
-				<!-- Sign up Form -->
-				<form th:action="@{/student-login}" th:object="${student}" method="post" class="sign-up-form">
-					<h2 class="title">Sign up</h2>
-					<p th:if="${signupError}" style="color:red" th:text="${signupError}"></p>
+                <!-- Sign up Form -->
+                <form th:action="@{/student-login}" th:object="${student}" method="post" class="sign-up-form">
+                    <h2 class="title">Sign up</h2>
+                    <p th:if="${signupError}" style="color:red" th:text="${signupError}"></p>
 
-					<!-- success message -->
-					<p th:if="${success}" style="color:green" th:text="${success}"></p>
-					<div class="input-field">
-						<i class="bi bi-person"></i>
-						<input type="text" th:field="*{fullname}" placeholder="Full Name" required>
-					</div>
-					<div class="input-field">
-						<i class="bi bi-building"></i>
-						<input type="text" th:field="*{college}" placeholder="College" required>
-					</div>
+                    <!-- success message -->
+                    <p th:if="${success}" style="color:green" th:text="${success}"></p>
+                    <div class="input-field">
+                        <i class="bi bi-person"></i>
+                        <input type="text" th:field="*{fullname}" placeholder="Full Name" required>
+                    </div>
+                    <div class="input-field">
+                        <i class="bi bi-building"></i>
+                        <input type="text" th:field="*{college}" placeholder="College" required>
+                    </div>
 
-					<div class="input-field">
-						<i class="bi bi-envelope"></i>
-						<input type="email" th:field="*{email}" placeholder="Email" required>
-					</div>
-					<div class="input-field">
-						<i class="bi bi-lock"></i>
-						<input type="password" th:field="*{password}" placeholder="Password" required>
-					</div>
-					<input type="submit" class="btn" value="Sign up" />
-					<p class="social-text">Or Sign up with social platforms</p>
-					<div class="social-media">
-						<a th:href="@{/}" class="social-icon"><i class="bi bi-instagram"></i></a>
-						<a th:href="@{/}" class="social-icon"><i class="bi bi-twitter"></i></a>
-						<a th:href="@{/}" class="social-icon"><i class="bi bi-google"></i></a>
-						<a th:href="@{/}" class="social-icon"><i class="bi bi-linkedin"></i></a>
-					</div>
-				</form>
-			</div>
-		</div>
+                    <div class="input-field">
+                        <i class="bi bi-envelope"></i>
+                        <input type="email" th:field="*{email}" placeholder="Email" required>
+                    </div>
+                    <div class="input-field">
+                        <i class="bi bi-lock"></i>
+                        <input type="password" th:field="*{password}" placeholder="Password" required>
+                    </div>
+                    <input type="submit" class="btn" value="Sign up" />
+                    <p class="social-text">Or Sign up with social platforms</p>
+                    <div class="social-media">
+                        <a th:href="@{/}" class="social-icon"><i class="bi bi-instagram"></i></a>
+                        <a th:href="@{/}" class="social-icon"><i class="bi bi-twitter"></i></a>
+                        <a th:href="@{/}" class="social-icon"><i class="bi bi-google"></i></a>
+                        <a th:href="@{/}" class="social-icon"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-		<div class="panels-container">
-			<div class="panel left-panel">
-				<div class="content">
-					<h3>New here?</h3>
-					<p>
-						Welcome to <strong>EduPlatform</strong> — where learning online
-						is simple, interactive, and effective.
-					</p>
-					<button class="btn transparent" id="sign-up-btn">
-						Sign up
-					</button>
-				</div>
-				<img th:src="@{/images/log.svg}" class="image" alt="" />
-			</div>
-			<div class="panel right-panel">
-				<div class="content">
-					<h3>Already with us?</h3>
-					<p>
-						Welcome back to <strong>EduPlatform</strong>!
-						Continue your journey toward success.
-					</p>
-					<button class="btn transparent" id="sign-in-btn">
-						Sign in
-					</button>
-				</div>
-				<img th:src="@{/images/register.svg}" class="image" alt="" />
-			</div>
-		</div>
-	</div>
+        <div class="panels-container">
+            <div class="panel left-panel">
+                <div class="content">
+                    <h3>New here?</h3>
+                    <p>
+                        Welcome to <strong>EduPlatform</strong> — where learning online
+                        is simple, interactive, and effective.
+                    </p>
+                    <button class="btn transparent" id="sign-up-btn">
+                        Sign up
+                    </button>
+                </div>
+                <img th:src="@{/images/log.svg}" class="image" alt="" />
+            </div>
+            <div class="panel right-panel">
+                <div class="content">
+                    <h3>Already with us?</h3>
+                    <p>
+                        Welcome back to <strong>EduPlatform</strong>!
+                        Continue your journey toward success.
+                    </p>
+                    <button class="btn transparent" id="sign-in-btn">
+                        Sign in
+                    </button>
+                </div>
+                <img th:src="@{/images/register.svg}" class="image" alt="" />
+            </div>
+        </div>
+    </div>
 
-	<!-- Footer -->
-	<footer class="edu-footer">
-		<div class="footer-container">
-			<div class="footer-col">
-				<h2 class="footer-logo">EduPlatform</h2>
-				<p>Empowering students with practical learning, career guidance, and future-ready skills.</p>
-			</div>
-			<div class="footer-col">
-				<h4>Quick Links</h4>
-				<a th:href="@{/}">Home</a>
-				<a th:href="@{/courses}">Courses</a>
-				<a th:href="@{/career}">Careers</a>
-				<a th:href="@{/contact}">Contact</a>
-			</div>
-			<div class="footer-col">
-				<h4>Learning</h4>
-				<a th:href="@{/courses/java}">Java Development</a>
-				<a th:href="@{/courses/web}">Web Development</a>
-				<a th:href="@{/courses/data-science}">Data Science</a>
-				<a th:href="@{/courses/ai}">AI & Machine Learning</a>
-				<a th:href="@{/courses/ui-ux}">UI / UX Design</a>
-			</div>
-			<div class="footer-col">
-				<h4>Support</h4>
-				<p><i class="bi bi-envelope"></i> support@eduplatform.com</p>
-				<p><i class="bi bi-telephone"></i> +91 9XXXX XXXXX</p>
-				<p><i class="bi bi-clock"></i> Mon – Sat : 9 AM – 7 PM</p>
-			</div>
-		</div>
-		<div class="footer-bottom">
-			© 2026 EduPlatform. All Rights Reserved. <span>|</span>
-			<a th:href="@{/student-privacy}">Privacy Policy</a> <span>|</span>
-			<a th:href="@{/}">Terms & Conditions</a>
-		</div>
-	</footer>
+    <!-- Footer -->
+    <footer class="edu-footer">
+        <div class="footer-container">
+            <div class="footer-col">
+                <h2 class="footer-logo">EduPlatform</h2>
+                <p>Empowering students with practical learning, career guidance, and future-ready skills.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/courses}">Courses</a>
+                <a th:href="@{/career}">Careers</a>
+                <a th:href="@{/contact}">Contact</a>
+            </div>
+            <div class="footer-col">
+                <h4>Learning</h4>
+                <a th:href="@{/courses/java}">Java Development</a>
+                <a th:href="@{/courses/web}">Web Development</a>
+                <a th:href="@{/courses/data-science}">Data Science</a>
+                <a th:href="@{/courses/ai}">AI & Machine Learning</a>
+                <a th:href="@{/courses/ui-ux}">UI / UX Design</a>
+            </div>
+            <div class="footer-col">
+                <h4>Support</h4>
+                <p><i class="bi bi-envelope"></i> support@eduplatform.com</p>
+                <p><i class="bi bi-telephone"></i> +91 9XXXX XXXXX</p>
+                <p><i class="bi bi-clock"></i> Mon – Sat : 9 AM – 7 PM</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 EduPlatform. All Rights Reserved. <span>|</span>
+            <a th:href="@{/student-privacy}">Privacy Policy</a> <span>|</span>
+            <a th:href="@{/}">Terms & Conditions</a>
+        </div>
+    </footer>
 
-	<script th:src="@{/javascript/app.js}"></script>
+    <script th:src="@{/javascript/app.js}"></script>
 </body>
 
 </html>
