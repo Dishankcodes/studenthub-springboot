@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <title>Admin Notes Management</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
             margin: 0;
@@ -15,46 +16,50 @@
             font-family: 'Poppins', sans-serif;
             color: #e5e7eb;
         }
-        
+
         .dashboard {
             max-width: 1200px;
             margin: 30px auto;
             padding: 20px;
         }
+
         /* HEADER */
-        
+
         .dashboard-header h2 {
             font-size: 22px;
             font-weight: 600;
         }
-        
+
         .dashboard-header p {
             font-size: 13px;
             color: #9ca3af;
         }
+
         /* GLASS CARD */
-        
+
         .activity-card {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 16px;
             padding: 20px;
             margin-bottom: 25px;
+            margin-top:20px;
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.06);
             transition: 0.25s;
         }
-        
+
         .activity-card:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
         }
-        
+
         .activity-card h5 {
             font-size: 16px;
             font-weight: 600;
         }
+
         /* INPUT */
-        
+
         input {
             background: rgba(255, 255, 255, 0.08);
             border: none;
@@ -63,95 +68,100 @@
             color: #fff;
             width: 260px;
         }
-        
+
         input:focus {
             outline: none;
             border: 1px solid #6366f1;
         }
+
         /* BUTTONS */
-        
+
         .btn-primary {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
             border: none;
             color: #fff;
         }
-        
+
         .btn-success {
             background: #22c55e;
         }
-        
+
         .btn-warning {
             background: #f59e0b;
         }
-        
+
         .btn-danger {
             background: #ef4444;
         }
-        
+
         .btn-sm {
             padding: 6px 12px;
             border-radius: 10px;
             font-size: 12px;
         }
+
         /* TABLE */
-        
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }
-        
+
         thead {
             background: rgba(255, 255, 255, 0.05);
         }
-        
+
         th {
             font-size: 12px;
             color: #9ca3af;
             padding: 12px;
             text-align: left;
         }
-        
+
         td {
             padding: 12px;
             font-size: 13px;
         }
-        
+
         tr {
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             transition: 0.2s;
         }
-        
+
         tr:hover {
             background: rgba(99, 102, 241, 0.08);
             transform: scale(1.01);
         }
+
         /* BADGES */
-        
+
         .badge {
             padding: 5px 12px;
             border-radius: 999px;
             font-size: 11px;
         }
-        
+
         .bg-success {
             background: #22c55e33;
             color: #22c55e;
         }
-        
+
         .bg-secondary {
             background: #9ca3af33;
             color: #9ca3af;
         }
+
         /* ACTION BUTTONS */
-        
+
         .action-buttons {
             display: flex;
             gap: 8px;
             justify-content: flex-end;
         }
+
         /* BACK BUTTON */
-        
+
         .btn-back-dashboard {
             display: inline-flex;
             align-items: center;
@@ -163,17 +173,18 @@
             background: rgba(255, 255, 255, 0.05);
             color: #fff;
         }
-        
+
         .btn-back-dashboard:hover {
             background: #6366f1;
         }
+
         /* TEXT */
-        
+
         .text-muted {
             color: #9ca3af;
             text-align: center;
         }
-        
+
         .btn-header {
             display: inline-flex;
             align-items: center;
@@ -186,58 +197,59 @@
             transition: 0.25s ease;
             backdrop-filter: blur(8px);
         }
-        
+
         .btn-active {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
             color: #fff;
             box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
         }
-        
+
         .btn-active:hover {
             transform: translateY(-2px) scale(1.03);
         }
-        
+
         .bg-warning {
             background: #f59e0b33;
             color: #f59e0b;
         }
-        
+
         button {
             border: none;
             cursor: pointer;
             transition: 0.2s ease;
         }
-        
+
         button:hover {
             transform: translateY(-2px);
             opacity: 0.9;
         }
-        
+
         .btn-sm i {
             font-size: 13px;
         }
-        
+
         tr:hover {
             background: rgba(99, 102, 241, 0.08);
             transform: scale(1.01);
             box-shadow: 0 8px 20px rgba(99, 102, 241, 0.15);
         }
-        
+
         .card-header-flex {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
         }
+
         /* FORM LAYOUT */
-        
+
         .category-form {
             display: flex;
             gap: 10px;
             align-items: center;
             flex-wrap: wrap;
         }
-        
+
         .input-group {
             display: flex;
             align-items: center;
@@ -248,11 +260,11 @@
             flex: 1;
             min-width: 220px;
         }
-        
+
         .input-group i {
             color: #9ca3af;
         }
-        
+
         .input-group input {
             border: none;
             background: transparent;
@@ -261,9 +273,117 @@
             width: 100%;
             font-size: 13px;
         }
-        
+
         .input-group:focus-within {
             border: 1px solid #6366f1;
+        }
+
+        /* ===== HEADER MOBILE ===== */
+        @media (max-width: 768px) {
+
+            .dashboard-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 10px;
+            }
+
+            .btn-header {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* ===== FORM FIX ===== */
+        @media (max-width: 768px) {
+
+            .category-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .input-group {
+                width: 100%;
+            }
+
+            .category-form button {
+                width: 100%;
+            }
+        }
+
+        /* ===== TABLE TO CARD ===== */
+        @media (max-width: 768px) {
+
+            table {
+                overflow-x: auto;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tbody tr {
+                display: block;
+                margin-bottom: 14px;
+                padding: 14px;
+                border-radius: 14px;
+                background: rgba(255, 255, 255, 0.05);
+            }
+
+            tbody td {
+                display: flex;
+                justify-content: space-between;
+                padding: 6px 0;
+                border: none;
+            }
+
+            tbody td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #9ca3af;
+            }
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        @media (max-width: 768px) {
+
+            .action-buttons {
+                flex-direction: column;
+               
+            }
+
+            .action-buttons form,
+            .action-buttons a {
+                width: 100%;
+            }
+
+            .btn-sm {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* ===== SMALL MOBILE ===== */
+        @media (max-width: 576px) {
+
+            .dashboard {
+                padding: 15px 10px;
+            }
+
+            .activity-card {
+                padding: 14px;
+            }
+
+            h5 {
+                font-size: 15px;
+            }
+
+            td {
+                font-size: 12px;
+            }
+
+            body {
+                overflow-x: hidden;
+            }
         }
     </style>
 </head>
@@ -321,14 +441,15 @@
                 </thead>
                 <tbody>
                     <tr th:each="c : ${categories}">
-                        <td th:text="${c.name}">Java</td>
-                        <td>
+                        <td data-label="Category" th:text="${c.name}">Java</td>
+                        <td data-label="Status">
                             <span th:if="${c.active}" class="badge bg-success">Active</span>
                             <span th:if="${!c.active}" class="badge bg-secondary">Disabled</span>
                         </td>
-                        <td>
+                        <td data-label="Action">
                             <div class="action-buttons">
-                                <form th:action="@{/admin-note-categories/toggle/{id}(id=${c.categoryId})}" method="post">
+                                <form th:action="@{/admin-note-categories/toggle/{id}(id=${c.categoryId})}"
+                                    method="post">
                                     <button class="btn-sm" th:classappend="${c.active ? 'btn-warning' : 'btn-success'}">
                                         <i class="bi"
                                             th:classappend="${c.active ? 'bi-x-circle' : 'bi-check-circle'}"></i>
@@ -415,7 +536,8 @@
                         </td>
 
                         <td>
-                            <a th:href="@{'/admin-instructor-view/' + ${n.teacher.teacherId}}" style="color:#93c5fd;text-decoration:none;">
+                            <a th:href="@{'/admin-instructor-view/' + ${n.teacher.teacherId}}"
+                                style="color:#93c5fd;text-decoration:none;">
 
                                 <i class="bi bi-person-circle"></i>
                                 <span th:text="${n.teacher.firstname}"></span>
@@ -436,7 +558,8 @@
                                     <i class="bi bi-eye"></i>
                                 </a>
 
-                                <form th:action="@{/admin/notes/delete}" method="post" onsubmit="return confirm('Delete this note?')">
+                                <form th:action="@{/admin/notes/delete}" method="post"
+                                    onsubmit="return confirm('Delete this note?')">
 
                                     <input type="hidden" name="id" th:value="${n.noteId}">
 

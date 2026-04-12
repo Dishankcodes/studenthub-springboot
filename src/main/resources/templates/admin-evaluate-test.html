@@ -2,293 +2,391 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Evaluate Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Evaluate Test</title>
 
-	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
-		:root {
-			--bg: linear-gradient(135deg, #050516, #0c0c2b);
-			--card: rgba(255, 255, 255, 0.06);
-			--accent: #6366f1;
-			--accent2: #8b5cf6;
-			--text: #f8fafc;
-			--muted: #94a3b8;
-			--success: #22c55e;
-			--danger: #ef4444;
-		}
+        :root {
+            --bg: linear-gradient(135deg, #050516, #0c0c2b);
+            --card: rgba(255, 255, 255, 0.06);
+            --accent: #6366f1;
+            --accent2: #8b5cf6;
+            --text: #f8fafc;
+            --muted: #94a3b8;
+            --success: #22c55e;
+            --danger: #ef4444;
+        }
 
-		body {
-			margin: 0;
-			background: var(--bg);
-			font-family: 'Poppins', sans-serif;
-			color: var(--text);
-		}
+        body {
+            margin: 0;
+            background: var(--bg);
+            font-family: 'Poppins', sans-serif;
+            color: var(--text);
+        }
 
-		.container {
-			max-width: 950px;
-			margin: auto;
-			padding: 30px 20px;
-		}
+        .container {
+            max-width: 950px;
+            margin: auto;
+            padding: 30px 20px;
+        }
 
-		.page-title {
-			font-size: 22px;
-			margin-bottom: 20px;
-		}
+        .page-title {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
 
-		.card {
-			background: var(--card);
-			backdrop-filter: blur(14px);
-			padding: 18px;
-			border-radius: 16px;
-			margin-bottom: 18px;
-			border: 1px solid rgba(255, 255, 255, 0.08);
-			transition: .25s;
-		}
+        .card {
+            background: var(--card);
+            backdrop-filter: blur(14px);
+            padding: 18px;
+            border-radius: 16px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: .25s;
+        }
 
-		.card:hover {
-			transform: translateY(-4px);
-			box-shadow: 0 10px 30px rgba(99, 102, 241, .25);
-		}
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, .25);
+        }
 
-		.overview p {
-			margin: 6px 0;
-			font-size: 13px;
-		}
+        .overview p {
+            margin: 6px 0;
+            font-size: 13px;
+        }
 
-		.overview b {
-			color: var(--muted);
-		}
+        .overview b {
+            color: var(--muted);
+        }
 
-		.question {
-			font-weight: 600;
-			margin-bottom: 10px;
-		}
+        .question {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
 
-		.answer {
-			background: rgba(255, 255, 255, 0.05);
-			padding: 12px;
-			border-radius: 10px;
-			margin-top: 10px;
-			font-size: 12px;
-			border: 1px solid rgba(255, 255, 255, 0.08);
-		}
+        .answer {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
 
-		pre {
-			margin: 5px 0 0;
-			white-space: pre-wrap;
-		}
+        pre {
+            margin: 5px 0 0;
+            white-space: pre-wrap;
+        }
 
-		.correct-text {
-			color: var(--success);
-			font-weight: 500;
-		}
+        .correct-text {
+            color: var(--success);
+            font-weight: 500;
+        }
 
-		.wrong-text {
-			color: var(--danger);
-			font-weight: 500;
-		}
+        .wrong-text {
+            color: var(--danger);
+            font-weight: 500;
+        }
 
-		.btn {
-			border: none;
-			padding: 8px 14px;
-			border-radius: 10px;
-			cursor: pointer;
-			font-size: 12px;
-			display: inline-flex;
-			gap: 6px;
-			align-items: center;
-			transition: .25s;
-		}
+        .btn {
+            border: none;
+            padding: 8px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 12px;
+            display: inline-flex;
+            gap: 6px;
+            align-items: center;
+            transition: .25s;
+        }
 
-		.btn:hover {
-			transform: translateY(-2px);
-		}
+        .btn:hover {
+            transform: translateY(-2px);
+        }
 
-		.correct {
-			background: rgba(34, 197, 94, .2);
-			color: var(--success);
-		}
+        .correct {
+            background: rgba(34, 197, 94, .2);
+            color: var(--success);
+        }
 
-		.wrong {
-			background: rgba(239, 68, 68, .2);
-			color: var(--danger);
-		}
+        .wrong {
+            background: rgba(239, 68, 68, .2);
+            color: var(--danger);
+        }
 
-		.final-btn {
-			background: linear-gradient(135deg, var(--accent), var(--accent2));
-			padding: 12px;
-			width: 100%;
-			color: white;
-			border-radius: 12px;
-			border: none;
-			font-weight: 500;
-			cursor: pointer;
-			transition: .25s;
-		}
+        .final-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            padding: 12px;
+            width: 100%;
+            color: white;
+            border-radius: 12px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: .25s;
+        }
 
-		.final-btn:hover {
-			transform: translateY(-2px);
-		}
+        .final-btn:hover {
+            transform: translateY(-2px);
+        }
 
-		.summary p {
-			font-size: 13px;
-		}
+        .summary p {
+            font-size: 13px;
+        }
 
-		.done {
-			box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
-		}
-	</style>
+        .done {
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+        }
+
+        @media (max-width: 768px) {
+
+            .container {
+                padding: 20px 14px;
+            }
+
+            .page-title {
+                font-size: 18px;
+            }
+
+            .card {
+                padding: 14px;
+                border-radius: 14px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .overview p {
+                display: flex;
+                flex-direction: column;
+                gap: 3px;
+                font-size: 12px;
+            }
+
+            .overview b {
+                font-size: 11px;
+                color: #9ca3af;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .question {
+                font-size: 14px;
+                line-height: 1.4;
+            }
+
+            .answer {
+                font-size: 12px;
+                padding: 10px;
+            }
+
+            pre {
+                font-size: 11px;
+                overflow-x: auto;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .btn {
+                width: 100%;
+                justify-content: center;
+                font-size: 12px;
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .summary p {
+                font-size: 12px;
+            }
+        }
+
+
+        @media (max-width: 768px) {
+
+            .final-btn {
+                font-size: 13px;
+                padding: 12px;
+            }
+        }
+
+
+        @media (max-width: 576px) {
+
+            body {
+                overflow-x: hidden;
+            }
+
+            .card {
+                margin-bottom: 12px;
+            }
+
+            .question {
+                font-size: 13px;
+            }
+
+            .btn {
+                font-size: 11px;
+                padding: 8px;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-	<div class="container">
-		<div class="card overview">
+    <div class="container">
+        <div class="card overview">
 
-			<h3 style="margin-bottom:10px;">
-				<i class="bi bi-bar-chart-line"></i> Test Overview
-			</h3>
-			<p>
-				<i class="bi bi-person"></i>
-				<b>Student:</b>
-				<span th:text="${attempt.student.fullname}"></span>
-			</p>
-			<p>
-				<i class="bi bi-briefcase"></i>
-				<b>Internship:</b>
-				<span th:text="${attempt.internship.title}"></span>
-			</p>
-			<p>
-				<i class="bi bi-bullseye"></i>
-				<b>Passing Marks:</b>
-				<span th:text="${test != null ? test.passingMarks : 'Not Set'}"></span>%
-			</p>
-			<p>
-				<i class="bi bi-graph-up"></i>
-				<b>Live Score:</b>
-				<span id="liveScore">0</span>
-			</p>
-			<p>
-				<i class="bi bi-check2-square"></i>
-				<b>Evaluated:</b>
-				<span id="checkedCount">0</span> /
-				<span th:text="${#lists.size(answers)}"></span>
-			</p>
-		</div>
-		<h2 class="page-title">
-			<i class="bi bi-clipboard-data"></i> Evaluate Test
-		</h2>
+            <h3 style="margin-bottom:10px;">
+                <i class="bi bi-bar-chart-line"></i> Test Overview
+            </h3>
+            <p>
+                <i class="bi bi-person"></i>
+                <b>Student:</b>
+                <span th:text="${attempt.student.fullname}"></span>
+            </p>
+            <p>
+                <i class="bi bi-briefcase"></i>
+                <b>Internship:</b>
+                <span th:text="${attempt.internship.title}"></span>
+            </p>
+            <p>
+                <i class="bi bi-bullseye"></i>
+                <b>Passing Marks:</b>
+                <span th:text="${test != null ? test.passingMarks : 'Not Set'}"></span>%
+            </p>
+            <p>
+                <i class="bi bi-graph-up"></i>
+                <b>Live Score:</b>
+                <span id="liveScoreTopBottom">0</span>
+            </p>
+            <p>
+                <i class="bi bi-check2-square"></i>
+                <b>Evaluated:</b>
+                <span id="checkedCount">0</span> /
+                <span th:text="${#lists.size(answers)}"></span>
+            </p>
+        </div>
+        <h2 class="page-title">
+            <i class="bi bi-clipboard-data"></i> Evaluate Test
+        </h2>
 
-		<div th:each="ans : ${answers}" class="card">
+        <div th:each="ans : ${answers}" class="card">
 
-			<div class="question">
-				<i class="bi bi-question-circle"></i>
-				Q: <span th:text="${ans.question.questionText}"></span>
-			</div>
+            <div class="question">
+                <i class="bi bi-question-circle"></i>
+                Q: <span th:text="${ans.question.questionText}"></span>
+            </div>
 
-			<!-- MCQ -->
-			<div th:if="${ans.question.questionFormat.name() == 'MCQ'}">
-				<p>Your Answer: <b th:text="${ans.selectedOption}"></b></p>
-				<p>Correct Answer: <b th:text="${ans.question.correctOption}"></b></p>
+            <!-- MCQ -->
+            <div th:if="${ans.question.questionFormat.name() == 'MCQ'}">
+                <p>Your Answer: <b th:text="${ans.selectedOption}"></b></p>
+                <p>Correct Answer: <b th:text="${ans.question.correctOption}"></b></p>
 
-				<p th:if="${ans.isCorrect}" class="correct-text">
-					<i class="bi bi-check-circle-fill"></i> Correct Answer
-				</p>
+                <p th:if="${ans.isCorrect}" class="correct-text">
+                    <i class="bi bi-check-circle-fill"></i> Correct Answer
+                </p>
 
-				<p th:if="${ans.isCorrect == false}" class="wrong-text">
-					<i class="bi bi-x-circle-fill"></i> Wrong Answer
-				</p>
-			</div>
+                <p th:if="${ans.isCorrect == false}" class="wrong-text">
+                    <i class="bi bi-x-circle-fill"></i> Wrong Answer
+                </p>
+            </div>
 
-			<!-- TEXT / CODE -->
-			<div th:if="${ans.question.questionFormat.name() != 'MCQ'}">
+            <div th:if="${ans.question.questionFormat.name() != 'MCQ'}">
 
-				<div class="answer">
-					<b>Student Answer:</b>
-					<pre th:text="${ans.answerText}"></pre>
-				</div>
+                <div class="answer">
+                    <b>Student Answer:</b>
+                    <pre th:text="${ans.answerText}"></pre>
+                </div>
 
-				<form th:action="@{/admin-evaluate-answer}" method="post">
-					<input type="hidden" name="answerId" th:value="${ans.id}">
+                <form th:action="@{/admin-evaluate-answer}" method="post">
+                    <input type="hidden" name="answerId" th:value="${ans.id}">
 
-					<button type="button" class="btn correct"
-						th:attr="onclick='markAnswer(this, true, ' + ${ans.question.marks} + ')'">
-						<i class="bi bi-check-lg"></i> Correct
-					</button>
+                    <button type="button" class="btn correct"
+                        th:attr="onclick='markAnswer(this, true, ' + ${ans.question.marks} + ')'">
+                        <i class="bi bi-check-lg"></i> Correct
+                    </button>
 
-					<button type="button" class="btn wrong"
-						th:attr="onclick='markAnswer(this, false, ' + ${ans.question.marks} + ')'">
-						<i class="bi bi-x-lg"></i> Wrong
-					</button>
-				</form>
+                    <button type="button" class="btn wrong"
+                        th:attr="onclick='markAnswer(this, false, ' + ${ans.question.marks} + ')'">
+                        <i class="bi bi-x-lg"></i> Wrong
+                    </button>
+                </form>
 
-			</div>
+            </div>
 
-		</div>
-		<div class="card">
+        </div>
+        <div class="card">
 
-			<h3>Evaluation Summary</h3>
+            <h3>Evaluation Summary</h3>
 
-			<p>Score: <span id="liveScore">0</span></p>
-			<p>Questions Checked: <span id="checkedCount">0</span></p>
+            <p>Score: <span id="liveScore">0</span></p>
+            <p>Questions Checked: <span id="checkedCount">0</span></p>
 
-			<p style="color:#9ca3af;">
-				Final result will be calculated after submission.
-			</p>
+            <p style="color:#9ca3af;">
+                Final result will be calculated after submission.
+            </p>
 
-		</div>
-		<!-- FINALIZE -->
-		<form th:action="@{/admin-finalize-score}" method="post">
-			<input type="hidden" name="attemptId" th:value="${attempt.id}">
-			<button class="final-btn">
-				<i class="bi bi-award"></i>
-				Finalize Evaluation & Calculate Result
-			</button>
-		</form>
+        </div>
+      <form th:action="@{/admin-finalize-score}" method="post">
+            <input type="hidden" name="attemptId" th:value="${attempt.id}">
+            <button class="final-btn">
+                <i class="bi bi-award"></i>
+                Finalize Evaluation & Calculate Result
+            </button>
+        </form>
 
-	</div>
-	<script>
-		let score = 0;
-		let checked = 0;
+    </div>
+    <script>
+        let score = 0;
+        let checked = 0;
 
-		function markAnswer(btn, isCorrect, marks) {
+        function markAnswer(btn, isCorrect, marks) {
 
-			let card = btn.closest(".card");
+            let card = btn.closest(".card");
 
-			if (card.classList.contains("done")) return;
+            if (card.classList.contains("done")) return;
 
-			card.classList.add("done");
+            card.classList.add("done");
 
-			// Disable buttons
-			let buttons = card.querySelectorAll("button");
-			buttons.forEach(b => b.disabled = true);
+            let buttons = card.querySelectorAll("button");
+            buttons.forEach(b => b.disabled = true);
 
-			// Highlight
-			if (isCorrect) {
-				card.style.borderColor = "#22c55e";
-				score += marks;
-			} else {
-				card.style.borderColor = "#ef4444";
-			}
+            if (isCorrect) {
+                card.style.borderColor = "#22c55e";
+                score += marks;
+            } else {
+                card.style.borderColor = "#ef4444";
+            }
 
-			checked++;
+            checked++;
 
-			document.getElementById("liveScore").innerText = score;
-			document.getElementById("checkedCount").innerText = checked;
+            document.getElementById("liveScoreTop").innerText = score;
+            document.getElementById("liveScoreBottom").innerText = score;
+            document.getElementById("checkedCount").innerText = checked;
 
-			// Submit silently
-			let form = btn.closest("form");
-			let input = document.createElement("input");
-			input.type = "hidden";
-			input.name = "correct";
-			input.value = isCorrect;
+           let form = btn.closest("form");
+            let input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "correct";
+            input.value = isCorrect;
 
-			form.appendChild(input);
-			form.submit();
-		}
-	</script>
+            form.appendChild(input);
+            form.submit();
+        }
+    </script>
 </body>
 
 </html>

@@ -198,15 +198,144 @@
         .btn-filter:hover {
             transform: translateY(-2px);
         }
+
+        a {
+            text-decoration: none !important;
+        }
+
+        body {
+            color: #f1f5f9;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #ffffff;
+        }
+
+        .meta {
+            color: #cbd5e1;
+        }
+
+        @media (max-width: 768px) {
+
+            .header-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .btn-create {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+
+            .filter-group input {
+                width: 100%;
+            }
+
+            .btn-filter {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 992px) {
+
+            .internship-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 576px) {
+
+            .internship-card {
+                padding: 16px;
+            }
+
+            .left h3 {
+                font-size: 16px;
+            }
+
+            .meta {
+                font-size: 12px;
+            }
+
+            .tag {
+                font-size: 11px;
+            }
+
+            .actions {
+                flex-direction: column;
+                width: 100%;
+                gap: 8px;
+            }
+
+            .btn-action {
+                width: 100%;
+                justify-content: center;
+                font-size: 13px;
+            }
+
+            .btn-create {
+                font-size: 14px;
+            }
+
+            .btn-filter {
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 400px) {
+
+            .left h3 {
+                font-size: 15px;
+            }
+
+            .btn-action {
+                font-size: 12px;
+                padding: 7px 10px;
+            }
+        }
+
+        .internship-card:hover {
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.35);
+        }
+
+        .filter-group input::placeholder {
+            color: #94a3b8;
+        }
+
+        .alert {
+            font-size: 14px;
+            padding: 12px 16px;
+        }
     </style>
 </head>
 
 <body>
     <div class="layout">
-
-        <!-- ===== SIDEBAR ===== -->
         <aside class="vertical-sidebar">
-            <input type="checkbox" id="sidebar-toggle" class="checkbox-input" checked>
+            <input type="checkbox" id="sidebar-toggle" class="checkbox-input">
             <nav>
                 <header>
                     <div class="sidebar__toggle-container">
@@ -256,9 +385,16 @@
                 </section>
             </nav>
         </aside>
-
-       <div class="content-area">
+        <div class="overlay" onclick="document.getElementById('sidebar-toggle').checked = false;">
+        </div>
+        <div class="content-area">
             <header class="topbar">
+                <button onclick="document.getElementById('sidebar-toggle').checked = 
+                     !document.getElementById('sidebar-toggle').checked"
+                    style="background:none;border:none;color:white;font-size:22px;">
+                    <i class="bi bi-list"></i>
+                </button>
+
                 <span class="page-title"></span>
                 <div class="topbar-right">
                     <button class="profile-btn dropdown-toggle" data-bs-toggle="dropdown">
@@ -288,7 +424,7 @@
                         <span th:text="${error}"></span>
                     </div>
                 </div>
-                <div class="filter-bar">
+                <form method="get" class="filter-bar">
 
                     <div class="filter-group">
                         <i class="bi bi-search"></i>
@@ -296,7 +432,7 @@
                             th:value="${param.keyword}">
                     </div>
 
-                   <div class="filter-group">
+                    <div class="filter-group">
                         <i class="bi bi-geo-alt"></i>
                         <input type="text" name="location" placeholder="Filter by location..."
                             th:value="${param.location}">
@@ -307,7 +443,7 @@
                         Apply
                     </button>
 
-                </div>
+                </form>
                 <div class="internship-list">
 
                     <div th:each="i : ${internships}" class="internship-card">
@@ -362,10 +498,6 @@
             </main>
         </div>
     </div>
-
-
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

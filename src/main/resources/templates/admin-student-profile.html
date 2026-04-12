@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Student Profile | Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link th:href="@{/css/admin-css/admin_sidebar.css}" rel="stylesheet">
@@ -155,6 +156,147 @@
             color: white;
             text-decoration: none;
         }
+
+        /* ===== GLOBAL MOBILE ===== */
+        @media (max-width: 768px) {
+
+            .content-area {
+                padding: 18px 14px;
+            }
+
+            .card {
+                padding: 16px;
+                border-radius: 14px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+        }
+
+        /* ===== PROFILE MOBILE ===== */
+        @media (max-width: 768px) {
+
+            .profile {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .profile img {
+                width: 70px;
+                height: 70px;
+            }
+
+            .profile h2 {
+                font-size: 16px;
+            }
+
+            .profile p {
+                font-size: 13px;
+            }
+        }
+
+        /* ===== INFO GRID ===== */
+        @media (max-width: 768px) {
+
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .info-box {
+                padding: 12px;
+            }
+
+            .info-box p {
+                font-size: 13px;
+            }
+        }
+
+        /* ===== FULL BOX ===== */
+        @media (max-width: 768px) {
+
+            .full-box {
+                font-size: 13px;
+                padding: 12px;
+            }
+        }
+
+        /* ===== TOPBAR ===== */
+        @media (max-width: 768px) {
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .back {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* ===== BUTTONS ===== */
+        @media (max-width: 768px) {
+
+            .actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .actions form {
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+                font-size: 12px;
+            }
+        }
+
+        /* ===== APPLICATION ===== */
+        @media (max-width: 768px) {
+
+            .card p {
+                font-size: 13px;
+                margin: 8px 0;
+            }
+
+            .status {
+                font-size: 11px;
+            }
+        }
+
+        /* ===== SMALL MOBILE ===== */
+        @media (max-width: 576px) {
+
+            body {
+                overflow-x: hidden;
+            }
+
+            .card {
+                margin-bottom: 14px;
+            }
+
+            .profile h2 {
+                font-size: 15px;
+            }
+
+            .info-box span {
+                font-size: 10px;
+            }
+
+            .btn {
+                padding: 10px;
+                font-size: 11px;
+            }
+        }
+        a.btn {
+    text-decoration: none !important;
+}
     </style>
 </head>
 

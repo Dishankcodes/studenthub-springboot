@@ -17,11 +17,11 @@
             --bs-table-color: #d1d5db;
             --bs-table-border-color: rgba(255, 255, 255, 0.08);
         }
-
+        
         .home-section .table>:not(caption)>*>* {
             background-color: transparent !important;
         }
-
+        
         .home-section .table {
             margin-top: 1.5rem;
             border-collapse: separate;
@@ -31,11 +31,11 @@
             border-radius: 0.75rem;
             overflow: hidden;
         }
-
+        
         .home-section .table thead {
             background: rgba(255, 255, 255, 0.06);
         }
-
+        
         .home-section .table thead th {
             color: #eaeaf0;
             font-weight: 600;
@@ -43,7 +43,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.12);
             text-align: center;
         }
-
+        
         .home-section .table tbody td {
             color: #d1d5db;
             font-size: 0.88rem;
@@ -51,25 +51,25 @@
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             text-align: center;
         }
-
+        
         .home-section .table-striped>tbody>tr:nth-of-type(odd) {
             background-color: rgba(255, 255, 255, 0.025);
         }
-
+        
         .home-section .table tbody tr:hover {
             background-color: rgba(59, 130, 246, 0.08);
             transition: background 0.2s ease;
         }
-
+        
         .home-section .table-bordered {
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
-
+        
         .home-section .table-bordered th,
         .home-section .table-bordered td {
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
-
+        
         .home-section .btn-danger {
             background: rgba(239, 68, 68, 0.85);
             border: none;
@@ -77,11 +77,11 @@
             padding: 0.3rem 0.6rem;
             border-radius: 0.4rem;
         }
-
+        
         .home-section .btn-danger:hover {
             background: rgb(239, 68, 68);
         }
-
+        
         .status-select {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -92,20 +92,19 @@
             backdrop-filter: blur(6px);
             min-width: 110px;
         }
-
+        
         .status-select:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
         }
-
+        
         .status-select option {
             background: #0f172a;
             color: #e5e7eb;
         }
-
+        
         .instructor-cell {
-
             align-items: center;
             justify-content: center;
             gap: 0.35rem;
@@ -113,7 +112,7 @@
             line-height: 1.1;
             min-height: auto;
         }
-
+        
         .by-label {
             font-size: 0.7rem;
             text-transform: uppercase;
@@ -123,7 +122,7 @@
             padding: 0;
             line-height: 1;
         }
-
+        
         .instructor-name {
             font-size: 0.85rem;
             font-weight: 600;
@@ -131,14 +130,14 @@
             margin: 0;
             line-height: 1.1;
         }
-
+        
         .course-stats {
             display: flex;
             gap: 0.35rem;
             justify-content: center;
             flex-wrap: wrap;
         }
-
+        
         .course-stats .stat {
             display: flex;
             align-items: center;
@@ -151,52 +150,51 @@
             color: #e5e7eb;
             backdrop-filter: blur(6px);
         }
-
+        
         .course-stats .stat i {
             font-size: 0.8rem;
             opacity: 0.85;
         }
-
+        
         .course-stats .stat span {
             font-weight: 600;
         }
-
+        
         .course-stats .stat small {
             font-size: 0.65rem;
             opacity: 0.7;
         }
-
         /* Color hints */
+        
         .stat-mod {
             border-left: 3px solid #3b82f6;
         }
-
+        
         .stat-les {
             border-left: 3px solid #22c55e;
         }
-
+        
         .stat-quiz {
             border-left: 3px solid #eab308;
         }
-
+        
         .home-section td .btn {
             margin: 0 0.15rem;
         }
-
-
-        @media (max-width : 768px) {
+        
+        @media (max-width: 768px) {
             .home-section .table {
                 font-size: 0.8rem;
             }
         }
-
+        
         .table-controls {
             display: flex;
             gap: 12px;
             margin-bottom: 15px;
             align-items: center;
         }
-
+        
         .search-box {
             display: flex;
             align-items: center;
@@ -205,7 +203,7 @@
             padding: 8px 12px;
             border-radius: 10px;
         }
-
+        
         .search-box input {
             background: transparent;
             border: none;
@@ -214,7 +212,7 @@
             font-size: 13px;
             width: 220px;
         }
-
+        
         .badge {
             display: inline-flex;
             align-items: center;
@@ -225,15 +223,63 @@
             font-weight: 600;
             line-height: 1;
         }
-
+        
         .badge i {
             font-size: 0.75rem;
         }
-
+        
         .type-badge-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
+        }
+        
+        @media (max-width: 576px) {
+            .table thead {
+                display: none;
+            }
+            .table tbody tr {
+                display: block;
+                margin-bottom: 12px;
+                background: rgba(255, 255, 255, 0.04);
+                border-radius: 10px;
+                padding: 10px;
+            }
+            .table tbody td {
+                display: flex;
+                justify-content: space-between;
+                text-align: left;
+                border: none;
+                padding: 6px 0;
+            }
+            .table tbody td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #9ca3af;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            td form {
+                flex-direction: column;
+                width: 100%;
+            }
+            td form button {
+                width: 100%;
+                margin-top: 5px;
+            }
+            .course-stats {
+                flex-direction: column;
+                width: 100%;
+            }
+            .course-stats .stat {
+                width: 100%;
+                justify-content: space-between;
+            }
+            td .btn {
+                width: 100%;
+                margin: 3px 0;
+            }
         }
     </style>
 </head>
@@ -241,7 +287,7 @@
 <body>
     <div class="layout">
         <aside class="vertical-sidebar">
-            <input type="checkbox" id="sidebar-toggle" class="checkbox-input" checked>
+            <input type="checkbox" id="sidebar-toggle" class="checkbox-input">
             <nav>
                 <header>
                     <div class="sidebar__toggle-container">
@@ -273,12 +319,18 @@
                                     class="bi bi-person-badge"></i><span>Instructor Management</span></a></li>
                         <li class="sidebar__item"><a th:href="@{/manage-courses}" class="active"><i
                                     class="bi bi-book"></i><span>Course Management</span></a></li>
-                        <li class="sidebar__item"><a th:href="@{/manage-internships}">
-                                <i class="bi bi-kanban"></i><span>Internship Management</span></a></li>
-                        <li class="sidebar__item"><a th:href="@{/admin-post-internships}">
-                                <i class="bi bi-plus-circle"></i><span>Post Internships </span></a></li>
-                        <li class="sidebar__item"><a th:href="@{/admin-chat}">
-                                <i class="bi bi-chat-dots"></i><span>Chat System</span></a></li>
+                        <li class="sidebar__item">
+                            <a th:href="@{/manage-internships}">
+                                <i class="bi bi-kanban"></i><span>Internship Management</span></a>
+                        </li>
+                        <li class="sidebar__item">
+                            <a th:href="@{/admin-post-internships}">
+                                <i class="bi bi-plus-circle"></i><span>Post Internships </span></a>
+                        </li>
+                        <li class="sidebar__item">
+                            <a th:href="@{/admin-chat}">
+                                <i class="bi bi-chat-dots"></i><span>Chat System</span></a>
+                        </li>
                         <li class="sidebar__item"><a th:href="@{/admin-announcement}"><i
                                     class="bi bi-briefcase"></i><span>Announcements</span></a></li>
                         <li class="sidebar__item"><a th:href="@{/admin-design}"><i
@@ -289,9 +341,15 @@
                 </section>
             </nav>
         </aside>
-
+        <div class="overlay" onclick="document.getElementById('sidebar-toggle').checked = false;">
+        </div>
         <div class="content-area">
             <header class="topbar">
+                <button onclick="document.getElementById('sidebar-toggle').checked = 
+                     !document.getElementById('sidebar-toggle').checked" style="background:none;border:none;color:white;font-size:22px;">
+                    <i class="bi bi-list"></i>
+                </button>
+
                 <span class="page-title">Manage/Search Course</span>
                 <div class="topbar-right">
                     <button class="profile-btn dropdown-toggle" data-bs-toggle="dropdown">
@@ -321,81 +379,81 @@
                     </select>
 
                 </div>
-                <table class="table table-bordered table-striped align-middle mt-3">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>#</th>
-                            <th>Course Name</th>
-                            <th>Instructor</th>
-                            <th>Status</th>
-                            <th>Type / Price</th>
-                            <th>Modules / Lessons</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="course, stat : ${courses}" th:id="'course-' + ${course.courseId}">
-                            <td th:text="${stat.index + 1}"></td>
-                            <td th:text="${course.title}"></td>
-                            <td class="instructor-cell"><span class="by-label">by</span>
-                                <span class="instructor-name" th:text="${course.instructorName}"></span>
-                            </td>
-                            <td>
-                                <form th:action="@{/manage-course/status/{id}(id=${course.courseId})}" method="post"
-                                    class="d-flex gap-1 align-items-center">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped align-middle mt-3">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>#</th>
+                                <th>Course Name</th>
+                                <th>Instructor</th>
+                                <th>Status</th>
+                                <th>Type / Price</th>
+                                <th>Modules / Lessons</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="course, stat : ${courses}" th:id="'course-' + ${course.courseId}">
+                                <td th:text="${stat.index + 1}"></td>
+                                <td data-label="Course Name" th:text="${course.title}"></td>
+                                <td data-label="Instructor" class="instructor-cell"><span class="by-label">by</span>
+                                    <span class="instructor-name" th:text="${course.instructorName}"></span>
+                                </td>
+                                <td data-label="Status">
+                                    <form th:action="@{/manage-course/status/{id}(id=${course.courseId})}" method="post" class="d-flex gap-1 align-items-center">
 
-                                    <select name="status" class="status-select">
-                                        <option value="DRAFT" th:selected="${course.status.name() == 'DRAFT'}">Draft
-                                        </option>
-                                        <option value="PUBLISHED" th:selected="${course.status.name() == 'PUBLISHED'}">
-                                            Published</option>
-                                        <option value="DELETED" th:selected="${course.status.name() == 'DELETED'}">
-                                            Deleted</option>
-                                        <option value="BLOCKED" th:selected="${course.status.name() == 'BLOCKED'}">
-                                            Blocked</option>
-                                    </select>
-                                    <button class="btn btn-success btn-sm">
-                                        <i class="bi bi-check"></i>
-                                    </button>
-                                </form>
-                            </td>
-                            <td>
-                                <div class="type-badge-wrapper">
-                                    <span th:if="${course.type.name() == 'free'}" class="badge free-badge">
-                                        <i class="bi bi-unlock"></i>
-                                        Free
-                                    </span>
-                                    <span th:if="${course.type.name() == 'paid'}" class="badge paid-badge">
-                                        <i class="bi bi-currency-rupee"></i>
-                                        <span th:text="${course.price}"></span>
-                                    </span>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="course-stats">
-                                    <span class="stat stat-mod"> <i class="bi bi-box"></i> <span
-                                            th:text="${course.moduleCount}"></span> <small>Modules</small>
-                                    </span> <span class="stat stat-les"> <i class="bi bi-play-circle"></i> <span
-                                            th:text="${course.lessonCount}"></span> <small>Lessons</small>
-                                    </span> <span class="stat stat-quiz"> <i class="bi bi-patch-question"></i> <span
-                                            th:text="${course.quizCount}"></span> <small>Quizzes</small>
-                                    </span>
-                                </div>
-                            </td>
-                            <td>
-                                <a th:href="@{/admin-course/view/{id}(id=${course.courseId})}"
-                                    class="btn btn-info btn-sm" title="View Course"> <i class="bi bi-eye"></i>
-                                </a>
-                                <form th:action="@{/manage-course/delete/{id}(id=${course.courseId})}" method="post"
-                                    class="d-inline" onsubmit="return confirm('Mark this course as deleted?');">
-                                    <button type="submit" class="btn btn-danger btn-sm" title="Delete Course">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                        <select name="status" class="status-select">
+                                            <option value="DRAFT" th:selected="${course.status.name() == 'DRAFT'}">Draft
+                                            </option>
+                                            <option value="PUBLISHED"
+                                                th:selected="${course.status.name() == 'PUBLISHED'}">
+                                                Published</option>
+                                            <option value="DELETED" th:selected="${course.status.name() == 'DELETED'}">
+                                                Deleted</option>
+                                            <option value="BLOCKED" th:selected="${course.status.name() == 'BLOCKED'}">
+                                                Blocked</option>
+                                        </select>
+                                        <button class="btn btn-success btn-sm">
+                                            <i class="bi bi-check"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                                <td data-label="Type / Price">
+                                    <div class="type-badge-wrapper">
+                                        <span th:if="${course.type.name() == 'free'}" class="badge free-badge">
+                                            <i class="bi bi-unlock"></i>
+                                            Free
+                                        </span>
+                                        <span th:if="${course.type.name() == 'paid'}" class="badge paid-badge">
+                                            <i class="bi bi-currency-rupee"></i>
+                                            <span th:text="${course.price}"></span>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td data-label="Modules / Lessons">
+                                    <div class="course-stats">
+                                        <span class="stat stat-mod"> <i class="bi bi-box"></i> <span
+                                                th:text="${course.moduleCount}"></span> <small>Modules</small>
+                                        </span> <span class="stat stat-les"> <i class="bi bi-play-circle"></i> <span
+                                                th:text="${course.lessonCount}"></span> <small>Lessons</small>
+                                        </span> <span class="stat stat-quiz"> <i class="bi bi-patch-question"></i> <span
+                                                th:text="${course.quizCount}"></span> <small>Quizzes</small>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td data-label="Actions">
+                                    <a th:href="@{/admin-course/view/{id}(id=${course.courseId})}" class="btn btn-info btn-sm" title="View Course"> <i class="bi bi-eye"></i>
+                                    </a>
+                                    <form th:action="@{/manage-course/delete/{id}(id=${course.courseId})}" method="post" class="d-inline" onsubmit="return confirm('Mark this course as deleted?');">
+                                        <button type="submit" class="btn btn-danger btn-sm" title="Delete Course">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </main>
         </div>
     </div>

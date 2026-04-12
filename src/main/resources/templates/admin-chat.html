@@ -245,7 +245,7 @@
 	<div class="layout">
 
 		<aside class="vertical-sidebar">
-			<input type="checkbox" id="sidebar-toggle" class="checkbox-input" checked>
+			<input type="checkbox" id="sidebar-toggle" class="checkbox-input">
 			<nav>
 				<header>
 					<div class="sidebar__toggle-container">
@@ -295,8 +295,16 @@
 				</section>
 			</nav>
 		</aside>
-		<div class="content-area">
-			<header class="topbar">
+<div class="overlay" onclick="document.getElementById('sidebar-toggle').checked = false;">
+        </div>
+        <div class="content-area">
+            <header class="topbar">
+                <button onclick="document.getElementById('sidebar-toggle').checked = 
+                     !document.getElementById('sidebar-toggle').checked"
+                    style="background:none;border:none;color:white;font-size:22px;">
+                    <i class="bi bi-list"></i>
+                </button>
+
 				<span class="page-title"></span>
 				<div class="topbar-right">
 					<button class="profile-btn dropdown-toggle" data-bs-toggle="dropdown">
