@@ -10,6 +10,10 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+
+
+
+    <link href="student-sidebar.css" rel="stylesheet" />
     <style>
         html {
             font-size: 18px;
@@ -164,6 +168,169 @@
             color: #374151;
             margin-top: 4px;
         }
+
+        /* ===== FIX MOBILE LAYOUT ===== */
+        @media (max-width: 768px) {
+
+            .main {
+                margin-left: 0 !important;
+                padding: 16px;
+            }
+
+            .student-topbar {
+                left: 0 !important;
+                width: 100%;
+            }
+
+        }
+
+        /* ================= MOBILE PERFECT FIX ================= */
+        @media (max-width: 768px) {
+
+            html {
+                font-size: 16px;
+            }
+
+            /* MAIN CONTENT */
+            .main {
+                margin-left: 0 !important;
+                margin-top: 60px;
+                padding: 14px;
+            }
+
+            /* TOPBAR */
+            .student-topbar {
+                left: 0 !important;
+                width: 100%;
+                padding: 0 12px;
+            }
+
+            .page-title {
+                font-size: 15px;
+            }
+
+            .student-name {
+                display: none;
+                /* cleaner mobile */
+            }
+
+            /* SIDEBAR */
+            .sidebar {
+                transform: translateX(-100%);
+                width: 240px;
+            }
+
+            .sidebar.mobile-show {
+                transform: translateX(0);
+            }
+
+            /* TOGGLE BUTTON FIX */
+            .toggle-btn {
+                right: -45px;
+                top: 14px;
+            }
+
+            /* CARDS GRID */
+            .cards {
+                grid-template-columns: 1fr !important;
+                gap: 16px;
+            }
+
+            .card {
+                padding: 18px;
+                min-height: auto;
+            }
+
+            /* DOUBLE COLUMN FIX */
+            div[style*="grid-template-columns:1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* CONNECTIONS FIX */
+            .card div[style*="flex"] {
+                justify-content: flex-start;
+            }
+
+            /* ACTIVITY FIX */
+            .activity-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .activity-text {
+                margin-left: 0;
+            }
+
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(2px);
+            z-index: 999;
+            display: none;
+        }
+
+        .sidebar.mobile-show~.overlay {
+            display: block;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+
+        @media (max-width: 768px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* TOOLTIP */
+        .sidebar a {
+            position: relative;
+        }
+
+        /* HIDDEN TEXT */
+        .sidebar.collapsed a::after {
+            content: attr(data-title);
+            position: absolute;
+            left: 70px;
+            background: #111827;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-50%);
+            top: 50%;
+            transition: 0.2s;
+        }
+
+        /* SHOW ON HOVER */
+        .sidebar.collapsed a:hover::after {
+            opacity: 1;
+            left: 75px;
+        }
+
+        .sidebar.collapsed:hover {
+            width: 240px;
+        }
+
+        .sidebar.collapsed:hover a span {
+            display: inline;
+        }
+
+        .sidebar.collapsed a:hover {
+            background: #0059ff;
+            color: #fff;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 
@@ -184,19 +351,26 @@
             </h2>
         </div>
 
-        <a th:href="@{/student-dashboard}" class="active"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-        <a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
-        <a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
-        <a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
-        <a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
-        <a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
-        <a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
-        <a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a>
-        <a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-        <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+        <a th:href="@{/student-dashboard}" class="active" data-title="Dashboard"><i
+                class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+        <a th:href="@{/student-course}" data-title="Explore Courses"><i class="bi bi-search"></i><span>Explore
+                Courses</span></a>
+        <a th:href="@{/student-learning}" data-title="My Learning"><i class="bi bi-book-half"></i><span>My
+                Learning</span></a>
+        <a th:href="@{/student-feedback}" data-title="Instructor Overview"><i
+                class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
+        <a th:href="@{/student-stuff}" data-title="Classroom"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
+        <a th:href="@{/student-chat}" data-title="Doubts Chat"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
+        <a th:href="@{/student-internships}" data-title="Internships"><i
+                class="bi bi-briefcase"></i><span>Internships</span></a>
+        <a th:href="@{/student-search}" data-title="Search Users"><i class="bi bi-search"></i><span>Search
+                Users</span></a>
+        <a th:href="@{/student-profile}" data-title="Profile"><i
+                class="bi bi-person-circle"></i><span>Profile</span></a>
+        <a th:href="@{/student-login}" data-title="Logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
     </div>
-
+    <div class="overlay" id="overlay"></div>
     <!-- ===== TOPBAR ===== -->
     <div class="student-topbar">
         <span class="page-title">Dashboard</span>
@@ -329,7 +503,7 @@
             </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;">
+        <div class="two-col">
             <div>
 
                 <h2>Latest Announcements</h2>
@@ -339,14 +513,11 @@
                     <div class="card" th:each="a : ${announcements}">
 
                         <h3 th:text="${a.title}">Announcement Title</h3>
-
                         <p th:text="${a.message}">
                             Announcement message
                         </p>
-
                     </div>
                 </div>
-
                 <a class="btn" th:href="@{/student-stuff}">
                     View All
                 </a>
@@ -354,14 +525,11 @@
 
             <div>
                 <h2>Classroom Updates</h2>
-
                 <div class="cards">
                     <div class="card" th:each="note : ${recentNotes}">
                         <h3 th:text="${note.title}">Note Title</h3>
-
                         <p>
                             By
-
                             <span th:text="${note.teacher.firstname + ' ' + note.teacher.lastname}">
                                 Teacher
                             </span>
@@ -420,8 +588,7 @@
 
             <div class="card">
                 <h3><i class="bi bi-headset"></i> Support Chat</h3>
-                <a class="btn" th:if="${adminUser != null}"
-th:href="@{/student-chat(userId=${adminUser.id})}">
+                <a class="btn" th:if="${adminUser != null}" th:href="@{/student-chat(userId=${adminUser.id})}">
                     Contact Support
                 </a>
             </div>
@@ -464,18 +631,33 @@ th:href="@{/student-chat(userId=${adminUser.id})}">
     </div>
 
     <script>
-        const sidebar = document.getElementById("sidebar");
-        const toggle = document.getElementById("toggle");
-        const icon = toggle.querySelector("i");
+        document.addEventListener("DOMContentLoaded", () => {
 
-        toggle.addEventListener("click", () => {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle("mobile-show");
-            } else {
-                sidebar.classList.toggle("collapsed");
-                icon.classList.toggle("bi-chevron-right");
-                icon.classList.toggle("bi-chevron-left");
-            }
+            const sidebar = document.getElementById("sidebar");
+            const toggle = document.getElementById("toggle");
+            const overlay = document.getElementById("overlay");
+            const icon = toggle.querySelector("i");
+
+            toggle.addEventListener("click", () => {
+
+                if (window.innerWidth <= 768) {
+
+                    sidebar.classList.toggle("mobile-show");
+
+                } else {
+
+                    sidebar.classList.toggle("collapsed");
+
+                    icon.classList.toggle("bi-chevron-right");
+                    icon.classList.toggle("bi-chevron-left");
+                }
+
+            });
+
+            overlay.addEventListener("click", () => {
+                sidebar.classList.remove("mobile-show");
+            });
+
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
