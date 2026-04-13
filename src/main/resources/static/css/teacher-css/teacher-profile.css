@@ -1,297 +1,384 @@
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
-	background: #f4f6f9;
-	color: #1f1f2e;
+  background: #f4f6f9;
+  color: #1f1f2e;
 }
 
 /* ================= SIDEBAR WIDTH SYNC ================= */
 /* must match teacher-sidebar.css */
 .sidebar {
-	width: 260px;
-	transition: width 0.3s ease;
+  width: 260px;
+  transition: width 0.3s ease;
 }
 
 .sidebar.collapsed {
-	width: 90px;
+  width: 80px;
 }
 
 /* ================= MAIN CONTENT (FIXED ONCE) ================= */
 .main-content {
-	margin-left: 260px;
-	padding: 20px 30px;
-	transition: margin-left 0.3s ease;
+  margin-left: 260px;
+  padding: 20px 30px;
+  transition: margin-left 0.3s ease;
 }
-
 
 /* ================= HEADER ================= */
 .page-header {
-	margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .page-header h1 {
-	font-size: 26px;
-	font-weight: 600;
-	margin-left: 20px;
+  font-size: 26px;
+  font-weight: 600;
+  margin-left: 20px;
 }
 
 /* ================= SIDEBAR TOGGLE ================= */
 .sidebar-toggle {
-	background: none;
-	border: none;
-	font-size: 22px;
-	cursor: pointer;
-	margin-bottom: 20px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  margin-bottom: 20px;
 }
 
 /* ================= PROFILE WRAPPER ================= */
 .teacher-profile-wrapper {
-	max-width: 900px;
-	margin: 0 auto;
-	padding-bottom: 60px;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: 60px;
 }
 
 /* ================= PROFILE CARD ================= */
 .teacher-profile-card {
-	background: #ffffff;
-	border-radius: 16px;
-	padding: 40px 20px;
-	text-align: center;
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-	margin-bottom: 40px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 40px 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  margin-bottom: 40px;
 }
 
 /* PHOTO */
 .teacher-photo {
-	width: 130px;
-	height: 130px;
-	margin: 0 auto 15px;
-	position: relative;
+  width: 130px;
+  height: 130px;
+  margin: 0 auto 15px;
+  position: relative;
 }
 
 .teacher-photo img {
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
-	object-fit: cover;
-	border: 4px solid #f6a623;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #f6a623;
 }
 
 .photo-upload {
-	display: inline-block;
-	margin-top: 10px;
-	font-size: 13px;
-	color: #f6a623;
-	cursor: pointer;
+  display: inline-block;
+  margin-top: 10px;
+  font-size: 13px;
+  color: #f6a623;
+  cursor: pointer;
 }
 
 /* NAME */
 .teacher-name {
-	font-size: 24px;
-	font-weight: 600;
-	margin-top: 40px;
+  font-size: 24px;
+  font-weight: 600;
+  margin-top: 40px;
 }
 
 .teacher-role {
-	color: #777;
-	font-size: 14px;
+  color: #777;
+  font-size: 14px;
 }
 
 /* ================= EDIT PROFILE BUTTON ================= */
 .edit-profile-btn {
-	margin-top: 15px;
-	padding: 10px 22px;
-	border-radius: 25px;
-	border: none;
-	background: #f6a623;
-	color: #fff;
-	font-weight: 600;
-	cursor: pointer;
-	transition: 0.3s;
+  margin-top: 15px;
+  padding: 10px 22px;
+  border-radius: 25px;
+  border: none;
+  background: #f6a623;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 .edit-profile-btn:hover {
-	background: #ffb347;
+  background: #ffb347;
 }
 
 /* ================= PROFILE FORM ================= */
 .teacher-profile-form {
-	background: #ffffff;
-	border-radius: 16px;
-	padding: 35px;
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
-	animation: fadeSlide 0.4s ease;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 35px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  animation: fadeSlide 0.4s ease;
 }
 
 .hidden {
-	display: none;
+  display: none;
 }
 
 @keyframes fadeSlide {
-	from {
-		opacity: 0;
-		transform: translateY(10px);
-	}
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
 
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* INPUTS */
 .form-group {
-	margin-bottom: 18px;
+  margin-bottom: 18px;
 }
 
 .form-group label {
-	font-weight: 500;
-	margin-bottom: 6px;
-	display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
 }
 
 .form-group input,
 .form-group textarea {
-	width: 100%;
-	padding: 12px 14px;
-	border-radius: 8px;
-	border: 1px solid #dcdcdc;
-	font-size: 14px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #dcdcdc;
+  font-size: 14px;
 }
 
 /* ACTION BUTTONS */
 .profile-actions {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 15px;
-	margin-top: 25px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 25px;
 }
 
 .save-btn {
-	background: #f6a623;
-	border: none;
-	padding: 14px;
-	border-radius: 8px;
-	font-weight: 600;
-	cursor: pointer;
+  background: #f6a623;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 .cancel-btn {
-	background: #ececec;
-	border: none;
-	padding: 14px;
-	border-radius: 8px;
-	font-weight: 600;
-	cursor: pointer;
+  background: #ececec;
+  border: none;
+  padding: 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 /* PASSWORD LINK */
 .password-link {
-	text-align: center;
-	margin-top: 18px;
-	font-size: 14px;
+  text-align: center;
+  margin-top: 18px;
+  font-size: 14px;
 }
 
 .password-link a {
-	color: #f6a623;
-	font-weight: 500;
-	text-decoration: none;
+  color: #f6a623;
+  font-weight: 500;
+  text-decoration: none;
 }
 
 /* ================= CONTACT INFO ================= */
 .contact-info-card {
-	background: #ffffff;
-	border-radius: 16px;
-	padding: 25px 30px;
-	margin-bottom: 35px;
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px 30px;
+  margin-bottom: 35px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 }
 
 .contact-row {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 14px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
 }
 
 .contact-row:not(:last-child) {
-	border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eee;
 }
 
 .contact-text {
-	display: flex;
-	flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .contact-label {
-	font-size: 13px;
-	color: #777;
+  font-size: 13px;
+  color: #777;
 }
 
 .contact-value {
-	font-size: 15px;
-	font-weight: 500;
+  font-size: 15px;
+  font-weight: 500;
 }
 
 .edit-link {
-	background: none;
-	border: none;
-	color: #f6a623;
-	font-weight: 600;
-	cursor: pointer;
-	padding: 6px 10px;
-	border-radius: 6px;
+  background: none;
+  border: none;
+  color: #f6a623;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 6px 10px;
+  border-radius: 6px;
 }
 
 .edit-link:hover {
-	background: rgba(246, 166, 35, 0.12);
+  background: rgba(246, 166, 35, 0.12);
 }
 
 /* ================= MODAL ================= */
 .modal {
-	position: fixed;
-	inset: 0;
-	background: rgba(0, 0, 0, 0.45);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	opacity: 0;
-	pointer-events: none;
-	transition: opacity 0.3s ease;
-	z-index: 1000;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
 }
 
 .modal.show {
-	opacity: 1;
-	pointer-events: auto;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .modal-content {
-	background: #fff;
-	width: 420px;
-	max-width: 90%;
-	padding: 2rem;
-	border-radius: 14px;
-	position: relative;
+  background: #fff;
+  width: 420px;
+  max-width: 90%;
+  padding: 2rem;
+  border-radius: 14px;
+  position: relative;
 }
 
 .close-btn {
-	position: absolute;
-	top: 14px;
-	right: 16px;
-	font-size: 22px;
-	cursor: pointer;
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  font-size: 22px;
+  cursor: pointer;
 }
 
 /* ================= MOBILE ================= */
 @media (max-width: 768px) {
-	.main-content {
-		margin-left: 0;
-		padding: 20px;
-	}
+  .main-content {
+    margin-left: 0;
+    padding: 20px;
+  }
+}
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0 !important;
+    padding: 14px;
+  }
+
+  .page-header h1 {
+    font-size: 20px;
+    margin-left: 0;
+  }
+  .teacher-profile-card {
+    padding: 25px 15px;
+  }
+
+  .teacher-photo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .teacher-name {
+    font-size: 18px;
+    margin-top: 15px;
+  }
+
+  .teacher-role {
+    font-size: 13px;
+  }
+
+  .edit-profile-btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .teacher-profile-form {
+    padding: 18px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  /* ===== BUTTONS STACK ===== */
+  .profile-actions {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+    padding: 12px;
+  }
+
+  .contact-info-card {
+    padding: 18px;
+  }
+
+  .contact-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .edit-link {
+    align-self: flex-end;
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 18px;
+  }
+
+  .modal-content h2 {
+    font-size: 18px;
+  }
+
+  .sidebar-toggle {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+}
+.teacher-profile-card {
+  background: linear-gradient(135deg, #ffffff, #f9fafc);
+  border: 1px solid #eee;
 }

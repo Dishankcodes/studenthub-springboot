@@ -7,6 +7,7 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
         * {
@@ -19,10 +20,8 @@
         body {
             background: #f4f6f9;
             color: #1f1f2e;
-            padding: 30px;
+            margin: 0;
         }
-
-        /* ===== PAGE CONTAINER ===== */
 
         .container {
             max-width: 1200px;
@@ -187,6 +186,261 @@
         .lesson-list li {
             margin-bottom: 4px;
         }
+
+        /* ============================= */
+        /* 🔥 ANALYTICS RESPONSIVE FINAL */
+        /* ============================= */
+
+        @media (max-width: 768px) {
+
+            /* ===== CONTAINER ===== */
+            .container {
+                padding: 12px;
+            }
+
+            /* ===== HEADER ===== */
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            .page-title {
+                font-size: 20px;
+                line-height: 1.3;
+            }
+
+            .back-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            /* ===== STATS ===== */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 14px;
+                border-radius: 10px;
+            }
+
+            .stat-value {
+                font-size: 18px;
+            }
+
+            .stat-label {
+                font-size: 11px;
+            }
+
+            /* ===== SECTION ===== */
+            .section-card {
+                padding: 14px;
+                border-radius: 10px;
+            }
+
+            .section-title {
+                font-size: 15px;
+            }
+
+            /* ===== TABLE (SCROLL FIX) ===== */
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            th,
+            td {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            /* ===== PROGRESS ===== */
+            .progress-wrapper {
+                gap: 6px;
+            }
+
+            .progress-text {
+                font-size: 11px;
+            }
+
+            .progress-bar {
+                height: 6px;
+            }
+
+            /* ===== MODULE ===== */
+            .module-title {
+                font-size: 14px;
+            }
+
+            .lesson-list {
+                font-size: 12px;
+                padding-left: 14px;
+            }
+
+        }
+
+        /* ============================= */
+        /* 🔥 ANALYTICS RESPONSIVE FINAL */
+        /* ============================= */
+
+        @media (max-width: 768px) {
+
+            /* ===== CONTAINER ===== */
+            .container {
+                padding: 12px;
+            }
+
+            /* ===== HEADER ===== */
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+
+            .page-title {
+                font-size: 20px;
+                line-height: 1.3;
+            }
+
+            .back-btn {
+                padding: 8px 12px;
+                font-size: 13px;
+            }
+
+            /* ===== STATS ===== */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .stat-card {
+                padding: 14px;
+                border-radius: 10px;
+            }
+
+            .stat-value {
+                font-size: 18px;
+            }
+
+            .stat-label {
+                font-size: 11px;
+            }
+
+            /* ===== SECTION ===== */
+            .section-card {
+                padding: 14px;
+                border-radius: 10px;
+            }
+
+            .section-title {
+                font-size: 15px;
+            }
+
+            /* ===== TABLE (SCROLL FIX) ===== */
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            th,
+            td {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            /* ===== PROGRESS ===== */
+            .progress-wrapper {
+                gap: 6px;
+            }
+
+            .progress-text {
+                font-size: 11px;
+            }
+
+            .progress-bar {
+                height: 6px;
+            }
+
+            /* ===== MODULE ===== */
+            .module-title {
+                font-size: 14px;
+            }
+
+            .lesson-list {
+                font-size: 12px;
+                padding-left: 14px;
+            }
+
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================= */
+        /* 🔥 MOBILE TABLE → CARD VIEW */
+        /* ============================= */
+
+        @media (max-width: 768px) {
+
+            table,
+            thead,
+            tbody,
+            th,
+            td,
+            tr {
+                display: block;
+                width: 100%;
+            }
+
+            thead {
+                display: none;
+            }
+
+            tbody tr {
+                background: #fff;
+                margin-bottom: 12px;
+                border-radius: 10px;
+                padding: 12px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            }
+
+            td {
+                display: flex;
+                justify-content: space-between;
+                padding: 6px 0;
+                font-size: 13px;
+                border: none;
+            }
+
+            td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #555;
+            }
+
+            .progress-wrapper {
+                gap: 6px;
+                width: 100%;
+            }
+
+            .progress-bar {
+                width: 100%;
+            }
+
+        }
+
+        tbody tr:hover {
+            transform: scale(1.01);
+        }
     </style>
 
 </head>
@@ -264,68 +518,41 @@
                         <th>Progress</th>
                     </tr>
                 </thead>
-
                 <tbody>
-
                     <tr th:each="p : ${studentProgressList}">
-
-                        <td th:text="${p.student.fullname}"></td>
-
-                        <td th:text="${p.completed}"></td>
-
-                        <td th:text="${p.total}"></td>
-
-                        <td>
-
+                        <td data-label="Student" th:text="${p.student.fullname}"></td>
+                        <td data-label="Completed" th:text="${p.completed}"></td>
+                        <td data-label="Total Lessons" th:text="${p.total}"></td>
+                        <td data-label="Progress">
                             <div class="progress-wrapper">
-
                                 <div class="progress-bar">
                                     <div class="progress-fill" th:style="'width:' + ${p.progress} + '%'">
                                     </div>
                                 </div>
-
                                 <span class="progress-text" th:text="${p.progress + '%'}"></span>
-
                             </div>
-
                         </td>
-
                     </tr>
-
                 </tbody>
-
             </table>
-
         </div>
 
-        <!-- COURSE STRUCTURE -->
-
         <div class="section-card">
-
             <div class="section-title">
                 Course Structure
             </div>
-
             <div th:each="module : ${modules}" class="module">
-
                 <div class="module-title" th:text="${module.title}">
                     Module Title
                 </div>
-
                 <ul class="lesson-list">
-
                     <li th:each="lesson : ${module.lessons}" th:text="${lesson.title}">
                         Lesson Title
                     </li>
-
                 </ul>
-
             </div>
-
         </div>
-
     </div>
-
+    
 </body>
-
 </html>

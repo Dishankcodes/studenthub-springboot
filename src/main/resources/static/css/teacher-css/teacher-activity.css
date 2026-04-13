@@ -62,7 +62,6 @@
   box-shadow: 0 0 0 3px rgba(246, 166, 35, 0.25);
 }
 
-
 .notes-upload-card input[type="file"] {
   background: #1f1f35;
   color: #9ca3af;
@@ -411,30 +410,134 @@
   display: block;
 }
 
-
 .announcement-card,
 .note-item,
 .create-announcement-card,
 .notes-upload-card {
-    color: #f1f5f9; 
+  color: #f1f5f9;
 }
 
 .announcement-card h4,
 .note-item h4,
 .create-announcement-card h3 {
-    color: #ffffff;
-    font-weight: 600;
+  color: #ffffff;
+  font-weight: 600;
 }
 
 .announcement-meta {
-    color: #9ca3af;
+  color: #9ca3af;
 }
 
 .announcement-message {
-    color: #e5e7eb;
+  color: #e5e7eb;
 }
 
+input,
+textarea,
+select,
+button {
+  font-family: "Poppins", sans-serif;
+}
 
-input, textarea, select, button {
-    font-family: 'Poppins', sans-serif;
+@media (max-width: 768px) {
+  /* ===== MAIN ===== */
+  .main-content {
+    margin-left: 0 !important;
+    padding: 14px;
+  }
+
+  .page-title {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .dashboard {
+    padding: 10px;
+  }
+
+  .notes-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .notes-upload-card {
+    padding: 18px;
+    width: 100%;
+  }
+
+  .uploaded-notes h3 {
+    font-size: 18px;
+  }
+
+  .notes-upload-card input,
+  .notes-upload-card textarea,
+  .notes-upload-card select {
+    width: 100%;
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .notes-upload-card button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .notes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .note-item {
+    padding: 16px;
+  }
+
+  .announcement-form-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .announcement-form-row input,
+  .announcement-form-row select {
+    width: 100%;
+  }
+
+  .create-announcement-card textarea {
+    width: 100%;
+  }
+
+  .create-announcement-card button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .announcement-card {
+    padding: 14px;
+  }
+
+  .announcement-card h4 {
+    font-size: 14px;
+  }
+
+  .announcement-message {
+    font-size: 13px;
+  }
+
+  .tabs {
+    overflow-x: auto;
+    gap: 12px;
+    padding-bottom: 5px;
+  }
+
+  .tab-btn {
+    flex: none;
+    font-size: 13px;
+  }
+
+  .status-banner {
+    margin: 10px;
+    font-size: 13px;
+  }
+}
+.note-item:hover,
+.announcement-card:hover {
+  transform: translateY(-4px) scale(1.01);
 }

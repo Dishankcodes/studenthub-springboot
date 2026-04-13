@@ -44,7 +44,7 @@
 
 		.main-content {
 			margin-left: 260px;
-			padding: 20 30px;
+			padding: 20px 30px;
 			transition: margin-left 0.3s ease;
 		}
 
@@ -98,7 +98,10 @@
 </head>
 
 <body class="sidebar-collapsed">
-	<aside class="sidebar collapsed">
+	<aside class="sidebar">
+	  <button class="mobile-close" id="closeSidebar">
+            <i class="bi bi-x-lg"></i>
+        </button>
 		<div class="sidebar-logo">
 			<img th:src="@{/images/logo.png}" alt="EduPlatform Logo">
 			<span class="logo-text">EduPlatform</span>
@@ -118,6 +121,7 @@
 			<a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 		</nav>
 	</aside>
+ <div class="overlay" id="overlay"></div>
 
 	<main class="main-content">
 		<header class="top-header">
@@ -434,32 +438,50 @@
 		</div>
 	</main>
 	<script>
+	const toggleBtn = document.getElementById("sidebarToggle");
+    const sidebar = document.querySelector(".sidebar");
+    const body = document.body;
+    const overlay = document.getElementById("overlay");
+    const closeBtn = document.getElementById("closeSidebar");
 
-		const toggleBtn = document.getElementById("sidebarToggle");
-		const sidebar = document.querySelector(".sidebar");
+    if (window.innerWidth > 768) {
+        sidebar.classList.add("collapsed");
+        body.classList.add("sidebar-collapsed");
+    } else {
+        sidebar.classList.remove("collapsed");
+        sidebar.classList.remove("mobile-show");
+    }
 
-		const body = document.body;
+    toggleBtn.addEventListener("click", () => {
 
-		toggleBtn.addEventListener("click", () => {
-			sidebar.classList.toggle("collapsed");
-			body.classList.toggle("sidebar-collapsed");
-		});
+        if (window.innerWidth <= 768) {
+            sidebar.classList.add("mobile-show");
+            overlay.classList.add("show");
+
+            body.classList.add("no-scroll");
+
+        } else {
+            sidebar.classList.toggle("collapsed");
+            body.classList.toggle("sidebar-collapsed");
+        }
+    });
+
+    function closeSidebar() {
+        sidebar.classList.remove("mobile-show");
+        overlay.classList.remove("show");
 
 
-		const profileToggle = document.getElementById("profileToggle");
-		const profileDropdown = document.getElementById("profileDropdown");
+        body.classList.remove("no-scroll");
+    }
 
-		if (profileToggle) {
-			profileToggle.addEventListener("click", () => {
-				profileDropdown.classList.toggle("show");
-			});
+    if (closeBtn) {
+        closeBtn.addEventListener("click", closeSidebar);
+    }
 
-			document.addEventListener("click", (e) => {
-				if (!profileToggle.contains(e.target)) {
-					profileDropdown.classList.remove("show");
-				}
-			});
-		}
+
+    if (overlay) {
+        overlay.addEventListener("click", closeSidebar);
+    }
 	</script>
 	<script>
 		const statusMsg = document.getElementById("statusMessage");

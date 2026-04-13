@@ -1,14 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    /* ===== SIDEBAR TOGGLE ===== */
-    const toggleBtn = document.getElementById("sidebarToggle");
-    const sidebar = document.querySelector(".sidebar");
-
-    if (toggleBtn && sidebar) {
-        toggleBtn.addEventListener("click", () => {
-            sidebar.classList.toggle("collapsed");
-        });
-    }
 
 
     /* ================= CHANGE PASSWORD MODAL ================= */

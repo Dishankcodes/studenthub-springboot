@@ -10,6 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" th:href="@{/css/teacher-css/teacher-sidebar.css}">
+  
     <style>
         * {
             margin: 0;
@@ -197,29 +198,140 @@
             color: #721c24;
             border-left: 6px solid #dc3545;
         }
-        .course-card:nth-child(2) {
-   background: #2a2a4a;
-    color: #fff;
-    padding: 35px;
-    text-align: center;
-    font-weight: 500;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-}
 
-.course-card:nth-child(3) {background: #2a2a4a;
-    color: #fff;
-    padding: 35px;
-    text-align: center;
-    font-weight: 500;
-    border-radius: 10px;
-    transition: all 0.3s ease;
-    }
+        .course-card:nth-child(2) {
+            background: #2a2a4a;
+            color: #fff;
+            padding: 35px;
+            text-align: center;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .course-card:nth-child(3) {
+            background: #2a2a4a;
+            color: #fff;
+            padding: 35px;
+            text-align: center;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        /* ============================= */
+        /* 🔥 MAIN DASHBOARD RESPONSIVE */
+        /* ============================= */
+
+        @media (max-width: 768px) {
+
+            /* ===== MAIN ===== */
+            .main-content {
+                margin-left: 0 !important;
+                padding: 14px;
+            }
+
+            /* ===== HEADER ===== */
+            .top-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px;
+            }
+
+            .page-title {
+                font-size: 18px;
+                margin: 0;
+            }
+
+            /* ===== DASHBOARD ===== */
+            .dashboard {
+                padding: 10px;
+            }
+
+            /* ===== SECTION TITLE ===== */
+            .section-title {
+                font-size: 18px;
+                margin: 20px 0 10px;
+            }
+
+            /* ===== CARDS ===== */
+            .cards {
+                grid-template-columns: 1fr;
+                /* stack cards */
+                gap: 12px;
+            }
+
+            .course-card {
+                padding: 18px;
+                border-radius: 12px;
+            }
+
+            .course-card h2 {
+                font-size: 24px;
+            }
+
+            /* ===== ANALYTICS ===== */
+            .analytics {
+                grid-template-columns: 1fr;
+                /* stack */
+                gap: 14px;
+            }
+
+            .chart-box,
+            .list-box {
+                padding: 16px;
+                border-radius: 12px;
+            }
+
+            /* ===== TABLE ===== */
+            table {
+                font-size: 13px;
+            }
+
+            th,
+            td {
+                padding: 8px;
+            }
+
+            /* ===== FEEDBACK ===== */
+            .feedback {
+                padding: 16px;
+            }
+
+            .feedback-item {
+                font-size: 13px;
+            }
+
+            /* ===== STATUS BANNER ===== */
+            .status-banner {
+                font-size: 13px;
+                padding: 12px;
+            }
+
+            /* ===== FIX OVERFLOW ===== */
+            .chart-box {
+                overflow-x: auto;
+            }
+
+            canvas {
+                max-width: 100%;
+            }
+        }
+
+      
+        html {
+            scroll-behavior: smooth;
+        }
     </style>
 </head>
 
 <body class="sidebar-collapsed">
-    <aside class="sidebar collapsed">
+
+    <aside class="sidebar">
+        <button class="mobile-close" id="closeSidebar">
+            <i class="bi bi-x-lg"></i>
+        </button>
         <div class="sidebar-logo">
             <img th:src="@{/images/logo.png}" alt="EduPlatform Logo">
             <span class="logo-text">EduPlatform</span>
@@ -238,10 +350,9 @@
             <a th:href="@{/logout}" class="logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
         </nav>
     </aside>
+    <div class="overlay" id="overlay"></div>
 
-    <!-- ===== MAIN CONTENT ===== -->
     <main class="main-content">
-        <!-- ===== TOP HEADER ===== -->
         <header class="top-header">
             <div class="header-left">
                 <button class="sidebar-toggle" id="sidebarToggle">
@@ -285,7 +396,6 @@
                 🚫 Your account has been blocked by admin.
                 You cannot perform any activity. Please contact support.
             </div>
-            <!-- PLATFORM OVERVIEW -->
             <div class="section-title">
                 <i class="bi bi-globe"></i> Platform Overview
             </div>
@@ -298,33 +408,27 @@
                         <span>Free:</span>
                         <span th:text="${platformFreeCourses}">80</span>
                     </p>
-
                     <p>
                         <span>Paid:</span>
                         <span th:text="${platformPaidCourses}">40</span>
                     </p>
-
                     <hr>
-
                     <strong>
                         <span th:text="${platformCourses}">120</span> Courses
                     </strong>
                 </div>
-
                 <div class="course-card">
                     <h2 th:text="${platformStudents}">15,400</h2>
                     <span>Total Students</span>
                 </div>
             </div>
 
-            <!-- TEACHER PERFORMANCE -->
             <div class="section-title">
                 <i class="bi bi-person-workspace"></i> Your Performance
             </div>
 
             <div class="cards">
 
-                <!-- Your Courses -->
                 <div class="course-card course-summary">
                     <h3>Your Courses</h3>
 
@@ -345,13 +449,11 @@
                     </strong>
                 </div>
 
-                <!-- Students -->
                 <div class="course-card">
                     <h2 th:text="${teacherStudents}">0</h2>
                     <span>Your Students</span>
                 </div>
 
-                <!-- Revenue -->
                 <div class="course-card">
                     <h2>₹<span th:text="${totalRevenue}">0</span></h2>
                     <span>Your Revenue</span>
@@ -359,16 +461,14 @@
 
             </div>
 
-    
 
-            <!-- ANALYTICS -->
+
             <div class="section-title">
                 <i class="bi bi-bar-chart-line"></i> Analytics
             </div>
 
             <div class="analytics">
 
-                <!-- CHART -->
                 <div class="chart-box">
                     <h3>
                         <i class="bi bi-graph-up-arrow"></i>
@@ -377,7 +477,6 @@
                     <canvas id="studentsChart"></canvas>
                 </div>
 
-                <!-- TOP COURSE -->
                 <div class="list-box">
                     <h3>
                         <i class="bi bi-fire"></i>
@@ -410,7 +509,6 @@
                 </div>
             </div>
 
-            <!-- COURSE INCOME -->
             <div class="section-title">
                 <i class="bi bi-cash-stack"></i> Course Income
             </div>
@@ -437,7 +535,8 @@
 
             <div class="section-title">
                 <i class="bi bi-star-half"></i> Student Feedback
-                <a th:href="@{/teacher-feedback}" style="float:right; font-size:14px; color:#f6a623; text-decoration: none;">
+                <a th:href="@{/teacher-feedback}"
+                    style="float:right; font-size:14px; color:#f6a623; text-decoration: none;">
                     View All
                 </a>
             </div>
@@ -453,9 +552,10 @@
                         </span>
                     </div>
                 </div>
-
             </div>
+        </div>
     </main>
+
 
     <script th:inline="javascript">
         let monthlyData = /*[[${monthlyStudents}]]*/[];
@@ -487,14 +587,49 @@
     <script>
         const toggleBtn = document.getElementById("sidebarToggle");
         const sidebar = document.querySelector(".sidebar");
-
         const body = document.body;
+        const overlay = document.getElementById("overlay");
+        const closeBtn = document.getElementById("closeSidebar");
+
+        if (window.innerWidth > 768) {
+            sidebar.classList.add("collapsed");
+            body.classList.add("sidebar-collapsed");
+        } else {
+            sidebar.classList.remove("collapsed");
+            sidebar.classList.remove("mobile-show");
+        }
 
         toggleBtn.addEventListener("click", () => {
-            sidebar.classList.toggle("collapsed");
-            body.classList.toggle("sidebar-collapsed");
+
+            if (window.innerWidth <= 768) {
+                sidebar.classList.add("mobile-show");
+                overlay.classList.add("show");
+
+                body.classList.add("no-scroll");
+
+            } else {
+                sidebar.classList.toggle("collapsed");
+                body.classList.toggle("sidebar-collapsed");
+            }
         });
 
+        function closeSidebar() {
+            sidebar.classList.remove("mobile-show");
+            overlay.classList.remove("show");
+
+
+            body.classList.remove("no-scroll");
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener("click", closeSidebar);
+        }
+
+        if (overlay) {
+            overlay.addEventListener("click", closeSidebar);
+        }
+    </script>
+    <script>
 
         const profileToggle = document.getElementById("profileToggle");
         const profileDropdown = document.getElementById("profileDropdown");
