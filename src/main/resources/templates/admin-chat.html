@@ -11,7 +11,17 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 
     <link th:href="@{/css/admin-css/admin_sidebar.css}" rel="stylesheet">
-    <link href="admin-sidebar.css" rel="stylesheet">
+ 
+ <script>
+    (function () {
+        if (window.innerWidth < 768) {
+            const params = new URLSearchParams(window.location.search);
+            if (params.has("userId")) {
+                document.documentElement.classList.add("force-chat-open");
+            }
+        }
+    })();
+</script>
     <style>
         html,
         body {
@@ -270,6 +280,13 @@
             .chat-bar.hide {
                 transform: translateX(-100%);
             }
+            .force-chat-open .chat-bar {
+    transform: translateX(-100%) !important;
+}
+
+.force-chat-open .chat-window {
+    transform: translateX(0) !important;
+}
         }
 
         /* ===== CHAT WINDOW ===== */
@@ -487,7 +504,9 @@
                             <div th:if="${selectedUser != null}" class="chat-header">
 
                                 <!-- 🔙 BACK BUTTON (ONLY MOBILE) -->
-                                <i class="bi bi-arrow-left mobile-back"></i>
+                               <button class="mobile-back" id="backBtn" style="background:none;border:none;color:white;">
+    <i class="bi bi-arrow-left"></i>
+</button>
 
                                 <!-- PROFILE LINK -->
                                 <a th:href="@{/admin/view-profile(userId=${selectedUser.id})}"
@@ -574,51 +593,73 @@
         }
     </script>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
 
-            const chatBar = document.getElementById("chatBar");
-            const backBtn = document.querySelector(".mobile-back");
-            const chatForm = document.querySelector(".chat-input");
-            const conversationLinks = document.querySelectorAll(".conversation a");
+        const chatBar = document.getElementById("chatBar");
+        const backBtn = document.querySelector(".mobile-back");
+        const chatForm = document.querySelector(".chat-input");
+        const conversationLinks = document.querySelectorAll(".conversation a");
 
-            // ✅ 1. On page load → check if chat should be open
-            if (window.innerWidth < 768) {
-                const chatOpen = sessionStorage.getItem("chatOpen");
+        function handleMobileView() {
+            if (window.innerWidth >= 768) return;
 
-                if (chatOpen === "true") {
-                    chatBar.classList.add("hide");
-                } else {
-                    chatBar.classList.remove("hide");
+            const params = new URLSearchParams(window.location.search);
+            const hasUserId = params.has("userId");
+
+           const chatHeaderUser = document.querySelector(".chat-header a");
+
+            const messagesBox = document.querySelector(".messages");
+            const hasMessages = messagesBox && messagesBox.querySelectorAll(".message").length > 0;
+            if (hasUserId || chatHeaderUser || hasMessages) {
+                chatBar.classList.add("hide");
+                sessionStorage.setItem("chatOpen", "true");
+            } else {
+                chatBar.classList.remove("hide");
+                sessionStorage.removeItem("chatOpen");
+            }
+        }
+
+       handleMobileView();
+
+         setTimeout(handleMobileView, 150);
+
+        window.addEventListener("load", handleMobileView);
+
+       conversationLinks.forEach(link => {
+            link.addEventListener("click", () => {
+                if (window.innerWidth < 768) {
+                    sessionStorage.setItem("chatOpen", "true");
                 }
-            }
-
-            // ✅ 2. When clicking a user
-            conversationLinks.forEach(link => {
-                link.addEventListener("click", () => {
-                    if (window.innerWidth < 768) {
-                        sessionStorage.setItem("chatOpen", "true");
-                    }
-                });
             });
-
-            // ✅ 3. When sending message
-            if (chatForm) {
-                chatForm.addEventListener("submit", () => {
-                    if (window.innerWidth < 768) {
-                        sessionStorage.setItem("chatOpen", "true");
-                    }
-                });
-            }
-
-            // ✅ 4. Back button (show sidebar again)
-            if (backBtn) {
-                backBtn.addEventListener("click", () => {
-                    chatBar.classList.remove("hide");
-                    sessionStorage.removeItem("chatOpen");
-                });
-            }
-
         });
+
+        if (chatForm) {
+            chatForm.addEventListener("submit", () => {
+                if (window.innerWidth < 768) {
+                    sessionStorage.setItem("chatOpen", "true");
+                }
+            });
+        }
+
+        if (backBtn) {
+            backBtn.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+           
+                document.documentElement.classList.remove("force-chat-open");
+
+                chatBar.classList.remove("hide");
+                sessionStorage.removeItem("chatOpen");
+
+               
+                const url = new URL(window.location);
+                url.searchParams.delete("userId");
+                window.history.replaceState({}, "", url);
+            });
+        }
+
+    });
     </script>
 </body>
 

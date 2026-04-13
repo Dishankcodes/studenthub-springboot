@@ -339,7 +339,6 @@
             margin-top: 6px;
         }
 
-        /* ================= PERFECT MOBILE FIX ================= */
         @media (max-width: 768px) {
 
             /* MAIN */
@@ -426,7 +425,6 @@
         @media (max-width: 768px) {
             .toggle-btn {
                 display: none !important;
-                /* ❌ hide desktop toggle */
             }
         }
     </style>
@@ -452,23 +450,16 @@
             </h2>
         </div>
 
-        <a th:href="@{/student-dashboard}" data-title="Dashboard"><i
-                class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+        <a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
         <a th:href="@{/student-course}" class="active"><i class="bi bi-search"></i><span>Explore Courses</span></a>
-        <a th:href="@{/student-learning}" data-title="My Learning"><i class="bi bi-book-half"></i><span>My
-                Learning</span></a>
-        <a th:href="@{/student-feedback}" data-title="Instructor Overview"><i
-                class="bi bi-person-video3"></i><span>Instructor
-                Overview</span></a>
-        <a th:href="@{/student-stuff}" data-title="Notes"><i class="bi bi-graph-up"></i><span>Notes</span></a>
-        <a th:href="@{/student-chat}" data-title="Doubts Chat"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
-        <a th:href="@{/student-internships}" data-title="Internships"><i
-                class="bi bi-briefcase"></i><span>Internships</span></a>
-        <a th:href="@{/student-search}" data-title="Search Users"><i class="bi bi-search"></i><span>Search
-                Users</span></a>
-        <a th:href="@{/student-profile}" data-title="Profile"><i
-                class="bi bi-person-circle"></i><span>Profile</span></a>
-        <a th:href="@{/student-login}" data-title="Logout"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+        <a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
+        <a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
+        <a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
+        <a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
+        <a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
+        <a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a>
+        <a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+        <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
     </div>
     <div class="overlay" id="overlay"></div>
@@ -537,7 +528,7 @@
 
             <div th:if="${courses != null and !#lists.isEmpty(courses)}" class="course-grid">
 
-               <div class="course-card" th:each="course : ${courses}">
+                <div class="course-card" th:each="course : ${courses}">
                     <div class="course-thumb">
                         <img th:if="${course.thumbnailURL != null}" th:src="${course.thumbnailURL}"
                             style="width:100%; height:100%; object-fit:cover;">
@@ -596,55 +587,61 @@
         document.addEventListener("DOMContentLoaded", () => {
 
             const sidebar = document.getElementById("sidebar");
-            const toggle = document.getElementById("toggle");           // desktop button
-            const mobileToggle = document.getElementById("mobileToggle"); // mobile button
+            const toggle = document.getElementById("toggle"); // desktop
+            const mobileToggle = document.getElementById("mobileToggle"); // mobile
+            const closeBtn = document.getElementById("closeSidebar");
             const overlay = document.getElementById("overlay");
             const icon = toggle ? toggle.querySelector("i") : null;
 
+            if (window.innerWidth > 768) {
+                sidebar.classList.add("collapsed");
+            } else {
+                sidebar.classList.remove("collapsed");
+                sidebar.classList.remove("mobile-show");
+            }
+
             if (toggle) {
                 toggle.addEventListener("click", () => {
-                    sidebar.classList.toggle("collapsed");
+                    if (window.innerWidth > 768) {
+                        sidebar.classList.toggle("collapsed");
 
-                    if (icon) {
-                        icon.classList.toggle("bi-chevron-right");
-                        icon.classList.toggle("bi-chevron-left");
+                        if (icon) {
+                            icon.classList.toggle("bi-chevron-right");
+                            icon.classList.toggle("bi-chevron-left");
+                        }
                     }
                 });
             }
 
             if (mobileToggle) {
                 mobileToggle.addEventListener("click", () => {
-                    sidebar.classList.toggle("mobile-show");
-                    overlay.classList.toggle("show");
+                    sidebar.classList.add("mobile-show");
+                    overlay.classList.add("show");
                 });
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove("mobile-show");
+                overlay.classList.remove("show");
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener("click", closeSidebar);
             }
 
             if (overlay) {
-                overlay.addEventListener("click", () => {
-                    sidebar.classList.remove("mobile-show");
-                    overlay.classList.remove("show");
-                });
+                overlay.addEventListener("click", closeSidebar);
             }
 
-             document.querySelectorAll(".sidebar a").forEach(link => {
+            document.querySelectorAll(".sidebar a").forEach(link => {
                 link.addEventListener("click", () => {
                     if (window.innerWidth <= 768) {
-                        sidebar.classList.remove("mobile-show");
-                        overlay.classList.remove("show");
+                        closeSidebar();
                     }
                 });
             });
 
         });
-
-        const closeBtn = document.getElementById("closeSidebar");
-
-        if (closeBtn) {
-            closeBtn.addEventListener("click", () => {
-                sidebar.classList.remove("mobile-show");
-                overlay.classList.remove("show");
-            });
-        }
     </script>
 </body>
 

@@ -103,7 +103,8 @@ body {
 .toggle-btn {
   position: absolute;
   top: 16px;
-  right: -12px;
+  right: -14px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -198,15 +199,6 @@ body {
   margin-bottom: 4px;
 }
 
-.sidebar.collapsed {
-  padding-top: 8px;
-}
-
-/* When sidebar is collapsed */
-.sidebar.collapsed ~ .main {
-  margin-left: 70px;
-}
-
 /* Mobile */
 @media (max-width: 768px) {
   .main {
@@ -278,10 +270,6 @@ body {
   .student-topbar {
     left: 0;
   }
-
-  .toggle-btn {
-    right: -40px;
-  }
 }
 
 .overlay {
@@ -293,7 +281,7 @@ body {
   display: none;
 }
 
-.sidebar.mobile-show ~ .overlay {
+.overlay.show {
   display: block;
 }
 
@@ -309,110 +297,133 @@ body {
   }
 }
 
-/* TOOLTIP */
-.sidebar a {
-  position: relative;
-}
-
-/* HIDDEN TEXT */
-.sidebar.collapsed a::after {
-  content: attr(data-title);
-  position: absolute;
-  left: 70px;
-  background: #111827;
-  color: #fff;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-50%);
-  top: 50%;
-  transition: 0.2s;
-}
-
-/* SHOW ON HOVER */
-.sidebar.collapsed a:hover::after {
-  opacity: 1;
-  left: 75px;
-}
-
-.sidebar.collapsed:hover {
-  width: 240px;
-}
-
-.sidebar.collapsed:hover a span {
-  display: inline;
-}
-
-.sidebar.collapsed a:hover {
-  background: #0059ff;
-  color: #fff;
-  transform: scale(1.05);
-}
 /* HIDE ON DESKTOP */
 .mobile-close {
-    display: none;
+  display: none;
 }
 
 /* SHOW ONLY ON MOBILE */
 @media (max-width: 768px) {
-
-    .mobile-close {
-        display: block;
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        background: #111827;
-        color: #fff;
-        border: none;
-        width: 34px;
-        height: 34px;
-        border-radius: 50%;
-        font-size: 14px;
-        cursor: pointer;
-        z-index: 1100;
-    }
-
+  .mobile-close {
+    display: block;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #111827;
+    color: #fff;
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 1100;
+  }
 }
 /* HAMBURGER BUTTON */
 .mobile-btn {
-    display: none; /* hidden on desktop */
-    background: #0059ff;
-    color: #fff;
-    border: none;
-    width: 38px;
-    height: 38px;
-    border-radius: 10px;
-    font-size: 18px;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.25s ease;
+  display: none; /* hidden on desktop */
+  background: #0059ff;
+  color: #fff;
+  border: none;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  font-size: 18px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
 
 /* SHOW ONLY ON MOBILE */
 @media (max-width: 768px) {
-    .mobile-btn {
-        display: flex;
-    }
+  .mobile-btn {
+    display: flex;
+  }
 }
 
 /* HOVER EFFECT */
 .mobile-btn:hover {
-    background: #0044cc;
-    transform: scale(1.05);
+  background: #0044cc;
+  transform: scale(1.05);
 }
 
 /* CLICK EFFECT */
 .mobile-btn:active {
-    transform: scale(0.95);
+  transform: scale(0.95);
 }
 
 /* ICON CENTERING */
 .mobile-btn i {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* DESKTOP DEFAULT */
+.main {
+  margin-left: 240px;
+}
+
+/* WHEN COLLAPSED */
+.sidebar.collapsed ~ .main {
+  margin-left: 80px;
+}
+
+/* TOPBAR FIX */
+.student-topbar {
+  left: 240px;
+}
+
+.sidebar.collapsed ~ .student-topbar {
+  left: 80px;
+}
+
+@media (max-width: 768px) {
+  .toggle-btn {
+    display: none !important;
+  }
+}
+/* FORCE FULL SIDEBAR ON MOBILE */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 240px !important;
+  }
+
+  .sidebar.collapsed {
+    width: 240px !important;
+  }
+
+  .sidebar a span {
+    display: inline !important;
+  }
+}
+@media (max-width: 768px) {
+  /* MAIN */
+  .main {
+    margin-left: 0 !important;
+    margin-top: 60px;
+    padding: 14px;
+  }
+
+  /* TOPBAR */
+  .student-topbar {
+    left: 0 !important;
+    width: 100%;
+    padding: 0 12px;
+  }
+
+  .student-name {
+    display: none;
+  }
+
+  /* SIDEBAR */
+  .sidebar {
+    transform: translateX(-100%);
+    width: 240px;
+  }
+
+  .sidebar.mobile-show {
+    transform: translateX(0);
+  }
 }

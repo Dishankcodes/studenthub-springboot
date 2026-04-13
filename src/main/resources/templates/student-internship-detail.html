@@ -5,13 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Dashboard | EduPlatform</title>
-
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+    
     <style>
         * {
             margin: 0;
@@ -19,18 +16,18 @@
             box-sizing: border-box;
             font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
-        
+
         body {
             background: #f4f7ff;
         }
-        
+
         .main {
             margin-left: 240px;
             margin-top: 56px;
             padding: 20px;
             transition: 0.3s ease;
         }
-        
+
         .detail-container {
             max-width: 900px;
             margin: auto;
@@ -38,54 +35,59 @@
             flex-direction: column;
             gap: 20px;
         }
+
         /* HEADER */
-        
+
         .detail-header {
             background: #fff;
             padding: 25px;
             border-radius: 15px;
         }
-        
+
         .detail-header h1 {
             font-size: 26px;
         }
-        
+
         .company {
             color: #666;
             margin-bottom: 10px;
         }
+
         /* META */
-        
+
         .meta {
             display: flex;
             gap: 20px;
             font-size: 14px;
         }
+
         /* SECTIONS */
-        
+
         .detail-section {
             background: #fff;
             padding: 20px;
             border-radius: 15px;
         }
-        
+
         .detail-section h3 {
             margin-bottom: 10px;
         }
+
         /* SKILLS */
-        
+
         .skills span {
             background: #eee;
             padding: 6px 12px;
             border-radius: 10px;
             margin-right: 5px;
         }
+
         /* APPLY BOX */
-        
+
         .apply-box {
             text-align: right;
         }
-        
+
         .apply-btn {
             background: linear-gradient(135deg, #6366f1, #8b5cf6);
             border: none;
@@ -95,7 +97,7 @@
             font-weight: bold;
             cursor: pointer;
         }
-        
+
         .import-btn {
             background: #0ea5e9;
             color: #fff;
@@ -105,7 +107,7 @@
             margin-bottom: 10px;
             cursor: pointer;
         }
-        
+
         .modal {
             position: fixed;
             inset: 0;
@@ -118,12 +120,12 @@
             transition: 0.3s ease;
             z-index: 9999;
         }
-        
+
         .modal.show {
             opacity: 1;
             visibility: visible;
         }
-        
+
         .modal-content {
             background: #fff;
             margin: 5% auto;
@@ -132,28 +134,29 @@
             border-radius: 12px;
             animation: fadeIn 0.3s ease;
         }
-        
+
         @keyframes fadeIn {
             from {
                 transform: translateY(-20px);
                 opacity: 0;
             }
+
             to {
                 transform: translateY(0);
                 opacity: 1;
             }
         }
-        
+
         .close-btn {
             float: right;
             font-size: 20px;
             cursor: pointer;
         }
-        
+
         .form-group {
             margin-bottom: 15px;
         }
-        
+
         .form-group input,
         textarea {
             width: 100%;
@@ -161,39 +164,39 @@
             border-radius: 8px;
             border: 1px solid #ddd;
         }
-        
+
         .alert {
             padding: 14px;
             border-radius: 12px;
             font-size: 14px;
         }
-        
+
         .success {
             background: #dcfce7;
             color: #166534;
         }
-        
+
         .error {
             background: #fee2e2;
             color: #991b1b;
         }
-        
+
         .hidden {
             display: none;
         }
-        
+
         html,
         body {
             height: 100%;
         }
-        
+
         .sidebar {
             height: 100%;
             position: fixed;
             left: 0;
             top: 0;
         }
-        
+
         .apply-btn {
             display: inline-flex;
             align-items: center;
@@ -209,26 +212,116 @@
             text-decoration: none;
             transition: all 0.25s ease;
         }
-        
+
         .apply-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
         }
-        
+
         .apply-box .apply-btn {
             margin: 8px 6px 0 0;
         }
-        
+
         .btn-course {
             background: linear-gradient(135deg, #0ea5e9, #0284c7);
+        }
+
+        @media (max-width: 768px) {
+
+            /* ===== MAIN ===== */
+            .main {
+                margin-left: 0 !important;
+                padding: 14px;
+            }
+
+            .detail-container {
+                padding: 0;
+            }
+
+            /* ===== HEADER ===== */
+            .detail-header {
+                padding: 18px;
+            }
+
+            .detail-header h1 {
+                font-size: 20px;
+            }
+
+            .company {
+                font-size: 13px;
+            }
+
+            .meta {
+                flex-direction: column;
+                gap: 8px;
+                font-size: 13px;
+            }
+
+            .detail-section {
+                padding: 16px;
+            }
+
+            .detail-section h3 {
+                font-size: 16px;
+            }
+
+            /* ===== SKILLS ===== */
+            .skills {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            .skills span {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+
+            .apply-box {
+                text-align: left;
+            }
+
+            .apply-btn {
+                width: 100%;
+                justify-content: center;
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            .apply-box .apply-btn {
+                margin: 8px 0;
+            }
+
+            .form-group input,
+            textarea {
+                font-size: 13px;
+            }
+
+            .form-group+div {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .alert {
+                font-size: 13px;
+                padding: 12px;
+            }
+
+        }
+
+        .detail-container {
+            padding-bottom: 40px;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- ===== SIDEBAR ===== -->
-    <div class="sidebar collapsed" id="sidebar">
+    <div class="sidebar" id="sidebar">
+        <button class="mobile-close" id="closeSidebar">
+            <i class="bi bi-x-lg"></i>
+        </button>
         <button class="toggle-btn" id="toggle">
             <i class="bi bi-chevron-right"></i>
         </button>
@@ -253,9 +346,11 @@
         <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
     </div>
-
-    <!-- ===== TOPBAR ===== -->
+    <div class="overlay" id="overlay"></div>
     <div class="student-topbar">
+        <button id="mobileToggle" class="mobile-btn">
+            <i class="bi bi-list"></i>
+        </button>
         <span class="page-title">Internships</span>
         <div class="topbar-right">
             <div class="notif">
@@ -287,23 +382,29 @@
         <div class="detail-container">
 
             <!-- TEST SUBMITTED -->
-            <div th:if="${app != null and app.status.name() == 'TEST_SUBMITTED'}" class="alert" style="background:#e0f2fe;color:#0369a1; margin-bottom:15px;">
+            <div th:if="${app != null and app.status.name() == 'TEST_SUBMITTED'}" class="alert"
+                style="background:#e0f2fe;color:#0369a1; margin-bottom:15px;">
 
-                <i class="bi bi-check-circle"></i> <b>Test Submitted Successfully!</b><br><br> Your responses have been recorded.
-                <br> Please wait while our team evaluates your performance.<br><br> 👉 You will be notified once results are declared.
+                <i class="bi bi-check-circle"></i> <b>Test Submitted Successfully!</b><br><br> Your responses have been
+                recorded.
+                <br> Please wait while our team evaluates your performance.<br><br> 👉 You will be notified once results
+                are declared.
 
             </div>
             <div th:if="${error}" class="alert error" th:text="${error}"></div>
 
-            <div th:if="${app != null and app.allowReattempt and app.status.name() == 'FAILED'}" class="alert" style="background:#fef3c7;color:#92400e;">
+            <div th:if="${app != null and app.allowReattempt and app.status.name() == 'FAILED'}" class="alert"
+                style="background:#fef3c7;color:#92400e;">
 
-                <i class="bi bi-arrow-repeat"></i> You have been granted another attempt.<br> Please try again carefully. This may be your final chance.
+                <i class="bi bi-arrow-repeat"></i> You have been granted another attempt.<br> Please try again
+                carefully. This may be your final chance.
 
             </div>
 
             <div th:if="${app != null and testAttempt != null and app.status.name() == 'FAILED'}" class="alert error">
 
-                <i class="bi bi-x-circle-fill"></i> <b>Assessment Result: Not Cleared</b><br><br> You did not meet the required criteria for this internship.
+                <i class="bi bi-x-circle-fill"></i> <b>Assessment Result: Not Cleared</b><br><br> You did not meet the
+                required criteria for this internship.
                 <br> 👉 We recommend improving your skills and trying again.<br><br>
 
                 <a href="/student-course" class="apply-btn" style="background:#0ea5e9;">
@@ -343,7 +444,8 @@
             <!-- DESCRIPTION -->
             <div class="detail-section">
                 <h3>About the Internship</h3>
-                <p th:if="${internship.description != null and internship.description != ''}" th:text="${internship.description}"></p>
+                <p th:if="${internship.description != null and internship.description != ''}"
+                    th:text="${internship.description}"></p>
 
                 <p th:if="${internship.description == null or internship.description == ''}" style="color:#666;">
                     No detailed description provided. You can connect with the company for more information.
@@ -358,7 +460,8 @@
                 </ul>
 
                 <!-- IF EMPTY -->
-                <p th:if="${internship.responsibilities == null or internship.responsibilities == ''}" style="color:#666;">
+                <p th:if="${internship.responsibilities == null or internship.responsibilities == ''}"
+                    style="color:#666;">
                     Responsibilities are not specified. Please contact the company for more details.
                 </p>
             </div>
@@ -381,7 +484,8 @@
                 </p>
 
                 <div style="margin-top:15px;">
-                    <a th:href="@{'/student-course-details?courseId=' + ${internship.requiredCourse.courseId}}" class="apply-btn btn-course">
+                    <a th:href="@{'/student-course-details?courseId=' + ${internship.requiredCourse.courseId}}"
+                        class="apply-btn btn-course">
                         <i class="bi bi-arrow-right-circle"></i> Go to Course
                     </a>
                 </div>
@@ -398,7 +502,8 @@
                         <i class="bi bi-send"></i> Apply Now
                     </button>
 
-                    <form id="applyForm" class="hidden" th:action="@{/student/apply}" method="post" enctype="multipart/form-data">
+                    <form id="applyForm" class="hidden" th:action="@{/student/apply}" method="post"
+                        enctype="multipart/form-data">
 
                         <input type="hidden" name="internshipId" th:value="${internship.id}">
 
@@ -468,7 +573,8 @@
 
                     <div th:if="${test == null or !test.active}">
                         <div class="alert" style="background:#e0f2fe;color:#0369a1;">
-                            <i class="bi bi-info-circle"></i> No test required.<br> You will receive a call/email if selected.
+                            <i class="bi bi-info-circle"></i> No test required.<br> You will receive a call/email if
+                            selected.
                         </div>
                     </div>
 
@@ -492,7 +598,8 @@
                 <div th:if="${app != null and app.status.name() == 'PASSED'}">
 
                     <div class="alert success">
-                        <i class="bi bi-check-circle-fill"></i> You cleared the test now wait if you selected then u will get the offer letter and next information!
+                        <i class="bi bi-check-circle-fill"></i> You cleared the test now wait if you selected then u
+                        will get the offer letter and next information!
                     </div>
 
                 </div>
@@ -507,7 +614,8 @@
                     <!-- REATTEMPT -->
                     <div th:if="${app.allowReattempt}">
                         <div class="alert" style="background:#fef3c7; color:#92400e;">
-                            <i class="bi bi-arrow-repeat"></i> You have been granted a re-attempt opportunity.<br> Please retry the assessment carefully. This may be your final chance.
+                            <i class="bi bi-arrow-repeat"></i> You have been granted a re-attempt opportunity.<br>
+                            Please retry the assessment carefully. This may be your final chance.
                         </div>
 
                         <button onclick="startTestConfirm(this)" th:data-id="${internship.id}" class="apply-btn">
@@ -566,58 +674,122 @@
 
 
             </div>
-            <script>
-            document.addEventListener("DOMContentLoaded", function() {
+        </div>
+    </div>
 
-                const showBtn = document.getElementById("showApplyFormBtn");
-                const form = document.getElementById("applyForm");
-                const cancelBtn = document.getElementById("cancelApply");
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
-                if (showBtn && form) {
+            const showBtn = document.getElementById("showApplyFormBtn");
+            const form = document.getElementById("applyForm");
+            const cancelBtn = document.getElementById("cancelApply");
 
-                    showBtn.addEventListener("click", () => {
-                        form.classList.remove("hidden");
-                        showBtn.style.display = "none";
-                    });
+            if (showBtn && form) {
 
-                    cancelBtn?.addEventListener("click", () => {
-                        form.classList.add("hidden");
-                        showBtn.style.display = "inline-block";
-                    });
-                }
+                showBtn.addEventListener("click", () => {
+                    form.classList.remove("hidden");
+                    showBtn.style.display = "none";
+                });
 
-            });
-            </script>
-            <script>
-                function startTestConfirm(btn) {
+                cancelBtn?.addEventListener("click", () => {
+                    form.classList.add("hidden");
+                    showBtn.style.display = "inline-block";
+                });
+            }
 
-                    let id = btn.getAttribute("data-id");
+        });
+    </script>
+    <script>
+        function startTestConfirm(btn) {
 
-                    let confirmBox = confirm(
-                        "⚠️ IMPORTANT INSTRUCTIONS\n\n" +
-                        "• This test is time-based\n" +
-                        "• Do NOT refresh the page\n" +
-                        "• Switching tabs may be tracked\n" +
-                        "• No cheating allowed\n\n" +
-                        "Are you sure you want to start?"
-                    );
+            let id = btn.getAttribute("data-id");
 
-                    if (confirmBox) {
+            let confirmBox = confirm(
+                "⚠️ IMPORTANT INSTRUCTIONS\n\n" +
+                "• This test is time-based\n" +
+                "• Do NOT refresh the page\n" +
+                "• Switching tabs may be tracked\n" +
+                "• No cheating allowed\n\n" +
+                "Are you sure you want to start?"
+            );
 
-                        localStorage.setItem("examStart", Date.now());
-                        localStorage.setItem("examActive", "true");
+            if (confirmBox) {
 
-                        window.location.href = "/student/test/start?internshipId=" + id;
+                localStorage.setItem("examStart", Date.now());
+                localStorage.setItem("examActive", "true");
+
+                window.location.href = "/student/test/start?internshipId=" + id;
+            }
+        }
+    </script>
+    <script th:inline="javascript">
+        function importProfile() {
+            document.getElementById("fullName").value = /*[[${loggedStudent.fullname}]]*/ "";
+            document.getElementById("email").value = /*[[${loggedStudent.email}]]*/ "";
+            document.getElementById("phone").value = "";
+        }
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const sidebar = document.getElementById("sidebar");
+            const toggle = document.getElementById("toggle"); // desktop
+            const mobileToggle = document.getElementById("mobileToggle"); // mobile
+            const closeBtn = document.getElementById("closeSidebar");
+            const overlay = document.getElementById("overlay");
+            const icon = toggle ? toggle.querySelector("i") : null;
+
+            if (window.innerWidth > 768) {
+                sidebar.classList.add("collapsed");
+            } else {
+                sidebar.classList.remove("collapsed");
+                sidebar.classList.remove("mobile-show");
+            }
+
+            if (toggle) {
+                toggle.addEventListener("click", () => {
+                    if (window.innerWidth > 768) {
+                        sidebar.classList.toggle("collapsed");
+
+                        if (icon) {
+                            icon.classList.toggle("bi-chevron-right");
+                            icon.classList.toggle("bi-chevron-left");
+                        }
                     }
-                }
-            </script>
-            <script th:inline="javascript">
-                function importProfile() {
-                    document.getElementById("fullName").value = /*[[${loggedStudent.fullname}]]*/ "";
-                    document.getElementById("email").value = /*[[${loggedStudent.email}]]*/ "";
-                    document.getElementById("phone").value = "";
-                }
-            </script>
+                });
+            }
+
+            if (mobileToggle) {
+                mobileToggle.addEventListener("click", () => {
+                    sidebar.classList.add("mobile-show");
+                    overlay.classList.add("show");
+                });
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove("mobile-show");
+                overlay.classList.remove("show");
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener("click", closeSidebar);
+            }
+
+            if (overlay) {
+                overlay.addEventListener("click", closeSidebar);
+            }
+
+            document.querySelectorAll(".sidebar a").forEach(link => {
+                link.addEventListener("click", () => {
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+        });
+
+    </script>
 </body>
 
 </html>

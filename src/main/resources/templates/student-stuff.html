@@ -326,14 +326,140 @@
             border-left: 5px solid #f59e0b;
             background: linear-gradient(135deg, #fffbeb, #fff7cc);
         }
+
+        @media (max-width: 768px) {
+
+            .main {
+                margin-left: 0 !important;
+                margin-top: 60px;
+                padding: 14px;
+            }
+
+            .container {
+                padding: 0;
+            }
+
+            .student-topbar {
+                left: 0 !important;
+                padding: 0 12px;
+            }
+
+            .student-name {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 16px;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                width: 240px;
+            }
+
+            .sidebar.mobile-show {
+                transform: translateX(0);
+            }
+
+            .sidebar a span {
+                display: inline !important;
+            }
+
+            .filters {
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
+                padding: 12px;
+            }
+
+            .filters input,
+            .filters select {
+                width: 100%;
+                font-size: 14px;
+            }
+
+            .filters button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .notes-grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+
+            .note-card {
+                padding: 14px;
+                border-radius: 14px;
+            }
+
+            .note-card h3 {
+                font-size: 15px;
+            }
+
+            .note-card p {
+                font-size: 13px;
+            }
+
+            .actions {
+                flex-direction: column;
+            }
+
+            .actions a {
+                width: 100%;
+                font-size: 13px;
+            }
+
+            .empty-state {
+                padding: 40px 16px;
+            }
+
+            .empty-state h3 {
+                font-size: 18px;
+            }
+
+            .empty-state p {
+                font-size: 13px;
+            }
+
+            .announcement-card {
+                padding: 14px;
+            }
+
+            .announcement-card h4 {
+                font-size: 15px;
+            }
+
+            .announcement-meta {
+                font-size: 12px;
+            }
+
+            .announcement-message {
+                font-size: 13px;
+            }
+
+            /* ===== SECTION ===== */
+            .section-title {
+                font-size: 18px;
+            }
+
+        }
+        @media (max-width: 768px) {
+            .toggle-btn {
+                display: none !important;
+            }
+        }
     </style>
 </head>
 
 <body>
 
-    <div class="sidebar collapsed" id="sidebar">
+    <div class="sidebar" id="sidebar">
         <button class="toggle-btn" id="toggle">
             <i class="bi bi-chevron-right"></i>
+        </button>
+        <button class="mobile-close" id="closeSidebar">
+            <i class="bi bi-x-lg"></i>
         </button>
 
         <div class="sidebar-brand">
@@ -357,9 +483,11 @@
         <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
     </div>
-
-    <!-- ===== TOPBAR ===== -->
+    <div class="overlay" id="overlay"></div>
     <div class="student-topbar">
+        <button id="mobileToggle" class="mobile-btn">
+            <i class="bi bi-list"></i>
+        </button>
         <span class="page-title">Download Notes & Stuff</span>
         <div class="topbar-right">
             <div class="notif">
@@ -510,19 +638,65 @@
         </div>
     </div>
     <script>
-        const sidebar = document.getElementById("sidebar");
-        const toggle = document.getElementById("toggle");
-        const icon = toggle.querySelector("i");
+    document.addEventListener("DOMContentLoaded", () => {
 
-        toggle.addEventListener("click", () => {
-            if (window.innerWidth <= 768) {
-                sidebar.classList.toggle("mobile-show");
-            } else {
-                sidebar.classList.toggle("collapsed");
-                icon.classList.toggle("bi-chevron-right");
-                icon.classList.toggle("bi-chevron-left");
-            }
+        const sidebar = document.getElementById("sidebar");
+        const toggle = document.getElementById("toggle"); // desktop
+        const mobileToggle = document.getElementById("mobileToggle"); // mobile
+        const closeBtn = document.getElementById("closeSidebar");
+        const overlay = document.getElementById("overlay");
+        const icon = toggle ? toggle.querySelector("i") : null;
+
+        if (window.innerWidth > 768) {
+            sidebar.classList.add("collapsed");
+        } else {
+            sidebar.classList.remove("collapsed");
+            sidebar.classList.remove("mobile-show");
+        }
+
+        if (toggle) {
+            toggle.addEventListener("click", () => {
+                if (window.innerWidth > 768) {
+                    sidebar.classList.toggle("collapsed");
+
+                    if (icon) {
+                        icon.classList.toggle("bi-chevron-right");
+                        icon.classList.toggle("bi-chevron-left");
+                    }
+                }
+            });
+        }
+
+        if (mobileToggle) {
+            mobileToggle.addEventListener("click", () => {
+                sidebar.classList.add("mobile-show");
+                overlay.classList.add("show");
+            });
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove("mobile-show");
+            overlay.classList.remove("show");
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener("click", closeSidebar);
+        }
+
+        if (overlay) {
+            overlay.addEventListener("click", closeSidebar);
+        }
+
+        document.querySelectorAll(".sidebar a").forEach(link => {
+            link.addEventListener("click", () => {
+                if (window.innerWidth <= 768) {
+                    closeSidebar();
+                }
+            });
         });
+
+    });
+
     </script>
 
 </body>

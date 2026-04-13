@@ -2,43 +2,51 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Student Dashboard | EduPlatform</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard | EduPlatform</title>
 
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-	<link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+    <script>
+        (function () {
+            if (window.innerWidth < 768) {
+                const params = new URLSearchParams(window.location.search);
+                if (params.has("userId")) {
+                    document.documentElement.classList.add("force-chat-open");
+                }
+            }
+        })();
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
 
-	<style>
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-			font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-		}
+        html,
+        body {
+            height: 100%;
+        }
 
-		html,
-		body {
-			height: 100%;
-			overflow: hidden;
-		}
+        body {
+            background: #fff;
+            line-height: 1.6;
+        }
 
-		body {
-			background: #fff;
-			line-height: 1.6;
-		}
+        .main {
+            margin-left: 240px;
+            margin-top: 56px;
+            height: calc(100vh - 56px);
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
 
-		.main {
-			margin-left: 240px;
-			margin-top: 56px;
-			height: calc(100vh - 56px);
-			padding: 0;
-			display: flex;
-			flex-direction: column;
-		}
-		
-		        html,
+        html,
         body {
             height: 100%;
         }
@@ -50,424 +58,642 @@
             top: 0;
         }
 
-		.chat-container {
-			display: flex;
-			height: 100%;
-			overflow: hidden;
-		}
+        .chat-container {
+            display: flex;
+            height: 100%;
+            overflow: hidden;
+        }
 
-		.chat-bar {
-			width: 260px;
-			background: #fff;
-			border-right: 1px solid #e5e7eb;
-			overflow-y: auto;
-			height: 100%;
-		}
+        .chat-bar {
+            width: 260px;
+            background: #fff;
+            border-right: 1px solid #e5e7eb;
+            overflow-y: auto;
+            height: 100%;
+        }
 
-		.conversation {
-			padding: 10px;
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			border-bottom: 1px solid var(--sidebar-border);
-			cursor: pointer;
-			text-decoration: none;
-			color: inherit;
-		}
+        .conversation {
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid var(--sidebar-border);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
 
-		.conversation:hover {
-			background: #f3f4f6;
-		}
+        .conversation:hover {
+            background: #f3f4f6;
+        }
 
-		.conversation.active {
-			background: #6d28d9;
-			color: white;
-		}
+        .conversation.active {
+            background: #6d28d9;
+            color: white;
+        }
 
-		.conversation img {
-			width: 45px;
-			height: 45px;
-			border-radius: 50%;
-			object-fit: cover;
-		}
+        .conversation img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-		.info {
-			flex: 1;
-		}
+        .info {
+            flex: 1;
+        }
 
-		.info .name {
-			font-weight: 600;
-		}
+        .info .name {
+            font-weight: 600;
+        }
 
-		.info .preview {
-			font-size: 0.85rem;
-			color: gray;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-		}
+        .info .preview {
+            font-size: 0.85rem;
+            color: gray;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
-		.chat-window {
-			flex: 1;
-			display: flex;
-			flex-direction: column;
-			background: #e5ddd5;
-			position: relative;
-		}
+        .chat-window {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #e5ddd5;
+            position: relative;
+        }
 
-		.messages {
-			flex: 1;
-			overflow-y: auto;
-			padding: 15px;
-			display: flex;
-			flex-direction: column;
-			gap: 8px;
-		}
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
 
-		.message {
-			max-width: 65%;
-			padding: 10px 15px;
-			border-radius: 15px;
-			margin-bottom: 10px;
-			line-height: 1.4;
-			position: relative;
-			word-wrap: break-word;
-		}
+        .message {
+            max-width: 65%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+            position: relative;
+            word-wrap: break-word;
+        }
 
-		.message.sent {
-			background: #dcf8c6;
-			align-self: flex-end;
-			border-bottom-right-radius: 0;
-		}
+        .message.sent {
+            background: #dcf8c6;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
 
-		.message.received {
-			background: #fff;
-			align-self: flex-start;
-			border-bottom-left-radius: 0;
-		}
+        .message.received {
+            background: #fff;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
 
-		.timestamp {
-			font-size: 0.7rem;
-			color: gray;
-			margin-top: 3px;
-			text-align: right;
-		}
+        .timestamp {
+            font-size: 0.7rem;
+            color: gray;
+            margin-top: 3px;
+            text-align: right;
+        }
 
-		.chat-input {
-			display: flex;
-			border-top: 1px solid #ccc;
-			padding: 10px;
-			background: #fff;
-		}
+        .chat-input {
+            display: flex;
+            border-top: 1px solid #ccc;
+            padding: 10px;
+            background: #fff;
+        }
 
-		.chat-input input {
-			flex: 1;
-			border-radius: 20px;
-			padding: 10px 15px;
-			border: 1px solid #ccc;
-		}
+        .chat-input input {
+            flex: 1;
+            border-radius: 20px;
+            padding: 10px 15px;
+            border: 1px solid #ccc;
+        }
 
-		.chat-input button {
-			border-radius: 50%;
-			width: 38px;
-			height: 38px;
-			background: #6d28d9;
-			color: white;
-			border: none;
-			margin-left: 10px;
-		}
+        .chat-input button {
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            background: #6d28d9;
+            color: white;
+            border: none;
+            margin-left: 10px;
+        }
 
-		#searchUser {
-			width: 90%;
-			margin: 10px auto;
-			display: block;
-			padding: 8px 12px;
-			border: 1px solid #e5e7eb;
-			border-radius: 8px;
-			outline: none;
-			background-color: #fff;
-			color: #374151;
-			transition: all 0.2s ease;
-		}
+        #searchUser {
+            width: 90%;
+            margin: 10px auto;
+            display: block;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            outline: none;
+            background-color: #fff;
+            color: #374151;
+            transition: all 0.2s ease;
+        }
 
-		#searchUser:focus {
-			border-color: #6d28d9;
-			box-shadow: 0 0 4px rgba(109, 40, 217, 0.3);
-		}
+        #searchUser:focus {
+            border-color: #6d28d9;
+            box-shadow: 0 0 4px rgba(109, 40, 217, 0.3);
+        }
 
-		.chat-header {
-			display: flex;
-			align-items: center;
-			gap: 12px;
-			padding: 10px 15px;
-			background-color: #fff;
-			border-bottom: 1px solid #e5e7eb;
-			position: sticky;
-			top: 0;
-			z-index: 10;
-			flex-shrink: 0;
-		}
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 15px;
+            background-color: #fff;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            flex-shrink: 0;
+        }
 
-		.chat-header img {
-			width: 42px;
-			height: 42px;
-			border-radius: 50%;
-			object-fit: cover;
-		}
+        .chat-header img {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-		.chat-header-info {
-			display: flex;
-			flex-direction: column;
-		}
+        .chat-header-info {
+            display: flex;
+            flex-direction: column;
+        }
 
-		.chat-name {
-			font-weight: 600;
-			color: #111827;
-		}
+        .chat-name {
+            font-weight: 600;
+            color: #111827;
+        }
 
-		.chat-status {
-			font-size: 0.8rem;
-			color: gray;
-		}
+        .chat-status {
+            font-size: 0.8rem;
+            color: gray;
+        }
 
 
-		.unread-badge {
-			display: inline-flex;
-			min-width: 18px;
-			height: 18px;
-			padding: 0 6px;
-			border-radius: 999px;
-			background: #ef4444;
-			color: #fff;
-			font-size: 11px;
-			align-items: center;
-			justify-content: center;
-		}
+        .unread-badge {
+            display: inline-flex;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 6px;
+            border-radius: 999px;
+            background: #ef4444;
+            color: #fff;
+            font-size: 11px;
+            align-items: center;
+            justify-content: center;
+        }
 
-		.conversation .time {
-			color: gray;
-			margin-left: auto;
-			white-space: nowrap;
-		}
-	</style>
+        .conversation .time {
+            color: gray;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+
+            .main {
+                margin-left: 0 !important;
+                height: calc(100vh - 56px);
+            }
+
+            .chat-container {
+                position: relative;
+            }
+
+            .chat-bar {
+                width: 100%;
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 2;
+                background: #fff;
+                height: 100%;
+                transform: translateX(0);
+                transition: 0.3s;
+            }
+
+            .chat-window {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                top: 0;
+                background: #e5ddd5;
+                transform: translateX(100%);
+                transition: 0.3s;
+                z-index: 3;
+            }
+
+            .chat-container.open-chat .chat-bar {
+                transform: translateX(-100%);
+            }
+
+            .chat-container.open-chat .chat-window {
+                transform: translateX(0);
+            }
+
+            .chat-header {
+                padding: 10px;
+            }
+
+            .chat-name {
+                font-size: 14px;
+            }
+
+            .message {
+                max-width: 80%;
+                font-size: 13px;
+            }
+
+            .chat-input input {
+                font-size: 13px;
+            }
+
+            .force-chat-open .chat-bar {
+                transform: translateX(-100%) !important;
+            }
+
+            .force-chat-open .chat-window {
+                transform: translateX(0) !important;
+            }
+
+        }
+
+        .back-btn {
+            display: none;
+            border: none;
+            background: transparent;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .back-btn {
+                display: block;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-	<!-- ===== SIDEBAR ===== -->
-	<div class="sidebar collapsed" id="sidebar">
-		<button class="toggle-btn" id="toggle">
-			<i class="bi bi-chevron-right"></i>
-		</button>
+    <div class="sidebar" id="sidebar">
+        <button class="mobile-close" id="closeSidebar">
+            <i class="bi bi-x-lg"></i>
+        </button>
 
-		<div class="sidebar-brand">
-			<a href="/student-dashboard">
-				<img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
-			</a>
-			<h2 class="platform-name">
-				EduPlatform
-			</h2>
-		</div>
+        <button class="toggle-btn" id="toggle">
+            <i class="bi bi-chevron-right"></i>
+        </button>
 
-		<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-		<a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
-		<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
-		<a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
-		<a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
-		<a th:href="@{/student-chat}" class="active"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
-		<a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
-		<a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a>
-		<a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-		<a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+        <div class="sidebar-brand">
+            <a href="/student-dashboard">
+                <img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
+            </a>
+            <h2 class="platform-name">
+                EduPlatform
+            </h2>
+        </div>
 
-	</div>
+        <a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+        <a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
+        <a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
+        <a th:href="@{/student-feedback}"><i class="bi bi-person-video3"></i><span>Instructor Overview</span></a>
+        <a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
+        <a th:href="@{/student-chat}" class="active"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
+        <a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
+        <a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a>
+        <a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+        <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
-	<!-- ===== TOPBAR ===== -->
-	<div class="student-topbar">
-		<span class="page-title">Chat System</span>
-		<div class="topbar-right">
-			<div class="notif">
-				<a th:href="@{/student-notification}">
-					<i class="bi bi-bell"></i>
-					<span class="dot"></span> </a>
-			</div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="student-topbar">
+        <button id="mobileToggle" class="mobile-btn">
+            <i class="bi bi-list"></i>
+        </button>
+        <span class="page-title">Chat System</span>
+        <div class="topbar-right">
+            <div class="notif">
+                <a th:href="@{/student-notification}">
+                    <i class="bi bi-bell"></i>
+                    <span class="dot"></span> </a>
+            </div>
 
-			<div class="profile">
-				<a th:href="@{/student-profile}" class="profile-link">
+            <div class="profile">
+                <a th:href="@{/student-profile}" class="profile-link">
 
-					<img th:src="${loggedStudent != null and loggedStudent.profileImage != null
+                    <img th:src="${loggedStudent != null and loggedStudent.profileImage != null
                 ? loggedStudent.profileImage
                 : '/images/default.jpg'}" alt="Profile">
 
-					<span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
-						Student
-					</span>
+                    <span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
+                        Student
+                    </span>
 
-				</a>
-			</div>
-		</div>
-
-
-	</div>
-
-	<!-- Main Content -->
-	<div class="main" id="main">
-
-		<div class="chat-container">
-			<div class="chat-bar" id="chatBar">
-				<input type="text" id="searchUser" placeholder="🔍 Search users...">
-				<div th:each="user : ${users}" class="conversation"
-					th:classappend="${selectedUser != null and user.id == selectedUser.id} ? 'active'">
-
-					<a th:href="@{/student-chat(userId=${user.id})}"
-						style="display:flex; gap:10px; text-decoration:none; color:inherit; width:100%;">
-
-						<img th:src="${imageMap[user.id] != null ? imageMap[user.id] : '/images/default.jpg'}">
-
-						<div class="info">
-							<div class="name">
-
-								<span th:text="${nameMap[user.id] != null ? nameMap[user.id] : 'Unknown'}"></span>
-
-								<!-- ICONS -->
-								<i th:if="${user.type.name() == 'TEACHER'}" class="bi bi-person-badge"
-									style="color:#6d28d9;"></i>
-
-								<i th:if="${user.type.name() == 'STUDENT'}" class="bi bi-mortarboard"
-									style="color:#2563eb;"></i>
-
-								<i th:if="${user.type.name() == 'ADMIN'}" class="bi bi-shield-check"
-									style="color:#ef4444;"></i>
-
-								<!-- UNREAD -->
-								<span class="unread-badge" th:if="${unreadMap[user.id] > 0}"
-									th:text="${unreadMap[user.id]}"></span>
+                </a>
+            </div>
+        </div>
 
 
+    </div>
 
-							</div>
-							<div class="preview" th:text="${lastMessageMap[user.id]}">
-							</div>
-							<div class="time" th:text="${timeMap[user.id]}"></div>
-						</div>
-					</a>
-				</div>
-			</div>
+    <!-- Main Content -->
+    <div class="main" id="main">
 
-			<div class="chat-window">
-				<a th:if="${selectedUser != null}" th:href="@{/student-view-profile(userId=${selectedUser.id})}"
-					class="chat-header" style="text-decoration:none; color:inherit; cursor:pointer;">
-					<img th:src="${selectedImage != null ? selectedImage : '/images/default.jpg'}">
+        <div class="chat-container">
+            <div class="chat-bar" id="chatBar">
+                <input type="text" id="searchUser" placeholder="🔍 Search users...">
+                <div th:each="user : ${users}" class="conversation"
+                    th:classappend="${selectedUser != null and user.id == selectedUser.id} ? 'active'">
 
-					<div class="chat-header-info">
-						<div class="chat-name" th:text="${selectedName != null ? selectedName : 'Unknown'}"></div>
+                    <a th:href="@{/student-chat(userId=${user.id})}"
+                        style="display:flex; gap:10px; text-decoration:none; color:inherit; width:100%;">
 
-						<div class="chat-status">
-							<span th:if="${canChat}">Online</span>
-							<span th:if="${!canChat}">Follow to chat</span>
-						</div>
-					</div>
+                        <img th:src="${imageMap[user.id] != null ? imageMap[user.id] : '/images/default.jpg'}">
 
-				</a>
+                        <div class="info">
+                            <div class="name">
 
-				<div th:if="${selectedUser == null}" class="chat-header">
-					<div class="chat-name">Select a user to start chatting</div>
-				</div>
+                                <span th:text="${nameMap[user.id] != null ? nameMap[user.id] : 'Unknown'}"></span>
 
-				<div class="messages" id="messages">
+                                <!-- ICONS -->
+                                <i th:if="${user.type.name() == 'TEACHER'}" class="bi bi-person-badge"
+                                    style="color:#6d28d9;"></i>
 
-					<div th:if="${messages == null or #lists.isEmpty(messages)}"
-						style="text-align:center; opacity:0.6;">
-						No messages yet
-					</div>
+                                <i th:if="${user.type.name() == 'STUDENT'}" class="bi bi-mortarboard"
+                                    style="color:#2563eb;"></i>
 
-					<div th:each="msg : ${messages}"
-						th:class="'message ' + (${msg.sender.id} == ${session.chatUserId} ? 'sent' : 'received')">
+                                <i th:if="${user.type.name() == 'ADMIN'}" class="bi bi-shield-check"
+                                    style="color:#ef4444;"></i>
 
-						<span th:text="${msg.content}"></span>
+                                <!-- UNREAD -->
+                                <span class="unread-badge" th:if="${unreadMap[user.id] > 0}"
+                                    th:text="${unreadMap[user.id]}"></span>
 
-						<div class="timestamp" th:text="${#temporals.format(msg.timestamp, 'HH:mm')}"></div>
-					</div>
 
-				</div>
 
-				<form th:if="${canChat}" method="POST" th:action="@{/student/send}" class="chat-input">
+                            </div>
+                            <div class="preview" th:text="${lastMessageMap[user.id]}">
+                            </div>
+                            <div class="time" th:text="${timeMap[user.id]}"></div>
+                        </div>
+                    </a>
+                </div>
+            </div>
 
-					<input type="hidden" name="roomId" th:value="${roomId}">
+            <div class="chat-window">
+                <div th:if="${selectedUser != null}" class="chat-header">
 
-					<input type="text" name="content" placeholder="Type a message..." required>
+                    <button class="back-btn" id="backBtn">
+                        <i class="bi bi-arrow-left"></i>
+                    </button>
 
-					<button type="submit">
-						<i class="bi bi-send"></i>
-					</button>
-				</form>
+                    <a th:href="@{/student-view-profile(userId=${selectedUser.id})}"
+                        style="display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit;">
 
-				<div th:if="${selectedUser != null and !canChat}" style="padding:15px; text-align:center;">
+                        <img th:src="${selectedImage != null ? selectedImage : '/images/default.jpg'}">
 
-					<form action="/chat/follow" method="post">
-						<input type="hidden" name="receiverId" th:value="${selectedUser.id}">
-						<button class="btn btn-primary">
-							Follow to Chat
-						</button>
-					</form>
+                        <div class="chat-header-info">
+                            <div class="chat-name" th:text="${selectedName != null ? selectedName : 'Unknown'}"></div>
 
-				</div>
-			</div>
-		</div>
+                            <div class="chat-status">
+                                <span th:if="${canChat}">Online</span>
+                                <span th:if="${!canChat}">Follow to chat</span>
+                            </div>
+                        </div>
 
-	</div>
+                    </a>
+                </div>
 
-	<script>
-		const sidebar = document.getElementById("sidebar");
-		const toggle = document.getElementById("toggle");
-		const icon = toggle.querySelector("i");
+                <div th:if="${selectedUser == null}" class="chat-header">
+                    <div class="chat-name">Select a user to start chatting</div>
+                </div>
 
-		toggle.addEventListener("click", () => {
-			if (window.innerWidth <= 768) {
-				sidebar.classList.toggle("mobile-show");
-			} else {
-				sidebar.classList.toggle("collapsed");
-				icon.classList.toggle("bi-chevron-right");
-				icon.classList.toggle("bi-chevron-left");
-			}
-		});
-	</script>
+                <div class="messages" id="messages">
 
-	<script>
+                    <div th:if="${messages == null or #lists.isEmpty(messages)}"
+                        style="text-align:center; opacity:0.6;">
+                        No messages yet
+                    </div>
 
-		// Search filter
-		document.getElementById('searchUser').addEventListener('keyup', function () {
-			const filter = this.value.toLowerCase();
-			document.querySelectorAll('.conversation').forEach(user => {
-				const name = user.querySelector('.info .name').textContent.toLowerCase();
-				const preview = user.querySelector('.info .preview').textContent.toLowerCase();
-				user.style.display = (name.includes(filter) || preview.includes(filter)) ? 'flex' : 'none';
-			});
-		});
-	</script>
-	<script>
-		function sendMessage() {
-			const input = document.getElementById("messageInput");
-			const text = input.value.trim();
+                    <div th:each="msg : ${messages}"
+                        th:class="'message ' + (${msg.sender.id} == ${session.chatUserId} ? 'sent' : 'received')">
 
-			if (!text) return;
+                        <span th:text="${msg.content}"></span>
 
-			const msgBox = document.getElementById("messages");
+                        <div class="timestamp" th:text="${#temporals.format(msg.timestamp, 'HH:mm')}"></div>
+                    </div>
 
-			const msg = document.createElement("div");
-			msg.className = "message sent";
-			msg.innerHTML = `
+                </div>
+
+                <form th:if="${canChat}" method="POST" th:action="@{/student/send}" class="chat-input">
+
+                    <input type="hidden" name="roomId" th:value="${roomId}">
+
+                    <input type="text" name="content" placeholder="Type a message..." required>
+
+                    <button type="submit">
+                        <i class="bi bi-send"></i>
+                    </button>
+                </form>
+
+                <div th:if="${selectedUser != null and !canChat}" style="padding:15px; text-align:center;">
+
+                    <form action="/chat/follow" method="post">
+                        <input type="hidden" name="receiverId" th:value="${selectedUser.id}">
+                        <button class="btn btn-primary">
+                            Follow to Chat
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const sidebar = document.getElementById("sidebar");
+            const toggle = document.getElementById("toggle"); // desktop
+            const mobileToggle = document.getElementById("mobileToggle"); // mobile
+            const closeBtn = document.getElementById("closeSidebar");
+            const overlay = document.getElementById("overlay");
+            const icon = toggle ? toggle.querySelector("i") : null;
+
+            if (window.innerWidth > 768) {
+                sidebar.classList.add("collapsed");
+            } else {
+                sidebar.classList.remove("collapsed");
+                sidebar.classList.remove("mobile-show");
+            }
+
+            if (toggle) {
+                toggle.addEventListener("click", () => {
+                    if (window.innerWidth > 768) {
+                        sidebar.classList.toggle("collapsed");
+
+                        if (icon) {
+                            icon.classList.toggle("bi-chevron-right");
+                            icon.classList.toggle("bi-chevron-left");
+                        }
+                    }
+                });
+            }
+
+            if (mobileToggle) {
+                mobileToggle.addEventListener("click", () => {
+                    sidebar.classList.add("mobile-show");
+                    overlay.classList.add("show");
+                });
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove("mobile-show");
+                overlay.classList.remove("show");
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener("click", closeSidebar);
+            }
+
+            if (overlay) {
+                overlay.addEventListener("click", closeSidebar);
+            }
+
+            document.querySelectorAll(".sidebar a").forEach(link => {
+                link.addEventListener("click", () => {
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+        });
+    </script>
+    <script>
+
+        // Search filter
+        document.getElementById('searchUser').addEventListener('keyup', function () {
+            const filter = this.value.toLowerCase();
+            document.querySelectorAll('.conversation').forEach(user => {
+                const name = user.querySelector('.info .name').textContent.toLowerCase();
+                const preview = user.querySelector('.info .preview').textContent.toLowerCase();
+                user.style.display = (name.includes(filter) || preview.includes(filter)) ? 'flex' : 'none';
+            });
+        });
+    </script>
+    <script>
+        function sendMessage() {
+            const input = document.getElementById("messageInput");
+            const text = input.value.trim();
+
+            if (!text) return;
+
+            const msgBox = document.getElementById("messages");
+
+            const msg = document.createElement("div");
+            msg.className = "message sent";
+            msg.innerHTML = `
         ${text}
         <div class="timestamp">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
     `;
 
-			msgBox.appendChild(msg);
+            msgBox.appendChild(msg);
 
-			input.value = "";
-			msgBox.scrollTop = msgBox.scrollHeight;
-		}
-	</script>
+            input.value = "";
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const chatContainer = document.querySelector(".chat-container");
+            const backBtn = document.getElementById("backBtn");
+            const conversationLinks = document.querySelectorAll(".conversation a");
+            const chatForm = document.querySelector(".chat-input");
+
+            function handleMobileChat() {
+                if (window.innerWidth >= 768) {
+                    chatContainer.style.visibility = "visible";
+                    return;
+                }
+
+                const params = new URLSearchParams(window.location.search);
+                const hasUserId = params.has("userId");
+
+                const chatHeader = document.querySelector(".chat-header a");
+
+                const messagesBox = document.getElementById("messages");
+                let hasRealMessages = false;
+
+                if (messagesBox) {
+                    const msgs = messagesBox.querySelectorAll(".message");
+                    hasRealMessages = msgs.length > 0;
+                }
+
+                if (hasUserId || chatHeader || hasRealMessages) {
+                    chatContainer.classList.add("open-chat");
+                    sessionStorage.setItem("chatOpen", "true");
+                } else {
+                    chatContainer.classList.remove("open-chat");
+                    sessionStorage.removeItem("chatOpen");
+                }
+                chatContainer.style.visibility = "visible";
+            }
+
+            handleMobileChat();
+            setTimeout(handleMobileChat, 150);
+            setTimeout(handleMobileChat, 400);
+            window.addEventListener("load", handleMobileChat);
+
+            conversationLinks.forEach(link => {
+                link.addEventListener("click", () => {
+                    if (window.innerWidth < 768) {
+                        sessionStorage.setItem("chatOpen", "true");
+                    }
+                });
+            });
+
+            if (chatForm) {
+                chatForm.addEventListener("submit", () => {
+                    if (window.innerWidth < 768) {
+                        sessionStorage.setItem("chatOpen", "true");
+                    }
+                });
+            }
+
+
+            if (backBtn) {
+                backBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+
+                
+                    document.documentElement.classList.remove("force-chat-open");
+
+                    chatContainer.classList.remove("open-chat");
+                    sessionStorage.removeItem("chatOpen");
+
+                 
+                    const url = new URL(window.location);
+                    url.searchParams.delete("userId");
+                    window.history.replaceState({}, "", url);
+                });
+            }
+
+        });
+    </script>
 
 </body>
-
 </html>

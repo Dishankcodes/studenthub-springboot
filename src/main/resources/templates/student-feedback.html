@@ -2,23 +2,20 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Student Dashboard | EduPlatform</title>
-
-	<!-- Bootstrap Icons -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Dashboard | EduPlatform</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
-	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-	<link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
-	<style>
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-			font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-		}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
 
         body {
             background: #f4f7ff;
@@ -35,6 +32,7 @@
         .sidebar.collapsed~.main {
             margin-left: 80px;
         }
+
         html,
         body {
             height: 100%;
@@ -47,494 +45,757 @@
             top: 0;
         }
 
-		.feedback-card {
-			max-width: 900px;
-			margin: auto;
-			background: #fff;
-			border-radius: 16px;
-			padding: 28px
-		}
+        .feedback-card {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            border-radius: 16px;
+            padding: 28px
+        }
 
-		.feedback-tabs {
-			display: flex;
-			margin-top: 20px;
-			background: #f1f5f9;
-			border-radius: 12px;
-			padding: 6px
-		}
+        .feedback-tabs {
+            display: flex;
+            margin-top: 20px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            padding: 6px
+        }
 
-		.tab-btn {
-			flex: 1;
-			border: none;
-			background: none;
-			padding: 12px;
-			border-radius: 10px;
-			font-weight: 600;
-			cursor: pointer;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 8px
-		}
+        .tab-btn {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px
+        }
 
-		.tab-btn.active {
-			background: #1f1f2e;
-			color: #fff
-		}
+        .tab-btn.active {
+            background: #1f1f2e;
+            color: #fff
+        }
 
-		.tab-content {
-			display: none;
-			margin-top: 25px
-		}
+        .tab-content {
+            display: none;
+            margin-top: 25px
+        }
 
-		.tab-content.active {
-			display: block
-		}
+        .tab-content.active {
+            display: block
+        }
 
-		.rating-stars {
-			display: flex;
-			gap: 8px;
-			margin: 14px 0
-		}
+        .rating-stars {
+            display: flex;
+            gap: 8px;
+            margin: 14px 0
+        }
 
-		.rating-stars i {
-			font-size: 26px;
-			cursor: pointer;
-			color: #cbd5f5
-		}
+        .rating-stars i {
+            font-size: 26px;
+            cursor: pointer;
+            color: #cbd5f5
+        }
 
-		.rating-stars i.active {
-			color: #facc15
-		}
+        .rating-stars i.active {
+            color: #facc15
+        }
 
-		textarea {
-			width: 100%;
-			min-height: 130px;
-			border-radius: 12px;
-			border: 1px solid #d1d5db;
-			padding: 14px;
-			margin-top: 12px
-		}
+        textarea {
+            width: 100%;
+            min-height: 130px;
+            border-radius: 12px;
+            border: 1px solid #d1d5db;
+            padding: 14px;
+            margin-top: 12px
+        }
 
-		.submit-btn {
-			margin-top: 18px;
-			background: #4f46e5;
-			color: #fff;
-			border: none;
-			padding: 12px 22px;
-			border-radius: 10px;
-			font-weight: 600;
-			cursor: pointer;
-			display: inline-flex;
-			gap: 8px
-		}
+        .submit-btn {
+            margin-top: 18px;
+            background: #4f46e5;
+            color: #fff;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            gap: 8px
+        }
 
-		.coming-soon {
-			background: #fef3c7;
-			border: 1px dashed #facc15;
-			padding: 20px;
-			border-radius: 14px;
-			text-align: center;
-			color: #92400e
-		}
+        .coming-soon {
+            background: #fef3c7;
+            border: 1px dashed #facc15;
+            padding: 20px;
+            border-radius: 14px;
+            text-align: center;
+            color: #92400e
+        }
 
-		.success-msg {
-			background: #dcfce7;
-			border: 1px solid #16a34a;
-			color: #166534
-		}
+        .success-msg {
+            background: #dcfce7;
+            border: 1px solid #16a34a;
+            color: #166534
+        }
 
-		/* ===============================
+        /* ===============================
    STUDENT FEEDBACK UX POLISH
 ================================ */
 
-		/* Headings */
-		.feedback-card h2 {
-			font-size: 24px;
-			font-weight: 600;
-			color: #111827;
-		}
+        /* Headings */
+        .feedback-card h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+        }
 
-		.feedback-card h3 {
-			font-size: 18px;
-			font-weight: 600;
-			margin-bottom: 10px;
-		}
+        .feedback-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
 
-		/* Course / Instructor list item */
-		.select-item {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-			padding: 14px 16px;
-			border-radius: 14px;
-			border: 1px solid #e5e7eb;
-			background: #ffffff;
-			transition: all 0.2s ease;
-			margin-top: 12px;
-		}
+        /* Course / Instructor list item */
+        .select-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            transition: all 0.2s ease;
+            margin-top: 12px;
+        }
 
-		.select-item:hover {
-			background: #eef2ff;
-			border-color: #6366f1;
-			transform: translateY(-1px);
-		}
+        .select-item:hover {
+            background: #eef2ff;
+            border-color: #6366f1;
+            transform: translateY(-1px);
+        }
 
-		.select-item strong {
-			font-size: 15px;
-			color: #111827;
-		}
+        .select-item strong {
+            font-size: 15px;
+            color: #111827;
+        }
 
-		.select-item small {
-			color: #6b7280;
-		}
+        .select-item small {
+            color: #6b7280;
+        }
 
-		/* Feedback action button */
-		.select-item .submit-btn {
-			padding: 10px 16px;
-			font-size: 13.5px;
-			border-radius: 10px;
-		}
+        /* Feedback action button */
+        .select-item .submit-btn {
+            padding: 10px 16px;
+            font-size: 13.5px;
+            border-radius: 10px;
+        }
 
-		/* Tabs polish */
-		.feedback-tabs {
-			gap: 6px;
-		}
+        /* Tabs polish */
+        .feedback-tabs {
+            gap: 6px;
+        }
 
-		.tab-btn {
-			transition: all 0.25s ease;
-		}
+        .tab-btn {
+            transition: all 0.25s ease;
+        }
 
-		.tab-btn:not(.active):hover {
-			background: #e5e7eb;
-		}
+        .tab-btn:not(.active):hover {
+            background: #e5e7eb;
+        }
 
-		/* Rating block */
-		.rating-stars {
-			background: #f9fafb;
-			padding: 14px;
-			border-radius: 14px;
-			justify-content: center;
-		}
+        /* Rating block */
+        .rating-stars {
+            background: #f9fafb;
+            padding: 14px;
+            border-radius: 14px;
+            justify-content: center;
+        }
 
-		/* Textarea polish */
-		textarea {
-			transition: border 0.2s ease, box-shadow 0.2s ease;
-		}
+        /* Textarea polish */
+        textarea {
+            transition: border 0.2s ease, box-shadow 0.2s ease;
+        }
 
-		textarea:focus {
-			outline: none;
-			border-color: #6366f1;
-			box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
-		}
+        textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
+        }
 
-		/* Success / warning */
-		.coming-soon {
-			font-size: 14.5px;
-		}
+        /* Success / warning */
+        .coming-soon {
+            font-size: 14.5px;
+        }
 
-		.success-msg {
-			font-weight: 600;
-		}
+        .success-msg {
+            font-weight: 600;
+        }
 
-		/* Instructor list scroll (scales well) */
-		.instructor-list {
-			max-height: 360px;
-			overflow-y: auto;
-			padding-right: 6px;
-		}
-	</style>
+        /* Instructor list scroll (scales well) */
+        .instructor-list {
+            max-height: 360px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        /* ===============================
+🔥 MAIN DASHBOARD POLISH
+================================ */
+
+        /* MAIN CONTAINER */
+        .main {
+            padding: 24px;
+        }
+
+        /* CARD IMPROVEMENT */
+        .feedback-card {
+            max-width: 900px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: 0.25s ease;
+        }
+
+        /* HOVER FEEL (SUBTLE) */
+        .feedback-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* HEADER */
+        .feedback-card h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .feedback-card p {
+            font-size: 14px;
+        }
+
+        /* ===============================
+TABS IMPROVE
+================================ */
+        .feedback-tabs {
+            margin-top: 24px;
+            background: #f3f4f6;
+            border-radius: 12px;
+            padding: 6px;
+        }
+
+        .tab-btn {
+            font-size: 14px;
+            padding: 10px;
+            border-radius: 10px;
+            transition: 0.25s ease;
+        }
+
+        .tab-btn.active {
+            background: #4f46e5;
+            color: #fff;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: #e5e7eb;
+        }
+
+        /* ===============================
+SELECT ITEMS (COURSE / TEACHER)
+================================ */
+        .select-item {
+            margin-top: 12px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            background: #ffffff;
+            transition: all 0.2s ease;
+        }
+
+        .select-item:hover {
+            background: #eef2ff;
+            border-color: #6366f1;
+        }
+
+        /* ===============================
+BUTTON IMPROVE
+================================ */
+        .submit-btn {
+            background: #4f46e5;
+            transition: 0.2s ease;
+        }
+
+        .submit-btn:hover {
+            background: #4338ca;
+            transform: translateY(-1px);
+        }
+
+        /* ===============================
+STAR RATING
+================================ */
+        .rating-stars {
+            margin: 16px 0;
+            padding: 14px;
+            border-radius: 14px;
+            background: #f9fafb;
+        }
+
+        .rating-stars i {
+            font-size: 26px;
+            transition: 0.2s;
+        }
+
+        .rating-stars i:hover {
+            transform: scale(1.15);
+        }
+
+        /* ===============================
+TEXTAREA
+================================ */
+        textarea {
+            margin-top: 14px;
+            resize: none;
+        }
+
+        textarea:focus {
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        /* ===============================
+SCROLL AREA
+================================ */
+        .instructor-list {
+            max-height: 360px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        /* CUSTOM SCROLLBAR */
+        .instructor-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .instructor-list::-webkit-scrollbar-thumb {
+            background: #c7d2fe;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+
+            .feedback-card {
+                padding: 18px;
+                border-radius: 14px;
+            }
+
+            .feedback-card h2 {
+                font-size: 20px;
+            }
+
+            .tab-btn {
+                font-size: 13px;
+                padding: 8px;
+            }
+
+            .select-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .select-item .submit-btn {
+                width: 100%;
+            }
+
+            .rating-stars {
+                justify-content: center;
+            }
+
+            textarea {
+                min-height: 110px;
+            }
+
+        }
+
+
+        /* ================= MOBILE ================= */
+        @media (max-width: 768px) {
+
+            /* MAIN */
+            .main {
+                margin-left: 0 !important;
+                margin-top: 60px;
+                padding: 14px;
+            }
+
+            /* TOPBAR */
+            .student-topbar {
+                left: 0 !important;
+                width: 100%;
+                padding: 0 12px;
+            }
+
+            .student-name {
+                display: none;
+            }
+
+            /* SIDEBAR */
+            .sidebar {
+                transform: translateX(-100%);
+                width: 240px;
+            }
+
+            .sidebar.mobile-show {
+                transform: translateX(0);
+            }
+
+        }
+    </style>
 </head>
 
 <body>
 
-	<!-- ===== SIDEBAR ===== -->
-	<div class="sidebar collapsed" id="sidebar">
-		<button class="toggle-btn" id="toggle">
-			<i class="bi bi-chevron-right"></i>
-		</button>
+    <!-- ===== SIDEBAR ===== -->
+    <div class="sidebar" id="sidebar">
+        <button class="mobile-close" id="closeSidebar">
+            <i class="bi bi-x-lg"></i>
+        </button>
+        <button class="toggle-btn" id="toggle">
+            <i class="bi bi-chevron-right"></i>
+        </button>
 
-		<div class="sidebar-brand">
-			<a href="/student-dashboard">
-				<img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
-			</a>
-			<h2 class="platform-name">
-				EduPlatform
-			</h2>
-		</div>
+        <div class="sidebar-brand">
+            <a href="/student-dashboard">
+                <img th:src="@{/images/logo.png}" class="platform-logo" alt="Logo">
+            </a>
+            <h2 class="platform-name">
+                EduPlatform
+            </h2>
+        </div>
 
-		<a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
-		<a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
-		<a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
-		<a th:href="@{/student-feedback}" class="active"><i class="bi bi-person-video3"></i><span>Instructor
-				Overview</span></a>
-		<a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
-		<a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
-		<a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
-		<a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a> 
-		<a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
-		<a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+        <a th:href="@{/student-dashboard}"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+        <a th:href="@{/student-course}"><i class="bi bi-search"></i><span>Explore Courses</span></a>
+        <a th:href="@{/student-learning}"><i class="bi bi-book-half"></i><span>My Learning</span></a>
+        <a th:href="@{/student-feedback}" class="active"><i class="bi bi-person-video3"></i><span>Instructor
+                Overview</span></a>
+        <a th:href="@{/student-stuff}"><i class="bi bi-graph-up"></i><span>Classroom</span></a>
+        <a th:href="@{/student-chat}"><i class="bi bi-chat"></i><span>Doubts Chat</span></a>
+        <a th:href="@{/student-internships}"><i class="bi bi-briefcase"></i><span>Internships</span></a>
+        <a th:href="@{/student-search}"><i class="bi bi-search"></i><span>Search Users</span></a>
+        <a th:href="@{/student-profile}"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+        <a th:href="@{/student-login}"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
 
-	</div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="student-topbar">
+        <button id="mobileToggle" class="mobile-btn">
+            <i class="bi bi-list"></i>
+        </button>
+        <span class="page-title">Instructor Overview</span>
+        <div class="topbar-right">
+            <div class="notif">
+                <a th:href="@{/student-notification}">
+                    <i class="bi bi-bell"></i>
+                    <span class="dot"></span> </a>
+            </div>
 
-	<!-- ===== TOPBAR ===== -->
-	<div class="student-topbar">
-		<span class="page-title">Instructor Overview</span>
-		<div class="topbar-right">
-			<div class="notif">
-				<a th:href="@{/student-notification}">
-					<i class="bi bi-bell"></i>
-					<span class="dot"></span> </a>
-			</div>
+            <div class="profile">
+                <a th:href="@{/student-profile}" class="profile-link">
 
-			<div class="profile">
-				<a th:href="@{/student-profile}" class="profile-link">
-
-					<img th:src="${loggedStudent != null and loggedStudent.profileImage != null
+                    <img th:src="${loggedStudent != null and loggedStudent.profileImage != null
                 ? loggedStudent.profileImage
                 : '/images/default.jpg'}" alt="Profile">
 
-					<span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
-						Student
-					</span>
+                    <span class="student-name" th:text="${loggedStudent != null ? loggedStudent.fullname : 'Student'}">
+                        Student
+                    </span>
 
-				</a>
-			</div>
-		</div>
+                </a>
+            </div>
+        </div>
 
 
-	</div>
+    </div>
 
-	<div class="main">
-		<div class="feedback-card">
+    <div class="main">
+        <div class="feedback-card">
 
-			<h2>Share Your Experience</h2>
-			<p style="color:#6b7280;margin-top:6px">
-				Your feedback helps improve course quality and teaching standards.
-			</p>
+            <h2>Share Your Experience</h2>
+            <p style="color:#6b7280;margin-top:6px">
+                Your feedback helps improve course quality and teaching standards.
+            </p>
 
-			<!-- ================= TABS ================= -->
-			<div class="feedback-tabs">
-				<button class="tab-btn active" data-tab="course">
-					<i class="bi bi-journal-bookmark"></i> Course Feedback
-				</button>
+            <!-- ================= TABS ================= -->
+            <div class="feedback-tabs">
+                <button class="tab-btn active" data-tab="course">
+                    <i class="bi bi-journal-bookmark"></i> Course Feedback
+                </button>
 
-				<button class="tab-btn" data-tab="teacher">
-					<i class="bi bi-person-video3"></i> Instructor Feedback
-				</button>
-			</div>
+                <button class="tab-btn" data-tab="teacher">
+                    <i class="bi bi-person-video3"></i> Instructor Feedback
+                </button>
+            </div>
 
-			<!-- ================= COURSE TAB ================= -->
-			<div class="tab-content active" id="course">
+            <!-- ================= COURSE TAB ================= -->
+            <div class="tab-content active" id="course">
 
-				<!-- NO COURSE SELECTED -->
-				<div th:if="${!courseSelected}" class="coming-soon">
-					<h3>Select a course</h3>
-					<p>You can give feedback only for completed courses.</p>
+                <!-- NO COURSE SELECTED -->
+                <div th:if="${!courseSelected}" class="coming-soon">
+                    <h3>Select a course</h3>
+                    <p>You can give feedback only for completed courses.</p>
 
-					<div th:if="${completedCourses != null}" th:each="c : ${completedCourses}" class="select-item">
-						<div>
-							<strong th:text="${c.title}"></strong><br>
-							<small th:text="${c.teacher.firstname+' '+c.teacher.lastname}"></small>
-						</div>
-						<a class="submit-btn" th:href="@{/student-feedback/{id}(id=${c.courseId})}">
-							<i class="bi bi-chat-dots-fill"></i> Give Feedback
-						</a>
-					</div>
-				</div>
+                    <div th:if="${completedCourses != null}" th:each="c : ${completedCourses}" class="select-item">
+                        <div>
+                            <strong th:text="${c.title}"></strong><br>
+                            <small th:text="${c.teacher.firstname+' '+c.teacher.lastname}"></small>
+                        </div>
+                        <a class="submit-btn" th:href="@{/student-feedback/{id}(id=${c.courseId})}">
+                            <i class="bi bi-chat-dots-fill"></i> Give Feedback
+                        </a>
+                    </div>
+                </div>
 
-				<!-- COURSE SELECTED -->
-				<div th:if="${courseSelected}">
-					<h3 th:text="${course.title}"></h3>
+                <!-- COURSE SELECTED -->
+                <div th:if="${courseSelected}">
+                    <h3 th:text="${course.title}"></h3>
 
-					<div th:if="${!courseFeedbackSubmitted}">
-						<form th:action="@{/student-feedback/{id}(id=${course.courseId})}" method="post">
+                    <div th:if="${!courseFeedbackSubmitted}">
+                        <form th:action="@{/student-feedback/{id}(id=${course.courseId})}" method="post">
 
-							<!-- ⭐ HIDDEN RATING FIELD -->
-							<input type="hidden" name="rating" id="ratingValue" value="0" />
+                            <!-- ⭐ HIDDEN RATING FIELD -->
+                            <input type="hidden" name="rating" id="ratingValue" value="0" />
 
-							<div class="rating-stars" data-rating>
-								<i class="bi bi-star-fill"></i>
-								<i class="bi bi-star-fill"></i>
-								<i class="bi bi-star-fill"></i>
-								<i class="bi bi-star-fill"></i>
-								<i class="bi bi-star-fill"></i>
-							</div>
+                            <div class="rating-stars" data-rating>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                                <i class="bi bi-star-fill"></i>
+                            </div>
 
-							<textarea name="comment" placeholder="What did you like? What can be improved?"
-								required></textarea>
+                            <textarea name="comment" placeholder="What did you like? What can be improved?"
+                                required></textarea>
 
-							<button class="submit-btn">
-								<i class="bi bi-send-fill"></i> Submit Course Feedback
-							</button>
+                            <button class="submit-btn">
+                                <i class="bi bi-send-fill"></i> Submit Course Feedback
+                            </button>
 
-						</form>
-					</div>
+                        </form>
+                    </div>
 
-					<div th:if="${courseFeedbackSubmitted}" class="coming-soon success-msg">
-						✅ Thanks for your course feedback!
-					</div>
-				</div>
+                    <div th:if="${courseFeedbackSubmitted}" class="coming-soon success-msg">
+                        ✅ Thanks for your course feedback!
+                    </div>
+                </div>
 
-			</div>
+            </div>
 
-			<!-- ================= TEACHER TAB ================= -->
-			<div class="tab-content" id="teacher">
+            <!-- ================= TEACHER TAB ================= -->
+            <div class="tab-content" id="teacher">
 
-				<!-- ===== LIST MODE ===== -->
-				<div th:if="${feedbackMode == 'LIST'}">
+                <!-- ===== LIST MODE ===== -->
+                <div th:if="${feedbackMode == 'LIST'}">
 
-					<h3>Select an Instructor</h3>
+                    <h3>Select an Instructor</h3>
 
-					<div th:if="${completedTeachers == null or completedTeachers.isEmpty()}" class="coming-soon">
-						❌ You haven’t completed any course yet.
-					</div>
+                    <div th:if="${completedTeachers == null or completedTeachers.isEmpty()}" class="coming-soon">
+                        ❌ You haven’t completed any course yet.
+                    </div>
 
-					<div class="instructor-list">
-						<div th:each="t : ${completedTeachers}" class="select-item">
-							<div>
-								<strong th:text="${t.firstname + ' ' + t.lastname}"></strong><br>
-								<small th:text="${t.email}"></small>
-							</div>
-							<a class="submit-btn"
-								th:href="@{/student-feedback/instructor/{id}(id=${t.teacherId},tab='teacher')}">
-								Give Instructor Feedback
-							</a>
-						</div>
-					</div>
+                    <div class="instructor-list">
+                        <div th:each="t : ${completedTeachers}" class="select-item">
+                            <div>
+                                <strong th:text="${t.firstname + ' ' + t.lastname}"></strong><br>
+                                <small th:text="${t.email}"></small>
+                            </div>
+                            <a class="submit-btn"
+                                th:href="@{/student-feedback/instructor/{id}(id=${t.teacherId},tab='teacher')}">
+                                Give Instructor Feedback
+                            </a>
+                        </div>
+                    </div>
 
-				</div>
+                </div>
 
-				<!-- ===== DIRECT MODE ===== -->
-				<div th:if="${feedbackMode == 'DIRECT'}">
+                <!-- ===== DIRECT MODE ===== -->
+                <div th:if="${feedbackMode == 'DIRECT'}">
 
-					<div th:if="${feedbackMode == 'DIRECT' and teacher != null}">
-						<h3 th:text="${teacher.firstname + ' ' + teacher.lastname}"></h3>
-					</div>
+                    <div th:if="${feedbackMode == 'DIRECT' and teacher != null}">
+                        <h3 th:text="${teacher.firstname + ' ' + teacher.lastname}"></h3>
+                    </div>
 
-					<div th:if="${!canRateInstructor}" class="coming-soon">
-						❌ You can rate this instructor only after completing their course.
-					</div>
+                    <div th:if="${!canRateInstructor}" class="coming-soon">
+                        ❌ You can rate this instructor only after completing their course.
+                    </div>
 
-					<div th:if="${canRateInstructor == true}">
+                    <div th:if="${canRateInstructor == true}">
 
-						<div th:if="${instructorFeedbackGiven}" class="coming-soon success-msg">
-							✅ You’ve already rated this instructor.
-						</div>
+                        <div th:if="${instructorFeedbackGiven}" class="coming-soon success-msg">
+                            ✅ You’ve already rated this instructor.
+                        </div>
 
-						<div th:if="${canRateInstructor == true and !instructorFeedbackGiven}">
-							<form th:action="@{/student-feedback/instructor/{id}(id=${teacher.teacherId})}"
-								method="post">
+                        <div th:if="${canRateInstructor == true and !instructorFeedbackGiven}">
+                            <form th:action="@{/student-feedback/instructor/{id}(id=${teacher.teacherId})}"
+                                method="post">
 
-								<input type="hidden" name="rating" id="instructorRating" />
+                                <input type="hidden" name="rating" id="instructorRating" />
 
-								<div class="rating-stars" data-instructor-rating>
-									<i class="bi bi-star-fill"></i>
-									<i class="bi bi-star-fill"></i>
-									<i class="bi bi-star-fill"></i>
-									<i class="bi bi-star-fill"></i>
-									<i class="bi bi-star-fill"></i>
-								</div>
+                                <div class="rating-stars" data-instructor-rating>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
 
-								<textarea name="comment" placeholder="How was the instructor’s teaching?"
-									required></textarea>
+                                <textarea name="comment" placeholder="How was the instructor’s teaching?"
+                                    required></textarea>
 
-								<button class="submit-btn">
-									<i class="bi bi-send-fill"></i> Submit Instructor Feedback
-								</button>
-							</form>
-						</div>
+                                <button class="submit-btn">
+                                    <i class="bi bi-send-fill"></i> Submit Instructor Feedback
+                                </button>
+                            </form>
+                        </div>
 
-					</div>
+                    </div>
 
-				</div>
+                </div>
 
-			</div>
+            </div>
 
-		</div>
-	</div>
+        </div>
+    </div>
 
-	<script>
-		/* ===============================
-		   ⭐ STAR RATING (COURSE)
-		================================ */
-		document.querySelectorAll("[data-rating] i").forEach((star, index, all) => {
-			star.addEventListener("click", () => {
-				all.forEach((s, i) =>
-					s.classList.toggle("active", i <= index)
-				);
+    <script>
+        /* ===============================
+           ⭐ STAR RATING (COURSE)
+        ================================ */
+        document.querySelectorAll("[data-rating] i").forEach((star, index, all) => {
+            star.addEventListener("click", () => {
+                all.forEach((s, i) =>
+                    s.classList.toggle("active", i <= index)
+                );
 
-				const ratingInput = document.getElementById("ratingValue");
-				if (ratingInput) {
-					ratingInput.value = index + 1;
-				}
-			});
-		});
+                const ratingInput = document.getElementById("ratingValue");
+                if (ratingInput) {
+                    ratingInput.value = index + 1;
+                }
+            });
+        });
 
-		/* ===============================
-		   ⭐ STAR RATING (INSTRUCTOR)
-		================================ */
-		document.querySelectorAll("[data-instructor-rating] i")
-			.forEach((star, index, all) => {
-				star.addEventListener("click", () => {
-					all.forEach((s, i) =>
-						s.classList.toggle("active", i <= index)
-					);
+        /* ===============================
+           ⭐ STAR RATING (INSTRUCTOR)
+        ================================ */
+        document.querySelectorAll("[data-instructor-rating] i")
+            .forEach((star, index, all) => {
+                star.addEventListener("click", () => {
+                    all.forEach((s, i) =>
+                        s.classList.toggle("active", i <= index)
+                    );
 
-					const instructorInput = document.getElementById("instructorRating");
-					if (instructorInput) {
-						instructorInput.value = index + 1;
-					}
-				});
-			});
+                    const instructorInput = document.getElementById("instructorRating");
+                    if (instructorInput) {
+                        instructorInput.value = index + 1;
+                    }
+                });
+            });
 
-		/* ===============================
-		   📑 TAB HANDLING (COURSE / TEACHER)
-		================================ */
-		function activateTab(tabId) {
-			document.querySelectorAll(".tab-btn")
-				.forEach(b => b.classList.remove("active"));
+        /* ===============================
+           📑 TAB HANDLING (COURSE / TEACHER)
+        ================================ */
+        function activateTab(tabId) {
+            document.querySelectorAll(".tab-btn")
+                .forEach(b => b.classList.remove("active"));
 
-			document.querySelectorAll(".tab-content")
-				.forEach(c => c.classList.remove("active"));
+            document.querySelectorAll(".tab-content")
+                .forEach(c => c.classList.remove("active"));
 
-			document.querySelector(`.tab-btn[data-tab="${tabId}"]`)
-				?.classList.add("active");
+            document.querySelector(`.tab-btn[data-tab="${tabId}"]`)
+                ?.classList.add("active");
 
-			document.getElementById(tabId)
-				?.classList.add("active");
-		}
+            document.getElementById(tabId)
+                ?.classList.add("active");
+        }
 
-		// Click on tab
-		document.querySelectorAll(".tab-btn").forEach(btn => {
-			btn.addEventListener("click", () => {
-				const tab = btn.dataset.tab;
-				activateTab(tab);
-				history.replaceState(null, "", "?tab=" + tab);
-			});
-		});
+        // Click on tab
+        document.querySelectorAll(".tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const tab = btn.dataset.tab;
+                activateTab(tab);
+                history.replaceState(null, "", "?tab=" + tab);
+            });
+        });
 
-		// Auto-open tab from URL or default
-		const params = new URLSearchParams(window.location.search);
-		activateTab(params.get("tab") || "course");
+        // Auto-open tab from URL or default
+        const params = new URLSearchParams(window.location.search);
+        activateTab(params.get("tab") || "course");
 
-		/* ===============================
-		   📌 SIDEBAR (UNCHANGED)
-		================================ */
-		const sidebar = document.getElementById("sidebar");
-		const toggle = document.getElementById("toggle");
-		const icon = toggle.querySelector("i");
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
 
-		toggle.addEventListener("click", () => {
-			if (window.innerWidth <= 768) {
-				sidebar.classList.toggle("mobile-show");
-			} else {
-				sidebar.classList.toggle("collapsed");
-				icon.classList.toggle("bi-chevron-right");
-				icon.classList.toggle("bi-chevron-left");
-			}
-		});
-	</script>
+            const sidebar = document.getElementById("sidebar");
+            const toggle = document.getElementById("toggle"); // desktop
+            const mobileToggle = document.getElementById("mobileToggle"); // mobile
+            const closeBtn = document.getElementById("closeSidebar");
+            const overlay = document.getElementById("overlay");
+            const icon = toggle ? toggle.querySelector("i") : null;
+
+            if (window.innerWidth > 768) {
+                sidebar.classList.add("collapsed");
+            } else {
+                sidebar.classList.remove("collapsed");
+                sidebar.classList.remove("mobile-show");
+            }
+
+            if (toggle) {
+                toggle.addEventListener("click", () => {
+                    if (window.innerWidth > 768) {
+                        sidebar.classList.toggle("collapsed");
+
+                        if (icon) {
+                            icon.classList.toggle("bi-chevron-right");
+                            icon.classList.toggle("bi-chevron-left");
+                        }
+                    }
+                });
+            }
+
+            if (mobileToggle) {
+                mobileToggle.addEventListener("click", () => {
+                    sidebar.classList.add("mobile-show");
+                    overlay.classList.add("show");
+                });
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove("mobile-show");
+                overlay.classList.remove("show");
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener("click", closeSidebar);
+            }
+
+            if (overlay) {
+                overlay.addEventListener("click", closeSidebar);
+            }
+
+            document.querySelectorAll(".sidebar a").forEach(link => {
+                link.addEventListener("click", () => {
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+
+        });
+
+    </script>
 </body>
 
 </html>
