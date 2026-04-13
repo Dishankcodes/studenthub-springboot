@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Student Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -196,6 +197,102 @@
             color: gray;
             padding: 20px;
         }
+
+        @media (max-width: 768px) {
+
+            /* ===== PAGE ===== */
+            body {
+                padding: 12px;
+            }
+
+            /* ===== CARD ===== */
+            .profile-card {
+                padding: 18px;
+                margin: 14px auto;
+                border-radius: 14px;
+            }
+
+            /* ===== TOP ACTIONS ===== */
+            .top-actions {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+
+            .top-actions .btn,
+            .top-actions a,
+            .top-actions form button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            /* ===== HEADER ===== */
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 12px;
+            }
+
+            .profile-header img {
+                width: 90px;
+                height: 90px;
+            }
+
+            .profile-header h3 {
+                font-size: 18px;
+            }
+
+            .profile-header p {
+                font-size: 13px;
+            }
+
+            /* ===== CONNECTION LINK ===== */
+            .profile-header a {
+                justify-content: center;
+                font-size: 13px;
+            }
+
+            /* ===== INFO GRID ===== */
+            .profile-info {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .info-box {
+                padding: 12px;
+            }
+
+            .info-box strong {
+                font-size: 14px;
+            }
+
+            /* ===== BUTTONS ===== */
+            .btn,
+            button {
+                width: 100%;
+                font-size: 13px;
+                padding: 10px;
+            }
+
+            /* ===== STATUS TEXT ===== */
+            .pending {
+                text-align: center;
+                display: block;
+                width: 100%;
+            }
+        }
+        .btn-connect {
+    background: #6d28d9;
+    color: #fff;
+}
+.btn-chat {
+    background: #10b981;
+    color: #fff;
+}
+.btn-back {
+    background: #e5e7eb;
+    color: #111;
+}
     </style>
 
 </head>

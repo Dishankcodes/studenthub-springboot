@@ -2,192 +2,269 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-	<meta charset="UTF-8">
-	<title>Notifications | EduPlatform</title>
+    <meta charset="UTF-8">
+    <title>Notifications | EduPlatform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-	<!-- Bootstrap Icons -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-	<style>
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-			font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-		}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        }
 
-		body {
-			background: #f4f7ff;
-		}
+        body {
+            background: #f4f7ff;
+        }
 
-		.main {
-			margin-left: 240px;
-			margin-top: 56px;
-			padding: 20px;
-		}
+        .main {
+            margin-left: 240px;
+            margin-top: 56px;
+            padding: 20px;
+        }
 
-		h3 {
-			margin-bottom: 15px;
-			display: flex;
-			align-items: center;
-			gap: 8px;
-		}
+        h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-		.card {
-			background: #fff;
-			padding: 14px;
-			border-radius: 12px;
-			margin-bottom: 12px;
-			display: flex;
-			align-items: center;
-			gap: 12px;
-			transition: 0.2s;
-		}
+        .card {
+            background: #fff;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.2s;
+        }
 
-		.card:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-		}
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
 
-		.profile-img {
-			width: 45px;
-			height: 45px;
-			border-radius: 50%;
-		}
+        .profile-img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+        }
 
-		.user-info {
-			flex: 1;
-		}
+        .user-info {
+            flex: 1;
+        }
 
-		.name {
-			font-weight: 600;
-		}
+        .name {
+            font-weight: 600;
+        }
 
-		.sub-text {
-			font-size: 12px;
-			color: gray;
-		}
+        .sub-text {
+            font-size: 12px;
+            color: gray;
+        }
 
-		.pending {
-			color: #f59e0b;
-		}
+        .pending {
+            color: #f59e0b;
+        }
 
-		.actions {
-			display: flex;
-			gap: 8px;
-		}
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
 
-		.btn {
-			border: none;
-			padding: 6px 10px;
-			border-radius: 8px;
-			font-size: 12px;
-			cursor: pointer;
-		}
+        .btn {
+            border: none;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
 
-		.btn-accept {
-			background: #22c55e;
-			color: white;
-		}
+        .btn-accept {
+            background: #22c55e;
+            color: white;
+        }
 
-		.btn-reject {
-			background: #ef4444;
-			color: white;
-		}
+        .btn-reject {
+            background: #ef4444;
+            color: white;
+        }
 
-		.btn-cancel {
-			background: #64748b;
-			color: white;
-		}
+        .btn-cancel {
+            background: #64748b;
+            color: white;
+        }
 
-		.empty {
-			text-align: center;
-			opacity: 0.6;
-			margin-top: 10px;
-		}
-	</style>
+        .empty {
+            text-align: center;
+            opacity: 0.6;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+
+            /* ===== MAIN ===== */
+            .main {
+                margin-left: 0 !important;
+                padding: 14px;
+            }
+
+            /* ===== HEADINGS ===== */
+            h3 {
+                font-size: 16px;
+                margin-bottom: 10px;
+            }
+
+            /* ===== CARD ===== */
+            .card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 12px;
+                gap: 10px;
+            }
+
+            /* ===== PROFILE ===== */
+            .profile-img {
+                width: 40px;
+                height: 40px;
+            }
+
+            .user-info {
+                width: 100%;
+            }
+
+            .name {
+                font-size: 14px;
+            }
+
+            .sub-text {
+                font-size: 12px;
+            }
+
+            /* ===== ACTIONS ===== */
+            .actions {
+                width: 100%;
+                display: flex;
+                gap: 8px;
+            }
+
+            /* Buttons full width */
+            .btn {
+                flex: 1;
+                padding: 10px;
+                font-size: 13px;
+                display: flex;
+                justify-content: center;
+            }
+
+            /* ===== SENT REQUEST BUTTON FIX ===== */
+            .card form {
+                width: 100%;
+            }
+
+            .btn-cancel {
+                width: 100%;
+            }
+
+            /* ===== EMPTY STATE ===== */
+            .empty {
+                font-size: 14px;
+                padding: 20px 10px;
+            }
+        }
+
+        .card {
+            border: 1px solid #eef1f7;
+        }
+    </style>
 </head>
 
 <body>
 
-	<div class="main">
+    <div class="main">
 
-		<!-- 🔔 INCOMING -->
-		<h3><i class="bi bi-inbox"></i> Incoming Requests</h3>
+        <!-- 🔔 INCOMING -->
+        <h3><i class="bi bi-inbox"></i> Incoming Requests</h3>
 
-		<div th:if="${receivedRequests == null or #lists.isEmpty(receivedRequests)}" class="empty">
-			No incoming requests
-		</div>
+        <div th:if="${receivedRequests == null or #lists.isEmpty(receivedRequests)}" class="empty">
+            No incoming requests
+        </div>
 
-		<div th:each="req : ${receivedRequests}" class="card">
+        <div th:each="req : ${receivedRequests}" class="card">
 
-			<!-- IMAGE -->
-			<img th:src="${imageMap[req.sender.id] != null ? imageMap[req.sender.id] : '/images/default.jpg'}"
-				class="profile-img">
+            <!-- IMAGE -->
+            <img th:src="${imageMap[req.sender.id] != null ? imageMap[req.sender.id] : '/images/default.jpg'}"
+                class="profile-img">
 
-			<!-- INFO -->
-			<div class="user-info">
-				<div class="name" th:text="${nameMap[req.sender.id]}"></div>
-				<div class="sub-text">
-					<i class="bi bi-person-plus"></i> wants to connect with you
-				</div>
-			</div>
+            <!-- INFO -->
+            <div class="user-info">
+                <div class="name" th:text="${nameMap[req.sender.id]}"></div>
+                <div class="sub-text">
+                    <i class="bi bi-person-plus"></i> wants to connect with you
+                </div>
+            </div>
 
-			<!-- ACTIONS -->
-			<div class="actions">
+            <!-- ACTIONS -->
+            <div class="actions">
 
-				<!-- ACCEPT -->
-				<form action="/connection/accept" method="post">
-					<input type="hidden" name="id" th:value="${req.id}">
-					<button class="btn btn-accept">
-						<i class="bi bi-check-lg"></i>
-					</button>
-				</form>
+                <!-- ACCEPT -->
+                <form action="/connection/accept" method="post">
+                    <input type="hidden" name="id" th:value="${req.id}">
+                    <button class="btn btn-accept">
+                        <i class="bi bi-check-lg"></i>Accept
+                    </button>
+                </form>
 
-				<!-- REJECT -->
-				<form action="/connection/reject" method="post">
-					<input type="hidden" name="id" th:value="${req.id}">
-					<button class="btn btn-reject">
-						<i class="bi bi-x-lg"></i>
-					</button>
-				</form>
+                <!-- REJECT -->
+                <form action="/connection/reject" method="post">
+                    <input type="hidden" name="id" th:value="${req.id}">
+                    <button class="btn btn-reject">
+                        <i class="bi bi-x-lg"></i>Reject
+                    </button>
+                </form>
 
-			</div>
+            </div>
 
-		</div>
+        </div>
 
-		<!-- 📤 SENT -->
-		<h3 style="margin-top:25px;"><i class="bi bi-send"></i> Sent Requests</h3>
+        <!-- 📤 SENT -->
+        <h3 style="margin-top:25px;"><i class="bi bi-send"></i> Sent Requests</h3>
 
-		<div th:if="${sentRequests == null or #lists.isEmpty(sentRequests)}" class="empty">
-			No sent requests
-		</div>
+        <div th:if="${sentRequests == null or #lists.isEmpty(sentRequests)}" class="empty">
+            No sent requests
+        </div>
 
-		<div th:each="req : ${sentRequests}" class="card">
+        <div th:each="req : ${sentRequests}" class="card">
 
-			<!-- IMAGE -->
-			<img th:src="${imageMap[req.receiver.id] != null ? imageMap[req.receiver.id] : '/images/default.jpg'}"
-				class="profile-img">
+            <!-- IMAGE -->
+            <img th:src="${imageMap[req.receiver.id] != null ? imageMap[req.receiver.id] : '/images/default.jpg'}"
+                class="profile-img">
 
-			<!-- INFO -->
-			<div class="user-info">
-				<div class="name" th:text="${nameMap[req.receiver.id]}"></div>
-				<div class="sub-text pending">
-					<i class="bi bi-clock-history"></i> Request Sent
-				</div>
-			</div>
+            <!-- INFO -->
+            <div class="user-info">
+                <div class="name" th:text="${nameMap[req.receiver.id]}"></div>
+                <div class="sub-text pending">
+                    <i class="bi bi-clock-history"></i> Request Sent
+                </div>
+            </div>
 
-			<!-- ACTION -->
-			<form action="/connection/cancel" method="post">
-				<input type="hidden" name="id" th:value="${req.id}">
-				<button class="btn btn-cancel">
-					<i class="bi bi-x-circle"></i>
-				</button>
-			</form>
+            <!-- ACTION -->
+            <form action="/connection/cancel" method="post">
+                <input type="hidden" name="id" th:value="${req.id}">
+                <button class="btn btn-cancel">
+                    <i class="bi bi-x-circle"></i>
+                </button>
+            </form>
 
-		</div>
+        </div>
 
-	</div>
+    </div>
 
 </body>
 
