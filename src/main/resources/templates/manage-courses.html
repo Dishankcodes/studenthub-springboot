@@ -17,11 +17,11 @@
             --bs-table-color: #d1d5db;
             --bs-table-border-color: rgba(255, 255, 255, 0.08);
         }
-        
+
         .home-section .table>:not(caption)>*>* {
             background-color: transparent !important;
         }
-        
+
         .home-section .table {
             margin-top: 1.5rem;
             border-collapse: separate;
@@ -31,11 +31,11 @@
             border-radius: 0.75rem;
             overflow: hidden;
         }
-        
+
         .home-section .table thead {
             background: rgba(255, 255, 255, 0.06);
         }
-        
+
         .home-section .table thead th {
             color: #eaeaf0;
             font-weight: 600;
@@ -43,7 +43,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.12);
             text-align: center;
         }
-        
+
         .home-section .table tbody td {
             color: #d1d5db;
             font-size: 0.88rem;
@@ -51,25 +51,25 @@
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             text-align: center;
         }
-        
+
         .home-section .table-striped>tbody>tr:nth-of-type(odd) {
             background-color: rgba(255, 255, 255, 0.025);
         }
-        
+
         .home-section .table tbody tr:hover {
             background-color: rgba(59, 130, 246, 0.08);
             transition: background 0.2s ease;
         }
-        
+
         .home-section .table-bordered {
             border: 1px solid rgba(255, 255, 255, 0.12);
         }
-        
+
         .home-section .table-bordered th,
         .home-section .table-bordered td {
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        
+
         .home-section .btn-danger {
             background: rgba(239, 68, 68, 0.85);
             border: none;
@@ -77,11 +77,11 @@
             padding: 0.3rem 0.6rem;
             border-radius: 0.4rem;
         }
-        
+
         .home-section .btn-danger:hover {
             background: rgb(239, 68, 68);
         }
-        
+
         .status-select {
             background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -92,18 +92,18 @@
             backdrop-filter: blur(6px);
             min-width: 110px;
         }
-        
+
         .status-select:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
         }
-        
+
         .status-select option {
             background: #0f172a;
             color: #e5e7eb;
         }
-        
+
         .instructor-cell {
             align-items: center;
             justify-content: center;
@@ -112,7 +112,7 @@
             line-height: 1.1;
             min-height: auto;
         }
-        
+
         .by-label {
             font-size: 0.7rem;
             text-transform: uppercase;
@@ -122,7 +122,7 @@
             padding: 0;
             line-height: 1;
         }
-        
+
         .instructor-name {
             font-size: 0.85rem;
             font-weight: 600;
@@ -130,14 +130,14 @@
             margin: 0;
             line-height: 1.1;
         }
-        
+
         .course-stats {
             display: flex;
             gap: 0.35rem;
             justify-content: center;
             flex-wrap: wrap;
         }
-        
+
         .course-stats .stat {
             display: flex;
             align-items: center;
@@ -150,51 +150,52 @@
             color: #e5e7eb;
             backdrop-filter: blur(6px);
         }
-        
+
         .course-stats .stat i {
             font-size: 0.8rem;
             opacity: 0.85;
         }
-        
+
         .course-stats .stat span {
             font-weight: 600;
         }
-        
+
         .course-stats .stat small {
             font-size: 0.65rem;
             opacity: 0.7;
         }
+
         /* Color hints */
-        
+
         .stat-mod {
             border-left: 3px solid #3b82f6;
         }
-        
+
         .stat-les {
             border-left: 3px solid #22c55e;
         }
-        
+
         .stat-quiz {
             border-left: 3px solid #eab308;
         }
-        
+
         .home-section td .btn {
             margin: 0 0.15rem;
         }
-        
+
         @media (max-width: 768px) {
             .home-section .table {
                 font-size: 0.8rem;
             }
         }
-        
+
         .table-controls {
             display: flex;
             gap: 12px;
             margin-bottom: 15px;
             align-items: center;
         }
-        
+
         .search-box {
             display: flex;
             align-items: center;
@@ -203,7 +204,7 @@
             padding: 8px 12px;
             border-radius: 10px;
         }
-        
+
         .search-box input {
             background: transparent;
             border: none;
@@ -212,7 +213,7 @@
             font-size: 13px;
             width: 220px;
         }
-        
+
         .badge {
             display: inline-flex;
             align-items: center;
@@ -223,21 +224,22 @@
             font-weight: 600;
             line-height: 1;
         }
-        
+
         .badge i {
             font-size: 0.75rem;
         }
-        
+
         .type-badge-wrapper {
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        
+
         @media (max-width: 576px) {
             .table thead {
                 display: none;
             }
+
             .table tbody tr {
                 display: block;
                 margin-bottom: 12px;
@@ -245,6 +247,7 @@
                 border-radius: 10px;
                 padding: 10px;
             }
+
             .table tbody td {
                 display: flex;
                 justify-content: space-between;
@@ -252,34 +255,81 @@
                 border: none;
                 padding: 6px 0;
             }
+
             .table tbody td::before {
                 content: attr(data-label);
                 font-weight: 600;
                 color: #9ca3af;
             }
         }
-        
+
         @media (max-width: 576px) {
             td form {
                 flex-direction: column;
                 width: 100%;
             }
+
             td form button {
                 width: 100%;
                 margin-top: 5px;
             }
+
             .course-stats {
                 flex-direction: column;
                 width: 100%;
             }
+
             .course-stats .stat {
                 width: 100%;
                 justify-content: space-between;
             }
+
             td .btn {
                 width: 100%;
                 margin: 3px 0;
             }
+        }
+
+        .result-count {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        .result-count span {
+            color: #6366f1;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 25px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+        }
+
+        .empty-state i {
+            font-size: 38px;
+            color: #6366f1;
+            margin-bottom: 10px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            font-size: 13px;
+            color: #94a3b8;
         }
     </style>
 </head>
@@ -346,7 +396,8 @@
         <div class="content-area">
             <header class="topbar">
                 <button onclick="document.getElementById('sidebar-toggle').checked = 
-                     !document.getElementById('sidebar-toggle').checked" style="background:none;border:none;color:white;font-size:22px;">
+                     !document.getElementById('sidebar-toggle').checked"
+                    style="background:none;border:none;color:white;font-size:22px;">
                     <i class="bi bi-list"></i>
                 </button>
 
@@ -379,6 +430,18 @@
                     </select>
 
                 </div>
+                <div id="resultCount" class="result-count">
+                    Showing <span id="countNumber">0</span> courses
+                </div>
+
+                <div id="emptyState" class="empty-state" style="display:none;">
+                    <i class="bi bi-journal-x"></i>
+                    <h3>No courses found</h3>
+                    <p>Try adjusting your search or filters</p>
+                    <button onclick="resetFilters()" class="btn btn-sm btn-primary mt-2">
+                        Reset Filters
+                    </button>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered table-striped align-middle mt-3">
                         <thead class="table-dark">
@@ -400,7 +463,8 @@
                                     <span class="instructor-name" th:text="${course.instructorName}"></span>
                                 </td>
                                 <td data-label="Status">
-                                    <form th:action="@{/manage-course/status/{id}(id=${course.courseId})}" method="post" class="d-flex gap-1 align-items-center">
+                                    <form th:action="@{/manage-course/status/{id}(id=${course.courseId})}" method="post"
+                                        class="d-flex gap-1 align-items-center">
 
                                         <select name="status" class="status-select">
                                             <option value="DRAFT" th:selected="${course.status.name() == 'DRAFT'}">Draft
@@ -442,9 +506,11 @@
                                     </div>
                                 </td>
                                 <td data-label="Actions">
-                                    <a th:href="@{/admin-course/view/{id}(id=${course.courseId})}" class="btn btn-info btn-sm" title="View Course"> <i class="bi bi-eye"></i>
+                                    <a th:href="@{/admin-course/view/{id}(id=${course.courseId})}"
+                                        class="btn btn-info btn-sm" title="View Course"> <i class="bi bi-eye"></i>
                                     </a>
-                                    <form th:action="@{/manage-course/delete/{id}(id=${course.courseId})}" method="post" class="d-inline" onsubmit="return confirm('Mark this course as deleted?');">
+                                    <form th:action="@{/manage-course/delete/{id}(id=${course.courseId})}" method="post"
+                                        class="d-inline" onsubmit="return confirm('Mark this course as deleted?');">
                                         <button type="submit" class="btn btn-danger btn-sm" title="Delete Course">
                                             <i class="bi bi-trash"></i>
                                         </button>
@@ -458,6 +524,68 @@
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const searchInput = document.getElementById("searchInput");
+            const statusFilter = document.getElementById("statusFilter");
+            const typeFilter = document.getElementById("typeFilter");
+
+            const rows = document.querySelectorAll("tbody tr");
+            const countNumber = document.getElementById("countNumber");
+            const emptyState = document.getElementById("emptyState");
+
+            function filterTable() {
+
+                const searchText = searchInput.value.toLowerCase().trim();
+                const statusValue = statusFilter.value;
+                const typeValue = typeFilter.value;
+
+                let visibleCount = 0;
+
+                rows.forEach(row => {
+
+                    const title = row.querySelector("td:nth-child(2)")?.innerText.toLowerCase() || "";
+                    const status = row.querySelector("select")?.value || "";
+                    const typeText = row.querySelector("td:nth-child(5)")?.innerText.toLowerCase() || "";
+
+                    let matchesSearch = title.includes(searchText);
+                    let matchesStatus = (statusValue === "ALL" || status === statusValue);
+                    let matchesType = (typeValue === "ALL" || typeText.includes(typeValue.toLowerCase()));
+
+                    if (matchesSearch && matchesStatus && matchesType) {
+                        row.style.display = "";
+                        visibleCount++;
+                    } else {
+                        row.style.display = "none";
+                    }
+
+                });
+
+                countNumber.innerText = visibleCount;
+
+                if (visibleCount === 0) {
+                    emptyState.style.display = "flex";
+                } else {
+                    emptyState.style.display = "none";
+                }
+            }
+
+            window.resetFilters = function () {
+                searchInput.value = "";
+                statusFilter.value = "ALL";
+                typeFilter.value = "ALL";
+                filterTable();
+            }
+
+            filterTable();
+
+            searchInput.addEventListener("keyup", filterTable);
+            statusFilter.addEventListener("change", filterTable);
+            typeFilter.addEventListener("change", filterTable);
+
+        });
+    </script>
 </body>
 
 </html>

@@ -341,6 +341,19 @@
                 display: block;
             }
         }
+        
+        .chat-window {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
     </style>
 </head>
 
@@ -692,6 +705,17 @@
                 });
             }
 
+            function scrollToBottom() {
+                const msgBox = document.getElementById("messages");
+                if (msgBox) {
+                    msgBox.scrollTop = msgBox.scrollHeight;
+                }
+            }
+         // AUTO SCROLL FIX
+            scrollToBottom();
+            setTimeout(scrollToBottom, 100);
+            setTimeout(scrollToBottom, 300);
+            setTimeout(scrollToBottom, 600);
         });
     </script>
 

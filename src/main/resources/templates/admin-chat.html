@@ -379,6 +379,26 @@
                 width: 100%;
             }
         }
+        /* FIX CHAT LAYOUT */
+.chat-window {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+/* STICKY INPUT */
+.chat-input {
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+}
     </style>
 </head>
 
@@ -660,6 +680,17 @@
         }
 
     });
+    function scrollToBottom() {
+        const msgBox = document.querySelector(".messages");
+        if (msgBox) {
+            msgBox.scrollTop = msgBox.scrollHeight;
+        }
+    }
+    
+    scrollToBottom();
+    setTimeout(scrollToBottom, 100);
+    setTimeout(scrollToBottom, 300);
+    setTimeout(scrollToBottom, 600);
     </script>
 </body>
 

@@ -307,6 +307,48 @@
                 margin-top: 5px;
             }
         }
+
+        .result-count {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        .result-count span {
+            color: #6366f1;
+            font-weight: 600;
+        }
+
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin-top: 25px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #e2e8f0;
+        }
+
+        .empty-state i {
+            font-size: 38px;
+            color: #6366f1;
+            margin-bottom: 10px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .empty-state p {
+            font-size: 13px;
+            color: #94a3b8;
+        }
     </style>
 </head>
 
@@ -418,6 +460,18 @@
                     </select>
 
                 </div>
+                <div id="resultCount" class="result-count">
+                    Showing <span id="countNumber">0</span> instructors
+                </div>
+
+                <div id="emptyState" class="empty-state" style="display:none;">
+                    <i class="bi bi-person-x"></i>
+                    <h3>No instructors found</h3>
+                    <p>Try adjusting your search or filters</p>
+                    <button onclick="resetFilters()" class="btn btn-sm btn-primary mt-2">
+                        Reset Filters
+                    </button>
+                </div>
                 <div th:if="${statusMessage}" class="status-alert">
                     <i class="bi bi-check-circle-fill"></i>
                     <span th:text="${statusMessage}"></span>
@@ -496,6 +550,65 @@
             }
         }
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const searchInput = document.getElementById("searchInput");
+            const statusFilter = document.getElementById("statusFilter");
+
+            const rows = document.querySelectorAll("tbody tr");
+            const countNumber = document.getElementById("countNumber");
+            const emptyState = document.getElementById("emptyState");
+
+            function filterTable() {
+
+                const searchText = searchInput.value.toLowerCase().trim();
+                const statusValue = statusFilter.value;
+
+                let visibleCount = 0;
+
+                rows.forEach(row => {
+
+                    const name = row.querySelector("td:nth-child(1)")?.innerText.toLowerCase() || "";
+                    const status = row.querySelector("select")?.value || "";
+
+                    let matchesSearch = name.includes(searchText);
+                    let matchesStatus = (statusValue === "ALL" || status === statusValue);
+
+                    if (matchesSearch && matchesStatus) {
+                        row.style.display = "";
+                        visibleCount++;
+                    } else {
+                        row.style.display = "none";
+                    }
+
+                });
+
+                countNumber.innerText = visibleCount;
+
+                if (visibleCount === 0) {
+                    emptyState.style.display = "flex";
+                } else {
+                    emptyState.style.display = "none";
+                }
+            }
+
+            window.resetFilters = function () {
+                searchInput.value = "";
+                statusFilter.value = "ALL";
+                filterTable();
+            }
+
+            filterTable();
+
+            searchInput.addEventListener("keyup", filterTable);
+            statusFilter.addEventListener("change", filterTable);
+
+        });
+    </script>
+
+
+
 </body>
 
 </html>

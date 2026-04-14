@@ -102,6 +102,14 @@ public class TeacherController {
 			chatUserMap.put(e.getStudent().getStudid(), u.getId());
 		}
 
+		List<String> coursesList = enrollments.stream()
+			    .map(e -> e.getCourse())
+			    .filter(c -> c.getStatus().name().equals("PUBLISHED")) 
+			    .map(c -> c.getTitle())
+			    .distinct()
+			    .toList();
+
+		model.addAttribute("coursesList", coursesList);
 		model.addAttribute("chatUserMap", chatUserMap);
 		model.addAttribute("teacher", teacher);
 		model.addAttribute("enrollments", enrollments);

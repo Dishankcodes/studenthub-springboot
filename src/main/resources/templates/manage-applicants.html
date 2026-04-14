@@ -476,7 +476,17 @@
             max-width: 100%;
         }
     }
-    
+
+    .result-count {
+        font-size: 13px;
+        color: #94a3b8;
+        margin-bottom: 10px;
+    }
+
+    .result-count span {
+        color: #6366f1;
+        font-weight: 600;
+    }
 </style>
 </head>
 
@@ -543,14 +553,13 @@
                     <option value="APPLIED">Applied</option>
                     <option value="ACCEPTED">Accepted</option>
                     <option value="REJECTED">Rejected</option>
+                    <option value="SELECTED">Selected</option>
+                    <option value="COMPLETED">Completed</option>
                 </select>
 
-                <select id="testFilter" class="status-select">
-                    <option value="ALL">All Test</option>
-                    <option value="GIVEN">Given</option>
-                    <option value="NOT_GIVEN">Not Given</option>
-                </select>
-
+            </div>
+            <div id="resultCount" class="result-count">
+                Showing <span id="countNumber">0</span> applicants
             </div>
             <table class="table-view">
                 <thead>
@@ -633,7 +642,6 @@
 
                         <td data-label="Direct Selection">
                             <div class="action-group">
-                                <!-- SELECT -->
                                 <form action="/admin/select-student" method="post">
                                     <input type="hidden" name="studentId" th:value="${app.student.studid}">
                                     <input type="hidden" name="internshipId" th:value="${internship.id}">
@@ -647,8 +655,72 @@
                     </tr>
                 </tbody>
             </table>
+            <div id="emptyState" class="empty-state" style="display:none;">
+                <i class="bi bi-people"></i>
+                <h3>No applicants found</h3>
+                <p>Try adjusting your search or filters</p>
+                <button onclick="resetFilters()" class="btn btn-primary mt-2">
+                    Reset Filters
+                </button>
+            </div>
         </div>
     </main>
 </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const searchInput = document.getElementById("searchInput");
+        const statusFilter = document.getElementById("statusFilter");
+
+        const rows = document.querySelectorAll("tbody tr");
+        const emptyState = document.getElementById("emptyState");
+        const countNumber = document.getElementById("countNumber");
+
+        function filterTable() {
+
+            const searchText = searchInput.value.toLowerCase().trim();
+            const statusValue = statusFilter.value;
+
+            let visibleCount = 0;
+
+            rows.forEach(row => {
+
+                const name = row.getAttribute("data-name")?.toLowerCase() || "";
+                const status = row.getAttribute("data-status") || "";
+
+                let matchesSearch = name.includes(searchText);
+                let matchesStatus = (statusValue === "ALL" || status === statusValue);
+
+                if (matchesSearch && matchesStatus) {
+                    row.style.display = "";
+                    visibleCount++;
+                } else {
+                    row.style.display = "none";
+                }
+
+            });
+
+            countNumber.innerText = visibleCount;
+
+            if (visibleCount === 0) {
+                emptyState.style.display = "block";
+            } else {
+                emptyState.style.display = "none";
+            }
+        }
+
+        window.resetFilters = function () {
+            searchInput.value = "";
+            statusFilter.value = "ALL";
+            filterTable();
+        }
+
+        filterTable();
+
+        searchInput.addEventListener("keyup", filterTable);
+        statusFilter.addEventListener("change", filterTable);
+
+    });
+</script>
 
 </html>

@@ -4,6 +4,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -80,7 +81,7 @@ public class AdminController {
 
 	@Autowired
 	private TeacherNotesRepository notesRepo;
-	
+
 	@GetMapping("/admin-dashboard")
 	public String admin_dashboard(HttpSession session, Model model) {
 
@@ -122,6 +123,11 @@ public class AdminController {
 		model.addAttribute("students", students);
 
 		String username = (String) session.getAttribute("adminUsername");
+
+		List<String> collegeList = students.stream().map(Student::getCollege).filter(Objects::nonNull).distinct()
+				.toList();
+
+		model.addAttribute("collegeList", collegeList);
 		model.addAttribute("username", username);
 
 		return "manage-students";
@@ -182,7 +188,6 @@ public class AdminController {
 		if (totalRatings == null)
 			totalRatings = 0L;
 
-		
 		List<Course> courses = courseRepo.findByTeacherTeacherIdAndStatusNot(teacherId, CourseStatus.DELETED);
 
 		if (courses == null)
@@ -202,9 +207,9 @@ public class AdminController {
 
 		ChatUser chatUser = chatUserRepo.findByRefIdAndType(teacherId, UserType.TEACHER).orElse(null);
 
-		 List<TeacherNotes> notes = notesRepo.findByTeacherTeacherId(teacherId);
+		List<TeacherNotes> notes = notesRepo.findByTeacherTeacherId(teacherId);
 
-		 model.addAttribute("notes", notes);
+		model.addAttribute("notes", notes);
 		model.addAttribute("chatUser", chatUser);
 		model.addAttribute("teacher", teacher);
 		model.addAttribute("profile", profile);
@@ -220,17 +225,15 @@ public class AdminController {
 
 		return "admin-instructor-view";
 	}
-	
+
 	@PostMapping("/admin/delete-note")
-	public String deleteNote(@RequestParam Integer noteId,
-	                         @RequestParam Integer teacherId,
-	                         RedirectAttributes ra) {
+	public String deleteNote(@RequestParam Integer noteId, @RequestParam Integer teacherId, RedirectAttributes ra) {
 
-	    notesRepo.deleteById(noteId);
+		notesRepo.deleteById(noteId);
 
-	    ra.addFlashAttribute("msg", "Note deleted successfully");
+		ra.addFlashAttribute("msg", "Note deleted successfully");
 
-	    return "redirect:/admin-instructor-view/" + teacherId;
+		return "redirect:/admin-instructor-view/" + teacherId;
 	}
 
 	@PostMapping("/manage-instructor/status/{id}")
@@ -276,7 +279,6 @@ public class AdminController {
 			return "admin-student-dashboard";
 		}
 
-		
 		List<InternshipApplication> apps = applicationRepo.findByStudent_Studid(id);
 
 		long totalInternships = apps.size();
@@ -305,7 +307,6 @@ public class AdminController {
 
 		long completedCourses = enrollments.stream().filter(e -> e.getCompletedAt() != null).count();
 
-	
 		List<CourseCertificate> certificates = certificateRepo.findByStudentStudid(id);
 
 		long certificateCount = certificates.size();
@@ -328,14 +329,12 @@ public class AdminController {
 	@GetMapping("/admin/view-profile")
 	public String viewUserProfile(@RequestParam Integer userId, Model model) {
 
-	
 		ChatUser user = chatUserRepo.findById(userId).orElse(null);
 
 		if (user == null) {
 			return "redirect:/admin-chat";
 		}
 
-		
 		if (user.getType() == UserType.STUDENT) {
 
 			Integer studentId = user.getRefId();
@@ -343,7 +342,6 @@ public class AdminController {
 			return "redirect:/admin-student-dashboard?id=" + studentId;
 		}
 
-		
 		else if (user.getType() == UserType.TEACHER) {
 
 			Integer teacherId = user.getRefId();

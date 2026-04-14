@@ -430,13 +430,13 @@
         <div class="top-bar">
             <div class="search-box">
                 <i class="bi bi-search"></i>
-                <input type="text" placeholder="Search courses...">
+                <input type="text" id="searchInput" placeholder="Search courses...">
             </div>
 
-            <select>
-                <option>All</option>
-                <option>Published</option>
-                <option>Draft</option>
+            <select id="statusFilter">
+                <option value="ALL">All</option>
+                <option value="PUBLISHED">Published</option>
+                <option value="DRAFT">Draft</option>
             </select>
 
             <a th:href="@{/teacher-creates-course}" class="btn">
@@ -446,8 +446,7 @@
 
         <div class="course-grid">
 
-            <!-- COURSE CARD -->
-            <div class="course-card" th:each="course : ${courses} ">
+            <div class="course-card" th:each="course : ${courses}" th:attr="data-status=${course.status.name()}">
                 <div class="course-thumb">
                     <img th:if="${course.thumbnailURL != null}" th:src="${course.thumbnailURL}">
                     <span th:if="${course.thumbnailURL == null}"> <i class="bi bi-book"></i> </span>
@@ -564,6 +563,44 @@
         }
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const searchInput = document.getElementById("searchInput");
+            const statusFilter = document.getElementById("statusFilter");
+
+            const cards = document.querySelectorAll(".course-card");
+
+            function filterCourses() {
+
+                const searchText = searchInput.value.toLowerCase();
+                const statusValue = statusFilter.value;
+
+                cards.forEach(card => {
+
+                    // Course title
+                    const title = card.querySelector(".course-title").innerText.toLowerCase();
+
+                    // Status from data attribute
+                    const status = card.getAttribute("data-status");
+
+                    let matchesSearch = title.includes(searchText);
+                    let matchesStatus = (statusValue === "ALL" || status === statusValue);
+
+                    if (matchesSearch && matchesStatus) {
+                        card.style.display = "block";
+                    } else {
+                        card.style.display = "none";
+                    }
+
+                });
+            }
+
+            searchInput.addEventListener("keyup", filterCourses);
+            statusFilter.addEventListener("change", filterCourses);
+
+        });
+    </script>
 </body>
 
 </html>

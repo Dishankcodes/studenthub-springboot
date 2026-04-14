@@ -329,6 +329,89 @@
             font-size: 14px;
             padding: 12px 16px;
         }
+
+        .filter-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        /* remove this if unused */
+        .btn-filter {
+            display: none;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+
+            margin-top: 40px;
+            padding: 40px;
+
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 18px;
+            backdrop-filter: blur(12px);
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+
+            color: #e2e8f0;
+        }
+
+        /* ICON */
+        .empty-state i {
+            font-size: 42px;
+            color: #6366f1;
+            margin-bottom: 12px;
+        }
+
+        /* TITLE */
+        .empty-state h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        /* SUBTEXT */
+        .empty-state p {
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        /* SMALL SCREEN */
+        @media (max-width: 576px) {
+            .empty-state {
+                padding: 25px;
+            }
+
+            .empty-state i {
+                font-size: 34px;
+            }
+
+            .empty-state h3 {
+                font-size: 16px;
+            }
+
+            .empty-state p {
+                font-size: 13px;
+            }
+        }
+
+        .result-count {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+
+        .result-count span {
+            color: #6366f1;
+            font-weight: 600;
+        }
     </style>
 </head>
 
@@ -424,29 +507,26 @@
                         <span th:text="${error}"></span>
                     </div>
                 </div>
-                <form method="get" class="filter-bar">
+                <div class="filter-bar">
 
                     <div class="filter-group">
                         <i class="bi bi-search"></i>
-                        <input type="text" name="keyword" placeholder="Search internships..."
-                            th:value="${param.keyword}">
+                        <input type="text" id="searchInput" placeholder="Search internships...">
                     </div>
 
                     <div class="filter-group">
                         <i class="bi bi-geo-alt"></i>
-                        <input type="text" name="location" placeholder="Filter by location..."
-                            th:value="${param.location}">
+                        <input type="text" id="locationInput" placeholder="Filter by location...">
                     </div>
 
-                    <button type="submit" class="btn-filter">
-                        <i class="bi bi-funnel"></i>
-                        Apply
-                    </button>
-
-                </form>
+                </div>
+                <div id="resultCount" class="result-count">
+                    Showing <span id="countNumber">0</span> internships
+                </div>
                 <div class="internship-list">
 
-                    <div th:each="i : ${internships}" class="internship-card">
+                    <div th:each="i : ${internships}" class="internship-card"
+                        th:attr="data-title=${i.title}, data-location=${i.location}">
 
                         <div class="left">
                             <h3 th:text="${i.title}"></h3>
@@ -495,10 +575,74 @@
                         </div>
                     </div>
                 </div>
+                <div id="emptyState" class="empty-state" style="display:none;">
+                    <i class="bi bi-search"></i>
+                    <h3>No internships found</h3>
+                    <p>Try adjusting your search or filter criteria</p>
+                    <button onclick="resetFilters()" class="btn btn-sm btn-primary mt-2">
+                        Reset Filters
+                    </button>
+                </div>
             </main>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const searchInput = document.getElementById("searchInput");
+            const locationInput = document.getElementById("locationInput");
+
+            const cards = document.querySelectorAll(".internship-card");
+            const emptyState = document.getElementById("emptyState");
+            const countNumber = document.getElementById("countNumber");
+
+            function filterCards() {
+
+                const searchText = searchInput.value.toLowerCase().trim();
+                const locationText = locationInput.value.toLowerCase().trim();
+
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+
+                    const title = card.getAttribute("data-title")?.toLowerCase() || "";
+                    const location = card.getAttribute("data-location")?.toLowerCase() || "";
+
+                    let matchesSearch = title.includes(searchText);
+                    let matchesLocation = location.includes(locationText);
+
+                    if (matchesSearch && matchesLocation) {
+                        card.style.display = "flex";
+                        visibleCount++;
+                    } else {
+                        card.style.display = "none";
+                    }
+
+                });
+
+                countNumber.innerText = visibleCount;
+
+                if (visibleCount === 0) {
+                    emptyState.style.display = "flex";
+                } else {
+                    emptyState.style.display = "none";
+                }
+            }
+
+            window.resetFilters = function () {
+                searchInput.value = "";
+                locationInput.value = "";
+                filterCards();
+            }
+
+            filterCards();
+
+            searchInput.addEventListener("keyup", filterCards);
+            locationInput.addEventListener("keyup", filterCards);
+
+        });
+    </script>
 </body>
 
 </html>

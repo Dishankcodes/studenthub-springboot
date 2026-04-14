@@ -370,7 +370,7 @@
 
             /* ===== BUTTON ===== */
             .msg-btn {
-              justify-content: center;
+                justify-content: center;
                 padding: 8px;
                 font-size: 13px;
             }
@@ -381,9 +381,63 @@
                 text-align: center;
             }
         }
+
         tbody tr {
-    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-}
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+        }
+
+        #startDate,
+        #endDate {
+            background: #1f1f35;
+            color: #ffffff;
+            border: 1px solid #3c3c5c;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 140px;
+        }
+
+        #startDate:hover,
+        #endDate:hover {
+            border-color: #f6a623;
+        }
+
+        #startDate:focus,
+        #endDate:focus {
+            border-color: #f6a623;
+            box-shadow: 0 0 0 3px rgba(246, 166, 35, 0.25);
+        }
+
+        #startDate::-webkit-calendar-picker-indicator,
+        #endDate::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            /* makes icon white */
+            cursor: pointer;
+            opacity: 0.8;
+        }
+
+        #startDate::placeholder,
+        #endDate::placeholder {
+            color: #9ca3af;
+        }
+
+        .filter-bar input[type="date"] {
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+
+            #startDate,
+            #endDate {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -456,20 +510,24 @@
 
                 <div class="search-box">
                     <i class="bi bi-search"></i>
-                    <input type="text" placeholder="Search students...">
+                    <input type="text" id="searchInput" placeholder="Search students...">
                 </div>
 
-                <select class="form-select">
-                    <option>All Courses</option>
-                    <option>Java</option>
-                    <option>Web Dev</option>
+                <select id="courseFilter" class="form-select">
+                    <option value="ALL">All Courses</option>
+                    <option th:each="c : ${coursesList}" th:value="${c}" th:text="${c}">
+                    </option>
                 </select>
 
-                <select class="form-select">
-                    <option>All Time</option>
-                    <option>Last 7 Days</option>
-                    <option>Last 30 Days</option>
+                <select id="timeFilter" class="form-select">
+                    <option value="ALL">All Time</option>
+                    <option value="7">Last 7 Days</option>
+                    <option value="30">Last 30 Days</option>
+                    <option value="CUSTOM">Custom Range</option>
                 </select>
+
+                <input type="date" id="startDate" class="form-select" style="display:none;">
+                <input type="date" id="endDate" class="form-select" style="display:none;">
 
             </div>
             <div class="card" style="background:#fff;border-radius:12px;padding:20px">
@@ -485,7 +543,8 @@
                     </thead>
 
                     <tbody>
-                        <tr th:each="e : ${enrollments}">
+                        <tr th:each="e : ${enrollments}" th:attr="data-course=${e.course.title},
+             data-date=${#temporals.format(e.enrolledAt,'yyyy-MM-dd')}">
 
                             <td data-label="Student">
                                 <strong th:text="${e.student.fullname}">Student Name</strong><br>
@@ -574,6 +633,83 @@
         }
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const searchInput = document.getElementById("searchInput");
+            const courseFilter = document.getElementById("courseFilter");
+            const timeFilter = document.getElementById("timeFilter");
+
+            const startDateInput = document.getElementById("startDate");
+            const endDateInput = document.getElementById("endDate");
+
+            const rows = document.querySelectorAll("tbody tr");
+
+            function filterTable() {
+
+                const searchText = searchInput.value.toLowerCase();
+                const selectedCourse = courseFilter.value;
+                const selectedTime = timeFilter.value;
+
+                const now = new Date();
+
+                const startDate = startDateInput.value ? new Date(startDateInput.value) : null;
+                const endDate = endDateInput.value ? new Date(endDateInput.value) : null;
+
+                rows.forEach(row => {
+
+                    if (row.children.length === 1) return;
+
+                    const text = row.innerText.toLowerCase();
+                    const course = row.getAttribute("data-course").toLowerCase();
+                    const date = new Date(row.getAttribute("data-date"));
+
+                    let matchesSearch = text.includes(searchText);
+
+                    let matchesCourse =
+                        selectedCourse === "ALL" ||
+                        course === selectedCourse.toLowerCase();
+
+                    let matchesTime = true;
+
+                    if (selectedTime === "7") {
+                        matchesTime = (now - date) <= (7 * 24 * 60 * 60 * 1000);
+                    } else if (selectedTime === "30") {
+                        matchesTime = (now - date) <= (30 * 24 * 60 * 60 * 1000);
+                    } else if (selectedTime === "CUSTOM") {
+
+                        if (startDate && date < startDate) matchesTime = false;
+                        if (endDate && date > endDate) matchesTime = false;
+                    }
+
+                    if (matchesSearch && matchesCourse && matchesTime) {
+                        row.style.display = "";
+                    } else {
+                        row.style.display = "none";
+                    }
+
+                });
+            }
+
+            timeFilter.addEventListener("change", function () {
+
+                if (this.value === "CUSTOM") {
+                    startDateInput.style.display = "inline-block";
+                    endDateInput.style.display = "inline-block";
+                } else {
+                    startDateInput.style.display = "none";
+                    endDateInput.style.display = "none";
+                }
+
+                filterTable();
+            });
+            searchInput.addEventListener("keyup", filterTable);
+            courseFilter.addEventListener("change", filterTable);
+            startDateInput.addEventListener("change", filterTable);
+            endDateInput.addEventListener("change", filterTable);
+
+        });
+    </script>
 </body>
 
 </html>
