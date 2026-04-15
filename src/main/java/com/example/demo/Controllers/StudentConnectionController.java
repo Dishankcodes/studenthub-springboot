@@ -142,9 +142,6 @@ public class StudentConnectionController {
 				results.add(map);
 			}
 		}
-		
-		
-		
 
 		model.addAttribute("results", results);
 
@@ -316,16 +313,66 @@ public class StudentConnectionController {
 
 	@GetMapping("/student-search-ajax")
 	@ResponseBody
-	public List<Map<String, Object>> searchAjax(@RequestParam String keyword, HttpSession session) {
+	public List<Map<String, Object>> searchAjax(@RequestParam(required = false) String keyword, HttpSession session) {
+
 		Integer studentId = (Integer) session.getAttribute("studentId");
-		if (studentId == null)
+
+		if (studentId == null) {
 			return new ArrayList<>();
+		}
 
 		ChatUser me = getOrCreate(studentId, UserType.STUDENT);
 		List<Map<String, Object>> results = new ArrayList<>();
 
+		if (keyword == null || keyword.trim().isEmpty()) {
+
+			List<Student> students = studentRepo.findAll().stream().limit(5).toList();
+			List<Teacher> teachers = teacherRepo.findAll().stream().limit(5).toList();
+
+			for (Student s : students) {
+
+				if (s.getStudid().equals(studentId))
+					continue;
+
+				ChatUser u = getOrCreate(s.getStudid(), UserType.STUDENT);
+
+				Map<String, Object> map = new HashMap<>();
+				map.put("id", u.getId());
+				map.put("name", s.getFullname());
+				map.put("type", "STUDENT");
+				map.put("image", s.getProfileImage());
+				map.put("status", getConnectionStatus(me, u));
+				map.put("refId", s.getStudid());
+
+				results.add(map);
+			}
+
+			for (Teacher t : teachers) {
+
+				ChatUser u = getOrCreate(t.getTeacherId(), UserType.TEACHER);
+
+				TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(t.getTeacherId());
+
+				Map<String, Object> map = new HashMap<>();
+				map.put("id", u.getId());
+				map.put("name", t.getFirstname() + " " + t.getLastname());
+				map.put("type", "TEACHER");
+				map.put("image", p != null ? p.getProfileImage() : null);
+				map.put("status", "TEACHER");
+				map.put("refId", t.getTeacherId());
+
+				results.add(map);
+			}
+
+			return results;
+		}
+
+		keyword = keyword.trim();
+
 		List<Student> students = studentRepo.findByFullnameContainingIgnoreCase(keyword);
+
 		for (Student s : students) {
+
 			if (s.getStudid().equals(studentId))
 				continue;
 
@@ -337,6 +384,7 @@ public class StudentConnectionController {
 			map.put("type", "STUDENT");
 			map.put("image", s.getProfileImage());
 			map.put("status", getConnectionStatus(me, u));
+			map.put("refId", s.getStudid()); // ✅ FIX
 
 			results.add(map);
 		}
@@ -345,6 +393,7 @@ public class StudentConnectionController {
 				keyword);
 
 		for (Teacher t : teachers) {
+
 			ChatUser u = getOrCreate(t.getTeacherId(), UserType.TEACHER);
 			TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(t.getTeacherId());
 
@@ -354,7 +403,8 @@ public class StudentConnectionController {
 			map.put("type", "TEACHER");
 			map.put("image", p != null ? p.getProfileImage() : null);
 			map.put("status", "TEACHER");
-			map.put("refId", t.getTeacherId());
+			map.put("refId", t.getTeacherId()); // ✅ FIX
+
 			results.add(map);
 		}
 

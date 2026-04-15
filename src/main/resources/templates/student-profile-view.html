@@ -340,21 +340,10 @@
                 <h3 th:text="${student.fullname}"></h3>
                 <p th:text="${student.college}"></p>
 
-                <!-- 🔥 CONNECTION COUNT -->
-                <a th:href="@{/student-connections-view(id=${student.studid})}" style="
-        display:inline-flex;
-        align-items:center;
-        gap:6px;
-        margin-top:6px;
-        font-size:14px;
-        font-weight:600;
-        color:#6d28d9;
-        text-decoration:none;
-    ">
+             
                     <i class="bi bi-people-fill"></i>
                     <span th:text="${connectionCount}">0</span> Connections
-                </a>
-            </div>
+              </div>
 
         </div>
 

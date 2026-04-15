@@ -444,6 +444,7 @@
             }
 
         }
+
         @media (max-width: 768px) {
             .toggle-btn {
                 display: none !important;
@@ -515,21 +516,20 @@
     </div>
 
     <div class="main">
+        <div class="filters">
 
-        <form class="filters">
-            <input name="q" placeholder="Search notes" th:value="${q}">
+            <input id="searchInput" placeholder="Search notes" th:value="${q}">
 
-            <select name="category">
+            <select id="categoryFilter">
                 <option value="">All Categories</option>
-                <option th:each="c : ${categories}" th:value="${c.categoryId}"
-                    th:selected="${c.categoryId == selectedCategory}" th:text="${c.name}">
+                <option th:each="c : ${categories}" th:value="${c.name}" th:text="${c.name}">
                 </option>
             </select>
 
-            <button>
-                <i class="bi bi-funnel-fill"></i> Apply
-            </button>
-        </form>
+        </div>
+        <div style="margin:10px 0;color:#6b7280;">
+            Showing <b id="countNumber">0</b> notes
+        </div>
         <div th:if="${#lists.isEmpty(notes) and !hasAnyNotes}" class="empty-state">
 
             <div class="empty-icon">
@@ -545,26 +545,22 @@
 
         </div>
 
-        <div th:if="${#lists.isEmpty(notes) and hasAnyNotes}" class="empty-state">
-
+        <div id="emptyState" class="empty-state" style="display:none;">
             <div class="empty-icon">
                 <i class="bi bi-search"></i>
             </div>
-
             <h3>No Results Found</h3>
+            <p>Try different keywords or filters</p>
 
-            <p>
-                We couldn’t find any notes matching your search.<br>
-                Try adjusting filters or search keywords.
-            </p>
-
-            <a th:href="@{/student-stuff}" class="reset-btn">
-                <i class="bi bi-arrow-clockwise"></i> Reset Filters
+            <a href="#" onclick="resetFilters()" class="reset-btn" style="background:#e5e7eb;color:#111827;">
+                <i class="bi bi-arrow-counterclockwise"></i>
             </a>
-
         </div>
         <div class="notes-grid" th:if="${!#lists.isEmpty(notes)}">
-            <div th:each="n : ${notes}" class="note-card">
+            <div th:each="n : ${notes}" class="note-card" th:attr="
+        data-title=${n.title},
+        data-category=${n.category.name}">
+
                 <h3 th:text="${n.title}"></h3>
                 <p th:text="${n.description}"></p>
 
@@ -638,65 +634,122 @@
         </div>
     </div>
     <script>
-    document.addEventListener("DOMContentLoaded", () => {
+        document.addEventListener("DOMContentLoaded", () => {
 
-        const sidebar = document.getElementById("sidebar");
-        const toggle = document.getElementById("toggle"); // desktop
-        const mobileToggle = document.getElementById("mobileToggle"); // mobile
-        const closeBtn = document.getElementById("closeSidebar");
-        const overlay = document.getElementById("overlay");
-        const icon = toggle ? toggle.querySelector("i") : null;
+            const sidebar = document.getElementById("sidebar");
+            const toggle = document.getElementById("toggle"); // desktop
+            const mobileToggle = document.getElementById("mobileToggle"); // mobile
+            const closeBtn = document.getElementById("closeSidebar");
+            const overlay = document.getElementById("overlay");
+            const icon = toggle ? toggle.querySelector("i") : null;
 
-        if (window.innerWidth > 768) {
-            sidebar.classList.add("collapsed");
-        } else {
-            sidebar.classList.remove("collapsed");
-            sidebar.classList.remove("mobile-show");
-        }
+            if (window.innerWidth > 768) {
+                sidebar.classList.add("collapsed");
+            } else {
+                sidebar.classList.remove("collapsed");
+                sidebar.classList.remove("mobile-show");
+            }
 
-        if (toggle) {
-            toggle.addEventListener("click", () => {
-                if (window.innerWidth > 768) {
-                    sidebar.classList.toggle("collapsed");
+            if (toggle) {
+                toggle.addEventListener("click", () => {
+                    if (window.innerWidth > 768) {
+                        sidebar.classList.toggle("collapsed");
 
-                    if (icon) {
-                        icon.classList.toggle("bi-chevron-right");
-                        icon.classList.toggle("bi-chevron-left");
+                        if (icon) {
+                            icon.classList.toggle("bi-chevron-right");
+                            icon.classList.toggle("bi-chevron-left");
+                        }
                     }
-                }
+                });
+            }
+
+            if (mobileToggle) {
+                mobileToggle.addEventListener("click", () => {
+                    sidebar.classList.add("mobile-show");
+                    overlay.classList.add("show");
+                });
+            }
+
+            function closeSidebar() {
+                sidebar.classList.remove("mobile-show");
+                overlay.classList.remove("show");
+            }
+
+            if (closeBtn) {
+                closeBtn.addEventListener("click", closeSidebar);
+            }
+
+            if (overlay) {
+                overlay.addEventListener("click", closeSidebar);
+            }
+
+            document.querySelectorAll(".sidebar a").forEach(link => {
+                link.addEventListener("click", () => {
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
             });
-        }
 
-        if (mobileToggle) {
-            mobileToggle.addEventListener("click", () => {
-                sidebar.classList.add("mobile-show");
-                overlay.classList.add("show");
-            });
-        }
-
-        function closeSidebar() {
-            sidebar.classList.remove("mobile-show");
-            overlay.classList.remove("show");
-        }
-
-        if (closeBtn) {
-            closeBtn.addEventListener("click", closeSidebar);
-        }
-
-        if (overlay) {
-            overlay.addEventListener("click", closeSidebar);
-        }
-
-        document.querySelectorAll(".sidebar a").forEach(link => {
-            link.addEventListener("click", () => {
-                if (window.innerWidth <= 768) {
-                    closeSidebar();
-                }
-            });
         });
 
-    });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
 
+            const searchInput = document.getElementById("searchInput");
+            const categoryFilter = document.getElementById("categoryFilter");
+            const cards = document.querySelectorAll(".note-card");
+            const countNumber = document.getElementById("countNumber");
+            const emptyState = document.getElementById("emptyState");
+            const grid = document.querySelector(".notes-grid");
+
+            function filterNotes() {
+
+                const search = searchInput.value.toLowerCase().trim();
+                const category = categoryFilter.value.toLowerCase();
+
+                let visible = 0;
+
+                cards.forEach(card => {
+
+                    const title = card.getAttribute("data-title")?.toLowerCase() || "";
+                    const cat = card.getAttribute("data-category")?.toLowerCase() || "";
+
+                    let matchSearch = title.includes(search);
+                    let matchCategory = !category || cat === category;
+
+                    if (matchSearch && matchCategory) {
+                        card.style.display = "flex";
+                        visible++;
+                    } else {
+                        card.style.display = "none";
+                    }
+
+                });
+
+                countNumber.innerText = visible;
+
+                if (visible === 0) {
+                    emptyState.style.display = "block";
+                    if (grid) grid.style.display = "none";
+                } else {
+                    emptyState.style.display = "none";
+                    if (grid) grid.style.display = "grid";
+                }
+            }
+
+            searchInput.addEventListener("keyup", filterNotes);
+            categoryFilter.addEventListener("change", filterNotes);
+
+            window.resetFilters = function () {
+                searchInput.value = "";
+                categoryFilter.value = "";
+                filterNotes();
+            }
+
+            filterNotes(); 
+        });
     </script>
 
 </body>

@@ -291,14 +291,12 @@ public class StudentController {
 
 	    boolean hasAnyNotes = teacherNoteRepo.countApprovedNotes() > 0;
 
-	    // ✅ GET ENROLLED COURSES
 	    List<Integer> enrolledCourseIds =
 	            enrollmentRepo.findByStudentStudid(studentId)
 	                    .stream()
 	                    .map(e -> e.getCourse().getCourseId())
 	                    .toList();
 
-	    // ✅ FIXED ANNOUNCEMENTS
 	    List<Announcement> announcements;
 
 	    if (enrolledCourseIds.isEmpty()) {

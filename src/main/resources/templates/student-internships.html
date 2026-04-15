@@ -6,15 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Student Dashboard | EduPlatform</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link th:href="@{/css/student-style/student_sidebar.css}" rel="stylesheet">
-    
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
@@ -473,18 +471,24 @@
 
             </div>
             <div class="search-bar">
-                <input type="text" placeholder="Search internships (Java, Web, Data Science...)">
-                <select>
-                    <option>All Roles</option>
-                    <option>Backend</option>
-                    <option>Frontend</option>
-                    <option>Data Science</option>
+
+                <input type="text" id="searchInput" placeholder="Search internships (Java, Web, Data Science...)">
+
+                <select id="roleFilter">
+                    <option value="ALL">All Roles</option>
+                    <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"></option>
                 </select>
-                <select>
-                    <option>All Locations</option>
-                    <option>Remote</option>
-                    <option>Ahmedabad</option>
+
+                <select id="locationFilter">
+                    <option value="ALL">All Locations</option>
+                    <option th:each="l : ${locations}" th:value="${l}" th:text="${l}"></option>
                 </select>
+
+
+            </div>
+
+            <div id="resultCount" style="margin:10px 0;color:#6b7280;">
+                Showing <b id="countNumber">0</b> internships
             </div>
             <div th:if="${#lists.isEmpty(internships)}" class="empty-state">
 
@@ -538,8 +542,11 @@
 
                     <div class="intern-card"
                         th:classappend="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'} ? 'highlight'"
-                        th:each="i : ${internships}">
-
+                        th:each="i : ${internships}" th:attr="
+        data-title=${i.title},
+        data-role=${i.role},
+        data-location=${i.location},
+        data-skills=${i.skills}">
 
                         <div
                             th:if="${appMap[i.id] != null and appMap[i.id].status != null and appMap[i.id].status.name() == 'ACCEPTED'}">
@@ -737,6 +744,24 @@
                     </div>
 
                 </div>
+                <div id="emptyState" class="empty-state" style="display:none;">
+
+                    <div class="empty-card">
+                        <i class="bi bi-search" style="font-size:50px;color:#6366f1;"></i>
+
+                        <h2>No Internships Found</h2>
+
+                        <p>
+                            No results match your search or filters.<br>
+                            Try adjusting filters or reset everything.
+                        </p>
+
+                        <button onclick="resetFilters()" class="explore-btn">
+                            Reset Filters
+                        </button>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
@@ -802,5 +827,72 @@
         });
 
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
 
+            const searchInput = document.getElementById("searchInput");
+            const roleFilter = document.getElementById("roleFilter");
+            const locationFilter = document.getElementById("locationFilter");
+
+            const cards = document.querySelectorAll(".intern-card");
+            const emptyState = document.getElementById("emptyState");
+            const countNumber = document.getElementById("countNumber");
+
+            function filterInternships() {
+
+                const search = searchInput.value.toLowerCase().trim();
+                const role = roleFilter.value.toLowerCase();
+                const location = locationFilter.value.toLowerCase();
+
+                let visibleCount = 0;
+
+                cards.forEach(card => {
+
+                    const title = card.getAttribute("data-title")?.toLowerCase() || "";
+                    const skills = card.getAttribute("data-skills")?.toLowerCase() || "";
+                    const r = card.getAttribute("data-role")?.toLowerCase() || "";
+                    const loc = card.getAttribute("data-location")?.toLowerCase() || "";
+
+                    let matchSearch =
+                        title.includes(search) ||
+                        skills.includes(search) ||
+                        r.includes(search) ||
+                        loc.includes(search);
+
+                    let matchRole = role === "all" || r.includes(role);
+                    let matchLocation = location === "all" || loc.includes(location);
+
+                    if (matchSearch && matchRole && matchLocation) {
+                        card.style.display = "block";
+                        visibleCount++;
+                    } else {
+                        card.style.display = "none";
+                    }
+
+                });
+
+                countNumber.innerText = visibleCount;
+
+                if (visibleCount === 0) {
+                    emptyState.style.display = "flex";
+                } else {
+                    emptyState.style.display = "none";
+                }
+            }
+
+            window.resetFilters = function () {
+                searchInput.value = "";
+                roleFilter.value = "ALL";
+                locationFilter.value = "ALL";
+                filterInternships();
+            }
+
+            searchInput.addEventListener("keyup", filterInternships);
+            roleFilter.addEventListener("change", filterInternships);
+            locationFilter.addEventListener("change", filterInternships);
+
+            filterInternships();
+
+        });
+    </script>
 </body>

@@ -69,26 +69,42 @@ public class StudentInternshipController {
 	@GetMapping("/student-internships")
 	public String studentInternships(Model model, HttpSession session) {
 
-		Integer studentId = (Integer) session.getAttribute("studentId");
+	    Integer studentId = (Integer) session.getAttribute("studentId");
 
-		if (studentId == null) {
-			return "redirect:/student-login";
-		}
+	    if (studentId == null) {
+	        return "redirect:/student-login";
+	    }
 
-		List<Internships> internships = internshipRepo.findAll();
+	    List<Internships> internships = internshipRepo.findAll();
 
-		List<InternshipApplication> applications = applicationRepo.findByStudent_Studid(studentId);
+	    List<InternshipApplication> applications =
+	            applicationRepo.findByStudent_Studid(studentId);
 
-		Map<Integer, InternshipApplication> appMap = new HashMap<>();
+	    Map<Integer, InternshipApplication> appMap = new HashMap<>();
 
-		for (InternshipApplication app : applications) {
-			appMap.put(app.getInternship().getId(), app);
-		}
+	    for (InternshipApplication app : applications) {
+	        appMap.put(app.getInternship().getId(), app);
+	    }
+	    List<String> roles = internships.stream()
+	            .map(Internships::getRole)
+	            
+	            .filter(r -> r != null && !r.isEmpty())
+	            .distinct()
+	            .toList();
 
-		model.addAttribute("internships", internships);
-		model.addAttribute("appMap", appMap);
+	    List<String> locations = internships.stream()
+	            .map(Internships::getLocation)
+	            .filter(l -> l != null && !l.isEmpty())
+	            .distinct()
+	            .toList();
 
-		return "student-internships";
+	    model.addAttribute("internships", internships);
+	    model.addAttribute("appMap", appMap);
+
+	    model.addAttribute("roles", roles);           
+	    model.addAttribute("locations", locations);   
+
+	    return "student-internships";
 	}
 
 	@GetMapping("/student-internship-detail")

@@ -46,13 +46,13 @@ public class StudentProfileController {
 
 	@Autowired
 	private ApplicationRepository applicationRepo;
-	
+
 	@Autowired
 	private ConnectionRepository connectionRepo;
-	
+
 	@Autowired
 	private ChatUserRepository chatUserRepo;
-	
+
 	@Autowired
 	private TeacherRepository teacherRepo;
 
@@ -68,66 +68,62 @@ public class StudentProfileController {
 
 		Student student = studentRepo.findById(studentId).orElseThrow();
 
+		boolean isEdit = (edit != null && edit);
+
 		List<InternshipApplication> completedInternships = applicationRepo.findByStudent_Studid(studentId).stream()
 				.filter(app -> app.getStatus() == ApplicationStatus.COMPLETED).toList();
 
-		ChatUser me = chatUserRepo
-		        .findByRefIdAndType(studentId, com.example.demo.enums.UserType.STUDENT)
-		        .orElse(null);
+		ChatUser me = chatUserRepo.findByRefIdAndType(studentId, com.example.demo.enums.UserType.STUDENT).orElse(null);
 
 		List<ChatUser> list = new ArrayList<>();
 
 		if (me != null) {
 
-		    List<Connection> connections =
-		            connectionRepo.findBySenderIdAndStatusOrReceiverIdAndStatus(
-		                    me.getId(), ConnectionStatus.ACCEPTED,
-		                    me.getId(), ConnectionStatus.ACCEPTED
-		            );
+			List<Connection> connections = connectionRepo.findBySenderIdAndStatusOrReceiverIdAndStatus(me.getId(),
+					ConnectionStatus.ACCEPTED, me.getId(), ConnectionStatus.ACCEPTED);
 
-		    for (Connection c : connections) {
+			for (Connection c : connections) {
 
-		        ChatUser other = c.getSender().getId().equals(me.getId())
-		                ? c.getReceiver()
-		                : c.getSender();
+				ChatUser other = c.getSender().getId().equals(me.getId()) ? c.getReceiver() : c.getSender();
 
-		        list.add(other);
-		    }
+				list.add(other);
+			}
 		}
-		
+
 		Map<Integer, String> nameMap = new HashMap<>();
 		Map<Integer, String> imageMap = new HashMap<>();
 
 		for (ChatUser u : list) {
 
-		    if (u.getType() == UserType.STUDENT) {
-		        Student s = studentRepo.findById(u.getRefId()).orElse(null);
-		        if (s != null) {
-		            nameMap.put(u.getId(), s.getFullname());
-		            imageMap.put(u.getId(), s.getProfileImage());
-		        }
-		    }
+			if (u.getType() == UserType.STUDENT) {
+				Student s = studentRepo.findById(u.getRefId()).orElse(null);
+				if (s != null) {
+					nameMap.put(u.getId(), s.getFullname());
+					imageMap.put(u.getId(), s.getProfileImage());
+				}
+			}
 
-		    else if (u.getType() == UserType.TEACHER) {
-		        Teacher t = teacherRepo.findById(u.getRefId()).orElse(null);
-		        if (t != null) {
-		            nameMap.put(u.getId(), t.getFirstname() + " " + t.getLastname());
+			else if (u.getType() == UserType.TEACHER) {
+				Teacher t = teacherRepo.findById(u.getRefId()).orElse(null);
+				if (t != null) {
+					nameMap.put(u.getId(), t.getFirstname() + " " + t.getLastname());
 
-		            TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(u.getRefId());
-		            if (p != null)
-		                imageMap.put(u.getId(), p.getProfileImage());
-		        }
-		    }
+					TeacherProfile p = teacherProfileRepo.findByTeacherTeacherId(u.getRefId());
+					if (p != null)
+						imageMap.put(u.getId(), p.getProfileImage());
+				}
+			}
 		}
 
 		long connectionCount = list.size();
 		model.addAttribute("connectionCount", connectionCount);
+
 		model.addAttribute("nameMap", nameMap);
 		model.addAttribute("imageMap", imageMap);
 		model.addAttribute("connections", list);
 		model.addAttribute("completedInternships", completedInternships);
 		model.addAttribute("student", student);
-		model.addAttribute("editMode", edit != null && edit);
+		model.addAttribute("editMode", isEdit);
 
 		return "student-profile";
 	}
@@ -163,19 +159,33 @@ public class StudentProfileController {
 
 		Student student = studentRepo.findById(studentId).orElseThrow();
 
+		if (oldEmail == null || password == null || newEmail == null || oldEmail.trim().isEmpty()
+				|| password.trim().isEmpty() || newEmail.trim().isEmpty()) {
+
+			model.addAttribute("emailError", "All fields are required");
+			return studentProfile(session, model, false); // 🔥 FIX
+		}
+
 		if (!student.getEmail().equals(oldEmail) || !student.getPassword().equals(password)) {
 
-			model.addAttribute("emailError", "Invalid credentials");
-			model.addAttribute("student", student);
-			return "student-profile-edit";
+			model.addAttribute("emailError", "Old email or password is incorrect");
+			return studentProfile(session, model, false);
+		}
+
+		if (student.getEmail().equals(newEmail)) {
+
+			model.addAttribute("emailError", "New email must be different");
+			return studentProfile(session, model, false);
 		}
 
 		student.setEmail(newEmail);
 		studentRepo.save(student);
 
-		return "redirect:/student-profile";
+		model.addAttribute("emailSuccess", "Email updated successfully ✅");
+		return studentProfile(session, model, false);
 	}
 
+	// ===================== CHANGE PASSWORD =====================
 	@PostMapping("/student-profile/change-password")
 	public String changePassword(String oldPassword, String newPassword, String confirmPassword, HttpSession session,
 			Model model) {
@@ -186,22 +196,33 @@ public class StudentProfileController {
 
 		Student student = studentRepo.findById(studentId).orElseThrow();
 
+		if (oldPassword == null || newPassword == null || confirmPassword == null || oldPassword.isEmpty()
+				|| newPassword.isEmpty() || confirmPassword.isEmpty()) {
+
+			model.addAttribute("passwordError", "All fields are required");
+			return studentProfile(session, model, false);
+		}
+
 		if (!student.getPassword().equals(oldPassword)) {
-			model.addAttribute("passwordError", "Old password incorrect");
-			model.addAttribute("student", student);
-			return "student-profile-edit";
+			model.addAttribute("passwordError", "Old password is incorrect");
+			return studentProfile(session, model, false);
 		}
 
 		if (!newPassword.equals(confirmPassword)) {
 			model.addAttribute("passwordError", "Passwords do not match");
-			model.addAttribute("student", student);
-			return "student-profile-edit";
+			return studentProfile(session, model, false);
+		}
+
+		if (oldPassword.equals(newPassword)) {
+			model.addAttribute("passwordError", "New password must be different");
+			return studentProfile(session, model, false);
 		}
 
 		student.setPassword(newPassword);
 		studentRepo.save(student);
 
-		return "redirect:/student-profile";
+		model.addAttribute("passwordSuccess", "Password changed successfully 🔒");
+		return studentProfile(session, model, false);
 	}
 
 	@PostMapping("/student-profile/upload-image")
